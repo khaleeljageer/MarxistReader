@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:transitionName="transition">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/appBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                    app:statusBarScrim="@color/colorPrimary"
+                    app:titleEnabled="false">
+
+                <FrameLayout
+                        android:id="@+id/flTitleHeader"
+                        android:layout_width="match_parent"
+                        android:layout_height="230dp"
+                        app:layout_collapseMode="parallax"
+                        app:layout_collapseParallaxMultiplier="0.2">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/txtCollapseTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:ellipsize="end"
+                            android:gravity="bottom"
+                            android:maxLines="4"
+                            android:padding="16dp"
+                            android:textColor="@color/colorTextSecondary"
+                            android:textSize="@dimen/details_title_size"
+                            app:fontFamily="@font/hind_regular" />
+                </FrameLayout>
+
+                <androidx.appcompat.widget.Toolbar
+                        android:id="@+id/toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        android:background="?attr/colorPrimary"
+                        app:contentInsetEnd="0dp"
+                        app:contentInsetStart="0dp"
+                        app:elevation="8dp"
+                        app:layout_collapseMode="pin"
+                        app:titleEnabled="false">
+
+                    <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                        <ImageView
+                                android:id="@+id/ivBack"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:background="?attr/selectableItemBackground"
+                                android:contentDescription="@string/back"
+                                android:scaleType="centerInside"
+                                android:src="@drawable/ic_arrow_back_24dp"
+                                android:tint="@color/colorTextSecondary" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/txtFeedTitle"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_toStartOf="@+id/ivBookMark"
+                                android:layout_toEndOf="@+id/ivBack"
+                                android:ellipsize="end"
+                                android:gravity="start|center_vertical"
+                                android:maxLines="1"
+                                android:textColor="@color/colorTextSecondary"
+                                android:textSize="@dimen/details_title_size"
+                                android:visibility="invisible"
+                                app:fontFamily="@font/hind_regular" />
+
+                        <com.airbnb.lottie.LottieAnimationView
+                                android:id="@+id/ivBookMark"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:layout_alignParentEnd="true"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:scaleType="centerInside"
+                                app:lottie_colorFilter="@color/colorTextSecondary"
+                                app:lottie_rawRes="@raw/bookmark_anim"
+                                app:lottie_scale="0.2" />
+                    </RelativeLayout>
+                </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.CollapsingToolbarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <org.sufficientlysecure.htmltextview.HtmlTextView
+                    android:id="@+id/txtContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:enabled="true"
+                    android:focusable="true"
+                    android:longClickable="true"
+                    android:overScrollMode="always"
+                    android:padding="16dp"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textIsSelectable="true"
+                    android:textSize="@dimen/default_font_size" />
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>

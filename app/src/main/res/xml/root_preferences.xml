@@ -1,0 +1,45 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        app:persistent="true">
+
+    <PreferenceCategory
+            app:allowDividerBelow="true"
+            app:iconSpaceReserved="false"
+            app:title="@string/notifications_header">
+
+        <SwitchPreferenceCompat
+                app:defaultValue="true"
+                app:iconSpaceReserved="false"
+                app:key="all_notification"
+                app:summaryOff="@string/stop_all_notifications"
+                app:summaryOn="@string/receive_all_notifications"
+                app:title="@string/all_notification" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:allowDividerBelow="true"
+            app:iconSpaceReserved="false"
+            app:title="@string/theme_header">
+
+        <SwitchPreferenceCompat
+                app:defaultValue="false"
+                app:iconSpaceReserved="false"
+                app:key="@string/pref_key_dark_mode"
+                app:summaryOff="@string/dark_mode_disabled"
+                app:summaryOn="@string/dark_mode_enable"
+                app:title="@string/dark_mode" />
+
+
+        <SeekBarPreference
+                app:defaultValue="14"
+                app:iconSpaceReserved="false"
+                app:min="12"
+                android:max="20"
+                app:adjustable="true"
+                app:key="@string/pref_key_font_size"
+                app:seekBarIncrement="1"
+                app:showSeekBarValue="true"
+                app:title="@string/font_size" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Copyright (C) 2014 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp">
+
+    <!--<RelativeLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal">
+
+        <ImageButton
+                android:id="@+id/stop"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/ib_rewind"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/stop"
+                android:padding="5dp"
+                android:src="@drawable/exo_icon_stop" />
+
+        <ImageButton
+                android:id="@+id/ib_rewind"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/ib_play_pause"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/rewind"
+                android:padding="5dp"
+                android:src="@drawable/ic_replay_10" />
+
+        <ImageButton
+                android:id="@+id/ib_play_pause"
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/play_pause"
+                android:padding="5dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_play_circle" />
+
+        <ImageButton
+                android:id="@+id/ib_forward"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="5dp"
+                android:layout_toEndOf="@+id/ib_play_pause"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/forward"
+                android:padding="5dp"
+                android:src="@drawable/ic_forward_10" />
+
+        <ImageButton
+                android:id="@+id/ib_download"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/ib_forward"
+                android:background="?selectableItemBackgroundBorderless"
+                android:contentDescription="@string/download"
+                android:padding="5dp"
+                android:src="@drawable/ic_save_black" />
+    </RelativeLayout>
+
+    <LinearLayout
+            android:id="@+id/ll_seek"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@id/exo_position"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="14sp" />
+
+        <SeekBar
+                android:id="@+id/sb_player"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+        <TextView
+                android:id="@id/exo_duration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:includeFontPadding="false"
+                android:textAppearance="?attr/textAppearanceListItem"
+                android:textSize="14sp" />
+
+    </LinearLayout>-->
+</RelativeLayout>

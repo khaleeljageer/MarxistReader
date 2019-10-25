@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="feed_item_title_size">14sp</dimen>
+    <dimen name="feed_item_desc_size">12sp</dimen>
+    <dimen name="feed_item_pubdate_size">12sp</dimen>
+    <dimen name="details_title_size">18sp</dimen>
+    <dimen name="default_font_size">14sp</dimen>
+</resources>

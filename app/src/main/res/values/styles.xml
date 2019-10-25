@@ -1,0 +1,56 @@
+<resources>
+
+    <style name="AppTheme" parent="MRBaseTheme" />
+
+    <style name="MRSplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:textColorSecondary">@color/colorSecondary</item>
+
+        <item name="android:fontFamily">@font/hind_regular</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+        <item name="android:windowBackground">@drawable/splash_window_bg</item>
+    </style>
+
+    <style name="MRBaseTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="titleTextColor">@color/colorTextPrimary</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorSecondary</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+
+        <item name="android:fontFamily">@font/hind_regular</item>
+    </style>
+
+    <style name="Splash_Theme" parent="MRSplashTheme" />
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
+
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+        <item name="android:textColorSecondary">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat">
+        <item name="android:fontFamily">@font/hind_bold</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TabLayoutTheme" parent="ThemeOverlay.AppCompat">
+        <item name="android:fontFamily">@font/hind_regular</item>
+    </style>
+
+    <style name="Nav_Active_Text">
+        <item name="android:fontFamily">@font/hind_bold</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/colorSecondaryDark</item>
+    </style>
+
+    <style name="Nav_InActive_Text">
+        <item name="android:fontFamily">@font/hind_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/rootView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activities.MainActivity">
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/container2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="?attr/actionBarSize">
+
+        <include layout="@layout/toolbar_widget" />
+
+        <fragment
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:defaultNavHost="true"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:navGraph="@navigation/mobile_navigation" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            android:elevation="8dp">
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/nav_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:itemHorizontalTranslationEnabled="true"
+                app:itemIconTint="@drawable/bottom_view_icon_tint_color"
+                app:itemTextAppearanceActive="@style/Nav_Active_Text"
+                app:itemTextAppearanceInactive="@style/Nav_InActive_Text"
+                app:labelVisibilityMode="selected"
+                app:layout_insetEdge="bottom"
+                app:menu="@menu/menu_home" />
+    </FrameLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
