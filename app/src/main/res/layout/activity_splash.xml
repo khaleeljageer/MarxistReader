@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <LinearLayout
+            android:id="@+id/llSplashLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="100dp"
+            android:orientation="vertical">
+
+        <ImageView
+                android:id="@+id/ivAppLogo"
+                android:layout_width="210dp"
+                android:layout_height="210dp"
+                android:src="@drawable/ic_launcher_splash"
+                tools:ignore="ContentDescription" />
+    </LinearLayout>
+
+    <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/progressLoader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txtLoading"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop"
+            app:lottie_autoPlay="true"
+            app:lottie_colorFilter="@color/colorTextPrimary"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/paper_loader"
+            app:lottie_scale="2.5" />
+
+    <com.marxist.android.utils.views.FadingTextView
+            android:id="@+id/txtLoading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
+            android:fontFamily="@font/hind_bold"
+            android:gravity="center"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:texts="@array/splash_loading"
+            app:timeout="800" />
+</RelativeLayout>

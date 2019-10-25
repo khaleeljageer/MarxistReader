@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hapticFeedbackEnabled="true"
+        app:cardBackgroundColor="@color/colorPrimary"
+        app:cardCornerRadius="2dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="15dp">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:ignore="MissingPrefix">
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtFeedTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/feed_item_title_size"
+                android:textStyle="bold" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtFeedDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtFeedTitle"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="3"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="@dimen/feed_item_desc_size" />
+
+        <FrameLayout
+                android:id="@+id/flProgress"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_below="@+id/txtFeedDesc"
+                android:layout_marginTop="5dp">
+
+            <ProgressBar
+                    android:id="@+id/pbReadPercent"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_gravity="bottom"
+                    android:max="100"
+                    android:progress="10"
+                    android:visibility="visible" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtPubDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:gravity="end|center_vertical"
+                    android:textSize="@dimen/feed_item_pubdate_size" />
+
+            <ImageView
+                    android:id="@+id/ivAudioLogo"
+                    android:layout_width="30dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:contentDescription="@string/audio_available"
+                    android:padding="8dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_music_black"
+                    android:tint="#FFA2A2A2" />
+        </FrameLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,52 @@
+<resources>
+    <string name="pref_key_dark_mode" translatable="false">dark_mode</string>
+    <string name="pref_key_font_size" translatable="false">font_size</string>
+    <string name="pref_key_name" translatable="false">com.marxist.android.PREFERENCE</string>
+
+    <string name="app_name">Marxist Reader</string>
+    <string name="action_settings">Settings</string>
+    <string name="select_your_language_hint_1">Select your feed language(s)</string>
+    <string name="select_your_language_hint_2">You can select multiple language</string>
+    <string name="default_notification_channel_id">marxist_tamil</string>
+    <string name="must_select_language">Must select at least one language</string>
+    <string name="instant_news">Instant News</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
+    <string name="dark_theme">Night Mode</string>
+    <string name="feed_languages">Feed Languages</string>
+    <string name="update">Update</string>
+    <string name="tha">த</string>
+    <string name="e">E</string>
+    <string name="loading">Loading&#8230;</string>
+    <string name="connected_to_internet">Connected to Internet</string>
+    <string name="no_internet">Connection Lost</string>
+    <string name="feeds">Feeds</string>
+    <string name="books">E-Books</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="saved">Saved</string>
+    <string name="settings">Settings</string>
+
+    <string-array name="splash_loading">
+        <item>Loading Feeds&#8230;</item>
+        <item>Please wait&#8230;</item>
+    </string-array>
+
+    <!-- Preference Titles -->
+    <string name="notifications_header">Notifications</string>
+    <string name="all_notification">All Notifications</string>
+    <string name="stop_all_notifications">Stop all notifications</string>
+    <string name="receive_all_notifications">Receive all notifications</string>
+
+    <string name="theme_header">Theme</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="dark_mode_disabled">Disabled</string>
+    <string name="dark_mode_enable">Enabled</string>
+    <string name="audio_available">Audio Available</string>
+    <string name="back">Back</string>
+    <string name="download">Download</string>
+    <string name="forward">Forward</string>
+    <string name="play_pause">Play/Pause</string>
+    <string name="rewind">Rewind</string>
+    <string name="stop">Stop</string>
+    <string name="font_size">Font Size</string>
+</resources>
