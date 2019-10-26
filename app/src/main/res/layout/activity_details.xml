@@ -36,7 +36,10 @@
                             android:ellipsize="end"
                             android:gravity="bottom"
                             android:maxLines="4"
-                            android:padding="16dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="18dp"
                             android:textColor="@color/colorTextSecondary"
                             android:textSize="@dimen/details_title_size"
                             app:fontFamily="@font/hind_regular" />
@@ -132,7 +135,7 @@
                 app:fabSize="normal"
                 app:layout_anchor="@+id/appBarLayout"
                 app:layout_anchorGravity="bottom|right|end"
-                app:srcCompat="@drawable/ic_music_black" />
+                app:srcCompat="@drawable/ic_play_arrow_black_24dp" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>
