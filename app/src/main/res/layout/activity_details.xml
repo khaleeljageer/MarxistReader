@@ -109,6 +109,7 @@
                     android:id="@+id/txtContent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginTop="30dp"
                     android:enabled="true"
                     android:focusable="true"
                     android:longClickable="true"
@@ -119,6 +120,19 @@
                     android:textSize="@dimen/default_font_size" />
 
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabAudio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:tint="@color/colorTextSecondary"
+                app:fabSize="normal"
+                app:layout_anchor="@+id/appBarLayout"
+                app:layout_anchorGravity="bottom|right|end"
+                app:srcCompat="@drawable/ic_music_black" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </LinearLayout>

@@ -1,5 +1,8 @@
 package com.marxist.android.ui.activities
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -9,13 +12,14 @@ import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.AppPreference.get
+import com.marxist.android.utils.PrintLog
 import kotlinx.android.synthetic.main.activity_details.*
 import kotlin.math.roundToInt
 
 class DetailsActivity : BaseActivity() {
+    private var clipManager: ClipboardManager? = null
     private var article: LocalFeeds? = null
     private var readPercent: Int = 0
-    private var isEndReached: Boolean = false
 
     companion object {
         const val ARTICLE = "article"
@@ -33,12 +37,26 @@ class DetailsActivity : BaseActivity() {
         }
 
         val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
-        txtContent.apply {
-            setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize.toFloat())
-            setHtml(article!!.content)
+
+        if (article!!.audioUrl.isEmpty()) {
+            fabAudio.visibility = View.INVISIBLE
         }
 
-        txtContent.setHtml(article!!.content)
+        var content = article!!.content
+        try {
+            val regex1 = Regex("(?s)<div class=\"wpcnt\">.*?</div>")
+            content = content.replace(regex1, "")
+            val regex2 = Regex("(?s)<script type=\"text/javascript\">.*?</script>")
+            content = content.replace(regex2, "")
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            txtContent.apply {
+                setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize.toFloat())
+                setHtml(content)
+            }
+        }
+
         article!!.isBookMarked.apply {
             ivBookMark.tag = this
             if (this) {
@@ -46,6 +64,31 @@ class DetailsActivity : BaseActivity() {
             }
         }
 
+
+        clipManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        clipManager!!.addPrimaryClipChangedListener(object :
+            ClipboardManager.OnPrimaryClipChangedListener {
+            override fun onPrimaryClipChanged() {
+                clipManager!!.removePrimaryClipChangedListener(this)
+                val primaryCLip = clipManager!!.primaryClip
+                if (primaryCLip != null) {
+                    val clip = primaryCLip.getItemAt(0).text
+                    PrintLog.debug("Khaleel", "Clip : $clip")
+                    clipManager!!.primaryClip =
+                        ClipData.newPlainText(
+                            "marxist_clip",
+                            clip.toString().plus("\n படிக்க : ${article!!.link}")
+                        )
+                }
+
+                clipManager!!.addPrimaryClipChangedListener(this)
+            }
+        })
+
+        initListeners()
+    }
+
+    private fun initListeners() {
         ivBookMark.setOnClickListener {
             val tag = it.tag as Boolean
             if (tag) {
@@ -61,6 +104,7 @@ class DetailsActivity : BaseActivity() {
             appDatabase.localFeedsDao()
                 .updateBookMarkStatus(!tag, article!!.title, article!!.pubDate)
         }
+
         appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var scrollRange = -1
 
@@ -76,11 +120,11 @@ class DetailsActivity : BaseActivity() {
             }
         })
 
-        nestedScroll.setOnScrollChangeListener { scrollView: NestedScrollView?, scrollX: Int, scrollY: Int, oldScrollX: Int, oldScrollY: Int ->
+        nestedScroll.setOnScrollChangeListener { scrollView: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (scrollView != null) {
                 val totalHeight =
                     scrollView.getChildAt(0).measuredHeight - scrollView.measuredHeight
-                isEndReached = scrollY == totalHeight
+//                isEndReached = scrollY == totalHeight
                 readPercent = (scrollY.toDouble() / totalHeight.toDouble() * 100).roundToInt()
             }
         }
@@ -96,6 +140,7 @@ class DetailsActivity : BaseActivity() {
                 .updateReadPercentage(readPercent, article!!.title, article!!.pubDate)
         }
         super.onBackPressed()
+        clipManager!!.removePrimaryClipChangedListener(null)
     }
 
     override fun onDestroy() {
