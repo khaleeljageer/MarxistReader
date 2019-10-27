@@ -8,13 +8,14 @@ import android.content.Context
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.network.NetworkSchedulerService
+import org.geometerplus.zlibrary.ui.android.library.FBReaderConfig
 
 
 class MarxistApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
+        FBReaderConfig.init(this);
         AppDatabase.getAppDatabase(applicationContext)
         scheduleJob()
         ApiClient.setApiService()

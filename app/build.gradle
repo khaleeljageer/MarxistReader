@@ -27,6 +27,22 @@ android {
         }
     }
 
+    signingConfigs {
+        debug {
+            storeFile file("keystore/debug.keystore")
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storePassword 'android'
+        }
+
+        googlePlayRelease {
+            storeFile file("keystore/marxist_key.jks")
+            keyAlias 'NBNK6rp9&@'
+            keyPassword 'NBNK6rp9&@'
+            storePassword 'NBNK6rp9&@'
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -38,22 +54,6 @@ android {
 
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-
-    flavorDimensions "version"
-
-    productFlavors {
-        productionUrl {
-            dimension "version"
-
-            buildConfigField "String", "HOST_URL", "\"https://marxistreader.home.blog/\""
-        }
-
-        stagingUrl {
-            dimension "version"
-
-            buildConfigField "String", "HOST_URL", "\"https://marxistreader.home.blog/\""
-        }
     }
 }
 
@@ -101,6 +101,7 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.0.7'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'org.sufficientlysecure:html-textview:3.7'
+    implementation 'com.github.binbinrd:fbreaderimpl_s:1.0.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
