@@ -15,6 +15,6 @@ object ApiClient {
             .client(UnsafeOkHttpClient.unsafeOkHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(SimpleXmlConverterFactory.create())
-            .baseUrl(BuildConfig.HOST_URL).build().create(ApiService::class.java)
+            .baseUrl("https://marxistreader.home.blog/").build().create(ApiService::class.java)
     }
 }
