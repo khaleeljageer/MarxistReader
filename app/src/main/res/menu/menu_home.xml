@@ -10,13 +10,14 @@
             android:icon="@drawable/ic_book_black_24dp"
             android:title="@string/books" />
     <item
-            android:id="@+id/navigation_bookmarks"
-            android:icon="@drawable/ic_bookmark_black_24dp"
-            android:title="@string/bookmarks" />
-    <item
             android:id="@+id/navigation_saved"
             android:icon="@drawable/ic_music_black"
             android:title="@string/saved" />
+
+    <item
+            android:id="@+id/navigation_bookmarks"
+            android:icon="@drawable/ic_bookmark_black_24dp"
+            android:title="@string/bookmarks" />
     <item
             android:id="@+id/navigation_settings"
             android:icon="@drawable/ic_settings_black"

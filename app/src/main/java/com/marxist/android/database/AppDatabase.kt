@@ -5,12 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.marxist.android.database.dao.LocalFeedsDao
+import com.marxist.android.database.dao.LocalHighlightsDao
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.database.entities.LocalHighlights
 
-@Database(entities = [LocalFeeds::class], version = 1, exportSchema = false)
+@Database(entities = [LocalFeeds::class, LocalHighlights::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun localFeedsDao(): LocalFeedsDao
+    abstract fun localHighlightsDao(): LocalHighlightsDao
 
     companion object {
         private var instance: AppDatabase? = null

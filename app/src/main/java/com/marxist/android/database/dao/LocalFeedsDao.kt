@@ -1,5 +1,6 @@
 package com.marxist.android.database.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.IGNORE
@@ -8,8 +9,11 @@ import com.marxist.android.database.entities.LocalFeeds
 
 @Dao
 interface LocalFeedsDao {
-    @Query("SELECT * from localFeeds ORDER BY pub_date DESC")
-    fun getAllFeeds(): List<LocalFeeds>
+    @Query("SELECT * FROM localFeeds ORDER BY pub_date DESC")
+    fun getAllFeeds(): LiveData<MutableList<LocalFeeds>>
+
+    @Query("SELECT count(*) FROM localFeeds")
+    fun getFeedsCount(): Int
 
     @Insert(onConflict = IGNORE)
     fun insert(localBooks: LocalFeeds)
