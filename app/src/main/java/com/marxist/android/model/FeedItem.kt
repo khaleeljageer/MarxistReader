@@ -12,7 +12,7 @@ data class FeedItem(
     var link: String? = null,
 
     @field:Element(name = "pubDate", required = true)
-    var pubDate: String? = null,
+    var pubDate: String = "",
 
     @field:Element(name = "description", required = true)
     var description: String? = null,

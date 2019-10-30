@@ -5,12 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.ui.base.FeedItemClickListener
+import com.marxist.android.ui.base.ItemClickListener
 
 class FeedListAdapter(
     private val mContext: Context,
     private val mutableList: MutableList<LocalFeeds>,
-    private val itemClickListener: FeedItemClickListener
+    private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<FeedItemHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedItemHolder {

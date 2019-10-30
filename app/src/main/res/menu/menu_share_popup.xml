@@ -17,11 +17,19 @@
 
     <item
             android:id="@+id/menu_share_item"
-            android:icon="@drawable/ic_share_white"
+            android:icon="@drawable/ic_share_black"
+            android:orderInCategory="1"
             android:title="@string/share_text" />
 
     <item
             android:id="@+id/menu_copy_item"
+            android:icon="@drawable/ic_content_copy_black"
             android:orderInCategory="2"
             android:title="@string/copy_text" />
+
+    <item
+            android:id="@+id/menu_bookmark_item"
+            android:icon="@drawable/ic_bookmark_black_24dp"
+            android:orderInCategory="3"
+            android:title="@string/bookmark" />
 </menu>

@@ -7,5 +7,5 @@ import androidx.recyclerview.widget.RecyclerView
 abstract class BaseViewHolder<T>(parent: ViewGroup, layoutID: Int) : RecyclerView.ViewHolder(
     LayoutInflater.from(parent.context).inflate(layoutID, parent, false)
 ) {
-    abstract fun bindData(article: T)
+    abstract fun bindData(item: T)
 }

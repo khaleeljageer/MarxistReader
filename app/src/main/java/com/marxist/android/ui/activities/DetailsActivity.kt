@@ -10,13 +10,13 @@ import android.view.*
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.appbar.AppBarLayout
 import com.marxist.android.R
+import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.model.ShowSnackBar
+import com.marxist.android.database.entities.LocalHighlights
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.PrintLog
-import com.marxist.android.utils.RxBus
 import kotlinx.android.synthetic.main.activity_details.*
 import org.sufficientlysecure.htmltextview.HtmlTextView
 import kotlin.math.roundToInt
@@ -135,7 +135,7 @@ class DetailsActivity : BaseActivity() {
                 txtContent,
                 applicationContext,
                 article!!.title,
-                article!!.link
+                article!!.link, appDatabase
             )
     }
 
@@ -157,7 +157,8 @@ class DetailsActivity : BaseActivity() {
         private val txtContent: HtmlTextView,
         private val baseContext: Context,
         private val title: String,
-        private val link: String
+        private val link: String,
+        private val appDatabase: AppDatabase
     ) :
         ActionMode.Callback {
         override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
@@ -169,7 +170,9 @@ class DetailsActivity : BaseActivity() {
                             if (selectedText.isNotEmpty()) {
                                 DeviceUtils.shareIntent(
                                     title,
-                                    selectedText.plus("\n படிக்க : $link"),
+                                    selectedText.plus("\n")
+                                        .plus(baseContext.getString(R.string.to_read_more))
+                                        .plus(link),
                                     baseContext
                                 )
                             }
@@ -188,11 +191,32 @@ class DetailsActivity : BaseActivity() {
                                     baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                                 val clip = ClipData.newPlainText(
                                     "marxist_reader",
-                                    selectedText.plus("\n படிக்க : $link")
+                                    selectedText.plus("\n")
+                                        .plus(baseContext.getString(R.string.to_read_more))
+                                        .plus(link)
                                 )
-                                clipManager.primaryClip = clip
+                                clipManager.setPrimaryClip(clip)
                             }
-                            RxBus.publish(ShowSnackBar(baseContext.getString(R.string.text_copied)))
+                            mode!!.finish()
+                            true
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            false
+                        }
+                    }
+                    R.id.menu_bookmark_item -> {
+                        return try {
+                            val selectedText = getSelected()
+                            if (selectedText.isNotEmpty()) {
+                                appDatabase.localHighlightsDao().insert(
+                                    LocalHighlights(
+                                        System.currentTimeMillis(),
+                                        title,
+                                        link,
+                                        selectedText
+                                    )
+                                )
+                            }
                             mode!!.finish()
                             true
                         } catch (e: Exception) {
@@ -234,9 +258,6 @@ class DetailsActivity : BaseActivity() {
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
-            PrintLog.debug("Khaleel", "ActionMode Destroyed")
         }
     }
-
-
 }

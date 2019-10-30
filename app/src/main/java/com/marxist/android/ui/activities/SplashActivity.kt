@@ -5,19 +5,20 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.*
+import androidx.lifecycle.ViewModelProviders
 import com.marxist.android.R
-import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.api.ApiClient
+import com.marxist.android.utils.api.RetryWithDelay
+import com.marxist.android.viewmodel.FeedsViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_splash.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 
 class SplashActivity : BaseActivity() {
+    private lateinit var feedsViewModel: FeedsViewModel
     private var feedDisposable: Disposable? = null
     private var activityDestroyed = false
 
@@ -25,11 +26,13 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
+        feedsViewModel = ViewModelProviders.of(this).get(FeedsViewModel::class.java)
+
         txtLoading.visibility = View.VISIBLE
         progressLoader.visibility = View.VISIBLE
 
-        val allFeeds = appDatabase.localFeedsDao().getAllFeeds()
-        maxPage = if (allFeeds.isNotEmpty()) {
+        val allFeeds = feedsViewModel.getFeedsCount()
+        maxPage = if (allFeeds > 0) {
             1
         } else {
             10
@@ -64,7 +67,7 @@ class SplashActivity : BaseActivity() {
         feedDisposable = ApiClient.mApiService.getFeeds(pageIndex)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .retry(3)
+            .retryWhen(RetryWithDelay())
             .doOnComplete {
                 if (pageIndex == maxPage) {
                     launchMainActivity()
@@ -78,39 +81,12 @@ class SplashActivity : BaseActivity() {
                 }
             }
             .subscribe({
-                allowToContinue = if (it?.channel != null && it.channel!!.itemList != null) {
-                    val itemList = it.channel!!.itemList
-                    if (itemList != null && itemList.isNotEmpty()) {
-                        itemList.forEach { feed ->
-                            val simpleDateFormat =
-                                SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
-                            val mDate = simpleDateFormat.parse(feed.pubDate)
-                            val timeInMillis = mDate.time
-
-                            val localFeeds = LocalFeeds(
-                                feed.title!!,
-                                feed.link!!,
-                                timeInMillis,
-                                feed.description!!,
-                                feed.content!!,
-                                if (feed.enclosure == null) {
-                                    ""
-                                } else {
-                                    feed.enclosure!!.audioUrl!!
-                                },
-                                isDownloaded = false,
-                                isBookMarked = false, readPercent = 0
-                            )
-                            appDatabase.localFeedsDao().insert(localFeeds)
-                        }
-                    }
-                    true
-                } else {
+                allowToContinue = feedsViewModel.updateFeeds(it)
+                if (!allowToContinue) {
                     txtLoading.apply {
                         setTextColor(Color.RED)
                         setTexts(arrayOf("Something went wrong", "Try again later"))
                     }
-                    false
                 }
             }, {
                 it.printStackTrace()

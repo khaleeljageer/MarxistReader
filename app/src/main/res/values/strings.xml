@@ -23,6 +23,7 @@
     <string name="feeds">Feeds</string>
     <string name="books">E-Books</string>
     <string name="bookmarks">Bookmarks</string>
+    <string name="bookmark">Bookmark</string>
     <string name="saved">Saved</string>
     <string name="settings">Settings</string>
 
@@ -52,4 +53,8 @@
     <string name="share_text">Share</string>
     <string name="copy_text">Copy</string>
     <string name="text_copied">Text Copied</string>
+    <string name="to_read_more">Read more :&#160;</string>
+    <string name="remove_highlight">Remove</string>
+    <string name="_8942">⋮</string>
+    <string name="estimate">&#160;~</string>
 </resources>

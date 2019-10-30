@@ -4,9 +4,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvHighLights"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Feeds bookmarks" />
+            android:layout_height="wrap_content"
+            android:layoutAnimation="@anim/layout_animation_fall_down" />
 </FrameLayout>

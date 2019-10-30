@@ -12,4 +12,5 @@
     <color name="statusBarColor">#FFFFFF</color>
 
     <color name="ic_launcher_background">#FFFFFF</color>
+    <color name="grey">#FFA2A2A2</color>
 </resources>
