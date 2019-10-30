@@ -49,4 +49,7 @@
     <string name="rewind">Rewind</string>
     <string name="stop">Stop</string>
     <string name="font_size">Font Size</string>
+    <string name="share_text">Share</string>
+    <string name="copy_text">Copy</string>
+    <string name="text_copied">Text Copied</string>
 </resources>
