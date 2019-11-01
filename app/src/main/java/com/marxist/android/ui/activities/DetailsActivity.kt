@@ -13,10 +13,12 @@ import com.marxist.android.R
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.database.entities.LocalHighlights
+import com.marxist.android.model.ConnectivityType
+import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
-import com.marxist.android.utils.PrintLog
+import com.marxist.android.utils.RxBus
 import kotlinx.android.synthetic.main.activity_details.*
 import org.sufficientlysecure.htmltextview.HtmlTextView
 import kotlin.math.roundToInt
@@ -82,6 +84,15 @@ class DetailsActivity : BaseActivity() {
         }
 
         initListeners()
+        RxBus.subscribe({
+            when (it) {
+                is ShowSnackBar -> {
+                    displayMaterialSnackBar(it.message, ConnectivityType.OTHER, rootView)
+                }
+            }
+        }, {
+            it.printStackTrace()
+        })
     }
 
     private fun initListeners() {
@@ -198,6 +209,7 @@ class DetailsActivity : BaseActivity() {
                                 clipManager.setPrimaryClip(clip)
                             }
                             mode!!.finish()
+                            RxBus.publish(ShowSnackBar(baseContext.getString(R.string.copied)))
                             true
                         } catch (e: Exception) {
                             e.printStackTrace()
@@ -218,6 +230,7 @@ class DetailsActivity : BaseActivity() {
                                 )
                             }
                             mode!!.finish()
+                            RxBus.publish(ShowSnackBar(baseContext.getString(R.string.added_to_bookmarks)))
                             true
                         } catch (e: Exception) {
                             e.printStackTrace()
