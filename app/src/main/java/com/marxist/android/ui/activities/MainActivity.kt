@@ -3,17 +3,12 @@ package com.marxist.android.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.View
-import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
 import com.marxist.android.R
-import com.marxist.android.model.ConnectivityType
 import com.marxist.android.model.DarkModeChanged
 import com.marxist.android.model.NetWorkMessage
 import com.marxist.android.ui.base.BaseActivity
@@ -47,7 +42,7 @@ class MainActivity : BaseActivity() {
 
         RxBus.subscribe({
             if (it is NetWorkMessage) {
-                displayMaterialSnackBar(it.message, it.type)
+                displayMaterialSnackBar(it.message, it.type, container2)
             } else if (it is DarkModeChanged) {
                 Handler().post {
                     recreate()
@@ -56,37 +51,6 @@ class MainActivity : BaseActivity() {
         }, {
             PrintLog.debug("Marxist", "$it")
         })
-    }
-
-    private fun displayMaterialSnackBar(
-        message: String,
-        type: ConnectivityType
-    ) {
-        val snackBar = Snackbar.make(
-            container2,
-            message,
-            if (type == ConnectivityType.LOST) Snackbar.LENGTH_INDEFINITE
-            else
-                Snackbar.LENGTH_SHORT
-        )
-
-        val snackBarView = snackBar.view
-        snackBarView.layoutParams = assignMarginsToSnackBar(snackBarView)
-        snackBar.show()
-    }
-
-    private fun assignMarginsToSnackBar(snackBarView: View): ViewGroup.LayoutParams {
-        val marginSide = 10
-        val params = snackBarView.layoutParams as CoordinatorLayout.LayoutParams
-
-        params.setMargins(
-            params.leftMargin + marginSide,
-            params.topMargin,
-            params.rightMargin + marginSide,
-            params.bottomMargin + marginSide
-        )
-
-        return params
     }
 
     override fun onStart() {
