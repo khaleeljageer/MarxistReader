@@ -1,5 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         app:persistent="true">
 
     <PreferenceCategory
@@ -31,15 +31,14 @@
 
 
         <SeekBarPreference
-                app:defaultValue="14"
-                app:iconSpaceReserved="false"
-                app:min="12"
                 android:max="20"
                 app:adjustable="true"
+                app:defaultValue="14"
+                app:iconSpaceReserved="false"
                 app:key="@string/pref_key_font_size"
+                app:min="12"
                 app:seekBarIncrement="1"
                 app:showSeekBarValue="true"
                 app:title="@string/font_size" />
     </PreferenceCategory>
-
 </PreferenceScreen>

@@ -50,7 +50,7 @@ class FeedsViewModel(application: Application) : AndroidViewModel(application) {
                             feed.enclosure!!.audioUrl!!
                         },
                         isDownloaded = false,
-                        isBookMarked = false, readPercent = 0
+                        isBookMarked = false
                     )
                     insert(localFeeds)
                 }

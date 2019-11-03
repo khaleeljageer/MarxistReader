@@ -20,6 +20,10 @@ import kotlinx.android.synthetic.main.toolbar_widget.*
 
 class MainActivity : BaseActivity() {
 
+    companion object {
+        const val PLAY_NEW_VIDEO = "com.marxist.android.ui.activities.PLAY_NEW_VIDEO"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
