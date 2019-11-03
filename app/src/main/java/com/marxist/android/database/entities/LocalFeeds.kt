@@ -29,9 +29,9 @@ data class LocalFeeds(
     @ColumnInfo(name = "is_downloaded")
     var isDownloaded: Boolean,
 
-    @ColumnInfo(name = "is_bookmarked")
-    var isBookMarked: Boolean,
+    @ColumnInfo(name = "downloaded_path")
+    var downloadPath: String = "",
 
-    @ColumnInfo(name = "read_percent")
-    var readPercent: Int
+    @ColumnInfo(name = "is_bookmarked")
+    var isBookMarked: Boolean
 ) : Serializable

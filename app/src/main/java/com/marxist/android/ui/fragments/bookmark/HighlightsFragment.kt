@@ -16,13 +16,19 @@ import com.marxist.android.R
 import com.marxist.android.database.entities.LocalHighlights
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.viewmodel.HighlightViewModel
+import kotlinx.android.synthetic.main.fragment_bookmarks.*
 import kotlinx.android.synthetic.main.fragment_bookmarks.view.*
+import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
 
 class HighlightsFragment : Fragment(), ItemClickListener {
     override fun feedItemClickListener(article: Any, adapterPosition: Int, view: View) {
         if (article is LocalHighlights) {
             highLightViewModel.deleteHighlight(article)
             highlightsAdapter.notifyItemRemoved(adapterPosition)
+            if(highlightsAdapter.itemCount == 0) {
+                rvHighLights.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -45,7 +51,14 @@ class HighlightsFragment : Fragment(), ItemClickListener {
         highLightViewModel = ViewModelProviders.of(this).get(HighlightViewModel::class.java)
         highLightViewModel.getHighlights().observeOnce(this, Observer {
             if (it != null) {
-                highlightsAdapter.addHighlights(it)
+                if (it.isNotEmpty()) {
+                    rvHighLights.visibility = View.VISIBLE
+                    emptyView.visibility = View.GONE
+                    highlightsAdapter.addHighlights(it)
+                } else {
+                    rvHighLights.visibility = View.GONE
+                    emptyView.visibility = View.VISIBLE
+                }
             }
         })
     }

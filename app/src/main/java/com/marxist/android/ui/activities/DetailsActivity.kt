@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.TypedValue
 import android.view.*
 import androidx.core.widget.NestedScrollView
@@ -17,6 +18,7 @@ import com.marxist.android.model.ConnectivityType
 import com.marxist.android.model.ShareSnackBar
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BaseActivity
+import com.marxist.android.ui.fragments.player.AudioPlayerFragment
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.RxBus
@@ -58,8 +60,16 @@ class DetailsActivity : BaseActivity() {
 
         val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
 
-        if (article!!.audioUrl.isEmpty()) {
-            fabAudio.hide()
+        if (article!!.audioUrl.isNotEmpty()) {
+            Handler().post {
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom,
+                        R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom
+                    )
+                    .replace(flAudioPlayer.id, AudioPlayerFragment())
+                    .commit()
+            }
         }
 
         var content = article!!.content
@@ -157,14 +167,6 @@ class DetailsActivity : BaseActivity() {
                 article!!.title,
                 article!!.link, appDatabase
             )
-    }
-
-    override fun onBackPressed() {
-        if (article != null) {
-            appDatabase.localFeedsDao()
-                .updateReadPercentage(readPercent, article!!.title, article!!.pubDate)
-        }
-        super.onBackPressed()
     }
 
     override fun onDestroy() {
