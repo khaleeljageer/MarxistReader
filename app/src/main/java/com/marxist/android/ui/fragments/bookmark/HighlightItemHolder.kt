@@ -7,7 +7,7 @@ import com.marxist.android.ui.base.BaseViewHolder
 import com.marxist.android.utils.DeviceUtils
 import kotlinx.android.synthetic.main.highlight_item_view.view.*
 
-class BookmarkItemHolder(private val parent: ViewGroup, layoutID: Int) :
+class HighlightItemHolder(private val parent: ViewGroup, layoutID: Int) :
     BaseViewHolder<LocalHighlights>(parent, layoutID) {
     override fun bindData(item: LocalHighlights) {
         itemView.txtFeedTitle.text = item.title

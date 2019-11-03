@@ -10,18 +10,18 @@ import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.utils.DeviceUtils
 import kotlinx.android.synthetic.main.highlight_item_view.view.*
 
-class BookmarkAdapter(
+class HighlightsAdapter(
     private val mContext: Context,
     private val mutableList: MutableList<LocalHighlights>,
     private val itemClickListener: ItemClickListener
-) : RecyclerView.Adapter<BookmarkItemHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookmarkItemHolder {
-        return BookmarkItemHolder(parent, R.layout.highlight_item_view)
+) : RecyclerView.Adapter<HighlightItemHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HighlightItemHolder {
+        return HighlightItemHolder(parent, R.layout.highlight_item_view)
     }
 
     override fun getItemCount() = mutableList.size
 
-    override fun onBindViewHolder(holder: BookmarkItemHolder, position: Int) {
+    override fun onBindViewHolder(holder: HighlightItemHolder, position: Int) {
         val item = mutableList[holder.adapterPosition]
         holder.bindData(item)
         holder.itemView.setOnClickListener {
@@ -34,7 +34,7 @@ class BookmarkAdapter(
 
     private fun showPopupMenu(
         item: LocalHighlights,
-        holder: BookmarkItemHolder
+        holder: HighlightItemHolder
     ) {
         val popup = PopupMenu(mContext, holder.itemView.txtMore)
         popup.inflate(R.menu.menu_bookmar_popup)
