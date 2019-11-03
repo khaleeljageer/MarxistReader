@@ -22,8 +22,8 @@
     <string name="no_internet">Connection Lost</string>
     <string name="feeds">Feeds</string>
     <string name="books">E-Books</string>
-    <string name="bookmarks">Bookmarks</string>
-    <string name="bookmark">Bookmark</string>
+    <string name="bookmarks">Highlights</string>
+    <string name="bookmark">Highlight</string>
     <string name="saved">Saved</string>
     <string name="settings">Settings</string>
 
@@ -58,5 +58,5 @@
     <string name="_8942">⋮</string>
     <string name="estimate">&#160;~</string>
     <string name="copied">Copied…</string>
-    <string name="added_to_bookmarks">Added to bookmarks</string>
+    <string name="added_to_bookmarks">Added to highlights</string>
 </resources>

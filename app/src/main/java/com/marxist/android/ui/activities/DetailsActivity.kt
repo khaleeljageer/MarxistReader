@@ -14,6 +14,7 @@ import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.database.entities.LocalHighlights
 import com.marxist.android.model.ConnectivityType
+import com.marxist.android.model.ShareSnackBar
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.AppPreference.get
@@ -88,6 +89,14 @@ class DetailsActivity : BaseActivity() {
             when (it) {
                 is ShowSnackBar -> {
                     displayMaterialSnackBar(it.message, ConnectivityType.OTHER, rootView)
+                }
+                is ShareSnackBar -> {
+                    displayMaterialSnackBar(
+                        it.message,
+                        ConnectivityType.OTHER,
+                        rootView,
+                        getString(R.string.share_text), it.title, it.extra
+                    )
                 }
             }
         }, {
@@ -228,9 +237,17 @@ class DetailsActivity : BaseActivity() {
                                         selectedText
                                     )
                                 )
+                                RxBus.publish(
+                                    ShareSnackBar(
+                                        baseContext.getString(R.string.added_to_bookmarks),
+                                        title,
+                                        selectedText.plus("\n")
+                                            .plus(baseContext.getString(R.string.to_read_more))
+                                            .plus(link)
+                                    )
+                                )
                             }
                             mode!!.finish()
-                            RxBus.publish(ShowSnackBar(baseContext.getString(R.string.added_to_bookmarks)))
                             true
                         } catch (e: Exception) {
                             e.printStackTrace()

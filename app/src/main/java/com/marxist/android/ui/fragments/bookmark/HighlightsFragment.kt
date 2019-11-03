@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
@@ -16,22 +18,22 @@ import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.viewmodel.HighlightViewModel
 import kotlinx.android.synthetic.main.fragment_bookmarks.view.*
 
-class BookmarkFragment : Fragment(), ItemClickListener {
+class HighlightsFragment : Fragment(), ItemClickListener {
     override fun feedItemClickListener(article: Any, adapterPosition: Int, view: View) {
         if (article is LocalHighlights) {
             highLightViewModel.deleteHighlight(article)
-            bookmarkAdapter.notifyItemRemoved(adapterPosition)
+            highlightsAdapter.notifyItemRemoved(adapterPosition)
         }
     }
 
     private lateinit var mContext: Context
     private lateinit var highLightViewModel: HighlightViewModel
-    private lateinit var bookmarkAdapter: BookmarkAdapter
+    private lateinit var highlightsAdapter: HighlightsAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
-        bookmarkAdapter = BookmarkAdapter(mContext, mutableListOf(), this@BookmarkFragment)
+        highlightsAdapter = HighlightsAdapter(mContext, mutableListOf(), this@HighlightsFragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,11 +43,19 @@ class BookmarkFragment : Fragment(), ItemClickListener {
 
     private fun initData() {
         highLightViewModel = ViewModelProviders.of(this).get(HighlightViewModel::class.java)
-        highLightViewModel.getHighlights().observe(this, Observer {
+        highLightViewModel.getHighlights().observeOnce(this, Observer {
             if (it != null) {
-                bookmarkAdapter.addHighlights(it)
+                highlightsAdapter.addHighlights(it)
             }
-            highLightViewModel.getHighlights().removeObservers(this)
+        })
+    }
+
+    private fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
+        observe(lifecycleOwner, object : Observer<T> {
+            override fun onChanged(t: T?) {
+                observer.onChanged(t)
+                removeObserver(this)
+            }
         })
     }
 
@@ -57,9 +67,7 @@ class BookmarkFragment : Fragment(), ItemClickListener {
         val view = inflater.inflate(R.layout.fragment_bookmarks, container, false)
         view.rvHighLights.setHasFixedSize(true)
         view.rvHighLights.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        view.rvHighLights.adapter = bookmarkAdapter
+        view.rvHighLights.adapter = highlightsAdapter
         return view
     }
-
-
 }

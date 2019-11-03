@@ -25,7 +25,7 @@
 
     <fragment
             android:id="@+id/navigation_bookmarks"
-            android:name="com.marxist.android.ui.fragments.bookmark.BookmarkFragment"
+            android:name="com.marxist.android.ui.fragments.bookmark.HighlightsFragment"
             android:label="@string/bookmarks"
             tools:layout="@layout/fragment_bookmarks" />
 
