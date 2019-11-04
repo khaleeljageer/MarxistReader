@@ -22,6 +22,9 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:contentDescription="@string/stop"
                 app:lottie_autoPlay="false"
+                app:lottie_speed="2.0"
+                app:lottie_loop="false"
+                app:lottie_repeatMode="restart"
                 app:lottie_rawRes="@raw/ic_media_stop" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -34,6 +37,9 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:contentDescription="@string/rewind"
                 app:lottie_autoPlay="false"
+                app:lottie_speed="2.0"
+                app:lottie_loop="false"
+                app:lottie_repeatMode="restart"
                 app:lottie_rawRes="@raw/ic_media_rewind" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -46,7 +52,10 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:contentDescription="@string/play_pause"
                 android:scaleType="fitCenter"
-                app:lottie_autoPlay="false"
+                app:lottie_speed="2.0"
+                app:lottie_loop="false"
+                app:lottie_repeatMode="restart"
+                app:lottie_renderMode="automatic"
                 app:lottie_rawRes="@raw/ic_media_play_pause" />
 
         <com.airbnb.lottie.LottieAnimationView
@@ -59,6 +68,9 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:contentDescription="@string/forward"
                 app:lottie_autoPlay="false"
+                app:lottie_speed="2.0"
+                app:lottie_loop="false"
+                app:lottie_repeatMode="restart"
                 app:lottie_rawRes="@raw/ic_media_forward" />
 
         <ImageButton

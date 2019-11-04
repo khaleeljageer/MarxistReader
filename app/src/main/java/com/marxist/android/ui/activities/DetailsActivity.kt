@@ -60,16 +60,28 @@ class DetailsActivity : BaseActivity() {
 
         val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
 
+        val reset = DeviceUtils.dpToPx(16)
+        val type = 1
         if (article!!.audioUrl.isNotEmpty()) {
+            cvPlayerView.visibility = View.VISIBLE
             Handler().post {
                 supportFragmentManager.beginTransaction()
                     .setCustomAnimations(
                         R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom,
                         R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom
                     )
-                    .replace(flAudioPlayer.id, AudioPlayerFragment())
+                    .replace(
+                        flAudioPlayer.id,
+                        AudioPlayerFragment.newInstance(article!!.audioUrl, type)
+                    )
                     .commit()
             }
+
+            val bottom = DeviceUtils.dpToPx(120)
+            txtContent.setPaddingRelative(reset, reset, reset, bottom)
+        } else {
+            cvPlayerView.visibility = View.GONE
+            txtContent.setPaddingRelative(reset, reset, reset, reset)
         }
 
         var content = article!!.content
