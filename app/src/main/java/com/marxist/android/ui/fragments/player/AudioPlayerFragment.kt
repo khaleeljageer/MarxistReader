@@ -9,6 +9,7 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.session.MediaSessionManager
 import android.os.Bundle
+import android.os.Handler
 import android.os.RemoteException
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
@@ -18,21 +19,31 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.marxist.android.R
 import com.marxist.android.utils.PrintLog
 import kotlinx.android.synthetic.main.audio_player_control_fragment.*
 import java.io.IOException
+import java.util.*
 
 class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
     MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,
     AudioManager.OnAudioFocusChangeListener {
 
+    private var bufferedPosition: Int = 0
     private var audioUrl: String = ""
     private var resumePosition: Int = 0
     private lateinit var mContext: Context
     private var mediaPlayer: MediaPlayer? = null
+    private var formatBuilder: StringBuilder? = null
+    private var formatter: Formatter? = null
+    private var dragging: Boolean = false
+    private var seekDispatcher: SeekDispatcher? = null
+    private var handler: Handler? = null
+
+
     private var mediaSessionManager: MediaSessionManager? = null
     private var mediaSession: MediaSessionCompat? = null
     private var transportControls: MediaControllerCompat.TransportControls? = null
@@ -41,6 +52,8 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     private var telephonyManager: TelephonyManager? = null
 
     companion object {
+        const val PROGRESS_BAR_MAX = 1000
+        const val TIME_UNSET = Long.MIN_VALUE + 1
         const val ACTION_PLAY = "com.marxist.android.ui.fragments.player.ACTION_PLAY"
         const val ACTION_PAUSE = "com.marxist.android.ui.fragments.player.ACTION_PAUSE"
         const val ACTION_FORWARD = "com.marxist.android.ui.fragments.player.ACTION_FORWARD"
@@ -83,15 +96,27 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        handler = Handler()
+        seekDispatcher = DEFAULT_SEEK_DISPATCHER
+        formatBuilder = StringBuilder()
+        formatter = Formatter(formatBuilder, Locale.getDefault())
+        sbPlayer.max = PROGRESS_BAR_MAX
+
+        pbPrepare.visibility = View.VISIBLE
+        btnPlayPause.visibility = View.INVISIBLE
+
         btnPlayPause.tag = "PLAY"
         btnPlayPause.addAnimatorListener(animatorListener)
         btnPlayPause.setOnClickListener {
             if (btnPlayPause.tag == "PLAY") {
                 btnPlayPause.tag = "PAUSE"
                 btnPlayPause.setMinAndMaxFrame(0, 33)
+                playMedia()
             } else {
                 btnPlayPause.tag = "PLAY"
                 btnPlayPause.setMinAndMaxFrame(33, 66)
+                pauseMedia()
             }
             btnPlayPause.playAnimation()
             btnPlayPause.isActivated = btnPlayPause.isAnimating
@@ -107,6 +132,31 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
             btnRewind.playAnimation()
             rewind()
         }
+
+        sbPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    val position = positionValue(progress)
+                    if (txtPosition != null) {
+                        txtPosition.text = stringForTime(position)
+                    }
+                    if (mediaPlayer != null && !dragging) {
+                        seekTo(position)
+                    }
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) {
+                dragging = true
+            }
+
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                dragging = false
+                if (mediaPlayer != null) {
+                    seekTo(positionValue(seekBar.progress))
+                }
+            }
+        })
     }
 
     private val animatorListener = AnimatorListenerAdapter(
@@ -209,11 +259,13 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     private fun playMedia() {
         if (!mediaPlayer!!.isPlaying) {
             mediaPlayer!!.start()
+            handler!!.post(updateProgressAction)
         }
     }
 
     private fun forward() {
         if (mediaPlayer!!.isPlaying) {
+            mediaPlayer!!.pause()
             mediaPlayer!!.seekTo(mediaPlayer!!.currentPosition + 10000)
             mediaPlayer!!.start()
         }
@@ -221,6 +273,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
     private fun rewind() {
         if (mediaPlayer!!.isPlaying) {
+            mediaPlayer!!.pause()
             mediaPlayer!!.seekTo(mediaPlayer!!.currentPosition - 10000)
             mediaPlayer!!.start()
         }
@@ -230,12 +283,14 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         if (mediaPlayer == null) return
         if (mediaPlayer!!.isPlaying) {
             mediaPlayer!!.stop()
+            handler!!.removeCallbacks(updateProgressAction)
         }
     }
 
     private fun pauseMedia() {
         if (mediaPlayer!!.isPlaying) {
             mediaPlayer!!.pause()
+            handler!!.removeCallbacks(updateProgressAction)
             resumePosition = mediaPlayer!!.currentPosition
         }
     }
@@ -278,10 +333,16 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
     override fun onCompletion(p0: MediaPlayer?) {
         stopMedia()
+        btnPlayPause.tag = "PLAY"
+        btnPlayPause.setMinAndMaxFrame(33, 66)
+        btnPlayPause.isActivated = btnPlayPause.isAnimating
+        btnPlayPause.postInvalidate()
     }
 
     override fun onPrepared(p0: MediaPlayer?) {
-//        playMedia()
+        pbPrepare.visibility = View.INVISIBLE
+        btnPlayPause.visibility = View.VISIBLE
+        handler!!.post(updateProgressAction)
     }
 
 
@@ -312,9 +373,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     override fun onInfo(p0: MediaPlayer?, p1: Int, p2: Int): Boolean = false
 
     override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
-        PrintLog.debug(
-            "Khaleel", "Percent $percent"
-        )
+        bufferedPosition = percent
     }
 
     override fun onAudioFocusChange(focusState: Int) {
@@ -335,6 +394,97 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
                 0.1f,
                 0.1f
             )
+        }
+    }
+
+    private val updateProgressAction = Runnable { updateProgress() }
+    private fun updateProgress() {
+        val duration = (if (mediaPlayer == null) 0 else mediaPlayer!!.duration).toLong()
+        val position = (if (mediaPlayer == null) 0 else mediaPlayer!!.currentPosition).toLong()
+        if (txtDuration != null) {
+            txtDuration.text = stringForTime(duration)
+        }
+        if (txtPosition != null && !dragging) {
+            txtPosition.text = stringForTime(position)
+        }
+
+        if (sbPlayer != null) {
+            if (!dragging) {
+                sbPlayer.progress = progressBarValue(position)
+            }
+            val bufferedPosition =
+                (if (mediaPlayer == null) 0 else bufferedPosition).toLong()
+            sbPlayer.secondaryProgress = progressBarValue(bufferedPosition)
+        }
+        handler!!.removeCallbacks(updateProgressAction)
+
+        if (mediaPlayer!!.isPlaying) {
+            handler!!.postDelayed(updateProgressAction, 1000)
+        }
+    }
+
+    private fun stringForTime(time: Long): String {
+        var timeMs = time
+        if (timeMs == TIME_UNSET) {
+            timeMs = 0
+        }
+        val totalSeconds = (timeMs + 500) / 1000
+        val seconds = totalSeconds % 60
+        val minutes = totalSeconds / 60 % 60
+        val hours = totalSeconds / 3600
+        formatBuilder!!.setLength(0)
+        return if (hours > 0)
+            formatter!!.format("%d:%02d:%02d", hours, minutes, seconds).toString()
+        else
+            formatter!!.format("%02d:%02d", minutes, seconds).toString()
+    }
+
+    private fun progressBarValue(position: Long): Int {
+        val duration = if (mediaPlayer == null) TIME_UNSET else mediaPlayer!!.duration.toLong()
+        return if (duration == TIME_UNSET || duration == 0L)
+            0
+        else
+            (position * PROGRESS_BAR_MAX / duration).toInt()
+    }
+
+    private fun seekTo(positionMs: Long) {
+        val dispatched = seekDispatcher!!.dispatchSeek(mediaPlayer!!, positionMs)
+        if (!dispatched) {
+            updateProgress()
+        }
+    }
+
+    private fun positionValue(progress: Int): Long {
+        val duration = if (mediaPlayer == null) TIME_UNSET else mediaPlayer!!.duration.toLong()
+        return if (duration == TIME_UNSET) 0 else duration * progress / PROGRESS_BAR_MAX
+    }
+
+    /**
+     * Dispatches seek operations to the player.
+     */
+    interface SeekDispatcher {
+
+        /**
+         * @param player      The player to seek.
+         * @param positionMs  The seek position in the specified window, or [TIME_UNSET] to seek
+         * to the window's default position.
+         * @return True if the seek was dispatched. False otherwise.
+         */
+        fun dispatchSeek(player: MediaPlayer, positionMs: Long): Boolean
+
+    }
+
+    /**
+     * Default [SeekDispatcher] that dispatches seeks to the player without modification.
+     */
+    val DEFAULT_SEEK_DISPATCHER: SeekDispatcher = object : SeekDispatcher {
+
+        override fun dispatchSeek(
+            player: MediaPlayer,
+            positionMs: Long
+        ): Boolean {
+            player.seekTo(positionMs.toInt())
+            return true
         }
     }
 }

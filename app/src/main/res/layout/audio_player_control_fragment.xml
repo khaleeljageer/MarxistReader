@@ -13,50 +13,50 @@
             android:orientation="horizontal">
 
         <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/btnStop"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_centerVertical="true"
-                android:layout_marginEnd="5dp"
-                android:layout_toStartOf="@+id/btnRewind"
-                android:background="?selectableItemBackgroundBorderless"
-                android:contentDescription="@string/stop"
-                app:lottie_autoPlay="false"
-                app:lottie_speed="2.0"
-                app:lottie_loop="false"
-                app:lottie_repeatMode="restart"
-                app:lottie_rawRes="@raw/ic_media_stop" />
-
-        <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/btnRewind"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="5dp"
-                android:layout_toStartOf="@+id/btnPlayPause"
+                android:layout_toStartOf="@+id/flPrepareProgress"
                 android:background="?selectableItemBackgroundBorderless"
                 android:contentDescription="@string/rewind"
                 app:lottie_autoPlay="false"
-                app:lottie_speed="2.0"
+                app:lottie_colorFilter="@color/colorTextSecondary"
                 app:lottie_loop="false"
+                app:lottie_rawRes="@raw/ic_media_rewind"
                 app:lottie_repeatMode="restart"
-                app:lottie_rawRes="@raw/ic_media_rewind" />
+                app:lottie_speed="2.0" />
 
-        <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/btnPlayPause"
+        <FrameLayout
+                android:id="@+id/flPrepareProgress"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginEnd="5dp"
-                android:background="?selectableItemBackgroundBorderless"
-                android:contentDescription="@string/play_pause"
-                android:scaleType="fitCenter"
-                app:lottie_speed="2.0"
-                app:lottie_loop="false"
-                app:lottie_repeatMode="restart"
-                app:lottie_renderMode="automatic"
-                app:lottie_rawRes="@raw/ic_media_play_pause" />
+                android:layout_marginEnd="5dp">
+
+            <ProgressBar
+                    android:id="@+id/pbPrepare"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="5dp" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                    android:id="@+id/btnPlayPause"
+                    android:layout_width="?attr/actionBarSize"
+                    android:layout_height="match_parent"
+                    android:background="?selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/play_pause"
+                    android:scaleType="fitCenter"
+                    app:lottie_colorFilter="@color/colorTextSecondary"
+                    app:lottie_loop="false"
+                    app:lottie_rawRes="@raw/ic_media_play_pause"
+                    app:lottie_renderMode="automatic"
+                    app:lottie_repeatMode="restart"
+                    app:lottie_speed="2.0" />
+        </FrameLayout>
 
         <com.airbnb.lottie.LottieAnimationView
                 android:id="@+id/btnForward"
@@ -64,25 +64,27 @@
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
                 android:layout_marginEnd="5dp"
-                android:layout_toEndOf="@+id/btnPlayPause"
+                android:layout_toEndOf="@+id/flPrepareProgress"
                 android:background="?selectableItemBackgroundBorderless"
                 android:contentDescription="@string/forward"
                 app:lottie_autoPlay="false"
-                app:lottie_speed="2.0"
+                app:lottie_colorFilter="@color/colorTextSecondary"
                 app:lottie_loop="false"
+                app:lottie_rawRes="@raw/ic_media_forward"
                 app:lottie_repeatMode="restart"
-                app:lottie_rawRes="@raw/ic_media_forward" />
+                app:lottie_speed="2.0" />
 
         <ImageButton
                 android:id="@+id/btnDownload"
                 android:layout_width="35dp"
                 android:layout_height="35dp"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/btnForward"
+                android:layout_marginStart="10dp"
                 android:background="?selectableItemBackgroundBorderless"
                 android:contentDescription="@string/download"
                 android:padding="5dp"
-                android:src="@drawable/ic_save_black" />
+                android:src="@drawable/ic_save_black"
+                android:tint="@color/colorTextSecondary" />
     </RelativeLayout>
 
     <LinearLayout
@@ -95,11 +97,14 @@
 
         <TextView
                 android:id="@+id/txtPosition"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:gravity="end"
                 android:includeFontPadding="false"
+                android:text="@string/_00_00"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="14sp" />
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="13sp" />
 
         <SeekBar
                 android:id="@+id/sbPlayer"
@@ -109,10 +114,13 @@
 
         <TextView
                 android:id="@+id/txtDuration"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="wrap_content"
+                android:gravity="start"
                 android:includeFontPadding="false"
+                android:text="@string/_00_00"
                 android:textAppearance="?attr/textAppearanceListItem"
-                android:textSize="14sp" />
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="13sp" />
     </LinearLayout>
 </RelativeLayout>

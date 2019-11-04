@@ -60,4 +60,5 @@
     <string name="copied">Copied…</string>
     <string name="added_to_bookmarks">Added to highlights</string>
     <string name="nothing_to_show">Nothing to show</string>
+    <string name="_00_00">00:00</string>
 </resources>
