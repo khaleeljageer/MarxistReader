@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.session.MediaSessionManager
@@ -28,6 +29,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,
     AudioManager.OnAudioFocusChangeListener {
 
+    private var audioUrl: String = ""
     private var resumePosition: Int = 0
     private lateinit var mContext: Context
     private var mediaPlayer: MediaPlayer? = null
@@ -44,6 +46,17 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         const val ACTION_FORWARD = "com.marxist.android.ui.fragments.player.ACTION_FORWARD"
         const val ACTION_REWIND = "com.marxist.android.ui.fragments.player.ACTION_REWIND"
         const val ACTION_STOP = "com.marxist.android.ui.fragments.player.ACTION_STOP"
+
+        const val PLAY_TO_PAUSE = 36
+
+        fun newInstance(audioUrl: String, type: Int): AudioPlayerFragment {
+            val bundle = Bundle()
+            bundle.putString("KEY_AUDIO_URL", audioUrl)
+            bundle.putInt("KEY_AUDIO_TYPE", type)
+            val fragment = AudioPlayerFragment()
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -70,10 +83,19 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnPlayPause.setMinFrame(33)
+        btnPlayPause.tag = "PLAY"
+        btnPlayPause.addAnimatorListener(animatorListener)
         btnPlayPause.setOnClickListener {
+            if (btnPlayPause.tag == "PLAY") {
+                btnPlayPause.tag = "PAUSE"
+                btnPlayPause.setMinAndMaxFrame(0, 33)
+            } else {
+                btnPlayPause.tag = "PLAY"
+                btnPlayPause.setMinAndMaxFrame(33, 66)
+            }
             btnPlayPause.playAnimation()
-            playMedia()
+            btnPlayPause.isActivated = btnPlayPause.isAnimating
+            btnPlayPause.postInvalidate()
         }
 
         btnForward.setOnClickListener {
@@ -87,8 +109,22 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         }
     }
 
+    private val animatorListener = AnimatorListenerAdapter(
+        onStart = { btnPlayPause.isActivated = true },
+        onEnd = {
+            btnPlayPause.isActivated = false
+        },
+        onCancel = {
+            btnPlayPause.isActivated = false
+        },
+        onRepeat = {
+        }
+    )
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        audioUrl = arguments!!.getString("KEY_AUDIO_URL")!!
         if (mediaSessionManager == null) {
             try {
                 initMediaSession()
@@ -112,9 +148,12 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         mediaPlayer!!.reset()
 
 
-        mediaPlayer!!.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        mediaPlayer!!.setAudioAttributes(
+            AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
+        )
         try {
-            mediaPlayer!!.setDataSource("http://archive.org/download/2019JulyMarxist/last%20years%20of%20karl%20marx.mp3")
+            mediaPlayer!!.setDataSource(audioUrl)
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -242,7 +281,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     override fun onPrepared(p0: MediaPlayer?) {
-        playMedia()
+//        playMedia()
     }
 
 

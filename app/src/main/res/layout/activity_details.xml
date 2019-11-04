@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -9,7 +9,8 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/rootView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/cvPlayerView">
 
         <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout"
@@ -118,35 +119,27 @@
                     android:enabled="true"
                     android:focusable="true"
                     android:overScrollMode="always"
-                    android:padding="16dp"
                     android:textColor="@color/colorTextSecondary"
                     android:textIsSelectable="true"
                     android:textSize="@dimen/default_font_size" />
 
         </androidx.core.widget.NestedScrollView>
-
-        <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardElevation="8dp"
-                app:layout_anchorGravity="bottom|right|end">
-
-            <FrameLayout
-                    android:id="@+id/flAudioPlayer"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-        </androidx.cardview.widget.CardView>
-
-        <!--<fragment
-                android:id="@+id/audioPlayer"
-                class="com.marxist.android.ui.fragments.player.AudioPlayerFragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                app:layout_anchorGravity="bottom|right|end" />-->
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</LinearLayout>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cvPlayerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            app:cardElevation="8dp"
+            app:layout_anchorGravity="bottom|right|end">
+
+        <FrameLayout
+                android:id="@+id/flAudioPlayer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>
