@@ -60,7 +60,6 @@ class DetailsActivity : BaseActivity() {
 
         val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
 
-        val reset = DeviceUtils.dpToPx(16)
         val type = 1
         if (article!!.audioUrl.isNotEmpty()) {
             cvPlayerView.visibility = View.VISIBLE
@@ -77,11 +76,8 @@ class DetailsActivity : BaseActivity() {
                     .commit()
             }
 
-            val bottom = DeviceUtils.dpToPx(120)
-            txtContent.setPaddingRelative(reset, reset, reset, bottom)
         } else {
             cvPlayerView.visibility = View.GONE
-            txtContent.setPaddingRelative(reset, reset, reset, reset)
         }
 
         var content = article!!.content
