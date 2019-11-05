@@ -32,6 +32,7 @@ class SplashActivity : BaseActivity() {
         progressLoader.visibility = View.VISIBLE
 
         val allFeeds = feedsViewModel.getFeedsCount()
+
         maxPage = if (allFeeds > 0) {
             1
         } else {
@@ -95,7 +96,9 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun launchMainActivity() {
-        startActivity(Intent(applicationContext, MainActivity::class.java))
+        val mainIntent = Intent(applicationContext, MainActivity::class.java)
+        mainIntent.data = intent.data
+        startActivity(mainIntent)
         finish()
     }
 

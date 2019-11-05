@@ -16,8 +16,8 @@ import com.marxist.android.R
 import com.marxist.android.database.entities.LocalHighlights
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.viewmodel.HighlightViewModel
-import kotlinx.android.synthetic.main.fragment_bookmarks.*
-import kotlinx.android.synthetic.main.fragment_bookmarks.view.*
+import kotlinx.android.synthetic.main.fragments_list.*
+import kotlinx.android.synthetic.main.fragments_list.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
 
 class HighlightsFragment : Fragment(), ItemClickListener {
@@ -25,9 +25,10 @@ class HighlightsFragment : Fragment(), ItemClickListener {
         if (article is LocalHighlights) {
             highLightViewModel.deleteHighlight(article)
             highlightsAdapter.notifyItemRemoved(adapterPosition)
-            if(highlightsAdapter.itemCount == 0) {
-                rvHighLights.visibility = View.GONE
+            if (highlightsAdapter.itemCount == 0) {
+                rvListView.visibility = View.GONE
                 emptyView.visibility = View.VISIBLE
+                lavEmptyImage.setAnimation(R.raw.search_empty)
             }
         }
     }
@@ -52,12 +53,13 @@ class HighlightsFragment : Fragment(), ItemClickListener {
         highLightViewModel.getHighlights().observeOnce(this, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    rvHighLights.visibility = View.VISIBLE
+                    rvListView.visibility = View.VISIBLE
                     emptyView.visibility = View.GONE
                     highlightsAdapter.addHighlights(it)
                 } else {
-                    rvHighLights.visibility = View.GONE
+                    rvListView.visibility = View.GONE
                     emptyView.visibility = View.VISIBLE
+                    lavEmptyImage.setAnimation(R.raw.search_empty)
                 }
             }
         })
@@ -77,10 +79,10 @@ class HighlightsFragment : Fragment(), ItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_bookmarks, container, false)
-        view.rvHighLights.setHasFixedSize(true)
-        view.rvHighLights.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        view.rvHighLights.adapter = highlightsAdapter
+        val view = inflater.inflate(R.layout.fragments_list, container, false)
+        view.rvListView.setHasFixedSize(true)
+        view.rvListView.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+        view.rvListView.adapter = highlightsAdapter
         return view
     }
 }
