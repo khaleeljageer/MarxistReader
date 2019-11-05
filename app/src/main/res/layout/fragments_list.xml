@@ -4,9 +4,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <TextView
+    <include layout="@layout/layout_lottie_no_feed" />
+
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="Feeds Saved" />
+            android:background="@color/colorPrimary"
+            android:layoutAnimation="@anim/layout_animation_fall_down" />
 </FrameLayout>

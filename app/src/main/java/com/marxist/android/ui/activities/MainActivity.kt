@@ -29,6 +29,11 @@ class MainActivity : BaseActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        if (intent != null && intent.data != null) {
+            PrintLog.debug("Khaleel", "Intent Data : ${intent.data!!.host}")
+            PrintLog.debug("Khaleel", "Intent Data : ${intent.data!!.encodedPath}")
+        }
+
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
         val navController = findNavController(R.id.nav_host_fragment)
 

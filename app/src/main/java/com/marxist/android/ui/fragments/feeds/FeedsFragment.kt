@@ -16,7 +16,9 @@ import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.activities.DetailsActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.viewmodel.FeedsViewModel
-import kotlinx.android.synthetic.main.fragment_feeds.view.*
+import kotlinx.android.synthetic.main.fragments_list.*
+import kotlinx.android.synthetic.main.fragments_list.view.*
+import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
 
 class FeedsFragment : Fragment(), ItemClickListener {
     private lateinit var feedAdapter: FeedListAdapter
@@ -38,7 +40,14 @@ class FeedsFragment : Fragment(), ItemClickListener {
         feedsViewModel = ViewModelProviders.of(this).get(FeedsViewModel::class.java)
         feedsViewModel.getLiveFeeds().observe(this, Observer {
             if (it != null) {
-                feedAdapter.addFeeds(it)
+                if (it.isNotEmpty()) {
+                    rvListView.visibility = View.VISIBLE
+                    emptyView.visibility = View.GONE
+                    feedAdapter.addFeeds(it)
+                } else {
+                    rvListView.visibility = View.GONE
+                    emptyView.visibility = View.VISIBLE
+                }
             }
         })
     }
@@ -48,7 +57,7 @@ class FeedsFragment : Fragment(), ItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_feeds, container, false)
+        val view = inflater.inflate(R.layout.fragments_list, container, false)
 
         view.rvListView.setHasFixedSize(true)
         view.rvListView.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
