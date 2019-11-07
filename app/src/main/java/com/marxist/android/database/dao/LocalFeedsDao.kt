@@ -30,6 +30,9 @@ interface LocalFeedsDao {
     @Query("UPDATE localFeeds SET is_downloaded = :status WHERE title = :title")
     fun updateAudioStatus(status: Boolean, title: String)
 
+    @Query("UPDATE localFeeds SET is_downloaded = :status, downloaded_path=:path WHERE title = :title AND pub_date = :pubDate")
+    fun resetAudioStatus(status: Boolean, path: String, title: String, pubDate: Long)
+
     @Query("SELECT * FROM localFeeds WHERE is_downloaded=:status ORDER BY pub_date DESC")
     fun getDownloaded(status: Boolean): LiveData<MutableList<LocalFeeds>>
 }
