@@ -13,10 +13,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginBottom="10dp"
             android:scaleType="centerCrop"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
-            app:lottie_scale="0.6"
             app:lottie_speed="1.4" />
 
     <TextView

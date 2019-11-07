@@ -4,5 +4,6 @@
         <domain includeSubdomains="true">marxistreader.home.blog</domain>
         <domain includeSubdomains="true">archive.org</domain>
         <domain includeSubdomains="true">cloudfront.net</domain>
+        <domain includeSubdomains="true">127.0.0.1</domain>
     </domain-config>
 </network-security-config>

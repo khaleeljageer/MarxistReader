@@ -28,9 +28,14 @@ class HighlightsFragment : Fragment(), ItemClickListener {
             if (highlightsAdapter.itemCount == 0) {
                 rvListView.visibility = View.GONE
                 emptyView.visibility = View.VISIBLE
-                lavEmptyImage.setAnimation(R.raw.search_empty)
+                showImage()
             }
         }
+    }
+
+    private fun showImage() {
+        lavEmptyImage.scale = 0.6f
+        lavEmptyImage.setAnimation(R.raw.search_empty)
     }
 
     private lateinit var mContext: Context
@@ -59,7 +64,7 @@ class HighlightsFragment : Fragment(), ItemClickListener {
                 } else {
                     rvListView.visibility = View.GONE
                     emptyView.visibility = View.VISIBLE
-                    lavEmptyImage.setAnimation(R.raw.search_empty)
+                    showImage()
                 }
             }
         })

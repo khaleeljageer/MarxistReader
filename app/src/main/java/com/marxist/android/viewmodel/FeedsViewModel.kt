@@ -13,9 +13,11 @@ import java.util.*
 class FeedsViewModel(application: Application) : AndroidViewModel(application) {
     private var feedsDao: LocalFeedsDao = AppDatabase.getAppDatabase(application).localFeedsDao()
     private var feedsLiveData: LiveData<MutableList<LocalFeeds>>
+    private var feedsDownloaded: LiveData<MutableList<LocalFeeds>>
 
     init {
         feedsLiveData = feedsDao.getAllFeeds()
+        feedsDownloaded = feedsDao.getDownloaded(true)
     }
 
     private fun insert(localBooks: LocalFeeds) {
@@ -26,6 +28,10 @@ class FeedsViewModel(application: Application) : AndroidViewModel(application) {
 
     fun getLiveFeeds(): LiveData<MutableList<LocalFeeds>> {
         return feedsLiveData
+    }
+
+    fun getDownloadedFeeds(): LiveData<MutableList<LocalFeeds>> {
+        return feedsDownloaded
     }
 
     fun updateFeeds(it: RssFeed?): Boolean {
