@@ -21,7 +21,6 @@ import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.fragments.player.AudioPlayerFragment
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
-import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.RxBus
 import kotlinx.android.synthetic.main.activity_details.*
 import org.sufficientlysecure.htmltextview.HtmlTextView
@@ -53,7 +52,6 @@ class DetailsActivity : BaseActivity() {
 
         setSupportActionBar(toolbar)
         article = intent.getSerializableExtra(ARTICLE) as LocalFeeds
-        PrintLog.debug("Khaleel", "Artivle : $article")
 
         article!!.title.apply {
             txtCollapseTitle.text = this
@@ -77,7 +75,6 @@ class DetailsActivity : BaseActivity() {
                     )
                     .commit()
             }
-
         } else {
             cvPlayerView.visibility = View.GONE
         }

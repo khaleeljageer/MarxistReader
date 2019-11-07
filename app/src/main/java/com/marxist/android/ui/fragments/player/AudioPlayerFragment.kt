@@ -20,14 +20,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.marxist.android.R
+import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.utils.AppConstants
 import com.marxist.android.utils.PrintLog
+import com.marxist.android.utils.RxBus
 import com.marxist.android.utils.download.DownloadUtil
+import com.marxist.android.utils.download.PreferencesHelper
 import kotlinx.android.synthetic.main.audio_player_control_fragment.*
+import java.io.File
 import java.io.IOException
 import java.util.*
 
@@ -141,7 +145,9 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
             rewind()
         }
 
-
+        btnRemove.setOnClickListener {
+            removeDownloads()
+        }
 
         btnDownload.setOnClickListener {
             downloadItem()
@@ -173,6 +179,18 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         })
     }
 
+    private fun removeDownloads() {
+        btnRemove.visibility = View.INVISIBLE
+        val filePath = File(localFeeds!!.downloadPath)
+        AppDatabase.getAppDatabase(mContext).localFeedsDao()
+            .resetAudioStatus(false, "", localFeeds!!.title, localFeeds!!.pubDate)
+        filePath.delete()
+        localFeeds!!.downloadPath = ""
+        localFeeds!!.isDownloaded = false
+
+        RxBus.publish(ShowSnackBar(getString(R.string.audio_deleted)))
+    }
+
     private val animatorListener = AnimatorListenerAdapter(
         onStart = { btnPlayPause.isActivated = true },
         onEnd = {
@@ -193,7 +211,8 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
             localFeeds!!.pubDate,
             AppConstants.AUDIO
         )
-        Toast.makeText(mContext, getString(R.string.download_started), Toast.LENGTH_SHORT).show()
+
+        RxBus.publish(ShowSnackBar(getString(R.string.download_started)))
         btnDownload.visibility = View.INVISIBLE
     }
 
@@ -210,6 +229,10 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         }
         if (localFeeds!!.isDownloaded) {
             btnDownload.visibility = View.INVISIBLE
+            btnRemove.visibility = View.VISIBLE
+        } else {
+            btnDownload.visibility = View.VISIBLE
+            btnRemove.visibility = View.INVISIBLE
         }
     }
 

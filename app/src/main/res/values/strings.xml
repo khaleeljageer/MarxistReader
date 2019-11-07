@@ -67,4 +67,5 @@
     <string name="download_msg_rationale">Need storage permission to perform read, write.</string>
     <string name="download_started">Downloading…</string>
     <string name="no_downloads">No Downloads</string>
+    <string name="audio_deleted">Audio deleted</string>
 </resources>
