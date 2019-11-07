@@ -1,6 +1,8 @@
 package com.marxist.android.utils
 
 object AppConstants {
+    const val AUDIO = "audio"
+    const val BOOKS = "books"
     val NIGHT_MODE: Boolean
         get() = false
     val INSTANCE_NEWS: Boolean?

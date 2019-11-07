@@ -20,9 +20,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.marxist.android.R
+import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.utils.AppConstants
 import com.marxist.android.utils.PrintLog
+import com.marxist.android.utils.download.DownloadUtil
 import kotlinx.android.synthetic.main.audio_player_control_fragment.*
 import java.io.IOException
 import java.util.*
@@ -32,8 +36,9 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,
     AudioManager.OnAudioFocusChangeListener {
 
+    private var isPrepared: Boolean = false
     private var bufferedPosition: Int = 0
-    private var audioUrl: String = ""
+    private var localFeeds: LocalFeeds? = null
     private var resumePosition: Int = 0
     private lateinit var mContext: Context
     private var mediaPlayer: MediaPlayer? = null
@@ -42,7 +47,6 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     private var dragging: Boolean = false
     private var seekDispatcher: SeekDispatcher? = null
     private var handler: Handler? = null
-
 
     private var mediaSessionManager: MediaSessionManager? = null
     private var mediaSession: MediaSessionCompat? = null
@@ -60,11 +64,9 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         const val ACTION_REWIND = "com.marxist.android.ui.fragments.player.ACTION_REWIND"
         const val ACTION_STOP = "com.marxist.android.ui.fragments.player.ACTION_STOP"
 
-        const val PLAY_TO_PAUSE = 36
-
-        fun newInstance(audioUrl: String, type: Int): AudioPlayerFragment {
+        fun newInstance(localFeeds: LocalFeeds, type: Int): AudioPlayerFragment {
             val bundle = Bundle()
-            bundle.putString("KEY_AUDIO_URL", audioUrl)
+            bundle.putSerializable("KEY_LOCAL_FEEDS", localFeeds)
             bundle.putInt("KEY_AUDIO_TYPE", type)
             val fragment = AudioPlayerFragment()
             fragment.arguments = bundle
@@ -103,24 +105,30 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         formatter = Formatter(formatBuilder, Locale.getDefault())
         sbPlayer.max = PROGRESS_BAR_MAX
 
-        pbPrepare.visibility = View.VISIBLE
-        btnPlayPause.visibility = View.INVISIBLE
-
         btnPlayPause.tag = "PLAY"
+        pbPrepare.visibility = View.INVISIBLE
         btnPlayPause.addAnimatorListener(animatorListener)
         btnPlayPause.setOnClickListener {
             if (btnPlayPause.tag == "PLAY") {
                 btnPlayPause.tag = "PAUSE"
                 btnPlayPause.setMinAndMaxFrame(0, 33)
-                playMedia()
+                if (isPrepared)
+                    playMedia()
             } else {
                 btnPlayPause.tag = "PLAY"
                 btnPlayPause.setMinAndMaxFrame(33, 66)
-                pauseMedia()
+                if (isPrepared)
+                    pauseMedia()
             }
             btnPlayPause.playAnimation()
             btnPlayPause.isActivated = btnPlayPause.isAnimating
             btnPlayPause.postInvalidate()
+
+            if (mediaPlayer == null) {
+                pbPrepare.visibility = View.VISIBLE
+                btnPlayPause.visibility = View.INVISIBLE
+                initMediaPlayer()
+            }
         }
 
         btnForward.setOnClickListener {
@@ -131,6 +139,12 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         btnRewind.setOnClickListener {
             btnRewind.playAnimation()
             rewind()
+        }
+
+
+
+        btnDownload.setOnClickListener {
+            downloadItem()
         }
 
         sbPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -171,17 +185,31 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         }
     )
 
+    private fun downloadItem() {
+        DownloadUtil.queueForDownload(
+            mContext,
+            localFeeds!!.title,
+            localFeeds!!.audioUrl,
+            localFeeds!!.pubDate,
+            AppConstants.AUDIO
+        )
+        Toast.makeText(mContext, getString(R.string.download_started), Toast.LENGTH_SHORT).show()
+        btnDownload.visibility = View.INVISIBLE
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        audioUrl = arguments!!.getString("KEY_AUDIO_URL")!!
+        localFeeds = (arguments!!.getSerializable("KEY_LOCAL_FEEDS") as LocalFeeds?)!!
         if (mediaSessionManager == null) {
             try {
                 initMediaSession()
-                initMediaPlayer()
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
+        }
+        if (localFeeds!!.isDownloaded) {
+            btnDownload.visibility = View.INVISIBLE
         }
     }
 
@@ -203,7 +231,11 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
         )
         try {
-            mediaPlayer!!.setDataSource(audioUrl)
+            if (localFeeds!!.isDownloaded) {
+                mediaPlayer!!.setDataSource("file://${localFeeds!!.downloadPath}")
+            } else {
+                mediaPlayer!!.setDataSource(localFeeds!!.audioUrl)
+            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -257,6 +289,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     private fun playMedia() {
+        if (mediaPlayer == null) return
         if (!mediaPlayer!!.isPlaying) {
             mediaPlayer!!.start()
             handler!!.post(updateProgressAction)
@@ -264,6 +297,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     private fun forward() {
+        if (mediaPlayer == null) return
         if (mediaPlayer!!.isPlaying) {
             mediaPlayer!!.pause()
             mediaPlayer!!.seekTo(mediaPlayer!!.currentPosition + 10000)
@@ -272,6 +306,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     private fun rewind() {
+        if (mediaPlayer == null) return
         if (mediaPlayer!!.isPlaying) {
             mediaPlayer!!.pause()
             mediaPlayer!!.seekTo(mediaPlayer!!.currentPosition - 10000)
@@ -288,6 +323,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     private fun pauseMedia() {
+        if (mediaPlayer == null) return
         if (mediaPlayer!!.isPlaying) {
             mediaPlayer!!.pause()
             handler!!.removeCallbacks(updateProgressAction)
@@ -296,6 +332,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     private fun resumeMedia() {
+        if (mediaPlayer == null) return
         if (!mediaPlayer!!.isPlaying) {
             mediaPlayer!!.seekTo(resumePosition)
             mediaPlayer!!.start()
@@ -340,9 +377,11 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     override fun onPrepared(p0: MediaPlayer?) {
+        isPrepared = true
         pbPrepare.visibility = View.INVISIBLE
         btnPlayPause.visibility = View.VISIBLE
         handler!!.post(updateProgressAction)
+        playMedia()
     }
 
 

@@ -23,4 +23,13 @@ interface LocalFeedsDao {
 
     @Query("UPDATE localFeeds SET is_bookmarked = :isBookMarked WHERE title = :title AND pub_date = :pubDate")
     fun updateBookMarkStatus(isBookMarked: Boolean, title: String, pubDate: Long)
+
+    @Query("UPDATE localFeeds SET downloaded_path = :filePath WHERE title = :title AND pub_date = :pubDate")
+    fun updateAudioStatus(filePath: String, title: String, pubDate: Long)
+
+    @Query("UPDATE localFeeds SET is_downloaded = :status WHERE title = :title")
+    fun updateAudioStatus(status: Boolean, title: String)
+
+    @Query("SELECT * FROM localFeeds WHERE is_downloaded=:status ORDER BY pub_date DESC")
+    fun getDownloaded(status: Boolean): LiveData<MutableList<LocalFeeds>>
 }

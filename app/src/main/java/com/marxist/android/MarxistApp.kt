@@ -7,6 +7,9 @@ import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
+import com.airbnb.lottie.LottieComposition
+import com.airbnb.lottie.LottieCompositionFactory
+import com.airbnb.lottie.LottieDrawable
 import com.google.firebase.messaging.FirebaseMessaging
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.utils.api.ApiClient

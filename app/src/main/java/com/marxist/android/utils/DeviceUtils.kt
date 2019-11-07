@@ -1,10 +1,11 @@
 package com.marxist.android.utils
 
 import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
-import android.content.res.Resources
 import android.net.ConnectivityManager
 import com.marxist.android.R
+import java.io.File
 
 
 object DeviceUtils {
@@ -31,9 +32,5 @@ object DeviceUtils {
         )
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         baseContext.startActivity(shareIntent)
-    }
-
-    fun dpToPx(dp: Int): Int {
-        return (dp * Resources.getSystem().displayMetrics.density).toInt()
     }
 }
