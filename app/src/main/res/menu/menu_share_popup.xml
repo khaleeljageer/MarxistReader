@@ -13,23 +13,27 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
             android:id="@+id/menu_share_item"
             android:icon="@drawable/ic_share_black"
             android:orderInCategory="1"
-            android:title="@string/share_text" />
-
-    <item
-            android:id="@+id/menu_copy_item"
-            android:icon="@drawable/ic_content_copy_black"
-            android:orderInCategory="2"
-            android:title="@string/copy_text" />
+            android:title="@string/share_text"
+            app:showAsAction="always" />
 
     <item
             android:id="@+id/menu_bookmark_item"
             android:icon="@drawable/ic_bookmark_black_24dp"
             android:orderInCategory="3"
-            android:title="@string/bookmark" />
+            android:title="@string/bookmark"
+            app:showAsAction="always" />
+
+    <item
+            android:id="@+id/menu_copy_item"
+            android:icon="@drawable/ic_content_copy_black"
+            android:orderInCategory="3"
+            android:title="@string/copy_text"
+            app:showAsAction="ifRoom" />
 </menu>

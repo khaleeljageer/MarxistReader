@@ -116,10 +116,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="30dp"
-                    android:enabled="true"
                     android:focusable="true"
-                    android:padding="16dp"
+                    android:focusableInTouchMode="true"
+                    android:longClickable="true"
                     android:overScrollMode="always"
+                    android:padding="16dp"
                     android:textColor="@color/colorTextSecondary"
                     android:textIsSelectable="true"
                     android:textSize="@dimen/default_font_size" />

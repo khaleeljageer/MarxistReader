@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
 import android.view.*
+import android.view.ActionMode.Callback
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.appbar.AppBarLayout
 import com.marxist.android.R
@@ -157,7 +158,6 @@ class DetailsActivity : BaseActivity() {
             if (scrollView != null) {
                 val totalHeight =
                     scrollView.getChildAt(0).measuredHeight - scrollView.measuredHeight
-//                isEndReached = scrollY == totalHeight
                 readPercent = (scrollY.toDouble() / totalHeight.toDouble() * 100).roundToInt()
             }
         }
@@ -166,14 +166,125 @@ class DetailsActivity : BaseActivity() {
             onBackPressed()
         }
 
-        txtContent.customSelectionActionModeCallback =
+        txtContent.customSelectionActionModeCallback = object : Callback {
+            override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
+                if (item != null) {
+                    when (item.itemId) {
+                        R.id.menu_share_item -> {
+                            return try {
+                                val selectedText = getSelected()
+                                if (selectedText.isNotEmpty()) {
+                                    DeviceUtils.shareIntent(
+                                        article!!.title,
+                                        selectedText.plus("\n")
+                                            .plus(baseContext.getString(R.string.to_read_more))
+                                            .plus(article!!.link),
+                                        baseContext
+                                    )
+                                }
+                                mode!!.finish()
+                                true
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                false
+                            }
+                        }
+                        R.id.menu_copy_item -> {
+                            return try {
+                                val selectedText = getSelected()
+                                if (selectedText.isNotEmpty()) {
+                                    val clipManager =
+                                        baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                    val clip = ClipData.newPlainText(
+                                        "marxist_reader",
+                                        selectedText.plus("\n")
+                                            .plus(baseContext.getString(R.string.to_read_more))
+                                            .plus(article!!.link)
+                                    )
+                                    clipManager.setPrimaryClip(clip)
+                                }
+                                mode!!.finish()
+                                RxBus.publish(ShowSnackBar(baseContext.getString(R.string.copied)))
+                                true
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                false
+                            }
+                        }
+                        R.id.menu_bookmark_item -> {
+                            return try {
+                                val selectedText = getSelected()
+                                if (selectedText.isNotEmpty()) {
+                                    appDatabase.localHighlightsDao().insert(
+                                        LocalHighlights(
+                                            System.currentTimeMillis(),
+                                            article!!.title,
+                                            article!!.link,
+                                            selectedText
+                                        )
+                                    )
+                                    RxBus.publish(
+                                        ShareSnackBar(
+                                            baseContext.getString(R.string.added_to_bookmarks),
+                                            article!!.title,
+                                            selectedText.plus("\n")
+                                                .plus(baseContext.getString(R.string.to_read_more))
+                                                .plus(article!!.link)
+                                        )
+                                    )
+                                }
+                                mode!!.finish()
+                                true
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                                false
+                            }
+                        }
+                    }
+                }
+                return false
+            }
+
+            private fun getSelected(): String {
+                if (txtContent.isFocused) {
+                    val textStartIndex = txtContent.selectionStart
+                    val textEndIndex = txtContent.selectionEnd
+
+                    val min = 0.coerceAtLeast(textStartIndex.coerceAtMost(textEndIndex))
+                    val max = 0.coerceAtLeast(textStartIndex.coerceAtLeast(textEndIndex))
+                    return txtContent.text.subSequence(min, max).toString().trim { it <= ' ' }
+                }
+                return ""
+            }
+
+            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                menuInflater.inflate(R.menu.menu_share_popup, menu)
+                return true
+            }
+
+            override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
+                if (menu != null) {
+                    menu.removeItem(android.R.id.cut)
+                    menu.removeItem(android.R.id.copy)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        menu.removeItem(android.R.id.shareText)
+                    }
+                }
+                return false
+            }
+
+            override fun onDestroyActionMode(mode: ActionMode?) {
+            }
+        }
+
+        /*txtContent.customSelectionActionModeCallback =
             MarkTextSelectionActionMode(
                 menuInflater,
                 txtContent,
                 applicationContext,
                 article!!.title,
                 article!!.link, appDatabase
-            )
+            )*/
     }
 
     override fun onDestroy() {
@@ -181,122 +292,15 @@ class DetailsActivity : BaseActivity() {
         System.gc()
     }
 
-    class MarkTextSelectionActionMode(
-        private val menuInflater: MenuInflater,
-        private val txtContent: HtmlTextView,
-        private val baseContext: Context,
-        private val title: String,
-        private val link: String,
-        private val appDatabase: AppDatabase
-    ) :
-        ActionMode.Callback {
-        override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-            if (item != null) {
-                when (item.itemId) {
-                    R.id.menu_share_item -> {
-                        return try {
-                            val selectedText = getSelected()
-                            if (selectedText.isNotEmpty()) {
-                                DeviceUtils.shareIntent(
-                                    title,
-                                    selectedText.plus("\n")
-                                        .plus(baseContext.getString(R.string.to_read_more))
-                                        .plus(link),
-                                    baseContext
-                                )
-                            }
-                            mode!!.finish()
-                            true
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            false
-                        }
-                    }
-                    R.id.menu_copy_item -> {
-                        return try {
-                            val selectedText = getSelected()
-                            if (selectedText.isNotEmpty()) {
-                                val clipManager =
-                                    baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                val clip = ClipData.newPlainText(
-                                    "marxist_reader",
-                                    selectedText.plus("\n")
-                                        .plus(baseContext.getString(R.string.to_read_more))
-                                        .plus(link)
-                                )
-                                clipManager.setPrimaryClip(clip)
-                            }
-                            mode!!.finish()
-                            RxBus.publish(ShowSnackBar(baseContext.getString(R.string.copied)))
-                            true
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            false
-                        }
-                    }
-                    R.id.menu_bookmark_item -> {
-                        return try {
-                            val selectedText = getSelected()
-                            if (selectedText.isNotEmpty()) {
-                                appDatabase.localHighlightsDao().insert(
-                                    LocalHighlights(
-                                        System.currentTimeMillis(),
-                                        title,
-                                        link,
-                                        selectedText
-                                    )
-                                )
-                                RxBus.publish(
-                                    ShareSnackBar(
-                                        baseContext.getString(R.string.added_to_bookmarks),
-                                        title,
-                                        selectedText.plus("\n")
-                                            .plus(baseContext.getString(R.string.to_read_more))
-                                            .plus(link)
-                                    )
-                                )
-                            }
-                            mode!!.finish()
-                            true
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            false
-                        }
-                    }
-                }
-            }
-            return false
-        }
-
-        private fun getSelected(): String {
-            if (txtContent.isFocused) {
-                val textStartIndex = txtContent.selectionStart
-                val textEndIndex = txtContent.selectionEnd
-
-                val min = 0.coerceAtLeast(textStartIndex.coerceAtMost(textEndIndex))
-                val max = 0.coerceAtLeast(textStartIndex.coerceAtLeast(textEndIndex))
-                return txtContent.text.subSequence(min, max).toString().trim { it <= ' ' }
-            }
-            return ""
-        }
-
-        override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            menuInflater.inflate(R.menu.menu_share_popup, menu)
-            return true
-        }
-
-        override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-            if (menu != null) {
-                menu.removeItem(android.R.id.cut)
-                menu.removeItem(android.R.id.copy)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    menu.removeItem(android.R.id.shareText)
-                }
-            }
-            return false
-        }
-
-        override fun onDestroyActionMode(mode: ActionMode?) {
-        }
-    }
+//    class MarkTextSelectionActionMode(
+//        private val menuInflater: MenuInflater,
+//        private val txtContent: HtmlTextView,
+//        private val baseContext: Context,
+//        private val title: String,
+//        private val link: String,
+//        private val appDatabase: AppDatabase
+//    ) :
+//        Callback {
+//
+//    }
 }
