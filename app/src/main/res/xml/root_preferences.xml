@@ -29,7 +29,6 @@
                 app:summaryOn="@string/dark_mode_enable"
                 app:title="@string/dark_mode" />
 
-
         <SeekBarPreference
                 android:max="20"
                 app:adjustable="true"
@@ -40,5 +39,23 @@
                 app:seekBarIncrement="1"
                 app:showSeekBarValue="true"
                 app:title="@string/font_size" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:allowDividerBelow="true"
+            app:iconSpaceReserved="false"
+            app:title="@string/credits">
+
+        <Preference
+                app:allowDividerBelow="true"
+                app:iconSpaceReserved="false"
+                app:key="@string/lottie_files_credit"
+                app:title="@string/lottie_files_credit" />
+
+        <Preference
+                app:allowDividerBelow="true"
+                app:iconSpaceReserved="false"
+                app:key="@string/about_us"
+                app:title="@string/about_us" />
     </PreferenceCategory>
 </PreferenceScreen>

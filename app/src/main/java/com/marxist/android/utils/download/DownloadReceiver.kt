@@ -18,6 +18,13 @@ class DownloadReceiver : BroadcastReceiver() {
             if (file.isSuccessful()) {
                 localBooksDao.updateAudioStatus(true, file.title!!)
             }
+        } else if (id in DownloadManagerHelper.getBooksDownloads(context)) {
+            val localBooksDao =
+                AppDatabase.getAppDatabase(context.applicationContext).localBooksDao()
+            val file = DownloadManagerHelper.getDownloadedFile(context, id)
+            if (file.isSuccessful()) {
+                localBooksDao.updateBookStatus(true, id)
+            }
         }
     }
 }
