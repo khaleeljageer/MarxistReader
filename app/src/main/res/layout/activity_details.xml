@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -7,8 +7,10 @@
         android:transitionName="transition">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/rootView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/cvPlayerView">
 
         <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout"
@@ -36,7 +38,10 @@
                             android:ellipsize="end"
                             android:gravity="bottom"
                             android:maxLines="4"
-                            android:padding="16dp"
+                            android:paddingStart="16dp"
+                            android:paddingTop="16dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="18dp"
                             android:textColor="@color/colorTextSecondary"
                             android:textSize="@dimen/details_title_size"
                             app:fontFamily="@font/hind_regular" />
@@ -47,6 +52,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         android:background="?attr/colorPrimary"
+                        android:theme="@style/ToolbarTheme"
                         app:contentInsetEnd="0dp"
                         app:contentInsetStart="0dp"
                         app:elevation="8dp"
@@ -77,7 +83,7 @@
                                 android:gravity="start|center_vertical"
                                 android:maxLines="1"
                                 android:textColor="@color/colorTextSecondary"
-                                android:textSize="@dimen/details_title_size"
+                                android:textSize="@dimen/default_font_size"
                                 android:visibility="invisible"
                                 app:fontFamily="@font/hind_regular" />
 
@@ -99,6 +105,7 @@
 
 
         <androidx.core.widget.NestedScrollView
+                android:id="@+id/nestedScroll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
@@ -108,8 +115,9 @@
                     android:id="@+id/txtContent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:enabled="true"
+                    android:layout_marginTop="30dp"
                     android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:longClickable="true"
                     android:overScrollMode="always"
                     android:padding="16dp"
@@ -118,6 +126,22 @@
                     android:textSize="@dimen/default_font_size" />
 
         </androidx.core.widget.NestedScrollView>
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</LinearLayout>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cvPlayerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:visibility="gone"
+            app:cardElevation="8dp"
+            app:layout_anchorGravity="bottom|right|end">
+
+        <FrameLayout
+                android:id="@+id/flAudioPlayer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

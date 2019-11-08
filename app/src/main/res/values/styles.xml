@@ -27,20 +27,7 @@
 
     <style name="Splash_Theme" parent="MRSplashTheme" />
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.ActionBar">
-
-        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
-        <item name="android:textColorSecondary">@color/colorTextPrimary</item>
-    </style>
-
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat">
-        <item name="android:fontFamily">@font/hind_bold</item>
-        <item name="android:textSize">18sp</item>
-    </style>
-
-    <style name="TabLayoutTheme" parent="ThemeOverlay.AppCompat">
-        <item name="android:fontFamily">@font/hind_regular</item>
-    </style>
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
 
     <style name="Nav_Active_Text">
         <item name="android:fontFamily">@font/hind_bold</item>

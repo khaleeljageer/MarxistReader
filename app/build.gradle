@@ -9,15 +9,16 @@ apply plugin: 'kotlin-kapt'
 apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion rootProject.ext.compileSdkVersion
     defaultConfig {
         applicationId "com.marxist.android"
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode 30
+        versionName "3.0"
 
         multiDexEnabled = true
+        ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
     }
 
     buildTypes {
@@ -39,32 +40,16 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-
-    flavorDimensions "version"
-
-    productFlavors {
-        productionUrl {
-            dimension "version"
-
-            buildConfigField "String", "HOST_URL", "\"https://marxistreader.home.blog/\""
-        }
-
-        stagingUrl {
-            dimension "version"
-
-            buildConfigField "String", "HOST_URL", "\"https://marxistreader.home.blog/\""
-        }
-    }
 }
 
 dependencies {
-    def retrofit_version = '2.5.0'
+    def retrofit_version = '2.6.2'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
+    implementation 'androidx.core:core-ktx:1.2.0-beta01'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.navigation:navigation-fragment:2.1.0'
@@ -72,12 +57,20 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0'
     implementation 'androidx.navigation:navigation-ui-ktx:2.1.0'
     implementation 'androidx.preference:preference:1.1.0'
+    implementation 'androidx.media:media:1.1.0'
 
     implementation 'androidx.multidex:multidex:2.0.1'
+    implementation project(':reader')
+
+    implementation("com.github.bumptech.glide:glide:$glide_version") {
+        exclude group: "com.android.support"
+    }
+    kapt "com.github.bumptech.glide:compiler:$glide_version"
 
     //Retrofit for REST
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     implementation("com.squareup.retrofit2:converter-simplexml:$retrofit_version") {
         exclude group: 'xpp3', module: 'xpp3'
         exclude group: 'stax', module: 'stax-api'
@@ -87,18 +80,11 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
     implementation 'io.reactivex.rxjava2:rxjava:2.2.11'
 
-    implementation 'androidx.room:room-runtime:2.2.0'
-    kapt 'androidx.room:room-compiler:2.2.0'
+    implementation 'androidx.room:room-runtime:2.2.1'
+    kapt 'androidx.room:room-compiler:2.2.1'
 
-    /**
-     * Firebase
-     * */
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
-    implementation 'com.google.firebase:firebase-analytics:17.2.0'
-    implementation 'com.google.firebase:firebase-auth:19.1.0'
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
-
-    implementation 'com.airbnb.android:lottie:3.0.7'
+    implementation 'com.airbnb.android:lottie:3.1.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'org.sufficientlysecure:html-textview:3.7'
 }

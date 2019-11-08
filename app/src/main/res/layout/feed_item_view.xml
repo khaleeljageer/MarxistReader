@@ -46,16 +46,6 @@
                 android:layout_below="@+id/txtFeedDesc"
                 android:layout_marginTop="5dp">
 
-            <ProgressBar
-                    android:id="@+id/pbReadPercent"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_gravity="bottom"
-                    android:max="100"
-                    android:progress="10"
-                    android:visibility="visible" />
-
             <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtPubDate"
                     android:layout_width="match_parent"
@@ -73,7 +63,7 @@
                     android:padding="8dp"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_music_black"
-                    android:tint="#FFA2A2A2" />
+                    android:tint="@color/grey" />
         </FrameLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

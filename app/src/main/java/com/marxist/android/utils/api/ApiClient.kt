@@ -2,19 +2,29 @@
 
 package com.marxist.android.utils.api
 
-import com.marxist.android.BuildConfig
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 object ApiClient {
     lateinit var mApiService: ApiService
+    lateinit var mGitHubService: GitHubService
 
     fun setApiService() {
         mApiService = Retrofit.Builder()
             .client(UnsafeOkHttpClient.unsafeOkHttpClient)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(SimpleXmlConverterFactory.create())
-            .baseUrl(BuildConfig.HOST_URL).build().create(ApiService::class.java)
+            .baseUrl("https://marxistreader.home.blog/").build().create(ApiService::class.java)
+    }
+
+    fun setGitHubService() {
+        mGitHubService = Retrofit.Builder()
+            .client(UnsafeOkHttpClient.unsafeOkHttpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://raw.githubusercontent.com/tamilmarxist/MarxistTamilEbooks/")
+            .build().create(GitHubService::class.java)
     }
 }

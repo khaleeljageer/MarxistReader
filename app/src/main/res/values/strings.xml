@@ -2,12 +2,14 @@
     <string name="pref_key_dark_mode" translatable="false">dark_mode</string>
     <string name="pref_key_font_size" translatable="false">font_size</string>
     <string name="pref_key_name" translatable="false">com.marxist.android.PREFERENCE</string>
+    <string name="default_notification_channel_id" translatable="false">marxist_tamil</string>
+    <string name="marxist_instant_news" translatable="false">marxist_instant_news</string>
 
     <string name="app_name">Marxist Reader</string>
     <string name="action_settings">Settings</string>
     <string name="select_your_language_hint_1">Select your feed language(s)</string>
     <string name="select_your_language_hint_2">You can select multiple language</string>
-    <string name="default_notification_channel_id">marxist_tamil</string>
+
     <string name="must_select_language">Must select at least one language</string>
     <string name="instant_news">Instant News</string>
     <string name="on">On</string>
@@ -15,14 +17,13 @@
     <string name="dark_theme">Night Mode</string>
     <string name="feed_languages">Feed Languages</string>
     <string name="update">Update</string>
-    <string name="tha">த</string>
-    <string name="e">E</string>
     <string name="loading">Loading&#8230;</string>
     <string name="connected_to_internet">Connected to Internet</string>
     <string name="no_internet">Connection Lost</string>
     <string name="feeds">Feeds</string>
     <string name="books">E-Books</string>
-    <string name="bookmarks">Bookmarks</string>
+    <string name="bookmarks">Highlights</string>
+    <string name="bookmark">Highlight</string>
     <string name="saved">Saved</string>
     <string name="settings">Settings</string>
 
@@ -49,4 +50,33 @@
     <string name="rewind">Rewind</string>
     <string name="stop">Stop</string>
     <string name="font_size">Font Size</string>
+    <string name="share_text">Share</string>
+    <string name="copy_text">Copy</string>
+    <string name="text_copied">Text Copied</string>
+    <string name="to_read_more">Read more :&#160;</string>
+    <string name="remove_highlight">Remove</string>
+    <string name="_8942">⋮</string>
+    <string name="estimate">&#160;~</string>
+    <string name="copied">Copied…</string>
+    <string name="added_to_bookmarks">Added to highlights</string>
+    <string name="nothing_to_show">Nothing to show</string>
+    <string name="_00_00">00:00</string>
+    <string name="no_highlights_to_show">No highlights to show</string>
+    <string name="you_can_add_highlights_from_any_article">You can add highlights from any article</string>
+    <string name="you_can_add_download_from_any_article">You can download audio from any article</string>
+    <string name="download_msg_rationale">Need storage permission to perform read, write.</string>
+    <string name="download_started">Downloading…</string>
+    <string name="no_downloads">No Downloads</string>
+    <string name="audio_deleted">Audio deleted</string>
+    <string name="about_us">About Us</string>
+    <string name="open_source_licence">Open source licence</string>
+    <string name="lottie_files_credit">LottieFiles Credit</string>
+    <string name="credits">Credits</string>
+    <string name="this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0">This animation is available to download and use for Free under Creative Commons License 2.0</string>
+    <string name="https_lottiefiles_com_10223_search_empty">https://lottiefiles.com/10223-search-empty</string>
+    <string name="https_lottiefiles_com_772_bookmark_animation">https://lottiefiles.com/772-bookmark-animation</string>
+    <string name="https_lottiefiles_com_marketplace_multimedia_icons">https://lottiefiles.com/marketplace/multimedia-icons</string>
+    <string name="https_lottiefiles_com_11123_music">https://lottiefiles.com/11123-music</string>
+    <string name="https_lottiefiles_com_353_newspaper_spinner">https://lottiefiles.com/353-newspaper-spinner</string>
+    <string name="lottie_credits">Lottie Credits</string>
 </resources>
