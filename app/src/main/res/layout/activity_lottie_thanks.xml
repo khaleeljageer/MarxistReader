@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:elevation="5dp">
+
+        <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:navigationIcon="@drawable/ic_arrow_back_24dp"
+                app:title="@string/lottie_credits" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie1"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/paper_loader" />
+
+                <TextView
+                        android:id="@+id/txt1Desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lottie1"
+                        android:text="@string/this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/txt1Link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt1Desc"
+                        android:layout_toEndOf="@+id/lottie1"
+                        android:autoLink="web"
+                        android:text="@string/https_lottiefiles_com_353_newspaper_spinner"
+                        android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie2"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/bookmark_anim" />
+
+                <TextView
+                        android:id="@+id/txt2Desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lottie2"
+                        android:text="@string/this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/txt2Link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt2Desc"
+                        android:layout_toEndOf="@+id/lottie2"
+                        android:autoLink="web"
+                        android:text="@string/https_lottiefiles_com_772_bookmark_animation"
+                        android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie4"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/ic_media_forward" />
+
+                <TextView
+                        android:id="@+id/txt4Desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lottie4"
+                        android:text="@string/this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/txt4Link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt4Desc"
+                        android:layout_toEndOf="@+id/lottie4"
+                        android:autoLink="web"
+                        android:text="@string/https_lottiefiles_com_marketplace_multimedia_icons"
+                        android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie5"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/ic_media_play_pause" />
+
+                <TextView
+                        android:id="@+id/txt5Desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lottie5"
+                        android:text="@string/this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/txt5Link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt5Desc"
+                        android:layout_toEndOf="@+id/lottie5"
+                        android:autoLink="web"
+                        android:text="@string/https_lottiefiles_com_marketplace_multimedia_icons"
+                        android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie6"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/ic_media_rewind" />
+
+                <TextView
+                        android:id="@+id/txt6Desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lottie6"
+                        android:text="@string/this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/txt6Link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt6Desc"
+                        android:layout_toEndOf="@+id/lottie6"
+                        android:autoLink="web"
+                        android:text="@string/https_lottiefiles_com_marketplace_multimedia_icons"
+                        android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie7"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/ic_media_stop" />
+
+                <TextView
+                        android:id="@+id/txt7Desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lottie7"
+                        android:text="@string/this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/txt7Link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt7Desc"
+                        android:layout_toEndOf="@+id/lottie7"
+                        android:autoLink="web"
+                        android:text="@string/https_lottiefiles_com_marketplace_multimedia_icons"
+                        android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie8"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/empty_music" />
+
+                <TextView
+                        android:id="@+id/txt8Desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lottie8"
+                        android:text="@string/this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/txt8Link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt8Desc"
+                        android:layout_toEndOf="@+id/lottie8"
+                        android:autoLink="web"
+                        android:text="@string/https_lottiefiles_com_11123_music"
+                        android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp">
+
+                <com.airbnb.lottie.LottieAnimationView
+                        android:id="@+id/lottie9"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true"
+                        app:lottie_rawRes="@raw/search_empty" />
+
+                <TextView
+                        android:id="@+id/txt9Desc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toEndOf="@+id/lottie9"
+                        android:text="@string/this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0"
+                        android:textSize="14sp" />
+
+                <TextView
+                        android:id="@+id/txt9Link"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt9Desc"
+                        android:layout_toEndOf="@+id/lottie9"
+                        android:autoLink="web"
+                        android:text="@string/https_lottiefiles_com_10223_search_empty"
+                        android:textSize="14sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

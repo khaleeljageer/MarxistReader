@@ -15,4 +15,7 @@
     <color name="grey">#FFA2A2A2</color>
     <color name="snackbar_bg">#323232</color>
     <color name="primary_red">#F44336</color>
+
+    <color name="colorAccent_alpha_40">#6664B5F6</color>
+    <color name="black_alpha_40">#66000000</color>
 </resources>

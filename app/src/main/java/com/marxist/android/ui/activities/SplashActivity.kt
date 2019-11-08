@@ -10,6 +10,7 @@ import com.marxist.android.R
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.api.RetryWithDelay
+import com.marxist.android.viewmodel.BookListViewModel
 import com.marxist.android.viewmodel.FeedsViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

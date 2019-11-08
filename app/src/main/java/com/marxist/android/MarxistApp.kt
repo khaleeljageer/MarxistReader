@@ -7,20 +7,22 @@ import android.app.job.JobInfo
 import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
-import com.airbnb.lottie.LottieComposition
-import com.airbnb.lottie.LottieCompositionFactory
-import com.airbnb.lottie.LottieDrawable
+import androidx.multidex.MultiDex
+import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.network.NetworkSchedulerService
+import org.geometerplus.android.fbreader.FBReaderApplication
 import java.util.*
 
 
-class MarxistApp : Application() {
+class MarxistApp : FBReaderApplication() {
 
     override fun onCreate() {
         super.onCreate()
+        MultiDex.install(this@MarxistApp)
+        FirebaseApp.initializeApp(this)
 
         FirebaseMessaging.getInstance()
             .subscribeToTopic(getString(R.string.default_notification_channel_id))
@@ -30,6 +32,7 @@ class MarxistApp : Application() {
         AppDatabase.getAppDatabase(applicationContext)
         scheduleJob()
         ApiClient.setApiService()
+        ApiClient.setGitHubService()
 
         initNotificationChannel()
     }

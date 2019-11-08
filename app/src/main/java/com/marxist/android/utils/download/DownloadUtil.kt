@@ -5,8 +5,9 @@ import android.content.Context
 import android.net.Uri
 import com.marxist.android.R
 import com.marxist.android.database.AppDatabase
+import com.marxist.android.database.entities.LocalBooks
 import com.marxist.android.utils.AppConstants
-import com.marxist.android.utils.PrintLog
+import org.geometerplus.android.fbreader.FBReader
 import kotlin.math.absoluteValue
 
 object DownloadUtil {
@@ -15,7 +16,7 @@ object DownloadUtil {
         title: String,
         url: String,
         pubDate: Long,
-        type: String
+        type: String, bookId: String = ""
     ): Long {
         val downloadManager =
             mContext.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -50,8 +51,14 @@ object DownloadUtil {
             }
             AppConstants.BOOKS -> {
                 PreferencesHelper.saveBooksDownload(mContext, id)
+                val localBooksDao = AppDatabase.getAppDatabase(mContext).localBooksDao()
+                localBooksDao.updateDownloadDetails(filePath, id, bookId)
             }
         }
         return id
+    }
+
+    fun openSavedBook(context: Context, book: LocalBooks) {
+        FBReader.openBookActivity(context, book.savedPath)
     }
 }

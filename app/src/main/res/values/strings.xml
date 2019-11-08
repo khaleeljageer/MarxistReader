@@ -68,4 +68,15 @@
     <string name="download_started">Downloading…</string>
     <string name="no_downloads">No Downloads</string>
     <string name="audio_deleted">Audio deleted</string>
+    <string name="about_us">About Us</string>
+    <string name="open_source_licence">Open source licence</string>
+    <string name="lottie_files_credit">LottieFiles Credit</string>
+    <string name="credits">Credits</string>
+    <string name="this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0">This animation is available to download and use for Free under Creative Commons License 2.0</string>
+    <string name="https_lottiefiles_com_10223_search_empty">https://lottiefiles.com/10223-search-empty</string>
+    <string name="https_lottiefiles_com_772_bookmark_animation">https://lottiefiles.com/772-bookmark-animation</string>
+    <string name="https_lottiefiles_com_marketplace_multimedia_icons">https://lottiefiles.com/marketplace/multimedia-icons</string>
+    <string name="https_lottiefiles_com_11123_music">https://lottiefiles.com/11123-music</string>
+    <string name="https_lottiefiles_com_353_newspaper_spinner">https://lottiefiles.com/353-newspaper-spinner</string>
+    <string name="lottie_credits">Lottie Credits</string>
 </resources>
