@@ -42,7 +42,7 @@ class MainActivity : BaseActivity() {
                 R.id.navigation_feeds,
                 R.id.navigation_ebook,
                 R.id.navigation_saved,
-                R.id.navigation_bookmarks,
+                R.id.navigation_notifications,
                 R.id.navigation_settings
             )
         )

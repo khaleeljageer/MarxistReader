@@ -24,10 +24,9 @@ class MarxistApp : FBReaderApplication() {
         MultiDex.install(this@MarxistApp)
         FirebaseApp.initializeApp(this)
 
-        FirebaseMessaging.getInstance()
-            .subscribeToTopic(getString(R.string.default_notification_channel_id))
-        FirebaseMessaging.getInstance()
-            .subscribeToTopic(getString(R.string.marxist_instant_news))
+        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_channel_id))
+        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_channel_id_test))
+        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.marxist_instant_news))
 
         AppDatabase.getAppDatabase(applicationContext)
         scheduleJob()
