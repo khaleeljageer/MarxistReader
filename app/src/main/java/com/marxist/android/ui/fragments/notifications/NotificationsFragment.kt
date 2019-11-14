@@ -54,7 +54,7 @@ class NotificationsFragment : Fragment(), ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initData()
+        initData() // Test
     }
 
     private fun initData() {
