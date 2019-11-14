@@ -6,25 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalNotifications
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.fragments.bookmark.NotificationsAdapter
-import com.marxist.android.viewmodel.NotificationViewModel
+import com.marxist.android.utils.api.ApiClient
+import com.marxist.android.utils.api.RetryWithDelay
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragments_list.*
 import kotlinx.android.synthetic.main.fragments_list.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
 
 class NotificationsFragment : Fragment(), ItemClickListener {
+
+    private var disposable: Disposable? = null
+
     override fun feedItemClickListener(article: Any, adapterPosition: Int, view: View) {
         if (article is LocalNotifications) {
-            notificationViewModel.deleteNotification(article)
             notificationsAdapter.notifyItemRemoved(adapterPosition)
             if (notificationsAdapter.itemCount == 0) {
                 rvListView.visibility = View.GONE
@@ -37,11 +39,10 @@ class NotificationsFragment : Fragment(), ItemClickListener {
     private fun showImage() {
         txtHelper.visibility = View.GONE
         lavEmptyImage.scale = 0.6f
-        lavEmptyImage.setAnimation(R.raw.search_empty)
+        lavEmptyImage.setAnimation(R.raw.notification)
     }
 
     private lateinit var mContext: Context
-    private lateinit var notificationViewModel: NotificationViewModel
     private lateinit var notificationsAdapter: NotificationsAdapter
 
     override fun onAttach(context: Context) {
@@ -57,29 +58,37 @@ class NotificationsFragment : Fragment(), ItemClickListener {
     }
 
     private fun initData() {
-        notificationViewModel = ViewModelProviders.of(this).get(NotificationViewModel::class.java)
-        notificationViewModel.getNotifications().observeOnce(this, Observer {
-            if (it != null) {
-                if (it.isNotEmpty()) {
-                    rvListView.visibility = View.VISIBLE
-                    emptyView.visibility = View.GONE
-                    notificationsAdapter.addNotifications(it)
-                } else {
-                    rvListView.visibility = View.GONE
-                    emptyView.visibility = View.VISIBLE
-                    showImage()
-                }
-            }
-        })
+        callBookApi()
     }
 
-    private fun <T> LiveData<T>.observeOnce(lifecycleOwner: LifecycleOwner, observer: Observer<T>) {
-        observe(lifecycleOwner, object : Observer<T> {
-            override fun onChanged(t: T?) {
-                observer.onChanged(t)
-                removeObserver(this)
-            }
-        })
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable?.dispose()
+    }
+
+    private fun callBookApi() {
+        disposable = ApiClient.mGitHubService.getNotifications()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .retryWhen(RetryWithDelay())
+            .subscribe({
+                if (it != null) {
+                    if (it.notifications.isNotEmpty()) {
+                        rvListView.visibility = View.VISIBLE
+                        emptyView.visibility = View.GONE
+                        notificationsAdapter.addNotifications(it.notifications);
+                    }else{
+                        rvListView.visibility = View.GONE
+                        emptyView.visibility = View.VISIBLE
+                        showImage()
+                    }
+                }
+            }, {
+                it.printStackTrace()
+                rvListView.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+                showImage()
+            })
     }
 
     override fun onCreateView(

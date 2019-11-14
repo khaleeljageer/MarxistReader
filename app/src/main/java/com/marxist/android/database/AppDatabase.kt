@@ -7,14 +7,12 @@ import androidx.room.RoomDatabase
 import com.marxist.android.database.dao.LocalBooksDao
 import com.marxist.android.database.dao.LocalFeedsDao
 import com.marxist.android.database.dao.LocalHighlightsDao
-import com.marxist.android.database.dao.LocalNotificationsDao
 import com.marxist.android.database.entities.LocalBooks
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.database.entities.LocalHighlights
-import com.marxist.android.database.entities.LocalNotifications
 
 @Database(
-    entities = [LocalFeeds::class, LocalHighlights::class, LocalNotifications::class, LocalBooks::class],
+    entities = [LocalFeeds::class, LocalHighlights::class, LocalBooks::class],
     version = 1,
     exportSchema = false
 )
@@ -22,7 +20,6 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun localFeedsDao(): LocalFeedsDao
     abstract fun localHighlightsDao(): LocalHighlightsDao
-    abstract fun localNotificationsDao(): LocalNotificationsDao
     abstract fun localBooksDao(): LocalBooksDao
 
     companion object {
