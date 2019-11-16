@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
     <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lavEmptyImage"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/hind_bold"
             android:gravity="center"
-            android:text="@string/no_highlights_to_show"
+            android:text="@string/no_notifications_to_show"
             android:textSize="18sp" />
 
     <TextView

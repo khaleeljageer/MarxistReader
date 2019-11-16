@@ -130,7 +130,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
             if (mediaPlayer == null) {
                 pbPrepare.visibility = View.VISIBLE
-                btnPlayPause.visibility = View.INVISIBLE
+                btnPlayPause.visibility = View.GONE
                 initMediaPlayer()
             }
         }

@@ -5,23 +5,23 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.marxist.android.R
-import com.marxist.android.database.entities.LocalHighlights
+import com.marxist.android.database.entities.LocalNotifications
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.utils.DeviceUtils
 import kotlinx.android.synthetic.main.highlight_item_view.view.*
 
-class HighlightsAdapter(
+class NotificationsAdapter(
     private val mContext: Context,
-    private val mutableList: MutableList<LocalHighlights>,
+    private val mutableList: MutableList<LocalNotifications>,
     private val itemClickListener: ItemClickListener
-) : RecyclerView.Adapter<HighlightItemHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HighlightItemHolder {
-        return HighlightItemHolder(parent, R.layout.highlight_item_view)
+) : RecyclerView.Adapter<NotificationItemHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationItemHolder {
+        return NotificationItemHolder(parent, R.layout.highlight_item_view)
     }
 
     override fun getItemCount() = mutableList.size
 
-    override fun onBindViewHolder(holder: HighlightItemHolder, position: Int) {
+    override fun onBindViewHolder(holder: NotificationItemHolder, position: Int) {
         val item = mutableList[holder.adapterPosition]
         holder.bindData(item)
         holder.itemView.setOnClickListener {
@@ -33,8 +33,8 @@ class HighlightsAdapter(
     }
 
     private fun showPopupMenu(
-        item: LocalHighlights,
-        holder: HighlightItemHolder
+        item: LocalNotifications,
+        holder: NotificationItemHolder
     ) {
         val popup = PopupMenu(mContext, holder.itemView.txtMore)
         popup.inflate(R.menu.menu_bookmar_popup)
@@ -43,9 +43,9 @@ class HighlightsAdapter(
                 when (it.itemId) {
                     R.id.menu_share -> {
                         DeviceUtils.shareIntent(
-                            item.title, item.highlight.plus("\n")
-                                .plus(mContext.getString(R.string.to_read_more))
-                                .plus(item.link), mContext
+                            item.title, item.message.plus("\n\n")
+                                //.plus(mContext.getString(R.string.to_read_more))
+                                .plus(item.message), mContext
                         )
                     }
                     R.id.menu_remove -> {
@@ -63,7 +63,7 @@ class HighlightsAdapter(
         popup.show()
     }
 
-    fun addHighlights(highLights: MutableList<LocalHighlights>) {
+    fun addNotifications(highLights: MutableList<LocalNotifications>) {
         mutableList.addAll(highLights)
         notifyDataSetChanged()
     }

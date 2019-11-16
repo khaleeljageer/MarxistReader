@@ -62,6 +62,7 @@
     <string name="nothing_to_show">Nothing to show</string>
     <string name="_00_00">00:00</string>
     <string name="no_highlights_to_show">No highlights to show</string>
+    <string name="no_notifications_to_show">No Notifications</string>
     <string name="you_can_add_highlights_from_any_article">You can add highlights from any article</string>
     <string name="you_can_add_download_from_any_article">You can download audio from any article</string>
     <string name="download_msg_rationale">Need storage permission to perform read, write.</string>
@@ -73,10 +74,12 @@
     <string name="lottie_files_credit">LottieFiles Credit</string>
     <string name="credits">Credits</string>
     <string name="this_animation_is_available_to_download_and_use_for_free_under_creative_commons_license_2_0">This animation is available to download and use for Free under Creative Commons License 2.0</string>
-    <string name="https_lottiefiles_com_10223_search_empty">https://lottiefiles.com/10223-search-empty</string>
+    <string name="https_lottiefiles_com_10223_notifications">https://lottiefiles.com/781-no-notifications</string>
     <string name="https_lottiefiles_com_772_bookmark_animation">https://lottiefiles.com/772-bookmark-animation</string>
     <string name="https_lottiefiles_com_marketplace_multimedia_icons">https://lottiefiles.com/marketplace/multimedia-icons</string>
     <string name="https_lottiefiles_com_11123_music">https://lottiefiles.com/11123-music</string>
     <string name="https_lottiefiles_com_353_newspaper_spinner">https://lottiefiles.com/353-newspaper-spinner</string>
     <string name="lottie_credits">Lottie Credits</string>
+    <string name="default_notification_channel_id_test">marxist_tamil_test</string>
+    <string name="notifications">Notifications</string>
 </resources>
