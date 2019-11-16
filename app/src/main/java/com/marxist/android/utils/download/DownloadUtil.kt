@@ -34,11 +34,6 @@ object DownloadUtil {
                 filePath =
                     "${extStorageDirectory}/${title.hashCode().absoluteValue}.mp3"
             }
-            AppConstants.BOOKS -> {
-                val extStorageDirectory = mContext.getExternalFilesDir(type)?.absolutePath
-                filePath =
-                    "${extStorageDirectory}/${title.hashCode().absoluteValue}.epub"
-            }
         }
 
         request.setDestinationUri(Uri.parse("file://$filePath"))
@@ -48,11 +43,6 @@ object DownloadUtil {
                 PreferencesHelper.saveAudioDownload(mContext, id)
                 val localFeedsDao = AppDatabase.getAppDatabase(mContext).localFeedsDao()
                 localFeedsDao.updateAudioStatus(filePath, title, pubDate)
-            }
-            AppConstants.BOOKS -> {
-                PreferencesHelper.saveBooksDownload(mContext, id)
-                val localBooksDao = AppDatabase.getAppDatabase(mContext).localBooksDao()
-                localBooksDao.updateDownloadDetails(filePath, id, bookId)
             }
         }
         return id

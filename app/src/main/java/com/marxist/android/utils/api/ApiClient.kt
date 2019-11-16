@@ -10,6 +10,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 object ApiClient {
     lateinit var mApiService: ApiService
     lateinit var mGitHubService: GitHubService
+    lateinit var mDownloadService: DownloadService
 
     fun setApiService() {
         mApiService = Retrofit.Builder()
@@ -26,5 +27,15 @@ object ApiClient {
             .addConverterFactory(GsonConverterFactory.create())
             .baseUrl("https://raw.githubusercontent.com/tamilmarxist/MarxistTamilEbooks/")
             .build().create(GitHubService::class.java)
+    }
+
+
+    fun setDownloadService() {
+        mDownloadService = Retrofit.Builder()
+            .client(UnsafeOkHttpClient.unsafeOkHttpClient)
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://archive.org/download/")
+            .build().create(DownloadService::class.java)
     }
 }

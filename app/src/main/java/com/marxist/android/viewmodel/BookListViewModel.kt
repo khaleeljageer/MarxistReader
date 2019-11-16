@@ -1,6 +1,7 @@
 package com.marxist.android.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.marxist.android.database.AppDatabase
@@ -26,6 +27,10 @@ class BookListViewModel(application: Application) : AndroidViewModel(application
 
     fun insert(highlights: LocalBooks) {
         booksDao.insert(highlights)
+    }
+
+    fun updateStatus(filePath: String, status: Boolean, bookId: String) {
+        booksDao.updateDownloadDetails(filePath, status, bookId)
     }
 
     fun getLocalBooksSize(): Int {

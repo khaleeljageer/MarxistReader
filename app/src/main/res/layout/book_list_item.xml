@@ -23,6 +23,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
+                    android:background="@color/colorAccent_alpha_40"
                     android:orientation="vertical"
                     android:scaleType="fitXY"
                     tools:ignore="ContentDescription" />
@@ -32,23 +33,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/gradient_bg"
-                    android:visibility="invisible">
+                    android:gravity="bottom|end"
+                    android:visibility="visible">
 
                 <ProgressBar
                         android:id="@+id/pbDownloadProgress"
                         style="@style/Widget.AppCompat.ProgressBar"
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="15dp"
                         android:visibility="invisible" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                         android:id="@+id/fabDownload"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_gravity="center"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginBottom="15dp"
                         android:src="@drawable/ic_save_black"
                         app:backgroundTint="@color/colorAccent"
                         app:fabSize="normal" />

@@ -104,4 +104,6 @@
     <string name="please_wait">Please wait</string>
     <string name="thanks_feedback">Thanks for your feedback…</string>
     <string name="phone">Phone</string>
+    <string name="download_completed">Download Completed</string>
+    <string name="download_failed">Download Failed</string>
 </resources>

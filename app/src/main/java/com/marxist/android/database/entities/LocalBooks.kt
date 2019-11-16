@@ -23,9 +23,12 @@ data class LocalBooks(
     var isDownloaded: Boolean,
     @ColumnInfo(name = "download_id")
     var downloadId: Long = 0,
+    @ColumnInfo(name = "download_percent")
+    var downloadPercent: Long = 0,
     @ColumnInfo(name = "saved_path")
     var savedPath: String = "",
 
+    var lastEmittedDownloadPercent: Long = -1,
     var isExpanded: Boolean = false,
     var date: String
 ) : Serializable

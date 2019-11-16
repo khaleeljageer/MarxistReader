@@ -2,7 +2,6 @@ package com.marxist.android.ui.fragments.books
 
 import android.content.Context
 import android.os.Bundle
-import android.util.LongSparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,31 +11,75 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalBooks
+import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BookClickListener
 import com.marxist.android.utils.AppConstants
+import com.marxist.android.utils.RxBus
+import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.download.DownloadUtil
 import com.marxist.android.viewmodel.BookListViewModel
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Function
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragments_list.*
 import kotlinx.android.synthetic.main.fragments_list.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
+import okhttp3.ResponseBody
+import okio.Okio
+import retrofit2.Response
+import java.io.File
+import java.io.IOException
+import kotlin.math.absoluteValue
 
 class EBooksFragment : Fragment(), BookClickListener {
-    private var downloadsPositions = LongSparseArray<Long>()
     override fun bookItemClickListener(adapterPosition: Int, book: LocalBooks) {
         if (book.isDownloaded) {
             DownloadUtil.openSavedBook(mContext, book)
         } else {
             if (book.downloadId == -1L) {
-                val downloadID = DownloadUtil.queueForDownload(
-                    mContext, book.title, book.epub,
-                    book.pubDate, AppConstants.BOOKS, book.bookid
-                )
-                if (downloadID != 0L) {
-                    bookAdapter.updateDownloadId(adapterPosition, downloadID)
-                    downloadsPositions.put(downloadID, adapterPosition.toLong())
-                }
+                val disposable =
+                    download(
+                        book,
+                        AppConstants.BOOKS
+                    ).observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe({
+                            bookListViewModel.updateStatus(it.absolutePath, true, book.bookid)
+                            bookAdapter.updateDownloadId(adapterPosition, true)
+                            RxBus.publish(ShowSnackBar(getString(R.string.download_completed)))
+                        }, {
+                            bookListViewModel.updateStatus("", false, book.bookid)
+                            bookAdapter.updateDownloadId(adapterPosition, false)
+                            RxBus.publish(ShowSnackBar(getString(R.string.download_failed)))
+                        })
             }
         }
+    }
+
+    fun download(
+        book: LocalBooks,
+        type: String
+    ): Observable<File> {
+        return ApiClient.mDownloadService.downloadFileByUrlRx(book.epub)
+            .flatMap(object : Function<Response<ResponseBody>, Observable<File>> {
+                override fun apply(response: Response<ResponseBody>): Observable<File> {
+                    try {
+                        val extStorageDirectory = mContext.getExternalFilesDir(type)?.absolutePath
+                        val filePath =
+                            "${extStorageDirectory}/${book.title.hashCode().absoluteValue}.epub"
+                        val file = File(filePath)
+                        val sink = Okio.buffer(Okio.sink(file))
+                        sink.writeAll(response.body()!!.source())
+                        sink.close()
+
+                        return Observable.just(file)
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                        return Observable.error(e)
+                    }
+                }
+            })
     }
 
     private lateinit var bookListViewModel: BookListViewModel
@@ -73,6 +116,7 @@ class EBooksFragment : Fragment(), BookClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         val view = inflater.inflate(R.layout.fragments_list, container, false)
         view.rvListView.setHasFixedSize(true)
         view.rvListView.layoutManager = GridLayoutManager(mContext, 2)

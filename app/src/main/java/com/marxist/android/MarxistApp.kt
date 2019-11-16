@@ -32,6 +32,7 @@ class MarxistApp : FBReaderApplication() {
         scheduleJob()
         ApiClient.setApiService()
         ApiClient.setGitHubService()
+        ApiClient.setDownloadService()
 
         initNotificationChannel()
     }

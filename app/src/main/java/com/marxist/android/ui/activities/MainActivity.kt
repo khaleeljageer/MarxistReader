@@ -9,8 +9,10 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.marxist.android.R
+import com.marxist.android.model.ConnectivityType
 import com.marxist.android.model.DarkModeChanged
 import com.marxist.android.model.NetWorkMessage
+import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.RxBus
@@ -50,12 +52,16 @@ class MainActivity : BaseActivity() {
         navView.setupWithNavController(navController)
 
         RxBus.subscribe({
-            if (it is NetWorkMessage) {
-                displayMaterialSnackBar(it.message, it.type, container2)
-            } else if (it is DarkModeChanged) {
-                Handler().post {
+            when (it) {
+                is NetWorkMessage -> displayMaterialSnackBar(it.message, it.type, container2)
+                is DarkModeChanged -> Handler().post {
                     recreate()
                 }
+                is ShowSnackBar -> displayMaterialSnackBar(
+                    it.message,
+                    ConnectivityType.OTHER,
+                    container2
+                )
             }
         }, {
             PrintLog.debug("Marxist", "$it")
