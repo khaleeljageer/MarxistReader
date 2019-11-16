@@ -37,7 +37,7 @@ public class ZLTextBaseStyle extends ZLTextStyle {
 	private static final String OPTIONS = "Options";
 
 	public final ZLBooleanOption UseCSSTextAlignmentOption =
-		new ZLBooleanOption("Style", "css:textAlignment", true);
+		new ZLBooleanOption("Style", "css:textAlignment", false);
 	public final ZLBooleanOption UseCSSMarginsOption =
 		new ZLBooleanOption("Style", "css:margins", true);
 	public final ZLBooleanOption UseCSSFontSizeOption =
@@ -68,7 +68,7 @@ public class ZLTextBaseStyle extends ZLTextStyle {
 		UnderlineOption = new ZLBooleanOption(GROUP, prefix + ":underline", false);
 		StrikeThroughOption = new ZLBooleanOption(GROUP, prefix + ":strikeThrough", false);
 		AlignmentOption = new ZLIntegerRangeOption(GROUP, prefix + ":alignment", 1, 4, ZLTextAlignmentType.ALIGN_JUSTIFY);
-		LineSpaceOption = new ZLIntegerRangeOption(GROUP, prefix + ":lineSpacing", 15, 30, 20);
+		LineSpaceOption = new ZLIntegerRangeOption(GROUP, prefix + ":lineSpacing", 15, 30, 15);
 	}
 
 	private String myFontFamily;

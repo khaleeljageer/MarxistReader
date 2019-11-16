@@ -341,7 +341,6 @@ public class MenuDialog extends Dialog {
         int blackTextColor = ZLAndroidColorUtil.rgb(myFBReaderApp.ViewOptions.getColorProfile().BlackTextOption.getValue());
         int textColor = ZLAndroidColorUtil.rgb(myFBReaderApp.ViewOptions.getColorProfile().MenuSelectedTextOption.getValue());
         if (ColorProfile.DAY.equals(myFBReaderApp.ViewOptions.ColorProfileName.getValue())) {
-            //日间模式
             mMenuBottomLightIv.setImageResource(R.drawable.ic_fbreader_menu_bottom_light_selected_day);
             mMenuBottomLightTv.setTextColor(textColor);
             mViewLightContainer.setBackgroundColor(backgroundColor);
@@ -351,7 +350,6 @@ public class MenuDialog extends Dialog {
             mTvLightModeNight.setTextColor(blackTextColor);
             mTvLightModeEye.setTextColor(blackTextColor);
         } else {
-            //夜间模式
             mMenuBottomLightIv.setImageResource(R.drawable.ic_fbreader_menu_bottom_light_selected_night);
             mMenuBottomLightTv.setTextColor(textColor);
             mViewLightContainer.setBackgroundColor(backgroundColor);
@@ -689,7 +687,6 @@ public class MenuDialog extends Dialog {
         mIvLightModeNight.setImageResource(R.drawable.ic_fbreader_menu_bottom_light_mode_night_unselected);
         mIvLightModeEye.setImageResource(R.drawable.ic_fbreader_menu_bottom_light_mode_blue_unselected);
         if (ColorProfile.DAY.equals(myFBReaderApp.ViewOptions.ColorProfileName.getValue())) {
-            //日间模式
             ZLColor color = myFBReaderApp.ViewOptions.getColorProfile().BackgroundOption.getValue();
             if (color.equals(new ZLColor(Color.parseColor("#f4f4f4")))) {
                 mIvLightModeDaily.setImageResource(R.drawable.ic_fbreader_menu_bottom_light_mode_daily_selected);

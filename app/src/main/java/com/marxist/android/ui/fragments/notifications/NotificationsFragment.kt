@@ -9,9 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
-import com.marxist.android.database.entities.LocalNotifications
+import com.marxist.android.model.LocalNotifications
 import com.marxist.android.ui.base.ItemClickListener
-import com.marxist.android.ui.fragments.bookmark.NotificationsAdapter
 import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.api.RetryWithDelay
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -54,7 +53,7 @@ class NotificationsFragment : Fragment(), ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initData() // Test
+        initData()
     }
 
     private fun initData() {

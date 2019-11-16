@@ -167,7 +167,7 @@ public class ColorProfile {
             FillModeOption =
                     new ZLEnumOption<ZLPaintContext.FillMode>("Colors", name + ":FillMode", ZLPaintContext.FillMode.tile);
             BackgroundOption =
-                    createOption(name, "Background", 244, 244, 244);
+                    createOption(name, "Background", 255, 245, 228);
             SelectionBackgroundOption =
                     createOption(name, "SelectionBackground", 19, 140, 255);
             SelectionForegroundOption =

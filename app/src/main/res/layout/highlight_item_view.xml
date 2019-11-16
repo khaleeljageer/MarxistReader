@@ -20,19 +20,6 @@
                 android:id="@+id/txtFeedTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_toStartOf="@+id/txtMore"
-                android:textColor="@color/colorTextPrimary"
-                android:textSize="@dimen/feed_item_title_size"
-                android:textStyle="bold" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/txtMore"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:gravity="center"
-                android:text="@string/_8942"
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="@dimen/feed_item_title_size"
                 android:textStyle="bold" />

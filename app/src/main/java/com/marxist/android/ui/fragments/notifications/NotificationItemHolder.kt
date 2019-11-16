@@ -1,7 +1,7 @@
-package com.marxist.android.ui.fragments.bookmark
+package com.marxist.android.ui.fragments.notifications
 
 import android.view.ViewGroup
-import com.marxist.android.database.entities.LocalNotifications
+import com.marxist.android.model.LocalNotifications
 import com.marxist.android.ui.base.BaseViewHolder
 import kotlinx.android.synthetic.main.highlight_item_view.view.*
 
