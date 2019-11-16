@@ -7,6 +7,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.marxist.android.R
 import com.marxist.android.model.DarkModeChanged
+import com.marxist.android.ui.activities.AboutActivity
+import com.marxist.android.ui.activities.FeedBackActivity
 import com.marxist.android.ui.activities.LottieThankActivity
 import com.marxist.android.utils.AppConstants
 import com.marxist.android.utils.RxBus
@@ -32,6 +34,11 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 true
             }
             getString(R.string.about_us) -> {
+                startActivity(Intent(mContext, AboutActivity::class.java))
+                true
+            }
+            getString(R.string.feed_back) -> {
+                startActivity(Intent(mContext, FeedBackActivity::class.java))
                 true
             }
             getString(R.string.lottie_files_credit) -> {

@@ -40,4 +40,9 @@
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
+
+    <style name="CustomAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <item name="windowFixedWidthMajor">45%</item>
+        <item name="windowFixedWidthMinor">45%</item>
+    </style>
 </resources>

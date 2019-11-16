@@ -5,20 +5,6 @@
     <PreferenceCategory
             app:allowDividerBelow="true"
             app:iconSpaceReserved="false"
-            app:title="@string/notifications_header">
-
-        <SwitchPreferenceCompat
-                app:defaultValue="true"
-                app:iconSpaceReserved="false"
-                app:key="all_notification"
-                app:summaryOff="@string/stop_all_notifications"
-                app:summaryOn="@string/receive_all_notifications"
-                app:title="@string/all_notification" />
-    </PreferenceCategory>
-
-    <PreferenceCategory
-            app:allowDividerBelow="true"
-            app:iconSpaceReserved="false"
             app:title="@string/theme_header">
 
         <SwitchPreferenceCompat
@@ -44,6 +30,20 @@
     <PreferenceCategory
             app:allowDividerBelow="true"
             app:iconSpaceReserved="false"
+            app:title="@string/notifications_header">
+
+        <SwitchPreferenceCompat
+                app:defaultValue="true"
+                app:iconSpaceReserved="false"
+                app:key="all_notification"
+                app:summaryOff="@string/stop_all_notifications"
+                app:summaryOn="@string/receive_all_notifications"
+                app:title="@string/all_notification" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            app:allowDividerBelow="true"
+            app:iconSpaceReserved="false"
             app:title="@string/credits">
 
         <Preference
@@ -51,6 +51,12 @@
                 app:iconSpaceReserved="false"
                 app:key="@string/lottie_files_credit"
                 app:title="@string/lottie_files_credit" />
+
+        <Preference
+                app:allowDividerBelow="true"
+                app:iconSpaceReserved="false"
+                app:key="@string/feed_back"
+                app:title="@string/feed_back" />
 
         <Preference
                 app:allowDividerBelow="true"

@@ -51,6 +51,11 @@ class EBooksFragment : Fragment(), BookClickListener {
 
     private fun initData() {
         bookListViewModel = ViewModelProviders.of(this).get(BookListViewModel::class.java)
+        if (bookListViewModel.getLocalBooksSize() == 0) {
+            rvListView.visibility = View.GONE
+            emptyView.visibility = View.VISIBLE
+            lavEmptyImage.setAnimation(R.raw.loading_books)
+        }
         bookListViewModel.callBookApi()
         bookListViewModel.getLocalBooks().observe(this, Observer {
             if (it != null) {

@@ -28,6 +28,10 @@ class BookListViewModel(application: Application) : AndroidViewModel(application
         booksDao.insert(highlights)
     }
 
+    fun getLocalBooksSize(): Int {
+        return booksDao.getAllBooks().size
+    }
+
     fun getLocalBooks(): LiveData<MutableList<LocalBooks>> {
         return booksLiveData
     }

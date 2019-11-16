@@ -62,7 +62,7 @@
     <string name="nothing_to_show">Nothing to show</string>
     <string name="_00_00">00:00</string>
     <string name="no_highlights_to_show">No highlights to show</string>
-    <string name="no_notifications_to_show">No Notifications</string>
+    <string name="no_notifications_to_show">Nothing to Show</string>
     <string name="you_can_add_highlights_from_any_article">You can add highlights from any article</string>
     <string name="you_can_add_download_from_any_article">You can download audio from any article</string>
     <string name="download_msg_rationale">Need storage permission to perform read, write.</string>
@@ -82,4 +82,26 @@
     <string name="lottie_credits">Lottie Credits</string>
     <string name="default_notification_channel_id_test">marxist_tamil_test</string>
     <string name="notifications">Notifications</string>
+    <string name="about_text"><![CDATA[
+<p><b>Marxist Reader</b> செயலியானது, மார்க்சிஸ்ட் மாத இதழின் இணைய பதிப்பு, ஒலிப் பதிவுகள் மற்றும் மின் நூல் வடிவத்தை உள்ளடக்கிய ஒன்றாகும். மார்க்சிய தத்துவ மாத இதழாக 1989, ஜூன் மாதத்தில் இருந்து வெளியாகிறது \'மார்க்சிஸ்ட்\'. இப்போது நவீன வடிவங்களிலும் வாசகர்களை வந்தடைகிறது.</p>
+
+<p><b>அலைபேசி:</b> 9994776471</p>
+
+<p>மாவட்டங்களில் செயல்படும் வாசகர் வட்டங்களில் இணைந்துகொள்ள எங்களை தொடர்புகொள்ளுங்கள்.</p>
+
+<p>இந்த செயலி மார்க்சிஸ்ட் கட்சியின் மல்ட்டிமீடியா கிளையின் மூலம்  பராமரிக்கப்படுகிறது. தொழில்நுட்ப உதவிக்கு tamilmarxist@gmail.com என்ற மின்னஞ்சலில் தொடர்புகொள்ளலாம்.</p>
+
+<p><b>நன்றி:</b><br><a href="http://www.kaniyam.com/">கணியம் அறக்கட்டளை</a> (மின் நூல் உருவாக்கம்)<br>http://www.kaniyam.com/</p>
+
+        ]]></string>
+    <string name="feed_back">Feedback</string>
+
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="comments">Your comment</string>
+    <string name="submit">Submit</string>
+    <string name="try_later">Try again later…</string>
+    <string name="please_wait">Please wait</string>
+    <string name="thanks_feedback">Thanks for your feedback…</string>
+    <string name="phone">Phone</string>
 </resources>

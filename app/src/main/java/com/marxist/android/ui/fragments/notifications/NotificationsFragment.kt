@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.model.LocalNotifications
 import com.marxist.android.ui.base.ItemClickListener
@@ -76,9 +76,10 @@ class NotificationsFragment : Fragment(), ItemClickListener {
                         rvListView.visibility = View.VISIBLE
                         emptyView.visibility = View.GONE
                         notificationsAdapter.addNotifications(it.notifications);
-                    }else{
+                    } else {
                         rvListView.visibility = View.GONE
                         emptyView.visibility = View.VISIBLE
+                        txtTitle.text = getString(R.string.no_notifications_to_show)
                         showImage()
                     }
                 }
@@ -97,7 +98,7 @@ class NotificationsFragment : Fragment(), ItemClickListener {
     ): View? {
         val view = inflater.inflate(R.layout.fragments_list, container, false)
         view.rvListView.setHasFixedSize(true)
-        view.rvListView.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+        view.rvListView.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
         view.rvListView.adapter = notificationsAdapter
         return view
     }

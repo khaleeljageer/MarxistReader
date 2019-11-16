@@ -13,6 +13,9 @@ interface LocalBooksDao {
     @Query("SELECT * from localBooks")
     fun getAllLocalBooks(): LiveData<MutableList<LocalBooks>>
 
+    @Query("SELECT * from localBooks")
+    fun getAllBooks(): MutableList<LocalBooks>
+
     @Insert(onConflict = REPLACE)
     fun insert(localBooks: LocalBooks)
 

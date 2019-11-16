@@ -3,6 +3,7 @@ package com.marxist.android.ui.fragments.feeds
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.base.BaseViewHolder
 import com.marxist.android.utils.PrintLog
@@ -26,7 +27,7 @@ class FeedItemHolder(private val parent: ViewGroup, layoutID: Int) :
         val estimated = wordCount.estimateTime()
 
         itemView.txtPubDate.text =
-            pubDate.plus(parent.context.getString(com.marxist.android.R.string.estimate))
+            pubDate.plus(parent.context.getString(R.string.estimate))
                 .plus(estimated)
 
         itemView.ivAudioLogo.visibility = if (item.audioUrl.isEmpty()) {
