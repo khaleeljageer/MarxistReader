@@ -24,9 +24,9 @@
             tools:layout="@layout/fragments_list" />
 
     <fragment
-            android:id="@+id/navigation_bookmarks"
-            android:name="com.marxist.android.ui.fragments.bookmark.HighlightsFragment"
-            android:label="@string/bookmarks"
+            android:id="@+id/navigation_notifications"
+            android:name="com.marxist.android.ui.fragments.notifications.NotificationsFragment"
+            android:label="@string/notifications"
             tools:layout="@layout/fragments_list" />
 
     <fragment

@@ -262,7 +262,7 @@
                         android:layout_height="70dp"
                         app:lottie_autoPlay="true"
                         app:lottie_loop="true"
-                        app:lottie_rawRes="@raw/search_empty" />
+                        app:lottie_rawRes="@raw/notification" />
 
                 <TextView
                         android:id="@+id/txt9Desc"
@@ -279,7 +279,7 @@
                         android:layout_below="@+id/txt9Desc"
                         android:layout_toEndOf="@+id/lottie9"
                         android:autoLink="web"
-                        android:text="@string/https_lottiefiles_com_10223_search_empty"
+                        android:text="@string/https_lottiefiles_com_10223_notifications"
                         android:textSize="14sp" />
             </RelativeLayout>
         </LinearLayout>

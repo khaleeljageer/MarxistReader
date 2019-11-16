@@ -15,9 +15,9 @@
             android:title="@string/saved" />
 
     <item
-            android:id="@+id/navigation_bookmarks"
-            android:icon="@drawable/ic_bookmark_black_24dp"
-            android:title="@string/bookmarks" />
+            android:id="@+id/navigation_notifications"
+            android:icon="@drawable/ic_notifications"
+            android:title="@string/notifications" />
     <item
             android:id="@+id/navigation_settings"
             android:icon="@drawable/ic_settings_black"

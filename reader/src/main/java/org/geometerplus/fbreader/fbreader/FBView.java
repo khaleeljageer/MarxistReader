@@ -99,7 +99,7 @@ public final class FBView extends ZLTextView {
             return;
         }
         final ZLTextRegion hyperlinkRegion = findRegion(x, y, maxSelectionDistance(), ZLTextRegion.HyperlinkFilter);
-        //判断点击区域是否有超链接
+
         if (hyperlinkRegion != null) {
             outlineRegion(hyperlinkRegion);
             myReader.getViewWidget().reset();
@@ -108,14 +108,12 @@ public final class FBView extends ZLTextView {
             return;
         }
 
-        //判断点击区域
         final ZLTextRegion bookRegion = findRegion(x, y, 0, ZLTextRegion.ExtensionFilter);
         if (bookRegion != null) {
             myReader.runAction(ActionCode.DISPLAY_BOOK_POPUP, bookRegion);
             return;
         }
 
-        //判断点击区域是否有音视频
         final ZLTextRegion videoRegion = findRegion(x, y, 0, ZLTextRegion.VideoFilter);
         if (videoRegion != null) {
             outlineRegion(videoRegion);
@@ -125,7 +123,6 @@ public final class FBView extends ZLTextView {
             return;
         }
 
-        //判断点击区域是否是书签
         final ZLTextHighlighting highlighting = findHighlighting(x, y, maxSelectionDistance());
         if (highlighting instanceof BookmarkHighlighting) {
             myReader.runAction(

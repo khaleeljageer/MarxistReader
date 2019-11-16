@@ -4,11 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import org.geometerplus.fbreader.fbreader.FBReaderApp;
 import org.geometerplus.fbreader.fbreader.options.FooterOptions;
 import org.geometerplus.zlibrary.core.options.ZLIntegerRangeOption;
@@ -16,11 +17,6 @@ import org.geometerplus.zlibrary.text.model.ZLTextAlignmentType;
 import org.geometerplus.zlibrary.ui.android.R;
 import org.geometerplus.zlibrary.ui.android.util.ZLAndroidColorUtil;
 
-/**
- * desc:设置界面<br>
- * author : yuanbin<br>
- * date : 2018/10/16 15:10
- */
 public class FBReaderSettingActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static void start(Context context) {
@@ -127,17 +123,14 @@ public class FBReaderSettingActivity extends AppCompatActivity implements View.O
         }
     }
 
-    //region 行间距
-    private int minHeight;
-    private int maxHeight;
     private int currentHeight;
     private int[] lineHeights = new int[5];
     private TextView[] lineHeightViews = new TextView[5];
 
     private void initLineHeight() {
         ZLIntegerRangeOption spaceOption = myFBReaderApp.ViewOptions.getTextStyleCollection().getBaseStyle().LineSpaceOption;
-        maxHeight = spaceOption.MaxValue;
-        minHeight = spaceOption.MinValue;
+        int maxHeight = spaceOption.MaxValue;
+        int minHeight = spaceOption.MinValue;
         currentHeight = spaceOption.getValue();
         int temp = (maxHeight - minHeight) / (lineHeights.length - 1);
         for (int i = 0; i < lineHeights.length; i++) {

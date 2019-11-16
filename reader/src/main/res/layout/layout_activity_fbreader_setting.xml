@@ -33,39 +33,6 @@
               android:background="#eeeeee"/>
     </RelativeLayout>
 
-    <!--<androidx.appcompat.widget.Toolbar
-            android:layout_width="match_parent"
-            android:layout_height="56dp">
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ffffff">
-
-            <ImageView
-                    android:id="@+id/id_activity_fbreader_setting_back"
-                    android:layout_width="56dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentStart="true"
-                    android:scaleType="centerInside"
-                    android:padding="12dp"
-                    android:src="@drawable/ic_arrow_back_black_24dp"
-                    tools:ignore="ContentDescription"/>
-
-            <org.geometerplus.android.fbreader.weight.FBReaderPercentTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:layout_centerInParent="true"
-                    android:text="@string/fbreader_menu_more_setting"
-                    android:textColor="#000000"
-                    android:textSize="17sp"/>
-
-            <View android:layout_width="match_parent"
-                  android:layout_alignParentBottom="true"
-                  android:layout_height="0.5dp"
-                  android:background="#eeeeee"/>
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>-->
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
