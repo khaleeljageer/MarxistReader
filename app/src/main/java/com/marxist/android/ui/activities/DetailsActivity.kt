@@ -1,18 +1,19 @@
 package com.marxist.android.ui.activities
 
+import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
-import android.view.*
-import android.view.ActionMode.Callback
+import android.view.ActionMode
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.appbar.AppBarLayout
 import com.marxist.android.R
-import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.database.entities.LocalHighlights
 import com.marxist.android.model.ConnectivityType
@@ -24,10 +25,11 @@ import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.RxBus
 import kotlinx.android.synthetic.main.activity_details.*
-import org.sufficientlysecure.htmltextview.HtmlTextView
 import kotlin.math.roundToInt
 
+
 class DetailsActivity : BaseActivity() {
+    private var mActionMode: ActionMode? = null
     private var article: LocalFeeds? = null
     private var readPercent: Int = 0
 
@@ -47,6 +49,7 @@ class DetailsActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
@@ -166,7 +169,11 @@ class DetailsActivity : BaseActivity() {
             onBackPressed()
         }
 
-        txtContent.customSelectionActionModeCallback = object : Callback {
+        txtContent.customSelectionActionModeCallback = object : ActionMode.Callback {
+            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
+                return true
+            }
+
             override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
                 if (item != null) {
                     when (item.itemId) {
@@ -257,34 +264,13 @@ class DetailsActivity : BaseActivity() {
                 return ""
             }
 
-            override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                menuInflater.inflate(R.menu.menu_share_popup, menu)
-                return true
-            }
-
             override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                if (menu != null) {
-                    menu.removeItem(android.R.id.cut)
-                    menu.removeItem(android.R.id.copy)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        menu.removeItem(android.R.id.shareText)
-                    }
-                }
-                return false
+                return true
             }
 
             override fun onDestroyActionMode(mode: ActionMode?) {
             }
         }
-
-        /*txtContent.customSelectionActionModeCallback =
-            MarkTextSelectionActionMode(
-                menuInflater,
-                txtContent,
-                applicationContext,
-                article!!.title,
-                article!!.link, appDatabase
-            )*/
     }
 
     override fun onDestroy() {
@@ -292,15 +278,4 @@ class DetailsActivity : BaseActivity() {
         System.gc()
     }
 
-//    class MarkTextSelectionActionMode(
-//        private val menuInflater: MenuInflater,
-//        private val txtContent: HtmlTextView,
-//        private val baseContext: Context,
-//        private val title: String,
-//        private val link: String,
-//        private val appDatabase: AppDatabase
-//    ) :
-//        Callback {
-//
-//    }
 }

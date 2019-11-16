@@ -21,8 +21,8 @@ class MarxistApp : FBReaderApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        MultiDex.install(this@MarxistApp)
         FirebaseApp.initializeApp(this)
+        MultiDex.install(this@MarxistApp)
 
         FirebaseMessaging.getInstance()
             .subscribeToTopic(getString(R.string.default_notification_channel_id))
