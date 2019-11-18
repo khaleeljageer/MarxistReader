@@ -65,9 +65,8 @@ class BookListAdapter(
         notifyDataSetChanged()
     }
 
-    fun updateDownloadId(itemPosition: Int, status: Boolean) {
+    fun updateDownloadId(itemPosition: Int) {
         previousClickedPosition = -1
-        booksList[itemPosition].isDownloaded = status
         notifyItemChanged(itemPosition)
     }
 }

@@ -12,6 +12,8 @@ object AppConstants {
     object SharedPreference {
         val FILE_NAME: String
             get() = "com.marxist.android.PREFERENCE"
+        val PAGED_INDEX: String
+            get() = "com.marxist.android.PAGED_INDEX"
         val INSTANCE_NEWS_STATUS: String
             get() = "com.marxist.android.INSTANCE_NEWS_STATUS"
     }

@@ -8,9 +8,11 @@ import android.view.animation.*
 import androidx.lifecycle.ViewModelProviders
 import com.marxist.android.R
 import com.marxist.android.ui.base.BaseActivity
+import com.marxist.android.utils.AppConstants
+import com.marxist.android.utils.AppPreference
+import com.marxist.android.utils.AppPreference.set
 import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.api.RetryWithDelay
-import com.marxist.android.viewmodel.BookListViewModel
 import com.marxist.android.viewmodel.FeedsViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -37,7 +39,7 @@ class SplashActivity : BaseActivity() {
         maxPage = if (allFeeds > 0) {
             1
         } else {
-            10
+            5
         }
         fetchFeeds()
     }
@@ -62,7 +64,7 @@ class SplashActivity : BaseActivity() {
     }
 
     private var pageIndex = 1
-    private var maxPage = 10
+    private var maxPage = 5
     private var allowToContinue = true
 
     private fun fetchFeeds() {
@@ -97,6 +99,10 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun launchMainActivity() {
+        if (pageIndex != 1) {
+            AppPreference.customPrefs(applicationContext)[AppConstants.SharedPreference.PAGED_INDEX] =
+                (pageIndex + 1)
+        }
         val mainIntent = Intent(applicationContext, MainActivity::class.java)
         mainIntent.data = intent.data
         startActivity(mainIntent)

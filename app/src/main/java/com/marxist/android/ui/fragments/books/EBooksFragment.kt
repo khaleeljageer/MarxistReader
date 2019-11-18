@@ -46,12 +46,12 @@ class EBooksFragment : Fragment(), BookClickListener {
                         .subscribeOn(Schedulers.io())
                         .subscribe({
                             bookListViewModel.updateStatus(it.absolutePath, true, book.bookid)
-                            bookAdapter.updateDownloadId(adapterPosition, true)
                             RxBus.publish(ShowSnackBar(getString(R.string.download_completed)))
+                            bookAdapter.updateDownloadId(adapterPosition)
                         }, {
                             bookListViewModel.updateStatus("", false, book.bookid)
-                            bookAdapter.updateDownloadId(adapterPosition, false)
                             RxBus.publish(ShowSnackBar(getString(R.string.download_failed)))
+                            bookAdapter.updateDownloadId(adapterPosition)
                         })
             }
         }

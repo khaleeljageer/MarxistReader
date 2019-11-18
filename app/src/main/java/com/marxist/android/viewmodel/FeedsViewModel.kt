@@ -1,6 +1,7 @@
 package com.marxist.android.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.marxist.android.database.AppDatabase
@@ -20,7 +21,7 @@ class FeedsViewModel(application: Application) : AndroidViewModel(application) {
         feedsDownloaded = feedsDao.getDownloaded(true)
     }
 
-    private fun insert(localBooks: LocalFeeds) {
+    fun insert(localBooks: LocalFeeds) {
         feedsDao.insert(localBooks)
     }
 
