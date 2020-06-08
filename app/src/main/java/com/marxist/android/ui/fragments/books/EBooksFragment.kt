@@ -11,26 +11,12 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalBooks
-import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BookClickListener
-import com.marxist.android.utils.AppConstants
-import com.marxist.android.utils.RxBus
-import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.download.DownloadUtil
 import com.marxist.android.viewmodel.BookListViewModel
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Function
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragments_list.*
 import kotlinx.android.synthetic.main.fragments_list.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
-import okhttp3.ResponseBody
-import okio.Okio
-import retrofit2.Response
-import java.io.File
-import java.io.IOException
-import kotlin.math.absoluteValue
 
 class EBooksFragment : Fragment(), BookClickListener {
     override fun bookItemClickListener(adapterPosition: Int, book: LocalBooks) {
@@ -38,7 +24,7 @@ class EBooksFragment : Fragment(), BookClickListener {
             DownloadUtil.openSavedBook(mContext, book)
         } else {
             if (book.downloadId == -1L) {
-                val disposable =
+                /*val disposable =
                     download(
                         book,
                         AppConstants.BOOKS
@@ -52,12 +38,12 @@ class EBooksFragment : Fragment(), BookClickListener {
                             bookListViewModel.updateStatus("", false, book.bookid)
                             RxBus.publish(ShowSnackBar(getString(R.string.download_failed)))
                             bookAdapter.updateDownloadId(adapterPosition)
-                        })
+                        })*/
             }
         }
     }
 
-    fun download(
+    /*fun download(
         book: LocalBooks,
         type: String
     ): Observable<File> {
@@ -80,7 +66,7 @@ class EBooksFragment : Fragment(), BookClickListener {
                     }
                 }
             })
-    }
+    }*/
 
     private lateinit var bookListViewModel: BookListViewModel
     private lateinit var bookAdapter: BookListAdapter
@@ -100,7 +86,7 @@ class EBooksFragment : Fragment(), BookClickListener {
             lavEmptyImage.setAnimation(R.raw.loading_books)
         }
         bookListViewModel.callBookApi()
-        bookListViewModel.getLocalBooks().observe(this, Observer {
+        bookListViewModel.getLocalBooks().observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     rvListView.visibility = View.VISIBLE

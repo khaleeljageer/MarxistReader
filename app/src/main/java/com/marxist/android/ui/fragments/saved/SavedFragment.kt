@@ -8,19 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.airbnb.lottie.LottieCompositionFactory
-import com.airbnb.lottie.LottieDrawable
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.activities.DetailsActivity
 import com.marxist.android.ui.base.ItemClickListener
-import com.marxist.android.viewmodel.FeedsViewModel
+import com.marxist.android.ui.fragments.feeds.FeedsViewModel
 import kotlinx.android.synthetic.main.fragments_list.*
 import kotlinx.android.synthetic.main.fragments_list.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SavedFragment : Fragment(), ItemClickListener {
     override fun feedItemClickListener(
@@ -35,7 +33,7 @@ class SavedFragment : Fragment(), ItemClickListener {
         }
     }
 
-    private lateinit var feedsViewModel: FeedsViewModel
+    private val feedsViewModel: FeedsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +42,6 @@ class SavedFragment : Fragment(), ItemClickListener {
     }
 
     private fun initData() {
-        feedsViewModel = ViewModelProviders.of(this).get(FeedsViewModel::class.java)
         feedsViewModel.getDownloadedFeeds().observe(this, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {

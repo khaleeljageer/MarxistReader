@@ -29,13 +29,13 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_gravity="bottom"
-            android:background="@color/colorPrimary"
             android:elevation="8dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/nav_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
                 app:itemHorizontalTranslationEnabled="true"
                 app:itemIconTint="@drawable/bottom_view_icon_tint_color"
                 app:itemTextAppearanceActive="@style/Nav_Active_Text"

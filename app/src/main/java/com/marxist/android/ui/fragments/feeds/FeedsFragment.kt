@@ -8,9 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.model.ShowSnackBar
@@ -22,13 +21,13 @@ import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.RxBus
 import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.api.RetryWithDelay
-import com.marxist.android.viewmodel.FeedsViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragments_list.*
 import kotlinx.android.synthetic.main.fragments_list.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
+import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -37,7 +36,7 @@ class FeedsFragment : Fragment(), ItemClickListener {
     private var feedDisposable: Disposable? = null
     private lateinit var feedAdapter: FeedListAdapter
     private lateinit var mContext: Context
-    private lateinit var feedsViewModel: FeedsViewModel
+    private val feedsViewModel: FeedsViewModel by viewModel()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -53,7 +52,6 @@ class FeedsFragment : Fragment(), ItemClickListener {
     }
 
     private fun initData() {
-        feedsViewModel = ViewModelProviders.of(this).get(FeedsViewModel::class.java)
         feedsViewModel.getLiveFeeds().observe(this, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {
@@ -77,7 +75,8 @@ class FeedsFragment : Fragment(), ItemClickListener {
         val view = inflater.inflate(R.layout.fragments_list, container, false)
 
         view.rvListView.setHasFixedSize(true)
-        view.rvListView.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
+//        view.rvListView.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
+        view.rvListView.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         view.rvListView.adapter = feedAdapter
 
         return view
@@ -90,17 +89,17 @@ class FeedsFragment : Fragment(), ItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val linearLayoutManager = rvListView.layoutManager as LinearLayoutManager
+        val linearLayoutManager = rvListView.layoutManager as StaggeredGridLayoutManager
         rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                totalItemCount = linearLayoutManager.itemCount
+                /*totalItemCount = linearLayoutManager.itemCount
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
 
                 if (!loading && totalItemCount <= lastVisibleItem + visibleThreshold) {
                     loading = true
                     fetchFeeds()
-                }
+                }*/
             }
         })
     }
@@ -142,7 +141,7 @@ class FeedsFragment : Fragment(), ItemClickListener {
                                     feed.title!!,
                                     feed.link!!,
                                     timeInMillis,
-                                    feed.description!!,
+//                                    feed.description!!,
                                     feed.content!!,
                                     if (feed.enclosure == null) {
                                         ""

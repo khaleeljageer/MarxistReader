@@ -17,8 +17,8 @@ class SavedItemHolder(private val parent: ViewGroup, layoutID: Int) :
     BaseViewHolder<LocalFeeds>(parent, layoutID) {
     override fun bindData(item: LocalFeeds) {
         itemView.txtFeedTitle.text = item.title
-        itemView.txtFeedDesc.text =
-            HtmlCompat.fromHtml(item.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
+//        itemView.txtFeedDesc.text =
+//            HtmlCompat.fromHtml(item.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
         val pubDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
             Date(item.pubDate)
         ).toString()

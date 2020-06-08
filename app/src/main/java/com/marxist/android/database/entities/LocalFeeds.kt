@@ -17,8 +17,8 @@ data class LocalFeeds(
     @ColumnInfo(name = "pub_date")
     val pubDate: Long,
 
-    @ColumnInfo(name = "description")
-    val description: String,
+//    @ColumnInfo(name = "description")
+//    val description: String,
 
     @ColumnInfo(name = "content")
     val content: String,

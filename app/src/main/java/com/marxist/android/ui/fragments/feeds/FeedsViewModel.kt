@@ -1,20 +1,33 @@
-package com.marxist.android.viewmodel
+package com.marxist.android.ui.fragments.feeds
 
-import android.app.Application
 import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.dao.LocalFeedsDao
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.model.RssFeed
+import com.marxist.android.utils.api.ApiService
+import com.marxist.android.utils.api.RetryWithDelay
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FeedsViewModel(application: Application) : AndroidViewModel(application) {
-    private var feedsDao: LocalFeedsDao = AppDatabase.getAppDatabase(application).localFeedsDao()
+class FeedsViewModel(
+    context: Context, appDatabase: AppDatabase,
+    private val apiService: ApiService
+) : ViewModel() {
+    private var feedsDao: LocalFeedsDao = appDatabase.localFeedsDao()
     private var feedsLiveData: LiveData<MutableList<LocalFeeds>>
     private var feedsDownloaded: LiveData<MutableList<LocalFeeds>>
+
+    private val disposable = CompositeDisposable()
+
+    private var _feedList: MutableLiveData<MutableList<LocalFeeds>> = MutableLiveData()
+    val feedList: MutableLiveData<MutableList<LocalFeeds>> = _feedList
 
     init {
         feedsLiveData = feedsDao.getAllFeeds()
@@ -23,6 +36,19 @@ class FeedsViewModel(application: Application) : AndroidViewModel(application) {
 
     fun insert(localBooks: LocalFeeds) {
         feedsDao.insert(localBooks)
+    }
+
+    fun getFeeds() {
+        disposable.add(
+            apiService.getFeeds(1).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .retryWhen(RetryWithDelay())
+                .subscribe({
+                    if (it?.channel != null && it.channel!!.itemList != null) {
+
+                    }
+                }, {})
+        )
     }
 
     fun getFeedsCount() = feedsDao.getFeedsCount()
@@ -49,7 +75,7 @@ class FeedsViewModel(application: Application) : AndroidViewModel(application) {
                         feed.title!!,
                         feed.link!!,
                         timeInMillis,
-                        feed.description!!,
+//                        feed.description!!,
                         feed.content!!,
                         if (feed.enclosure == null) {
                             ""
@@ -66,5 +92,10 @@ class FeedsViewModel(application: Application) : AndroidViewModel(application) {
         } else {
             false
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        disposable.dispose()
     }
 }

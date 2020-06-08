@@ -1,47 +1,49 @@
 package com.marxist.android.ui.activities
 
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.view.animation.*
-import androidx.lifecycle.ViewModelProviders
 import com.marxist.android.R
 import com.marxist.android.ui.base.BaseActivity
-import com.marxist.android.utils.AppConstants
-import com.marxist.android.utils.AppPreference
-import com.marxist.android.utils.AppPreference.set
-import com.marxist.android.utils.api.ApiClient
-import com.marxist.android.utils.api.RetryWithDelay
-import com.marxist.android.viewmodel.FeedsViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_splash.*
+import java.util.concurrent.TimeUnit
 
 
 class SplashActivity : BaseActivity() {
-    private lateinit var feedsViewModel: FeedsViewModel
-    private var feedDisposable: Disposable? = null
+    private var disposable: Disposable? = null
     private var activityDestroyed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
 
-        feedsViewModel = ViewModelProviders.of(this).get(FeedsViewModel::class.java)
-
         txtLoading.visibility = View.VISIBLE
         progressLoader.visibility = View.VISIBLE
 
-        val allFeeds = feedsViewModel.getFeedsCount()
+        initTimer()
+    }
 
-        maxPage = if (allFeeds > 0) {
-            1
-        } else {
-            5
-        }
-        fetchFeeds()
+    private fun initTimer() {
+        disposable = Observable.timer(3, TimeUnit.SECONDS)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                launchNextActivity()
+            }, {
+                launchNextActivity()
+            })
+    }
+
+    private fun launchNextActivity() {
+        val mainIntent = Intent(applicationContext, MainActivity::class.java)
+        mainIntent.data = intent.data
+        startActivity(mainIntent)
+        finishAffinity()
     }
 
     override fun onResume() {
@@ -63,11 +65,11 @@ class SplashActivity : BaseActivity() {
         llSplashLogo.startAnimation(animSet)
     }
 
-    private var pageIndex = 1
+/*    private var pageIndex = 1
     private var maxPage = 5
-    private var allowToContinue = true
+    private var allowToContinue = true*/
 
-    private fun fetchFeeds() {
+    /*private fun fetchFeeds() {
         feedDisposable = ApiClient.mApiService.getFeeds(pageIndex)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -96,9 +98,9 @@ class SplashActivity : BaseActivity() {
                 it.printStackTrace()
                 launchMainActivity()
             })
-    }
+    }*/
 
-    private fun launchMainActivity() {
+/*    private fun launchMainActivity() {
         if (pageIndex != 1) {
             AppPreference.customPrefs(applicationContext)[AppConstants.SharedPreference.PAGED_INDEX] =
                 (pageIndex + 1)
@@ -107,11 +109,11 @@ class SplashActivity : BaseActivity() {
         mainIntent.data = intent.data
         startActivity(mainIntent)
         finish()
-    }
+    }*/
 
     override fun onDestroy() {
         activityDestroyed = true
         super.onDestroy()
-        feedDisposable?.dispose()
+        disposable?.dispose()
     }
 }

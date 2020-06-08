@@ -1,6 +1,5 @@
 package com.marxist.android
 
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.job.JobInfo
@@ -8,24 +7,39 @@ import android.app.job.JobScheduler
 import android.content.ComponentName
 import android.content.Context
 import androidx.multidex.MultiDex
+import coil.ImageLoader
+import coil.ImageLoaderFactory
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.marxist.android.database.AppDatabase
+import com.marxist.android.di.feedsModule
+import com.marxist.android.di.networkModule
+import com.marxist.android.di.roomModule
 import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.network.NetworkSchedulerService
 import org.geometerplus.android.fbreader.FBReaderApplication
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 import java.util.*
 
 
-class MarxistApp : FBReaderApplication() {
+class MarxistApp : FBReaderApplication(), ImageLoaderFactory {
 
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
         MultiDex.install(this@MarxistApp)
 
-        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_channel_id))
-//        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_channel_id_test))
+        startKoin {
+            androidLogger(Level.DEBUG)
+            androidContext(this@MarxistApp)
+            modules(listOf(networkModule, roomModule, feedsModule))
+        }
+
+        FirebaseMessaging.getInstance()
+            .subscribeToTopic(getString(R.string.default_notification_channel_id))
         FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.marxist_instant_news))
 
         AppDatabase.getAppDatabase(applicationContext)
@@ -35,6 +49,14 @@ class MarxistApp : FBReaderApplication() {
         ApiClient.setDownloadService()
 
         initNotificationChannel()
+    }
+
+    override fun newImageLoader(): ImageLoader {
+        return ImageLoader.Builder(this)
+            .crossfade(true)
+            .availableMemoryPercentage(0.3)
+            .bitmapPoolPercentage(0.8)
+            .build()
     }
 
     private fun scheduleJob() {

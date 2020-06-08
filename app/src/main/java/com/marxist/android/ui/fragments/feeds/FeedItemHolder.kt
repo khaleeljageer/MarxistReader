@@ -2,11 +2,9 @@ package com.marxist.android.ui.fragments.feeds
 
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.HtmlCompat
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.base.BaseViewHolder
-import com.marxist.android.utils.PrintLog
 import kotlinx.android.synthetic.main.feed_item_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -18,17 +16,16 @@ class FeedItemHolder(private val parent: ViewGroup, layoutID: Int) :
     BaseViewHolder<LocalFeeds>(parent, layoutID) {
     override fun bindData(item: LocalFeeds) {
         itemView.txtFeedTitle.text = item.title
-        itemView.txtFeedDesc.text =
-            HtmlCompat.fromHtml(item.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
+//        itemView.txtFeedDesc.text =
+//            HtmlCompat.fromHtml(item.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
         val pubDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
             Date(item.pubDate)
         ).toString()
         val wordCount = item.content.wordCount()
         val estimated = wordCount.estimateTime()
 
-        itemView.txtPubDate.text =
-            pubDate.plus(parent.context.getString(R.string.estimate))
-                .plus(estimated)
+        itemView.txtPubDate.text = pubDate
+        itemView.txtEstimate.text = parent.context.getString(R.string.estimate).plus(estimated)
 
         itemView.ivAudioLogo.visibility = if (item.audioUrl.isEmpty()) {
             View.INVISIBLE
