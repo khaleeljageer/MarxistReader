@@ -57,4 +57,6 @@ object DeviceUtils {
                     + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
         ).matcher(email).matches()
     }
+
+    fun getColor(context: Context): Int = context.resources.getIntArray(R.array.bg_colors).random()
 }

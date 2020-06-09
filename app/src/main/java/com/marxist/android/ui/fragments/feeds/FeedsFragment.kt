@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
@@ -26,7 +25,6 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragments_list.*
 import kotlinx.android.synthetic.main.fragments_list.view.*
-import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -52,7 +50,15 @@ class FeedsFragment : Fragment(), ItemClickListener {
     }
 
     private fun initData() {
-        feedsViewModel.getLiveFeeds().observe(this, Observer {
+        feedsViewModel.getFeeds()
+        feedsViewModel.feedList.observe(this, androidx.lifecycle.Observer {
+            if (it != null) {
+                feedAdapter.addFeed(it)
+            } else {
+
+            }
+        })
+/*        feedsViewModel.getLiveFeeds().observe(this, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     rvListView.visibility = View.VISIBLE
@@ -64,7 +70,7 @@ class FeedsFragment : Fragment(), ItemClickListener {
                 }
                 feedsViewModel.getLiveFeeds().removeObservers(this)
             }
-        })
+        })*/
     }
 
     override fun onCreateView(
@@ -148,8 +154,8 @@ class FeedsFragment : Fragment(), ItemClickListener {
                                     } else {
                                         feed.enclosure!!.audioUrl!!
                                     },
-                                    isDownloaded = false,
-                                    isBookMarked = false
+                                    isDownloaded = false
+//                                    isBookMarked = false
                                 )
                                 finalList.add(localFeeds)
                             }

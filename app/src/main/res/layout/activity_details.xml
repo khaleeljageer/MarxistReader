@@ -55,30 +55,20 @@
                         android:theme="@style/ToolbarTheme"
                         app:contentInsetEnd="0dp"
                         app:contentInsetStart="0dp"
+                        app:contentInsetStartWithNavigation="0dp"
                         app:elevation="8dp"
                         app:layout_collapseMode="pin"
+                        app:navigationIcon="@drawable/ic_arrow_back_24dp"
                         app:titleEnabled="false">
 
                     <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent">
 
-                        <ImageView
-                                android:id="@+id/ivBack"
-                                android:layout_width="?attr/actionBarSize"
-                                android:layout_height="?attr/actionBarSize"
-                                android:background="?attr/selectableItemBackground"
-                                android:contentDescription="@string/back"
-                                android:scaleType="centerInside"
-                                android:src="@drawable/ic_arrow_back_24dp"
-                                android:tint="@color/colorTextSecondary" />
-
                         <androidx.appcompat.widget.AppCompatTextView
                                 android:id="@+id/txtFeedTitle"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_toStartOf="@+id/ivBookMark"
-                                android:layout_toEndOf="@+id/ivBack"
                                 android:ellipsize="end"
                                 android:gravity="start|center_vertical"
                                 android:maxLines="1"
@@ -86,18 +76,6 @@
                                 android:textSize="@dimen/default_font_size"
                                 android:visibility="invisible"
                                 app:fontFamily="@font/hind_regular" />
-
-                        <com.airbnb.lottie.LottieAnimationView
-                                android:id="@+id/ivBookMark"
-                                android:layout_width="?attr/actionBarSize"
-                                android:layout_height="?attr/actionBarSize"
-                                android:layout_alignParentEnd="true"
-                                android:clickable="true"
-                                android:focusable="true"
-                                android:scaleType="centerInside"
-                                app:lottie_colorFilter="@color/colorTextSecondary"
-                                app:lottie_rawRes="@raw/bookmark_anim"
-                                app:lottie_scale="0.2" />
                     </RelativeLayout>
                 </androidx.appcompat.widget.Toolbar>
             </com.google.android.material.appbar.CollapsingToolbarLayout>

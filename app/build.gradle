@@ -91,6 +91,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'org.sufficientlysecure:html-textview:3.7'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 }
 
 apply plugin: 'com.google.gms.google-services'

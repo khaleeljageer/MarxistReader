@@ -26,8 +26,8 @@ class FeedsViewModel(
 
     private val disposable = CompositeDisposable()
 
-    private var _feedList: MutableLiveData<MutableList<LocalFeeds>> = MutableLiveData()
-    val feedList: MutableLiveData<MutableList<LocalFeeds>> = _feedList
+    private var _feedList: MutableLiveData<LocalFeeds> = MutableLiveData()
+    val feedList: MutableLiveData<LocalFeeds> = _feedList
 
     init {
         feedsLiveData = feedsDao.getAllFeeds()
@@ -45,7 +45,28 @@ class FeedsViewModel(
                 .retryWhen(RetryWithDelay())
                 .subscribe({
                     if (it?.channel != null && it.channel!!.itemList != null) {
-
+                        val itemList = it.channel!!.itemList
+                        if (itemList != null && itemList.isNotEmpty()) {
+                            itemList.forEach { feed ->
+                                val simpleDateFormat =
+                                    SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
+                                val mDate = simpleDateFormat.parse(feed.pubDate)
+                                val timeInMillis = mDate!!.time
+                                val localFeeds = LocalFeeds(
+                                    feed.title!!,
+                                    feed.link!!,
+                                    timeInMillis,
+                                    feed.content!!,
+                                    if (feed.enclosure == null) {
+                                        ""
+                                    } else {
+                                        feed.enclosure!!.audioUrl!!
+                                    },
+                                    isDownloaded = false
+                                )
+                                _feedList.value = localFeeds
+                            }
+                        }
                     }
                 }, {})
         )
@@ -75,15 +96,13 @@ class FeedsViewModel(
                         feed.title!!,
                         feed.link!!,
                         timeInMillis,
-//                        feed.description!!,
                         feed.content!!,
                         if (feed.enclosure == null) {
                             ""
                         } else {
                             feed.enclosure!!.audioUrl!!
                         },
-                        isDownloaded = false,
-                        isBookMarked = false
+                        isDownloaded = false
                     )
                     insert(localFeeds)
                 }

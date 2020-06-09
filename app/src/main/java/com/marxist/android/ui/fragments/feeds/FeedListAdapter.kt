@@ -48,6 +48,11 @@ class FeedListAdapter(
         }
     }
 
+    fun addFeed(article: LocalFeeds) {
+        mutableList.add(article)
+        notifyItemInserted(mutableList.size - 1)
+    }
+
     fun addFeeds(articles: MutableList<LocalFeeds>) {
         mutableList.addAll(articles)
         notifyDataSetChanged()

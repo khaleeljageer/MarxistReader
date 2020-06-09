@@ -1,8 +1,5 @@
 package com.marxist.android.ui.activities
 
-import android.content.ClipData
-import android.content.ClipboardManager
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
@@ -14,7 +11,6 @@ import androidx.core.widget.NestedScrollView
 import com.google.android.material.appbar.AppBarLayout
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.database.entities.LocalHighlights
 import com.marxist.android.model.ConnectivityType
 import com.marxist.android.model.ShareSnackBar
 import com.marxist.android.model.ShowSnackBar
@@ -96,13 +92,6 @@ class DetailsActivity : BaseActivity() {
             }
         }
 
-        article!!.isBookMarked.apply {
-            ivBookMark.tag = this
-            if (this) {
-                ivBookMark.playAnimation()
-            }
-        }
-
         initListeners()
         RxBus.subscribe({
             when (it) {
@@ -124,22 +113,6 @@ class DetailsActivity : BaseActivity() {
     }
 
     private fun initListeners() {
-        ivBookMark.setOnClickListener {
-            val tag = it.tag as Boolean
-            if (tag) {
-                ivBookMark.playAnimation().apply {
-                    ivBookMark.setAnimation(R.raw.bookmark_anim)
-                }
-            } else {
-                ivBookMark.playAnimation()
-            }
-
-            ivBookMark.tag = !tag
-            article!!.isBookMarked = !tag
-            appDatabase.localFeedsDao()
-                .updateBookMarkStatus(!tag, article!!.title, article!!.pubDate)
-        }
-
         appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
             var scrollRange = -1
 
@@ -155,118 +128,15 @@ class DetailsActivity : BaseActivity() {
             }
         })
 
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
         nestedScroll.setOnScrollChangeListener { scrollView: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
             if (scrollView != null) {
                 val totalHeight =
                     scrollView.getChildAt(0).measuredHeight - scrollView.measuredHeight
                 readPercent = (scrollY.toDouble() / totalHeight.toDouble() * 100).roundToInt()
-            }
-        }
-
-        ivBack.setOnClickListener {
-            onBackPressed()
-        }
-
-        txtContent.customSelectionActionModeCallback = object : ActionMode.Callback {
-            override fun onCreateActionMode(p0: ActionMode?, p1: Menu?): Boolean {
-                return true
-            }
-
-            override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
-                if (item != null) {
-                    when (item.itemId) {
-                        R.id.menu_share_item -> {
-                            return try {
-                                val selectedText = getSelected()
-                                if (selectedText.isNotEmpty()) {
-                                    DeviceUtils.shareIntent(
-                                        article!!.title,
-                                        selectedText.plus("\n")
-                                            .plus(baseContext.getString(R.string.to_read_more))
-                                            .plus(article!!.link),
-                                        baseContext
-                                    )
-                                }
-                                mode!!.finish()
-                                true
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                false
-                            }
-                        }
-                        R.id.menu_copy_item -> {
-                            return try {
-                                val selectedText = getSelected()
-                                if (selectedText.isNotEmpty()) {
-                                    val clipManager =
-                                        baseContext.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                                    val clip = ClipData.newPlainText(
-                                        "marxist_reader",
-                                        selectedText.plus("\n")
-                                            .plus(baseContext.getString(R.string.to_read_more))
-                                            .plus(article!!.link)
-                                    )
-                                    clipManager.setPrimaryClip(clip)
-                                }
-                                mode!!.finish()
-                                RxBus.publish(ShowSnackBar(baseContext.getString(R.string.copied)))
-                                true
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                false
-                            }
-                        }
-                        R.id.menu_bookmark_item -> {
-                            return try {
-                                val selectedText = getSelected()
-                                if (selectedText.isNotEmpty()) {
-                                    appDatabase.localHighlightsDao().insert(
-                                        LocalHighlights(
-                                            System.currentTimeMillis(),
-                                            article!!.title,
-                                            article!!.link,
-                                            selectedText
-                                        )
-                                    )
-                                    RxBus.publish(
-                                        ShareSnackBar(
-                                            baseContext.getString(R.string.added_to_bookmarks),
-                                            article!!.title,
-                                            selectedText.plus("\n")
-                                                .plus(baseContext.getString(R.string.to_read_more))
-                                                .plus(article!!.link)
-                                        )
-                                    )
-                                }
-                                mode!!.finish()
-                                true
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                                false
-                            }
-                        }
-                    }
-                }
-                return false
-            }
-
-            private fun getSelected(): String {
-                if (txtContent.isFocused) {
-                    val textStartIndex = txtContent.selectionStart
-                    val textEndIndex = txtContent.selectionEnd
-
-                    val min = 0.coerceAtLeast(textStartIndex.coerceAtMost(textEndIndex))
-                    val max = 0.coerceAtLeast(textStartIndex.coerceAtLeast(textEndIndex))
-                    return txtContent.text.subSequence(min, max).toString().trim { it <= ' ' }
-                }
-                return ""
-            }
-
-            override fun onPrepareActionMode(mode: ActionMode?, menu: Menu?): Boolean {
-                return true
-            }
-
-            override fun onDestroyActionMode(mode: ActionMode?) {
             }
         }
     }

@@ -18,4 +18,39 @@
 
     <color name="colorAccent_alpha_40">#6664B5F6</color>
     <color name="black_alpha_40">#66000000</color>
+    <array name="bg_colors">
+        <item>0xffffebee</item>
+        <item>0xffb2dfdb</item>
+        <item>0xff00b0ff</item>
+        <item>0xffff8a80</item>
+        <item>0xffede7f6</item>
+        <item>0xffd1c4e9</item>
+        <item>0xffff80ab</item>
+        <item>0xff80deea</item>
+        <item>0xff40c4ff</item>
+        <item>0xff42a5f5</item>
+        <item>0xffb39ddb</item>
+        <item>0xffbbdefb</item>
+        <item>0xff4dd0e1</item>
+        <item>0xff26c6da</item>
+        <item>0xfff48fb1</item>
+        <item>0xfff3e5f5</item>
+        <item>0xff4db6ac</item>
+        <item>0xff80d8ff</item>
+        <item>0xff90caf9</item>
+        <item>0xff64b5f6</item>
+        <item>0xffe3f2fd</item>
+        <item>0xff00acc1</item>
+        <item>0xff4fc3f7</item>
+        <item>0xff29b6f6</item>
+        <item>0xff03a9f4</item>
+        <item>0xffffcdd2</item>
+        <item>0xffea80fc</item>
+        <item>0xff82b1ff</item>
+        <item>0xff8c9eff</item>
+        <item>0xffb388ff</item>
+        <item>0xffb3e5fc</item>
+        <item>0xff81d4fa</item>
+        <item>0xffb2ebf2</item>
+    </array>
 </resources>

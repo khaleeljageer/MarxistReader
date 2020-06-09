@@ -17,9 +17,6 @@ data class LocalFeeds(
     @ColumnInfo(name = "pub_date")
     val pubDate: Long,
 
-//    @ColumnInfo(name = "description")
-//    val description: String,
-
     @ColumnInfo(name = "content")
     val content: String,
 
@@ -30,8 +27,5 @@ data class LocalFeeds(
     var isDownloaded: Boolean,
 
     @ColumnInfo(name = "downloaded_path")
-    var downloadPath: String = "",
-
-    @ColumnInfo(name = "is_bookmarked")
-    var isBookMarked: Boolean
+    var downloadPath: String = ""
 ) : Serializable

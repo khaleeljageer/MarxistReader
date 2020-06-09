@@ -2,10 +2,10 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/rootCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hapticFeedbackEnabled="true"
-        app:cardBackgroundColor="@color/colorPrimary"
         app:cardCornerRadius="3dp"
         app:cardElevation="3dp"
         app:cardPreventCornerOverlap="true"
@@ -69,7 +69,7 @@
                     android:contentDescription="@string/audio_available"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_music_black"
-                    android:tint="@color/grey" />
+                    android:tint="@color/colorTextPrimary" />
         </FrameLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

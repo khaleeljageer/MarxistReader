@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.base.BaseViewHolder
+import com.marxist.android.utils.DeviceUtils
 import kotlinx.android.synthetic.main.feed_item_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -26,6 +27,7 @@ class FeedItemHolder(private val parent: ViewGroup, layoutID: Int) :
 
         itemView.txtPubDate.text = pubDate
         itemView.txtEstimate.text = parent.context.getString(R.string.estimate).plus(estimated)
+        itemView.rootCard.setCardBackgroundColor(DeviceUtils.getColor(parent.context))
 
         itemView.ivAudioLogo.visibility = if (item.audioUrl.isEmpty()) {
             View.INVISIBLE
