@@ -107,4 +107,5 @@
     <string name="phone">Phone</string>
     <string name="download_completed">Download Completed</string>
     <string name="download_failed">Download Failed</string>
+    <string name="text_size">Text Size</string>
 </resources>

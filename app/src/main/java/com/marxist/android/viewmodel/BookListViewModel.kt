@@ -1,13 +1,11 @@
 package com.marxist.android.viewmodel
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.dao.LocalBooksDao
 import com.marxist.android.database.entities.LocalBooks
-import com.marxist.android.utils.api.ApiClient
+import com.marxist.android.utils.api.GitHubService
 import com.marxist.android.utils.api.RetryWithDelay
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -15,9 +13,12 @@ import io.reactivex.schedulers.Schedulers
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BookListViewModel(application: Application) : AndroidViewModel(application) {
+class BookListViewModel(
+    appDatabase: AppDatabase,
+    private val apiService: GitHubService
+) : ViewModel() {
 
-    private var booksDao: LocalBooksDao = AppDatabase.getAppDatabase(application).localBooksDao()
+    private var booksDao: LocalBooksDao = appDatabase.localBooksDao()
     private var booksLiveData: LiveData<MutableList<LocalBooks>>
     private var disposable: Disposable? = null
 
@@ -42,7 +43,7 @@ class BookListViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun callBookApi() {
-        disposable = ApiClient.mGitHubService.getBooks()
+        disposable = apiService.getBooks()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .retryWhen(RetryWithDelay())

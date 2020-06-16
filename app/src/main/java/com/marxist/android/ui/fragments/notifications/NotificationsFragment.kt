@@ -12,6 +12,7 @@ import com.marxist.android.R
 import com.marxist.android.model.LocalNotifications
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.utils.api.ApiClient
+import com.marxist.android.utils.api.GitHubService
 import com.marxist.android.utils.api.RetryWithDelay
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -19,8 +20,11 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragments_list.*
 import kotlinx.android.synthetic.main.fragments_list.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
+import org.koin.android.ext.android.inject
 
 class NotificationsFragment : Fragment(), ItemClickListener {
+
+    private val gitHubService: GitHubService by inject()
 
     private var disposable: Disposable? = null
 
@@ -66,7 +70,7 @@ class NotificationsFragment : Fragment(), ItemClickListener {
     }
 
     private fun callBookApi() {
-        disposable = ApiClient.mGitHubService.getNotifications()
+        disposable = gitHubService.getNotifications()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .retryWhen(RetryWithDelay())

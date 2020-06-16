@@ -15,7 +15,6 @@ import com.marxist.android.database.AppDatabase
 import com.marxist.android.di.feedsModule
 import com.marxist.android.di.networkModule
 import com.marxist.android.di.roomModule
-import com.marxist.android.utils.api.ApiClient
 import com.marxist.android.utils.network.NetworkSchedulerService
 import org.geometerplus.android.fbreader.FBReaderApplication
 import org.koin.android.ext.koin.androidContext
@@ -40,13 +39,10 @@ class MarxistApp : FBReaderApplication(), ImageLoaderFactory {
 
         FirebaseMessaging.getInstance()
             .subscribeToTopic(getString(R.string.default_notification_channel_id))
-        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.marxist_instant_news))
+        FirebaseMessaging.getInstance()
+            .subscribeToTopic(getString(R.string.marxist_instant_news))
 
-        AppDatabase.getAppDatabase(applicationContext)
         scheduleJob()
-        ApiClient.setApiService()
-        ApiClient.setGitHubService()
-        ApiClient.setDownloadService()
 
         initNotificationChannel()
     }

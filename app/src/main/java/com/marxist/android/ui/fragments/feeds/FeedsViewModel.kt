@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.dao.LocalFeedsDao
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.model.RssFeed
+import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.api.ApiService
 import com.marxist.android.utils.api.RetryWithDelay
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,9 +38,12 @@ class FeedsViewModel(
         feedsDao.insert(localBooks)
     }
 
+    var pageNumber = 1
+
     fun getFeeds() {
+        PrintLog.debug("Khaleel", "pageNumber : $pageNumber")
         disposable.add(
-            apiService.getFeeds(1).subscribeOn(Schedulers.io())
+            apiService.getFeeds(pageNumber).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retryWhen(RetryWithDelay())
                 .subscribe({
@@ -66,6 +69,8 @@ class FeedsViewModel(
                                 )
                                 _feedList.value = localFeeds
                             }
+
+                            pageNumber += 1
                         }
                     }
                 }, {})
@@ -80,37 +85,6 @@ class FeedsViewModel(
 
     fun getDownloadedFeeds(): LiveData<MutableList<LocalFeeds>> {
         return feedsDownloaded
-    }
-
-    fun updateFeeds(it: RssFeed?): Boolean {
-        return if (it?.channel != null && it.channel!!.itemList != null) {
-            val itemList = it.channel!!.itemList
-            if (itemList != null && itemList.isNotEmpty()) {
-                itemList.forEach { feed ->
-                    val simpleDateFormat =
-                        SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
-                    val mDate = simpleDateFormat.parse(feed.pubDate)
-                    val timeInMillis = mDate!!.time
-
-                    val localFeeds = LocalFeeds(
-                        feed.title!!,
-                        feed.link!!,
-                        timeInMillis,
-                        feed.content!!,
-                        if (feed.enclosure == null) {
-                            ""
-                        } else {
-                            feed.enclosure!!.audioUrl!!
-                        },
-                        isDownloaded = false
-                    )
-                    insert(localFeeds)
-                }
-            }
-            true
-        } else {
-            false
-        }
     }
 
     override fun onCleared() {

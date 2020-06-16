@@ -5,4 +5,6 @@
     <dimen name="feed_item_pubdate_size">12sp</dimen>
     <dimen name="details_title_size">18sp</dimen>
     <dimen name="default_font_size">14sp</dimen>
+
+    <integer name="recycler_view_span_count">2</integer>
 </resources>

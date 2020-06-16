@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical">
 
     <include layout="@layout/layout_lottie_no_feed" />
@@ -11,5 +12,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
+            app:spanCount="@integer/recycler_view_span_count"
             android:layoutAnimation="@anim/layout_animation_fall_down" />
 </FrameLayout>
