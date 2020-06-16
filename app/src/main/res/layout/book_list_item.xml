@@ -24,8 +24,7 @@
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:background="@color/colorAccent_alpha_40"
-                    android:orientation="vertical"
-                    android:scaleType="fitXY"
+                    android:scaleType="centerCrop"
                     tools:ignore="ContentDescription" />
 
             <RelativeLayout

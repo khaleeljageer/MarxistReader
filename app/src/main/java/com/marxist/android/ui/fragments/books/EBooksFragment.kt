@@ -72,6 +72,7 @@ class EBooksFragment : Fragment(), BookClickListener {
     private val bookAdapter by lazy {
         BookListAdapter(mContext, mutableListOf(), this@EBooksFragment)
     }
+
     private lateinit var mContext: Context
 
     override fun onAttach(context: Context) {

@@ -14,10 +14,7 @@ class BookViewHolder(
 ) :
     BaseBookViewHolder<LocalBooks>(view) {
     override fun bindData(book: LocalBooks) {
-        itemView.arBookImage.load(book.image) {
-            crossfade(true)
-            size(212, 300)
-        }
+        itemView.arBookImage.load(book.image)
         val expanded = book.isExpanded
         itemView.fabDownload.run {
             show()

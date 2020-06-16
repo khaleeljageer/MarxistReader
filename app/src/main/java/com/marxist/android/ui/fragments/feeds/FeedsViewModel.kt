@@ -21,7 +21,6 @@ class FeedsViewModel(
     private val apiService: ApiService
 ) : ViewModel() {
     private var feedsDao: LocalFeedsDao = appDatabase.localFeedsDao()
-    private var feedsLiveData: LiveData<MutableList<LocalFeeds>>
     private var feedsDownloaded: LiveData<MutableList<LocalFeeds>>
 
     private val disposable = CompositeDisposable()
@@ -30,12 +29,7 @@ class FeedsViewModel(
     val feedList: MutableLiveData<LocalFeeds> = _feedList
 
     init {
-        feedsLiveData = feedsDao.getAllFeeds()
         feedsDownloaded = feedsDao.getDownloaded(true)
-    }
-
-    fun insert(localBooks: LocalFeeds) {
-        feedsDao.insert(localBooks)
     }
 
     var pageNumber = 1
@@ -75,12 +69,6 @@ class FeedsViewModel(
                     }
                 }, {})
         )
-    }
-
-    fun getFeedsCount() = feedsDao.getFeedsCount()
-
-    fun getLiveFeeds(): LiveData<MutableList<LocalFeeds>> {
-        return feedsLiveData
     }
 
     fun getDownloadedFeeds(): LiveData<MutableList<LocalFeeds>> {

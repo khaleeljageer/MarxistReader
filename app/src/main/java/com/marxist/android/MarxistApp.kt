@@ -9,9 +9,9 @@ import android.content.Context
 import androidx.multidex.MultiDex
 import coil.ImageLoader
 import coil.ImageLoaderFactory
+import coil.request.CachePolicy
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
-import com.marxist.android.database.AppDatabase
 import com.marxist.android.di.feedsModule
 import com.marxist.android.di.networkModule
 import com.marxist.android.di.roomModule
