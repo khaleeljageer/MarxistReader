@@ -108,4 +108,7 @@
     <string name="download_completed">Download Completed</string>
     <string name="download_failed">Download Failed</string>
     <string name="text_size">Text Size</string>
+    <string name="tune">Tune</string>
+    <string name="tune_reader">Tune Reader</string>
+    <string name="pref_key_preferred_font">preferred_font</string>
 </resources>

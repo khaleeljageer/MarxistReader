@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-            android:id="@+id/menu_font"
-            android:icon="@drawable/ic_round_format_size_24"
-            android:title="@string/text_size"
+            android:id="@+id/menu_tune"
+            android:icon="@drawable/ic_round_tune_24"
+            android:title="@string/tune"
             app:showAsAction="always" />
     <item
             android:id="@+id/menu_share"
             android:icon="@drawable/ic_share_black"
             android:title="@string/share_text"
-            app:showAsAction="always" />
+            app:showAsAction="ifRoom" />
 
 </menu>

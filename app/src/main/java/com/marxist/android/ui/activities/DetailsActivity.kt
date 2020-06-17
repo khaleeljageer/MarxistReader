@@ -3,30 +3,35 @@ package com.marxist.android.ui.activities
 import android.os.Bundle
 import android.os.Handler
 import android.util.TypedValue
-import android.view.ActionMode
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
 import com.google.android.material.appbar.AppBarLayout
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.model.ConnectivityType
-import com.marxist.android.model.ShareSnackBar
-import com.marxist.android.model.ShowSnackBar
+import com.marxist.android.model.FontChange
+import com.marxist.android.model.FontSizeChange
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.fragments.player.AudioPlayerFragment
+import com.marxist.android.ui.fragments.tune.TuneSheetFragment
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.RxBus
+import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_details.*
 import kotlin.math.roundToInt
 
 
 class DetailsActivity : BaseActivity() {
-    private var mActionMode: ActionMode? = null
+    private lateinit var disposable: Disposable
     private var article: LocalFeeds? = null
     private var readPercent: Int = 0
+
+    private val tuneSheet by lazy {
+        TuneSheetFragment()
+    }
 
     companion object {
         const val ARTICLE = "article"
@@ -38,10 +43,25 @@ class DetailsActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item!!.itemId == R.id.menu_share) {
-            DeviceUtils.shareIntent(article!!.title, article!!.link, applicationContext)
+        item?.let {
+            if (it.itemId == R.id.menu_share) {
+                DeviceUtils.shareIntent(article!!.title, article!!.link, applicationContext)
+                return true
+            } else if (it.itemId == R.id.menu_tune) {
+                tuneSheet.show(supportFragmentManager, tuneSheet.tag)
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun applyFont(fontId: Int) {
+        val typeface = ResourcesCompat.getFont(baseContext, fontId)
+        typeface?.let { f ->
+            txtContent.typeface = f
+            txtFeedTitle.typeface = f
+            txtCollapseTitle.typeface = f
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +75,15 @@ class DetailsActivity : BaseActivity() {
             txtCollapseTitle.text = this
             txtFeedTitle.text = this
         }
+
+        val selectedFont = appPreference[getString(R.string.pref_key_preferred_font), "Hind"]
+        val fontsId = arrayOf(
+            R.font.arima_madurai, R.font.catamaran, R.font.hind_regular,
+            R.font.meera_inimai, R.font.mukta_malar, R.font.pavanam
+        )
+        val fonts = arrayOf("Arima", "Catamaran", "Hind", "Meera", "Mukta", "Pavanam")
+        val fontId = fontsId[fonts.indexOf(selectedFont)]
+        applyFont(fontId)
 
         val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
 
@@ -93,18 +122,13 @@ class DetailsActivity : BaseActivity() {
         }
 
         initListeners()
-        RxBus.subscribe({
+        disposable = RxBus.subscribe({
             when (it) {
-                is ShowSnackBar -> {
-                    displayMaterialSnackBar(it.message, ConnectivityType.OTHER, rootView)
+                is FontChange -> {
+                    applyFont(it.fontId)
                 }
-                is ShareSnackBar -> {
-                    displayMaterialSnackBar(
-                        it.message,
-                        ConnectivityType.OTHER,
-                        rootView,
-                        getString(R.string.share_text), it.title, it.extra
-                    )
+                is FontSizeChange -> {
+                    txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, it.fontSize)
                 }
             }
         }, {
@@ -143,6 +167,9 @@ class DetailsActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        if (this::disposable.isInitialized) {
+            disposable.dispose()
+        }
         System.gc()
     }
 }

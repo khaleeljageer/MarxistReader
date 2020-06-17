@@ -11,21 +11,17 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.marxist.android.R
-import com.marxist.android.database.AppDatabase
 import com.marxist.android.model.ConnectivityType
-import com.marxist.android.utils.AppPreference
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
+import org.koin.android.ext.android.inject
 
 abstract class BaseActivity : AppCompatActivity() {
-    lateinit var appPreference: SharedPreferences
-    lateinit var appDatabase: AppDatabase
+    val appPreference: SharedPreferences by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appDatabase = AppDatabase.getAppDatabase(applicationContext)
-        appPreference = AppPreference.customPrefs(baseContext)
         if (appPreference[getString(R.string.pref_key_dark_mode), false]) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
