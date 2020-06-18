@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.widget.NestedScrollView
-import com.google.android.material.appbar.AppBarLayout
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.model.FontChange
@@ -144,21 +143,6 @@ class DetailsActivity : BaseActivity() {
     }
 
     private fun initListeners() {
-//        appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-//            var scrollRange = -1
-//
-//            override fun onOffsetChanged(appBar: AppBarLayout?, verticalOffset: Int) {
-//                if (scrollRange == -1) {
-//                    scrollRange = appBar!!.totalScrollRange
-//                }
-//                txtFeedTitle.visibility = if (scrollRange + verticalOffset == 0) {
-//                    View.VISIBLE
-//                } else {
-//                    View.INVISIBLE
-//                }
-//            }
-//        })
-
         toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
