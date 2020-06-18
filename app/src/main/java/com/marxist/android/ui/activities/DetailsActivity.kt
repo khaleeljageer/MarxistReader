@@ -59,6 +59,7 @@ class DetailsActivity : BaseActivity() {
         val typeface = ResourcesCompat.getFont(baseContext, fontId)
         typeface?.let { f ->
             txtContent.typeface = f
+            txtTitle.typeface = f
         }
     }
 
@@ -70,6 +71,8 @@ class DetailsActivity : BaseActivity() {
         supportActionBar?.title = ""
 
         article = intent.getSerializableExtra(ARTICLE) as LocalFeeds
+
+        txtTitle.text = article!!.title
 
         val selectedFont = appPreference[getString(R.string.pref_key_preferred_font), "Hind"]
         val fontsId = arrayOf(
@@ -127,14 +130,19 @@ class DetailsActivity : BaseActivity() {
                 }
                 is ReaderBgChange -> {
                     if (it.color == 0xff282828) {
+                        txtTitle.setTextColor(0xffffffff.toInt())
                         txtContent.setTextColor(0xffffffff.toInt())
                     } else {
+                        txtTitle.setTextColor(0xff000000.toInt())
                         txtContent.setTextColor(0xff000000.toInt())
                     }
 
-                    txtContent.setBackgroundColor(it.color.toInt())
-                    toolbar.setBackgroundColor(it.color.toInt())
-                    window.statusBarColor = it.color.toInt()
+                    it.color.toInt().run {
+                        txtContent.setBackgroundColor(this)
+                        txtTitle.setBackgroundColor(this)
+                        toolbar.setBackgroundColor(this)
+                        window.statusBarColor = this
+                    }
                 }
             }
         }, {
