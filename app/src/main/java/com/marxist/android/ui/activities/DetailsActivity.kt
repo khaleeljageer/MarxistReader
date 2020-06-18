@@ -13,6 +13,7 @@ import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.model.FontChange
 import com.marxist.android.model.FontSizeChange
+import com.marxist.android.model.ReaderBgChange
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.fragments.player.AudioPlayerFragment
 import com.marxist.android.ui.fragments.tune.TuneSheetFragment
@@ -59,8 +60,6 @@ class DetailsActivity : BaseActivity() {
         val typeface = ResourcesCompat.getFont(baseContext, fontId)
         typeface?.let { f ->
             txtContent.typeface = f
-            txtFeedTitle.typeface = f
-            txtCollapseTitle.typeface = f
         }
     }
 
@@ -69,12 +68,9 @@ class DetailsActivity : BaseActivity() {
         setContentView(R.layout.activity_details)
 
         setSupportActionBar(toolbar)
-        article = intent.getSerializableExtra(ARTICLE) as LocalFeeds
+        supportActionBar?.title = ""
 
-        article!!.title.apply {
-            txtCollapseTitle.text = this
-            txtFeedTitle.text = this
-        }
+        article = intent.getSerializableExtra(ARTICLE) as LocalFeeds
 
         val selectedFont = appPreference[getString(R.string.pref_key_preferred_font), "Hind"]
         val fontsId = arrayOf(
@@ -130,6 +126,17 @@ class DetailsActivity : BaseActivity() {
                 is FontSizeChange -> {
                     txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, it.fontSize)
                 }
+                is ReaderBgChange -> {
+                    if (it.color == 0xff282828) {
+                        txtContent.setTextColor(0xffffffff.toInt())
+                    } else {
+                        txtContent.setTextColor(0xff000000.toInt())
+                    }
+
+                    txtContent.setBackgroundColor(it.color.toInt())
+                    toolbar.setBackgroundColor(it.color.toInt())
+                    window.statusBarColor = it.color.toInt()
+                }
             }
         }, {
             it.printStackTrace()
@@ -137,20 +144,20 @@ class DetailsActivity : BaseActivity() {
     }
 
     private fun initListeners() {
-        appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
-            var scrollRange = -1
-
-            override fun onOffsetChanged(appBar: AppBarLayout?, verticalOffset: Int) {
-                if (scrollRange == -1) {
-                    scrollRange = appBar!!.totalScrollRange
-                }
-                txtFeedTitle.visibility = if (scrollRange + verticalOffset == 0) {
-                    View.VISIBLE
-                } else {
-                    View.INVISIBLE
-                }
-            }
-        })
+//        appBarLayout.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+//            var scrollRange = -1
+//
+//            override fun onOffsetChanged(appBar: AppBarLayout?, verticalOffset: Int) {
+//                if (scrollRange == -1) {
+//                    scrollRange = appBar!!.totalScrollRange
+//                }
+//                txtFeedTitle.visibility = if (scrollRange + verticalOffset == 0) {
+//                    View.VISIBLE
+//                } else {
+//                    View.INVISIBLE
+//                }
+//            }
+//        })
 
         toolbar.setNavigationOnClickListener {
             onBackPressed()

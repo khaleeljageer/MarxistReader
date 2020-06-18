@@ -1,39 +1,19 @@
 package com.marxist.android.ui.base
 
 import android.content.SharedPreferences
-import android.os.Build
-import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.marxist.android.R
 import com.marxist.android.model.ConnectivityType
-import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
 import org.koin.android.ext.android.inject
 
 abstract class BaseActivity : AppCompatActivity() {
     val appPreference: SharedPreferences by inject()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        if (appPreference[getString(R.string.pref_key_dark_mode), false]) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                window.decorView.systemUiVisibility = 0
-            }
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            }
-        }
-    }
 
     internal fun displayMaterialSnackBar(
         message: String,

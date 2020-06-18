@@ -69,80 +69,52 @@
             android:alpha="0.5"
             android:background="@color/colorTextPrimary" />
 
-    <LinearLayout
+    <RadioGroup
+            android:id="@+id/radioGroup"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:gravity="center"
             android:orientation="horizontal">
 
-        <com.marxist.android.utils.views.CheckableFrameLayout
-                android:layout_width="43dp"
-                android:layout_height="43dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/round_ring">
+        <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/checkWhite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/selector_white"
+                android:button="@null"
+                android:paddingStart="15dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="10dp"
+                android:text="Classic" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_round_white" />
+        <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/checkNight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/selector_night"
+                android:button="@null"
+                android:paddingStart="15dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="10dp"
+                android:text="Night"
+                android:textColor="@color/colorPrimary" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="T"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:fontFamily="@font/arima_madurai" />
-        </com.marxist.android.utils.views.CheckableFrameLayout>
-
-        <com.marxist.android.utils.views.CheckableFrameLayout
-                android:layout_width="43dp"
-                android:layout_height="43dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="5dp"
-                android:background="@drawable/round_ring">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_round_black" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="T"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:fontFamily="@font/arima_madurai" />
-        </com.marxist.android.utils.views.CheckableFrameLayout>
-
-        <com.marxist.android.utils.views.CheckableFrameLayout
-                android:layout_width="43dp"
-                android:layout_height="43dp"
-                android:layout_gravity="center"
-                android:background="@drawable/round_ring">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:srcCompat="@drawable/ic_round_tradition" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="T"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:fontFamily="@font/arima_madurai" />
-        </com.marxist.android.utils.views.CheckableFrameLayout>
-    </LinearLayout>
+        <androidx.appcompat.widget.AppCompatRadioButton
+                android:id="@+id/checkTradition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/selector_tradition"
+                android:button="@null"
+                android:paddingStart="15dp"
+                android:paddingTop="10dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="10dp"
+                android:text="Tradition" />
+    </RadioGroup>
 
     <Space
             android:layout_width="match_parent"

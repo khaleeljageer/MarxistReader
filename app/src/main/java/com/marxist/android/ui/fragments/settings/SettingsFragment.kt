@@ -29,10 +29,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         return when (preference!!.key) {
-            getString(R.string.pref_key_dark_mode) -> {
-                RxBus.publish(DarkModeChanged(""))
-                true
-            }
             getString(R.string.about_us) -> {
                 startActivity(Intent(mContext, AboutActivity::class.java))
                 true

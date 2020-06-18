@@ -15,70 +15,18 @@
         <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/appBarLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:elevation="0dp">
 
-            <com.google.android.material.appbar.CollapsingToolbarLayout
+            <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed"
-                    app:statusBarScrim="@color/colorPrimary"
-                    app:titleEnabled="false">
-
-                <FrameLayout
-                        android:id="@+id/flTitleHeader"
-                        android:layout_width="match_parent"
-                        android:layout_height="230dp"
-                        app:layout_collapseMode="parallax"
-                        app:layout_collapseParallaxMultiplier="0.2">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                            android:id="@+id/txtCollapseTitle"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:ellipsize="end"
-                            android:gravity="bottom"
-                            android:maxLines="4"
-                            android:paddingStart="16dp"
-                            android:paddingTop="16dp"
-                            android:paddingEnd="16dp"
-                            android:paddingBottom="18dp"
-                            android:textColor="@color/colorTextSecondary"
-                            android:textSize="@dimen/details_title_size"
-                            app:fontFamily="@font/hind_regular" />
-                </FrameLayout>
-
-                <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="?attr/actionBarSize"
-                        android:background="?attr/colorPrimary"
-                        android:theme="@style/ToolbarTheme"
-                        app:contentInsetEnd="0dp"
-                        app:contentInsetStart="0dp"
-                        app:contentInsetStartWithNavigation="0dp"
-                        app:elevation="8dp"
-                        app:layout_collapseMode="pin"
-                        app:navigationIcon="@drawable/ic_arrow_back_24dp"
-                        app:titleEnabled="false">
-
-                    <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                                android:id="@+id/txtFeedTitle"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:ellipsize="end"
-                                android:gravity="start|center_vertical"
-                                android:maxLines="1"
-                                android:textColor="@color/colorTextSecondary"
-                                android:textSize="@dimen/default_font_size"
-                                android:visibility="invisible"
-                                app:fontFamily="@font/hind_regular" />
-                    </RelativeLayout>
-                </androidx.appcompat.widget.Toolbar>
-            </com.google.android.material.appbar.CollapsingToolbarLayout>
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="@color/transparent"
+                    android:theme="@style/ToolbarTheme"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:navigationIcon="@drawable/ic_arrow_back_24dp"
+                    app:titleEnabled="false" />
         </com.google.android.material.appbar.AppBarLayout>
 
 
@@ -93,9 +41,11 @@
                     android:id="@+id/txtContent"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="30dp"
                     android:overScrollMode="always"
-                    android:padding="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingTop="46dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp"
                     android:textColor="@color/colorTextSecondary"
                     android:textIsSelectable="true"
                     android:textSize="@dimen/default_font_size" />

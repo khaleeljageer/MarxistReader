@@ -7,14 +7,6 @@
             app:iconSpaceReserved="false"
             app:title="@string/theme_header">
 
-        <SwitchPreferenceCompat
-                app:defaultValue="false"
-                app:iconSpaceReserved="false"
-                app:key="@string/pref_key_dark_mode"
-                app:summaryOff="@string/dark_mode_disabled"
-                app:summaryOn="@string/dark_mode_enable"
-                app:title="@string/dark_mode" />
-
         <SeekBarPreference
                 android:max="20"
                 app:adjustable="true"

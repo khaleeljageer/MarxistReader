@@ -13,6 +13,7 @@ import com.google.android.material.tabs.TabLayout
 import com.marxist.android.R
 import com.marxist.android.model.FontChange
 import com.marxist.android.model.FontSizeChange
+import com.marxist.android.model.ReaderBgChange
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.AppPreference.set
 import com.marxist.android.utils.RxBus
@@ -52,6 +53,22 @@ class TuneSheetFragment : BottomSheetDialogFragment() {
 
         val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
         view.fontSizeSeek.progress = fontSize
+
+        val colors = mapOf(
+            R.id.checkWhite to 0xffFFFFFF,
+            R.id.checkNight to 0xff282828,
+            R.id.checkTradition to 0xffF8F2E5
+        )
+
+        view.radioGroup.setOnCheckedChangeListener { _, p1 ->
+            if (p1 != -1) {
+                appPreference[getString(R.string.pref_key_reader_bg)] = p1
+                val color = colors[p1]
+                color?.let {
+                    RxBus.publish(ReaderBgChange(it))
+                }
+            }
+        }
 
         view.fontSizeSeek.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(p0: SeekBar?, p1: Int, p2: Boolean) {
