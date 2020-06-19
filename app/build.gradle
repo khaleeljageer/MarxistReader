@@ -97,6 +97,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'org.sufficientlysecure:html-textview:3.7'
+    implementation 'ir.siaray:downloadmanagerplus:1.4.0'
+    implementation 'com.nabinbhandari.android:permissions:3.8'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.3'
 }

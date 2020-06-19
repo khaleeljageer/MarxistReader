@@ -1,21 +1,23 @@
 package com.marxist.android.ui.fragments.books
 
+import android.Manifest
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalBooks
 import com.marxist.android.ui.base.BookClickListener
-import kotlinx.android.synthetic.main.book_list_item.view.*
+import com.nabinbhandari.android.permissions.PermissionHandler
+import com.nabinbhandari.android.permissions.Permissions
 
 class BookListAdapter(
     private val mContext: Context,
     private var booksList: MutableList<LocalBooks>,
     private val listener: BookClickListener
 ) : RecyclerView.Adapter<BookViewHolder>() {
+    private lateinit var rvListView: RecyclerView
     private var previousClickedPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
@@ -35,29 +37,19 @@ class BookListAdapter(
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val bookItem = booksList[holder.adapterPosition]
-        holder.bindData(bookItem)
+        holder.bindData(bookItem, position)
+    }
 
-        holder.itemView.fabDownload.setOnClickListener {
-            if (!bookItem.isDownloaded) {
-                holder.itemView.fabDownload.hide()
-                holder.itemView.pbDownloadProgress.visibility = View.VISIBLE
-            }
-            listener.bookItemClickListener(holder.adapterPosition, bookItem)
-        }
+    private fun downloadClicked() {
+        Permissions.check(
+            mContext,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            null,
+            object : PermissionHandler() {
+                override fun onGranted() {
 
-        holder.itemView.setOnClickListener {
-            if (previousClickedPosition == holder.adapterPosition) {
-                return@setOnClickListener
-            }
-            if (previousClickedPosition != -1) {
-                booksList[previousClickedPosition].isExpanded = false
-                notifyItemChanged(previousClickedPosition)
-            }
-            previousClickedPosition = holder.adapterPosition
-            val expanded = bookItem.isExpanded
-            bookItem.isExpanded = !expanded
-            notifyItemChanged(holder.adapterPosition)
-        }
+                }
+            })
     }
 
     fun setItems(it: MutableList<LocalBooks>) {
@@ -69,4 +61,9 @@ class BookListAdapter(
         previousClickedPosition = -1
         notifyItemChanged(itemPosition)
     }
+
+    fun setListView(rvListView: RecyclerView) {
+        this.rvListView = rvListView
+    }
+
 }

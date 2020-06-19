@@ -48,7 +48,7 @@ object DownloadUtil {
         return id
     }
 
-    fun openSavedBook(context: Context, book: LocalBooks) {
-        FBReader.openBookActivity(context, book.savedPath)
+    fun openSavedBook(context: Context, path: String) {
+        FBReader.openBookActivity(context, path)
     }
 }

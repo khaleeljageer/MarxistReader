@@ -21,7 +21,7 @@ val networkModule = module {
 
 fun createCache(context: Context): Cache {
     val httpCacheDirectory = File(context.cacheDir, "responses");
-    val cacheSize: Long = 10 * 1024 * 1024 // 10 MiB
+    val cacheSize: Long = 20 * 1024 * 1024 // 10 MiB
     return Cache(httpCacheDirectory, cacheSize)
 }
 

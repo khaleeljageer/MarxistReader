@@ -52,6 +52,7 @@ class MarxistApp : FBReaderApplication(), ImageLoaderFactory {
             .crossfade(true)
             .availableMemoryPercentage(0.3)
             .bitmapPoolPercentage(0.8)
+            .diskCachePolicy(CachePolicy.ENABLED)
             .build()
     }
 

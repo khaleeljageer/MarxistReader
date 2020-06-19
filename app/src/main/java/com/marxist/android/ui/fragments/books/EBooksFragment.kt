@@ -1,5 +1,7 @@
 package com.marxist.android.ui.fragments.books
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,63 +12,22 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalBooks
+import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BookClickListener
-import com.marxist.android.utils.download.DownloadUtil
+import com.marxist.android.utils.RxBus
 import com.marxist.android.viewmodel.BookListViewModel
+import com.nabinbhandari.android.permissions.PermissionHandler
+import com.nabinbhandari.android.permissions.Permissions
 import kotlinx.android.synthetic.main.fragments_list.*
 import kotlinx.android.synthetic.main.fragments_list.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.*
 
 class EBooksFragment : Fragment(), BookClickListener {
     override fun bookItemClickListener(adapterPosition: Int, book: LocalBooks) {
-        if (book.isDownloaded) {
-            DownloadUtil.openSavedBook(mContext, book)
-        } else {
-            if (book.downloadId == -1L) {
-                /*val disposable =
-                    download(
-                        book,
-                        AppConstants.BOOKS
-                    ).observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({
-                            bookListViewModel.updateStatus(it.absolutePath, true, book.bookid)
-                            RxBus.publish(ShowSnackBar(getString(R.string.download_completed)))
-                            bookAdapter.updateDownloadId(adapterPosition)
-                        }, {
-                            bookListViewModel.updateStatus("", false, book.bookid)
-                            RxBus.publish(ShowSnackBar(getString(R.string.download_failed)))
-                            bookAdapter.updateDownloadId(adapterPosition)
-                        })*/
-            }
-        }
+
     }
-
-    /*fun download(
-        book: LocalBooks,
-        type: String
-    ): Observable<File> {
-        return ApiClient.mDownloadService.downloadFileByUrlRx(book.epub)
-            .flatMap(object : Function<Response<ResponseBody>, Observable<File>> {
-                override fun apply(response: Response<ResponseBody>): Observable<File> {
-                    try {
-                        val extStorageDirectory = mContext.getExternalFilesDir(type)?.absolutePath
-                        val filePath =
-                            "${extStorageDirectory}/${book.title.hashCode().absoluteValue}.epub"
-                        val file = File(filePath)
-                        val sink = Okio.buffer(Okio.sink(file))
-                        sink.writeAll(response.body()!!.source())
-                        sink.close()
-
-                        return Observable.just(file)
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                        return Observable.error(e)
-                    }
-                }
-            })
-    }*/
 
     private val bookListViewModel: BookListViewModel by viewModel()
     private val bookAdapter by lazy {
@@ -108,6 +69,7 @@ class EBooksFragment : Fragment(), BookClickListener {
         view.rvListView.setHasFixedSize(true)
         view.rvListView.layoutManager = GridLayoutManager(mContext, 2)
         view.rvListView.adapter = bookAdapter
+        bookAdapter.setListView(view.rvListView)
         return view
     }
 
@@ -115,5 +77,27 @@ class EBooksFragment : Fragment(), BookClickListener {
         super.onActivityCreated(savedInstanceState)
 
         initData()
+        getPermission()
+    }
+
+    private fun getPermission() {
+        val permissions = arrayOf(
+            WRITE_EXTERNAL_STORAGE,
+            READ_EXTERNAL_STORAGE
+        )
+        val rationale = "Please provide Storage permission to download books..."
+        val options =
+            Permissions.Options()
+                .setRationaleDialogTitle("Info")
+                .setSettingsDialogTitle("Warning")
+        Permissions.check(mContext, permissions, rationale, options, object : PermissionHandler() {
+            override fun onGranted() {
+
+            }
+
+            override fun onDenied(context: Context?, deniedPermissions: ArrayList<String>?) {
+                RxBus.publish(ShowSnackBar("You can't use download feature"))
+            }
+        })
     }
 }

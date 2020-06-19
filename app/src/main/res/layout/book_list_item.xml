@@ -1,59 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="2dp"
+        app:cardPreventCornerOverlap="true"
+        app:cardUseCompatPadding="true">
 
-    <androidx.cardview.widget.CardView
+    <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            app:cardCornerRadius="4dp"
-            app:cardElevation="4dp"
-            app:cardPreventCornerOverlap="true">
+            android:layout_height="match_parent">
 
-        <RelativeLayout
+        <ImageView
+                android:id="@+id/arBookImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="2dp">
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                tools:ignore="ContentDescription" />
 
-            <ImageView
-                    android:id="@+id/arBookImage"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:background="@color/colorAccent_alpha_40"
-                    android:scaleType="centerCrop"
-                    tools:ignore="ContentDescription" />
-
-            <RelativeLayout
-                    android:id="@+id/rlDownloadView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/gradient_bg"
-                    android:gravity="bottom|end"
-                    android:visibility="visible">
-
-                <ProgressBar
-                        android:id="@+id/pbDownloadProgress"
-                        style="@style/Widget.AppCompat.ProgressBar"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:visibility="invisible" />
-
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                        android:id="@+id/fabDownload"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="15dp"
-                        android:layout_marginBottom="15dp"
-                        android:src="@drawable/ic_save_black"
-                        app:backgroundTint="@color/colorAccent"
-                        app:fabSize="normal" />
-            </RelativeLayout>
-        </RelativeLayout>
-    </androidx.cardview.widget.CardView>
-</RelativeLayout>
+        <ProgressBar
+                android:id="@+id/pbDownloadProgress"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="8dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="-2dp"
+                android:minHeight="8dp"
+                android:progressTint="@color/colorSecondaryDark"
+                android:visibility="gone" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

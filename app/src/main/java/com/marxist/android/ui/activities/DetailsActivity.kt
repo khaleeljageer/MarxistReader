@@ -7,7 +7,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.widget.NestedScrollView
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.model.FontChange
@@ -21,13 +20,11 @@ import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.RxBus
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_details.*
-import kotlin.math.roundToInt
 
 
 class DetailsActivity : BaseActivity() {
     private lateinit var disposable: Disposable
     private var article: LocalFeeds? = null
-    private var readPercent: Int = 0
 
     private val tuneSheet by lazy {
         TuneSheetFragment()
@@ -42,8 +39,8 @@ class DetailsActivity : BaseActivity() {
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        item?.let {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        item.let {
             if (it.itemId == R.id.menu_share) {
                 DeviceUtils.shareIntent(article!!.title, article!!.link, applicationContext)
                 return true
@@ -153,14 +150,6 @@ class DetailsActivity : BaseActivity() {
     private fun initListeners() {
         toolbar.setNavigationOnClickListener {
             onBackPressed()
-        }
-
-        nestedScroll.setOnScrollChangeListener { scrollView: NestedScrollView?, _: Int, scrollY: Int, _: Int, _: Int ->
-            if (scrollView != null) {
-                val totalHeight =
-                    scrollView.getChildAt(0).measuredHeight - scrollView.measuredHeight
-                readPercent = (scrollY.toDouble() / totalHeight.toDouble() * 100).roundToInt()
-            }
         }
     }
 
