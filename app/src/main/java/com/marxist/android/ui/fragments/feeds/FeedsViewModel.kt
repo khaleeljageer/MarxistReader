@@ -1,6 +1,5 @@
 package com.marxist.android.ui.fragments.feeds
 
-import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FeedsViewModel(
-    context: Context, appDatabase: AppDatabase,
+    appDatabase: AppDatabase,
     private val apiService: ApiService
 ) : ViewModel() {
     private var feedsDao: LocalFeedsDao = appDatabase.localFeedsDao()
@@ -32,7 +31,7 @@ class FeedsViewModel(
         feedsDownloaded = feedsDao.getDownloaded(true)
     }
 
-    var pageNumber = 1
+    private var pageNumber = 1
 
     fun getFeeds() {
         PrintLog.debug("Khaleel", "pageNumber : $pageNumber")

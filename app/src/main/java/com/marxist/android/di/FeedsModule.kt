@@ -6,6 +6,6 @@ import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val feedsModule = module {
-    viewModel { FeedsViewModel(get(), get(), get()) }
+    viewModel { FeedsViewModel(get(), get()) }
     viewModel { BookListViewModel(get(), get()) }
 }
