@@ -17,13 +17,11 @@
     <com.google.android.material.tabs.TabLayout
             android:id="@+id/fontTabs"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
             app:tabGravity="fill"
-            app:tabIndicator="@drawable/custom_tab_indicator"
             app:tabMinWidth="80dp"
-            app:tabMode="scrollable"
-            app:tabTextAppearance="@style/TabTextAppearance"
-            app:tabUnboundedRipple="true" />
+            app:tabMode="scrollable" />
 
     <View
             android:layout_width="match_parent"
@@ -33,7 +31,7 @@
 
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="?attr/actionBarSize"
             android:paddingStart="5dp"
             android:paddingEnd="5dp">
 
@@ -72,8 +70,10 @@
     <RadioGroup
             android:id="@+id/radioGroup"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="?attr/actionBarSize"
             android:gravity="center"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatRadioButton

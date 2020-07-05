@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="feed_item_title_size">16sp</dimen>
+    <dimen name="about_page_content_size">16sp</dimen>
     <dimen name="feed_item_desc_size">12sp</dimen>
     <dimen name="feed_item_pubdate_size">12sp</dimen>
     <dimen name="details_title_size">18sp</dimen>

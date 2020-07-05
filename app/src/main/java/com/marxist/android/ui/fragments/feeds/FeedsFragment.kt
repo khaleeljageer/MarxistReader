@@ -32,13 +32,13 @@ class FeedsFragment : Fragment(), ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        setHasOptionsMenu(true)
+        setHasOptionsMenu(true)
         initData()
     }
 
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.menu_search, menu)
-//    }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
+    }
 
     private fun initData() {
         feedsViewModel.getFeeds()
