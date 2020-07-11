@@ -34,7 +34,6 @@ class FeedsViewModel(
     private var pageNumber = 1
 
     fun getFeeds() {
-        PrintLog.debug("Khaleel", "pageNumber : $pageNumber")
         disposable.add(
             apiService.getFeeds(pageNumber).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

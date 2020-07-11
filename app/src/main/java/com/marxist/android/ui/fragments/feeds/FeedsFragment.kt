@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.activities.DetailsActivity
+import com.marxist.android.ui.activities.SearchActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.utils.PrintLog
 import io.reactivex.disposables.Disposable
@@ -38,6 +39,17 @@ class FeedsFragment : Fragment(), ItemClickListener {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.menu_search, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.app_bar_search -> {
+                startActivity(Intent(requireContext(), SearchActivity::class.java))
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initData() {
@@ -87,6 +99,7 @@ class FeedsFragment : Fragment(), ItemClickListener {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        PrintLog.debug("Khaleel", "onActivityCreated")
         val layoutManager = rvListView.layoutManager as StaggeredGridLayoutManager
         rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -102,7 +115,6 @@ class FeedsFragment : Fragment(), ItemClickListener {
                 ) {
                     if (!loading) {
                         loading = true
-                        PrintLog.debug("Khaleel", "LoadMore Items")
                         feedsViewModel.getFeeds()
                     }
                 }

@@ -52,6 +52,7 @@
         <activity android:name=".ui.activities.LottieThankActivity" />
         <activity android:name=".ui.activities.AboutActivity" />
         <activity android:name=".ui.activities.FeedBackActivity" />
+        <activity android:name=".ui.activities.SearchActivity" />
 
         <service
                 android:name=".utils.network.NetworkSchedulerService"
