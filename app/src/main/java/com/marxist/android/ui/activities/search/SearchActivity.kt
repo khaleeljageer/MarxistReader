@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
+import android.view.Window
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +45,7 @@ class SearchActivity : BaseActivity(), ItemClickListener {
             statusBarColor = ContextCompat.getColor(baseContext, R.color.colorSecondaryDark)
         }
         setContentView(R.layout.activity_search)
+        supportActionBar?.hide()
 
         ivVoiceSearch.setOnClickListener {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)

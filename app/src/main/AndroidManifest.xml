@@ -48,7 +48,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activities.MainActivity" />
-        <activity android:name=".ui.activities.DetailsActivity" />
+        <activity
+                android:name=".ui.activities.DetailsActivity"
+                android:theme="@style/DetailsTheme" />
         <activity android:name=".ui.activities.LottieThankActivity" />
         <activity android:name=".ui.activities.AboutActivity" />
         <activity android:name=".ui.activities.FeedBackActivity" />

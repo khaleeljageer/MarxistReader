@@ -55,11 +55,6 @@ class NotificationsFragment : Fragment(), ItemClickListener {
             NotificationsAdapter(mContext, mutableListOf(), this@NotificationsFragment)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        initData()
-    }
-
     private fun initData() {
         callBookApi()
     }
@@ -104,6 +99,7 @@ class NotificationsFragment : Fragment(), ItemClickListener {
         view.rvListView.setHasFixedSize(true)
         view.rvListView.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
         view.rvListView.adapter = notificationsAdapter
+        initData()
         return view
     }
 }

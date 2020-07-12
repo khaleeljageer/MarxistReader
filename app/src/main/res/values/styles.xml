@@ -2,6 +2,8 @@
 
     <style name="AppTheme" parent="MRBaseTheme" />
 
+    <style name="DetailsTheme" parent="MRDetailsBaseTheme" />
+
     <style name="MRSplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
@@ -12,7 +14,19 @@
         <item name="android:windowBackground">@drawable/splash_window_bg</item>
     </style>
 
-    <style name="MRBaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="MRDetailsBaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+
+
+        <item name="bottomNavigationStyle">@style/CustomBottomNavigation</item>
+        <item name="tabStyle">@style/CustomTabStyle</item>
+        <item name="android:fontFamily">@font/hind_regular</item>
+    </style>
+
+    <style name="MRBaseTheme" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>

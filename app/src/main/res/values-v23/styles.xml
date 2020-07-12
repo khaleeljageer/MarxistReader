@@ -4,4 +4,7 @@
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
+    <style name="DetailsTheme" parent="MRDetailsBaseTheme">
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 </resources>

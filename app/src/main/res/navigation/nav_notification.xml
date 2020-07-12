@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/nav_saved"
-        app:startDestination="@id/saved">
+        android:id="@+id/nav_notification"
+        app:startDestination="@id/notifications">
 
     <fragment
-            android:id="@+id/saved"
-            android:name="com.marxist.android.ui.fragments.saved.SavedFragment"
-            android:label="@string/saved"
+            android:id="@+id/notifications"
+            android:name="com.marxist.android.ui.fragments.notifications.NotificationsFragment"
+            android:label="@string/notifications"
             tools:layout="@layout/fragments_list" />
 </navigation>

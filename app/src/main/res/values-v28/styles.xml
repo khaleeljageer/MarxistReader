@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Splash_Theme" parent="MRSplashTheme">
         <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@drawable/splash_window_bg</item>
@@ -8,6 +9,11 @@
     </style>
 
     <style name="AppTheme" parent="MRBaseTheme">
+        <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="DetailsTheme" parent="MRDetailsBaseTheme">
         <item name="android:windowLayoutInDisplayCutoutMode">shortEdges</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
