@@ -97,7 +97,6 @@ class FeedBackActivity : BaseActivity() {
                     rootView
                 )
             }, { error ->
-                PrintLog.debug("Khaleel", "Error : ${error.printStackTrace()}")
                 dialog.dismiss()
                 displayMaterialSnackBar(
                     getString(R.string.try_later),

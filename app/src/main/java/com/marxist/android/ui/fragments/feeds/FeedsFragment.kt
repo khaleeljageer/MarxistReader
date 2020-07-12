@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.ui.activities.DetailsActivity
-import com.marxist.android.ui.activities.SearchActivity
+import com.marxist.android.ui.activities.search.SearchActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.utils.PrintLog
 import io.reactivex.disposables.Disposable

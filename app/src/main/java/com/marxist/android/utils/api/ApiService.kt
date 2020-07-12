@@ -7,6 +7,9 @@ import retrofit2.http.*
 
 interface ApiService {
     @GET("feed/")
+    fun search(@Query("s") key: String, @Query("paged") page: Int): Observable<RssFeed>
+
+    @GET("feed/")
     fun getFeeds(@Query("paged") page: Int): Observable<RssFeed>
 
     @FormUrlEncoded

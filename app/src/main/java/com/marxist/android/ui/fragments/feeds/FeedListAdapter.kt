@@ -48,9 +48,9 @@ class FeedListAdapter(
         }
     }
 
-    fun addFeed(article: LocalFeeds) {
-        mutableList.add(article)
-        notifyItemInserted(mutableList.size - 1)
+    fun addFeed(articles: List<LocalFeeds>) {
+        mutableList.addAll(articles)
+        notifyItemRangeInserted(mutableList.size, articles.size)
     }
 
     fun addFeeds(articles: MutableList<LocalFeeds>) {
@@ -66,5 +66,10 @@ class FeedListAdapter(
     fun removeLoaderItem() {
         this.mutableList.removeAt(itemCount - 1)
         notifyItemRemoved(itemCount)
+    }
+
+    fun clear() {
+        mutableList.clear()
+        notifyDataSetChanged()
     }
 }

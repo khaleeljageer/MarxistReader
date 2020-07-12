@@ -113,4 +113,5 @@
     <string name="tune_reader">Tune Reader</string>
     <string name="pref_key_preferred_font">preferred_font</string>
     <string name="search">Search</string>
+    <string name="clear">Clear</string>
 </resources>

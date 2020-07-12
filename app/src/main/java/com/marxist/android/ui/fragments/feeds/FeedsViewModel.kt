@@ -24,8 +24,8 @@ class FeedsViewModel(
 
     private val disposable = CompositeDisposable()
 
-    private var _feedList: MutableLiveData<LocalFeeds> = MutableLiveData()
-    val feedList: MutableLiveData<LocalFeeds> = _feedList
+    private var _feedList: MutableLiveData<List<LocalFeeds>> = MutableLiveData()
+    val feedList: MutableLiveData<List<LocalFeeds>> = _feedList
 
     init {
         feedsDownloaded = feedsDao.getDownloaded(true)
@@ -42,12 +42,13 @@ class FeedsViewModel(
                     if (it?.channel != null && it.channel!!.itemList != null) {
                         val itemList = it.channel!!.itemList
                         if (itemList != null && itemList.isNotEmpty()) {
+                            val localFeeds = mutableListOf<LocalFeeds>()
                             itemList.forEach { feed ->
                                 val simpleDateFormat =
                                     SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
                                 val mDate = simpleDateFormat.parse(feed.pubDate)
                                 val timeInMillis = mDate!!.time
-                                val localFeeds = LocalFeeds(
+                                val localFeed = LocalFeeds(
                                     feed.title!!,
                                     feed.link!!,
                                     timeInMillis,
@@ -59,8 +60,9 @@ class FeedsViewModel(
                                     },
                                     isDownloaded = false
                                 )
-                                _feedList.value = localFeeds
+                                localFeeds.add(localFeed)
                             }
+                            _feedList.value = localFeeds
 
                             pageNumber += 1
                         }
@@ -76,5 +78,9 @@ class FeedsViewModel(
     override fun onCleared() {
         super.onCleared()
         disposable.dispose()
+    }
+
+    fun resetList() {
+        _feedList.value = mutableListOf()
     }
 }
