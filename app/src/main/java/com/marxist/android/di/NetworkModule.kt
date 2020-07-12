@@ -21,7 +21,7 @@ val networkModule = module {
 
 fun createCache(context: Context): Cache {
     val httpCacheDirectory = File(context.cacheDir, "responses");
-    val cacheSize: Long = 20 * 1024 * 1024 // 10 MiB
+    val cacheSize: Long = 100 * 1024 * 1024 // 100 MiB
     return Cache(httpCacheDirectory, cacheSize)
 }
 
@@ -43,7 +43,8 @@ fun getApiService(context: Context, cache: Cache): ApiService {
     okHttp.addNetworkInterceptor(CacheInterceptor(context))
     okHttp.cache(cache)
 
-    return Retrofit.Builder().client(okHttp.build())
+    return Retrofit.Builder()
+        .client(okHttp.build())
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(SimpleXmlConverterFactory.create())
         .baseUrl("https://marxistreader.home.blog/").build()

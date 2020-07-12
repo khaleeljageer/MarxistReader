@@ -26,6 +26,12 @@ class FeedsFragment : Fragment(), ItemClickListener {
     private lateinit var mContext: Context
     private val feedsViewModel: FeedsViewModel by viewModel()
 
+    private var visibleItemCount: Int = 0
+    private var totalItemCount: Int = 0
+    private val visibleThreshold = 4
+    private var firstVisibleItemPosition = 0
+    private var loading: Boolean = false
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -33,8 +39,8 @@ class FeedsFragment : Fragment(), ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        PrintLog.debug("Khaleel", "FeedsFragment : onCreate")
         setHasOptionsMenu(true)
-        initData()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -53,14 +59,14 @@ class FeedsFragment : Fragment(), ItemClickListener {
     }
 
     private fun initData() {
+        PrintLog.debug("Khaleel", "initData")
         feedsViewModel.getFeeds()
-        feedsViewModel.feedList.observe(this, androidx.lifecycle.Observer {
+        feedsViewModel.feedList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it != null) {
+                rvListView.visibility = View.VISIBLE
                 feedAdapter.addFeed(it)
-                loading = false
-            } else {
-
             }
+            loading = false
         })
 /*        feedsViewModel.getLiveFeeds().observe(this, Observer {
             if (it != null) {
@@ -82,26 +88,22 @@ class FeedsFragment : Fragment(), ItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        PrintLog.debug("Khaleel", "onCreateView")
         val view = inflater.inflate(R.layout.fragments_list, container, false)
 
-        view.rvListView.setHasFixedSize(true)
-        view.rvListView.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        view.rvListView.adapter = feedAdapter
+        setRecyclerListener(view)
+        initData()
 
         return view
     }
 
-    private var visibleItemCount: Int = 0
-    private var totalItemCount: Int = 0
-    private val visibleThreshold = 4
-    private var firstVisibleItemPosition = 0
-    private var loading: Boolean = false
+    private fun setRecyclerListener(view: View) {
+        val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+        view.rvListView.setHasFixedSize(true)
+        view.rvListView.layoutManager = layoutManager
+        view.rvListView.adapter = feedAdapter
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        PrintLog.debug("Khaleel", "onActivityCreated")
-        val layoutManager = rvListView.layoutManager as StaggeredGridLayoutManager
-        rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        view.rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 firstVisibleItemPosition =
@@ -121,7 +123,6 @@ class FeedsFragment : Fragment(), ItemClickListener {
             }
         })
     }
-
 
     override fun feedItemClickListener(
         article: Any,
