@@ -9,18 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
 import com.marxist.android.R
+import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalBooks
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BookClickListener
+import com.marxist.android.utils.GridItemSpace
 import com.marxist.android.utils.RxBus
+import com.marxist.android.utils.toPixel
 import com.marxist.android.viewmodel.BookListViewModel
 import com.nabinbhandari.android.permissions.PermissionHandler
 import com.nabinbhandari.android.permissions.Permissions
-import kotlinx.android.synthetic.main.fragments_list.*
-import kotlinx.android.synthetic.main.fragments_list.view.*
+import kotlinx.android.synthetic.main.fragments_books.*
+import kotlinx.android.synthetic.main.fragments_books.view.*
 import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
+import org.koin.android.ext.android.inject
 import org.koin.android.viewmodel.ext.android.viewModel
 import java.util.*
 
@@ -30,8 +33,10 @@ class EBooksFragment : Fragment(), BookClickListener {
     }
 
     private val bookListViewModel: BookListViewModel by viewModel()
+    private val appDatabase: AppDatabase by inject()
+
     private val bookAdapter by lazy {
-        BookListAdapter(mContext, mutableListOf(), this@EBooksFragment)
+        BookListAdapter(mContext, mutableListOf(), appDatabase)
     }
 
     private lateinit var mContext: Context
@@ -44,15 +49,15 @@ class EBooksFragment : Fragment(), BookClickListener {
     private fun initData() {
         if (bookListViewModel.getLocalBooksSize() == 0) {
             rvListView.visibility = View.GONE
-            emptyView.visibility = View.VISIBLE
-            lavEmptyImage.setAnimation(R.raw.loading_books)
+//            emptyView.visibility = View.VISIBLE
+//            lavEmptyImage.setAnimation(R.raw.loading_books)
         }
         bookListViewModel.callBookApi()
         bookListViewModel.getLocalBooks().observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     rvListView.visibility = View.VISIBLE
-                    emptyView.visibility = View.GONE
+//                    emptyView.visibility = View.GONE
                     bookAdapter.setItems(it)
                 }
             }
@@ -64,12 +69,14 @@ class EBooksFragment : Fragment(), BookClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val view = inflater.inflate(R.layout.fragments_books, container, false)
 
-        val view = inflater.inflate(R.layout.fragments_list, container, false)
-        view.rvListView.setHasFixedSize(true)
-        view.rvListView.layoutManager = GridLayoutManager(mContext, 2)
-        view.rvListView.adapter = bookAdapter
-        bookAdapter.setListView(view.rvListView)
+        with(view.rvListView) {
+            addItemDecoration(GridItemSpace(mContext, 5.toPixel(context)))
+            setHasFixedSize(true)
+            adapter = bookAdapter
+        }
+
         return view
     }
 

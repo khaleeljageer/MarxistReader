@@ -18,17 +18,10 @@ data class LocalBooks(
     val epub: String,
     @ColumnInfo(name = "pubDate")
     var pubDate: Long,
+    val date: String,
 
     @ColumnInfo(name = "is_downloaded")
     var isDownloaded: Boolean,
-    @ColumnInfo(name = "download_id")
-    var downloadId: Long = 0,
-    @ColumnInfo(name = "download_percent")
-    var downloadPercent: Long = 0,
     @ColumnInfo(name = "saved_path")
-    var savedPath: String = "",
-
-    var lastEmittedDownloadPercent: Long = -1,
-    var isExpanded: Boolean = false,
-    var date: String
+    var savedPath: String = ""
 ) : Serializable

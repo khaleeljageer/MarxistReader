@@ -47,15 +47,25 @@
                 <category android:name="android.intent.category.BROWSABLE" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activities.MainActivity" />
+        <activity
+                android:name=".ui.activities.MainActivity"
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".ui.activities.DetailsActivity"
+                android:screenOrientation="portrait"
                 android:theme="@style/DetailsTheme" />
-        <activity android:name=".ui.activities.LottieThankActivity" />
-        <activity android:name=".ui.activities.AboutActivity" />
-        <activity android:name=".ui.activities.FeedBackActivity" />
+        <activity
+                android:name=".ui.activities.LottieThankActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".ui.activities.AboutActivity"
+                android:screenOrientation="portrait" />
+        <activity
+                android:name=".ui.activities.FeedBackActivity"
+                android:screenOrientation="portrait" />
         <activity
                 android:name=".ui.activities.search.SearchActivity"
+                android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize" />
 
         <service

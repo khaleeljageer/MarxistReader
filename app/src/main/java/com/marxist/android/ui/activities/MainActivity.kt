@@ -14,6 +14,7 @@ import com.marxist.android.model.DarkModeChanged
 import com.marxist.android.model.NetWorkMessage
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BaseActivity
+import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.RxBus
 import com.marxist.android.utils.network.NetworkSchedulerService
@@ -36,18 +37,11 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        setSupportActionBar(toolbar)
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
 
-
-//        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-//        val navController = findNavController(R.id.nav_host_fragment)
-//
-
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        navView.setupWithNavController(navController)
+        val path = DeviceUtils.getRootDirPath(baseContext)
 
         RxBus.subscribe({
             when (it) {

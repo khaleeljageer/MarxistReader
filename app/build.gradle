@@ -16,8 +16,8 @@ android {
         applicationId "com.marxist.android"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 32
-        versionName "5.0"
+        versionCode 33
+        versionName "5.0_33"
 
         multiDexEnabled = true
         ndk.abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -100,7 +100,8 @@ dependencies {
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'org.sufficientlysecure:html-textview:3.7'
-    implementation 'ir.siaray:downloadmanagerplus:1.4.0'
+
+    implementation 'com.download.library:Downloader:4.1.3'
     implementation 'com.nabinbhandari.android:permissions:3.8'
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'

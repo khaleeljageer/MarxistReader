@@ -17,7 +17,6 @@ class BookListViewModel(
     appDatabase: AppDatabase,
     private val apiService: GitHubService
 ) : ViewModel() {
-
     private var booksDao: LocalBooksDao = appDatabase.localBooksDao()
     private var booksLiveData: LiveData<MutableList<LocalBooks>>
     private var disposable: Disposable? = null
@@ -57,7 +56,6 @@ class BookListViewModel(
                                 val mDate = simpleDateFormat.parse(book.date)
                                 val timeInMillis = mDate!!.time
 
-                                book.downloadId = -1
                                 book.isDownloaded = false
                                 book.savedPath = ""
                                 book.pubDate = timeInMillis

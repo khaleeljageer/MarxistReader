@@ -23,7 +23,7 @@ class DownloadReceiver : BroadcastReceiver() {
                 AppDatabase.getAppDatabase(context.applicationContext).localBooksDao()
             val file = DownloadManagerHelper.getDownloadedFile(context, id)
             if (file.isSuccessful()) {
-                localBooksDao.updateBookStatus(true, id)
+//                localBooksDao.updateBookStatus(true, id)
             }
         }
     }

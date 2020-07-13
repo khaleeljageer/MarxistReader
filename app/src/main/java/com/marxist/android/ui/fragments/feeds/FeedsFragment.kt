@@ -39,7 +39,6 @@ class FeedsFragment : Fragment(), ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        PrintLog.debug("Khaleel", "FeedsFragment : onCreate")
         setHasOptionsMenu(true)
     }
 
@@ -59,7 +58,6 @@ class FeedsFragment : Fragment(), ItemClickListener {
     }
 
     private fun initData() {
-        PrintLog.debug("Khaleel", "initData")
         feedsViewModel.getFeeds()
         feedsViewModel.feedList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it != null) {
@@ -88,7 +86,6 @@ class FeedsFragment : Fragment(), ItemClickListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        PrintLog.debug("Khaleel", "onCreateView")
         val view = inflater.inflate(R.layout.fragments_list, container, false)
 
         setRecyclerListener(view)

@@ -35,7 +35,6 @@ class FeedsViewModel(
 
     fun getFeeds() {
 
-        PrintLog.debug("Khaleel", "getFeeds")
         disposable.add(
             apiService.getFeeds(pageNumber).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -79,7 +78,6 @@ class FeedsViewModel(
 
     override fun onCleared() {
         super.onCleared()
-        PrintLog.debug("Khaleel", "onCleared")
         disposable.dispose()
     }
 

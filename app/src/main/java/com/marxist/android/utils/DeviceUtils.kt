@@ -4,12 +4,39 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Environment
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import com.marxist.android.R
+import java.io.File
+import java.util.*
 import java.util.regex.Pattern
 
 
 object DeviceUtils {
+
+    fun getRootDirPath(context: Context): String {
+        return if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+            val file: File = ContextCompat.getExternalFilesDirs(
+                context.applicationContext,
+                null
+            )[0]
+            file.absolutePath
+        } else {
+            context.applicationContext.filesDir.absolutePath
+        }
+    }
+
+    fun getProgressDisplayLine(
+        currentBytes: Long,
+        totalBytes: Long
+    ): String? {
+        return getBytesToMBString(currentBytes) + "/" + getBytesToMBString(totalBytes)
+    }
+
+    private fun getBytesToMBString(bytes: Long): String {
+        return String.format(Locale.ENGLISH, "%.2fMb", bytes / (1024.00 * 1024.00))
+    }
 
     fun isConnectedToNetwork(context: Context): Boolean {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

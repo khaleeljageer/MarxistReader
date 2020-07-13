@@ -11,7 +11,7 @@ import com.marxist.android.database.entities.LocalFeeds
 
 @Database(
     entities = [LocalFeeds::class, LocalBooks::class],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

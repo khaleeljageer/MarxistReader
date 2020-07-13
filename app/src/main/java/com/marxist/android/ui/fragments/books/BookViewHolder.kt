@@ -1,117 +1,100 @@
 package com.marxist.android.ui.fragments.books
 
-import android.app.DownloadManager
-import android.os.Environment
+import android.content.Context
+import android.net.Uri
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
+import com.download.library.DownloadImpl
+import com.download.library.DownloadListenerAdapter
+import com.download.library.Extra
+import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalBooks
-import com.marxist.android.ui.base.BaseBookViewHolder
 import com.marxist.android.utils.download.DownloadUtil
-import ir.siaray.downloadmanagerplus.classes.Downloader
-import ir.siaray.downloadmanagerplus.enums.DownloadReason
-import ir.siaray.downloadmanagerplus.enums.DownloadStatus
-import ir.siaray.downloadmanagerplus.interfaces.DownloadListener
 import kotlinx.android.synthetic.main.book_list_item.view.*
 import java.io.File
 
 
 class BookViewHolder(
-    private val viewGroup: ViewGroup,
-    view: View
-) : BaseBookViewHolder<LocalBooks>(view) {
-    lateinit var downloadListener: DownloadListener
-    override fun bindData(
-        book: LocalBooks,
-        position: Int
-    ) {
-        itemView.arBookImage.load(book.image) {
-            size(160, 360)
-        }
-        initListener(book)
-        itemView.setOnClickListener {
-            val downloader = getDownloader(book.epub, book.title, book.bookid)
-            if (downloader.getStatus(book.bookid) == DownloadStatus.RUNNING || downloader.getStatus(
-                    book.bookid
-                ) == DownloadStatus.PENDING
-            ) {
-                Toast.makeText(viewGroup.context, "Downloading", Toast.LENGTH_SHORT).show()
-            } else if (downloader.getStatus(book.bookid) == DownloadStatus.SUCCESSFUL) {
+    private val context: Context,
+    view: View,
+    private val targetPath: String
+) : RecyclerView.ViewHolder(view) {
 
+    fun bindData(
+        book: LocalBooks,
+        position: Int,
+        appDatabase: AppDatabase
+    ) {
+        itemView.arBookImage.load(book.image)
+        itemView.setOnClickListener {
+            val isExist = appDatabase.localBooksDao().getDownloadStatus(book.bookid)
+            if (isExist) {
                 DownloadUtil.openSavedBook(
-                    viewGroup.context, if (book.savedPath.isEmpty()) {
-                        downloader.getDownloadedFilePath(book.bookid)
+                    context, if (book.savedPath.isEmpty()) {
+                        appDatabase.localBooksDao().getSavedPath(book.bookid)
                     } else {
                         book.savedPath
                     }
                 )
             } else {
-                downloader.start()
+                itemView.pbDownloadProgress.visibility = View.VISIBLE
+                DownloadImpl.getInstance()
+                    .with(context)
+                    .target(File(targetPath, "${book.title}.epub"))
+                    .setUniquePath(true)
+                    .setEnableIndicator(true)
+                    .setRetry(3)
+                    .setParallelDownload(true)
+                    .setForceDownload(true)
+                    .url(book.epub).enqueue(object : DownloadListenerAdapter() {
+                        override fun onStart(
+                            url: String?,
+                            userAgent: String?,
+                            contentDisposition: String?,
+                            mimetype: String?,
+                            contentLength: Long,
+                            extra: Extra?
+                        ) {
+                            itemView.pbDownloadProgress.visibility = View.VISIBLE
+                            Toast.makeText(context, "Download Started...", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+
+                        override fun onProgress(
+                            url: String?,
+                            downloaded: Long,
+                            length: Long,
+                            usedTime: Long
+                        ) {
+                            val percent = (downloaded.div(length)) * 100
+                            itemView.pbDownloadProgress.progress = percent.toInt()
+                        }
+
+                        override fun onResult(
+                            throwable: Throwable?,
+                            path: Uri?,
+                            url: String?,
+                            extra: Extra?
+                        ): Boolean {
+                            url?.let {
+                                val isExist1 = DownloadImpl.getInstance().exist(book.epub)
+                                if (isExist1) {
+                                    itemView.pbDownloadProgress.visibility = View.INVISIBLE
+                                    Toast.makeText(
+                                        context,
+                                        "Download Completed",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                    appDatabase.localBooksDao()
+                                        .updateDownloadDetails(path.toString(), true, book.bookid)
+                                }
+                            }
+                            return super.onResult(throwable, path, url, extra)
+                        }
+                    })
             }
         }
-    }
-
-    private fun initListener(
-        book: LocalBooks
-    ) {
-        downloadListener = object : DownloadListener {
-            override fun onPending(percent: Int, totalBytes: Int, downloadedBytes: Int) {
-
-            }
-
-            override fun onComplete(totalBytes: Int) {
-                val filePath =
-                    File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
-                        "/Marxist Reader/"
-                    )
-                book.savedPath = "${filePath.absolutePath}/${book.title}.epub"
-                book.downloadPercent = 100
-                book.isDownloaded = true
-            }
-
-            override fun onFail(
-                percent: Int,
-                reason: DownloadReason?,
-                totalBytes: Int,
-                downloadedBytes: Int
-            ) {
-                book.isDownloaded = false
-            }
-
-            override fun onCancel(totalBytes: Int, downloadedBytes: Int) {
-
-            }
-
-            override fun onPause(
-                percent: Int,
-                reason: DownloadReason?,
-                totalBytes: Int,
-                downloadedBytes: Int
-            ) {
-
-            }
-
-            override fun onRunning(
-                percent: Int,
-                totalBytes: Int,
-                downloadedBytes: Int,
-                downloadSpeed: Float
-            ) {
-                itemView.pbDownloadProgress.progress = percent
-            }
-        }
-    }
-
-    private fun getDownloader(link: String, title: String, token: String): Downloader {
-        return Downloader.getInstance(viewGroup.context)
-            .setToken(token)
-            .setListener(downloadListener)
-            .setUrl(link).setAllowedOverRoaming(true).setAllowedOverMetered(true)
-            .setVisibleInDownloadsUi(true)
-            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-            .setDestinationDir(Environment.DIRECTORY_DOCUMENTS, "/Marxist Reader/$title.epub")
-            .setNotificationTitle(title).setKeptAllDownload(false)
     }
 }

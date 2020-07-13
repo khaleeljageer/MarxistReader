@@ -15,12 +15,14 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.marxist.android.di.feedsModule
 import com.marxist.android.di.networkModule
 import com.marxist.android.di.roomModule
+import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.network.NetworkSchedulerService
 import org.geometerplus.android.fbreader.FBReaderApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import java.io.File
 import java.util.*
 
 
@@ -36,6 +38,7 @@ class MarxistApp : FBReaderApplication(), ImageLoaderFactory {
             androidContext(this@MarxistApp)
             modules(listOf(networkModule, roomModule, feedsModule))
         }
+        initPRDownloader()
 
         FirebaseMessaging.getInstance()
             .subscribeToTopic(getString(R.string.default_notification_channel_id))
@@ -45,6 +48,19 @@ class MarxistApp : FBReaderApplication(), ImageLoaderFactory {
         scheduleJob()
 
         initNotificationChannel()
+    }
+
+    private fun initPRDownloader() {
+        val path = DeviceUtils.getRootDirPath(applicationContext)
+        val booksPath = File(path.plus("/books"))
+        if (!booksPath.exists()) {
+            booksPath.mkdir()
+        }
+
+        val audioPath = File(path.plus("/audio"))
+        if (!audioPath.exists()) {
+            audioPath.mkdir()
+        }
     }
 
     override fun newImageLoader(): ImageLoader {
