@@ -25,12 +25,8 @@ class BookListViewModel(
         booksLiveData = booksDao.getAllLocalBooks()
     }
 
-    fun insert(highlights: LocalBooks) {
+    private fun insert(highlights: LocalBooks) {
         booksDao.insert(highlights)
-    }
-
-    fun updateStatus(filePath: String, status: Boolean, bookId: String) {
-        booksDao.updateDownloadDetails(filePath, status, bookId)
     }
 
     fun getLocalBooksSize(): Int {
@@ -67,10 +63,6 @@ class BookListViewModel(
             }, {
                 it.printStackTrace()
             })
-    }
-
-    fun deleteBook(books: LocalBooks) {
-        booksDao.deleteBook(books)
     }
 
     override fun onCleared() {

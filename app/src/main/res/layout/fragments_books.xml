@@ -5,7 +5,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-<!--    <include layout="@layout/layout_lottie_no_feed" />-->
+    <include layout="@layout/layout_lottie_no_feed" />
 
     <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvListView"
