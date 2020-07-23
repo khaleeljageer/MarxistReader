@@ -1,12 +1,10 @@
 package com.marxist.android.ui.fragments.feeds
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.dao.LocalFeedsDao
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.api.ApiService
 import com.marxist.android.utils.api.RetryWithDelay
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,11 +14,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class FeedsViewModel(
-    appDatabase: AppDatabase,
+    private val appDatabase: AppDatabase,
     private val apiService: ApiService
 ) : ViewModel() {
     private var feedsDao: LocalFeedsDao = appDatabase.localFeedsDao()
-    private var feedsDownloaded: LiveData<MutableList<LocalFeeds>>
+
+    private var _feedsDownloaded: MutableLiveData<MutableList<LocalFeeds>> = MutableLiveData()
+    val feedsDownloaded: MutableLiveData<MutableList<LocalFeeds>> = _feedsDownloaded
 
     private val disposable = CompositeDisposable()
 
@@ -28,13 +28,12 @@ class FeedsViewModel(
     val feedList: MutableLiveData<List<LocalFeeds>> = _feedList
 
     init {
-        feedsDownloaded = feedsDao.getDownloaded(true)
+        _feedsDownloaded.value = feedsDao.getDownloaded(true)
     }
 
     private var pageNumber = 1
 
     fun getFeeds() {
-
         disposable.add(
             apiService.getFeeds(pageNumber).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -72,8 +71,8 @@ class FeedsViewModel(
         )
     }
 
-    fun getDownloadedFeeds(): LiveData<MutableList<LocalFeeds>> {
-        return feedsDownloaded
+    fun getDownloadedFeeds() {
+        _feedsDownloaded.value = feedsDao.getDownloaded(true)
     }
 
     override fun onCleared() {

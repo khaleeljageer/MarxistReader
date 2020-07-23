@@ -8,6 +8,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.session.MediaSessionManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.RemoteException
@@ -21,16 +22,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
+import com.download.library.DownloadImpl
+import com.download.library.DownloadListenerAdapter
+import com.download.library.Extra
 import com.marxist.android.R
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.model.ShowSnackBar
-import com.marxist.android.utils.AppConstants
+import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.RxBus
-import com.marxist.android.utils.download.DownloadUtil
-import com.marxist.android.utils.download.PreferencesHelper
 import kotlinx.android.synthetic.main.audio_player_control_fragment.*
+import org.koin.android.ext.android.inject
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -58,6 +61,8 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     private var ongoingCall = false
     private var phoneStateListener: PhoneStateListener? = null
     private var telephonyManager: TelephonyManager? = null
+
+    private val appDatabase: AppDatabase by inject()
 
     companion object {
         const val PROGRESS_BAR_MAX = 1000
@@ -150,7 +155,9 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         }
 
         btnDownload.setOnClickListener {
-            downloadItem()
+            if (localFeeds != null) {
+                downloadItem(localFeeds!!)
+            }
         }
 
         sbPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -182,7 +189,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     private fun removeDownloads() {
         btnRemove.visibility = View.INVISIBLE
         val filePath = File(localFeeds!!.downloadPath)
-        AppDatabase.getAppDatabase(mContext).localFeedsDao()
+        appDatabase.localFeedsDao()
             .resetAudioStatus(false, "", localFeeds!!.title, localFeeds!!.pubDate)
         filePath.delete()
         localFeeds!!.downloadPath = ""
@@ -203,23 +210,55 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         }
     )
 
-    private fun downloadItem() {
-        DownloadUtil.queueForDownload(
-            mContext,
-            localFeeds!!.title,
-            localFeeds!!.audioUrl,
-            localFeeds!!.pubDate,
-            AppConstants.AUDIO
-        )
-
+    private fun downloadItem(feed: LocalFeeds) {
         RxBus.publish(ShowSnackBar(getString(R.string.download_started)))
         btnDownload.visibility = View.INVISIBLE
+        progress.visibility = View.VISIBLE
+
+        val targetPath = DeviceUtils.getRootDirPath(mContext).plus("/audio")
+
+        DownloadImpl.getInstance()
+            .with(mContext)
+            .setUniquePath(true)
+            .setEnableIndicator(true)
+            .setRetry(3)
+            .setParallelDownload(true)
+            .setForceDownload(true)
+            .target(File(targetPath, "${feed.title}.mp3"))
+            .url(feed.audioUrl).enqueue(object : DownloadListenerAdapter() {
+                override fun onProgress(
+                    url: String?,
+                    downloaded: Long,
+                    length: Long,
+                    usedTime: Long
+                ) {
+                    PrintLog.debug("Khaleel", "downloaded : $downloaded")
+                }
+
+                override fun onResult(
+                    throwable: Throwable?,
+                    path: Uri?,
+                    url: String?,
+                    extra: Extra?
+                ): Boolean {
+                    url?.let {
+                        val isExist1 = DownloadImpl.getInstance().exist(feed.audioUrl)
+                        if (isExist1) {
+                            progress.visibility = View.INVISIBLE
+                            appDatabase.localFeedsDao()
+                                .updateAudioStatus(true, path.toString(), feed.title)
+                            btnRemove.visibility = View.VISIBLE
+                        }
+                    }
+                    return super.onResult(throwable, path, url, extra)
+                }
+            })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        localFeeds = (arguments!!.getSerializable("KEY_LOCAL_FEEDS") as LocalFeeds?)!!
+        localFeeds = (requireArguments().getSerializable("KEY_LOCAL_FEEDS") as LocalFeeds?)!!
         if (mediaSessionManager == null) {
             try {
                 initMediaSession()
@@ -227,7 +266,14 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
                 e.printStackTrace()
             }
         }
-        if (localFeeds!!.isDownloaded) {
+        val targetPath = DeviceUtils.getRootDirPath(mContext).plus("/audio")
+
+        val filePath = File(targetPath, "${localFeeds!!.title}.mp3")
+        val fileExist = filePath.exists()
+        localFeeds!!.isDownloaded = fileExist
+        localFeeds!!.downloadPath = filePath.toString()
+
+        if (fileExist) {
             btnDownload.visibility = View.INVISIBLE
             btnRemove.visibility = View.VISIBLE
         } else {
@@ -539,7 +585,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     /**
      * Default [SeekDispatcher] that dispatches seeks to the player without modification.
      */
-    val DEFAULT_SEEK_DISPATCHER: SeekDispatcher = object : SeekDispatcher {
+    private val DEFAULT_SEEK_DISPATCHER: SeekDispatcher = object : SeekDispatcher {
 
         override fun dispatchSeek(
             player: MediaPlayer,

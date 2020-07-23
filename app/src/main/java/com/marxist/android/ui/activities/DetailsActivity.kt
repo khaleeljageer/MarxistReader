@@ -9,9 +9,7 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.model.FontChange
-import com.marxist.android.model.FontSizeChange
-import com.marxist.android.model.ReaderBgChange
+import com.marxist.android.model.*
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.fragments.player.AudioPlayerFragment
 import com.marxist.android.ui.fragments.tune.TuneSheetFragment
@@ -20,7 +18,6 @@ import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.RxBus
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_details.*
-
 
 class DetailsActivity : BaseActivity() {
     private lateinit var disposable: Disposable
@@ -125,6 +122,11 @@ class DetailsActivity : BaseActivity() {
                 is FontSizeChange -> {
                     txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, it.fontSize)
                 }
+                is ShowSnackBar -> displayMaterialSnackBar(
+                    it.message,
+                    ConnectivityType.OTHER,
+                    rootView
+                )
                 is ReaderBgChange -> {
                     if (it.color == 0xff282828) {
                         txtTitle.setTextColor(0xffffffff.toInt())

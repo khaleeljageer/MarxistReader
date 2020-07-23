@@ -38,11 +38,17 @@ class SavedFragment : Fragment(), ItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
         initData()
     }
 
     private fun initData() {
-        feedsViewModel.getDownloadedFeeds().observe(this, Observer {
+        feedsViewModel.getDownloadedFeeds()
+        feedsViewModel.feedsDownloaded.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     rvListView.visibility = View.VISIBLE
