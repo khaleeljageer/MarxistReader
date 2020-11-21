@@ -27,4 +27,10 @@ class NotificationsAdapter(
         mutableList.addAll(highLights)
         notifyDataSetChanged()
     }
+
+    fun updateNotifications(highLights: MutableList<LocalNotifications>) {
+        mutableList.clear()
+        mutableList.addAll(highLights)
+        notifyDataSetChanged()
+    }
 }

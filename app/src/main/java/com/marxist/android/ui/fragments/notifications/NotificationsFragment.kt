@@ -74,7 +74,7 @@ class NotificationsFragment : Fragment(), ItemClickListener {
                     if (it.notifications.isNotEmpty()) {
                         rvListView.visibility = View.VISIBLE
                         emptyView.visibility = View.GONE
-                        notificationsAdapter.addNotifications(it.notifications);
+                        notificationsAdapter.updateNotifications(it.notifications);
                     } else {
                         rvListView.visibility = View.GONE
                         emptyView.visibility = View.VISIBLE
