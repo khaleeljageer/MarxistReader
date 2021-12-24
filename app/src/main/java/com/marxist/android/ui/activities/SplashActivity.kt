@@ -5,25 +5,28 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.*
 import com.marxist.android.R
+import com.marxist.android.databinding.ActivitySplashBinding
 import com.marxist.android.ui.base.BaseActivity
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_splash.*
 import java.util.concurrent.TimeUnit
 
 
 class SplashActivity : BaseActivity() {
+    private val binding by lazy {
+        ActivitySplashBinding.inflate(layoutInflater)
+    }
     private var disposable: Disposable? = null
     private var activityDestroyed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
+        setContentView(binding.root)
 
-        txtLoading.visibility = View.VISIBLE
-        progressLoader.visibility = View.VISIBLE
+        binding.txtLoading.visibility = View.VISIBLE
+        binding.progressLoader.visibility = View.VISIBLE
 
         initTimer()
     }
@@ -62,7 +65,7 @@ class SplashActivity : BaseActivity() {
 
         animSet.interpolator = OvershootInterpolator()
         animSet.duration = 600
-        llSplashLogo.startAnimation(animSet)
+        binding.llSplashLogo.startAnimation(animSet)
     }
 
 /*    private var pageIndex = 1

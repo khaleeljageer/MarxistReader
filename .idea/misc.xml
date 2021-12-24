@@ -5,6 +5,19 @@
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/layout/activity_about.xml" value="0.21875" />
+        <entry key="app/src/main/res/layout/activity_details.xml" value="0.43373493975903615" />
+        <entry key="app/src/main/res/layout/activity_feedback.xml" value="0.35833333333333334" />
+        <entry key="app/src/main/res/layout/activity_lottie_thanks.xml" value="0.35833333333333334" />
+        <entry key="app/src/main/res/layout/book_list_item.xml" value="0.12604166666666666" />
+        <entry key="app/src/main/res/layout/fragments_books.xml" value="0.12604166666666666" />
+        <entry key="app/src/main/res/layout/fragments_list.xml" value="0.12604166666666666" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
       <profile-state>
@@ -19,7 +32,7 @@
       </profile-state>
     </entry>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

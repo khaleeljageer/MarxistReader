@@ -1,14 +1,13 @@
 package com.marxist.android.ui.fragments.notifications
 
-import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.marxist.android.databinding.HighlightItemViewBinding
 import com.marxist.android.model.LocalNotifications
-import com.marxist.android.ui.base.BaseViewHolder
-import kotlinx.android.synthetic.main.highlight_item_view.view.*
 
-class NotificationItemHolder(private val parent: ViewGroup, layoutID: Int) :
-    BaseViewHolder<LocalNotifications>(parent, layoutID) {
-    override fun bindData(item: LocalNotifications) {
-        itemView.txtFeedTitle.text = item.title
-        itemView.txtHighLight.text = item.message
+class NotificationItemHolder(private val parent: HighlightItemViewBinding) :
+    RecyclerView.ViewHolder(parent.root) {
+    fun bindData(item: LocalNotifications) {
+        parent.txtFeedTitle.text = item.title
+        parent.txtHighLight.text = item.message
     }
 }

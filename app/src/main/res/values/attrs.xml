@@ -5,5 +5,5 @@
         <attr name="timeout" format="integer" />
     </declare-styleable>
 
-    <integer name="books_span_count">3</integer>
+    <integer name="books_span_count">2</integer>
 </resources>

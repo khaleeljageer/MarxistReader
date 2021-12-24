@@ -5,26 +5,24 @@ import android.content.Intent
 import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
-import android.view.Window
 import android.view.inputmethod.EditorInfo
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.databinding.ActivitySearchBinding
 import com.marxist.android.model.ConnectivityType
 import com.marxist.android.ui.activities.DetailsActivity
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.fragments.feeds.FeedListAdapter
 import com.marxist.android.utils.DeviceUtils
-import com.marxist.android.utils.PrintLog
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_search.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -39,6 +37,10 @@ class SearchActivity : BaseActivity(), ItemClickListener {
         FeedListAdapter(baseContext, mutableListOf(), this)
     }
 
+    private val binding by lazy {
+        ActivitySearchBinding.inflate(layoutInflater)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         with(window) {
@@ -47,7 +49,7 @@ class SearchActivity : BaseActivity(), ItemClickListener {
         setContentView(R.layout.activity_search)
         supportActionBar?.hide()
 
-        ivVoiceSearch.setOnClickListener {
+        binding.ivVoiceSearch.setOnClickListener {
             val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
 
             intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, "com.marxist.android")
@@ -63,18 +65,18 @@ class SearchActivity : BaseActivity(), ItemClickListener {
             )
         }
 
-        ivBack.setOnClickListener {
+        binding.ivBack.setOnClickListener {
             onBackPressed()
         }
 
-        rvListView.setHasFixedSize(true)
-        rvListView.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        rvListView.adapter = feedAdapter
+        binding.rvListView.setHasFixedSize(true)
+        binding.rvListView.layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+        binding.rvListView.adapter = feedAdapter
 
-        edtSearch.setOnEditorActionListener { _, actionId, _ ->
+        binding.edtSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 DeviceUtils.hideSoftKeyboard(this)
-                val key = edtSearch.text?.toString()
+                val key = binding.edtSearch.text?.toString()
                 if (key != null && key.isNotEmpty()) {
                     callSearch(key.toString())
                 }
@@ -83,15 +85,15 @@ class SearchActivity : BaseActivity(), ItemClickListener {
             return@setOnEditorActionListener false
         }
 
-        searchViewModel.searchFeedList.observe(this, androidx.lifecycle.Observer {
+        searchViewModel.searchFeedList.observe(this, {
             if (it != null) {
                 feedAdapter.addFeed(it)
             }
             loading = false
         })
 
-        searchViewModel.errorView.observe(this, androidx.lifecycle.Observer {
-            displayMaterialSnackBar("No result found", ConnectivityType.OTHER, rootView)
+        searchViewModel.errorView.observe(this, {
+            displayMaterialSnackBar("No result found", ConnectivityType.OTHER, binding.rootView)
         })
 
         rvScrollListener()
@@ -103,8 +105,8 @@ class SearchActivity : BaseActivity(), ItemClickListener {
     private var firstVisibleItemPosition = 0
     private var loading: Boolean = false
     private fun rvScrollListener() {
-        val layoutManager = rvListView.layoutManager as StaggeredGridLayoutManager
-        rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        val layoutManager = binding.rvListView.layoutManager as StaggeredGridLayoutManager
+        binding.rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 firstVisibleItemPosition =
@@ -118,7 +120,7 @@ class SearchActivity : BaseActivity(), ItemClickListener {
                 ) {
                     if (!loading) {
                         loading = true
-                        val key = edtSearch.text?.toString() ?: ""
+                        val key = binding.edtSearch.text?.toString() ?: ""
                         if (key.length > 3) {
                             searchViewModel.searchKey = key
                             searchViewModel.search()
@@ -159,8 +161,8 @@ class SearchActivity : BaseActivity(), ItemClickListener {
                         data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
 
                     if (result != null) {
-                        edtSearch.text!!.clear()
-                        edtSearch.append(result[0])
+                        binding.edtSearch.text!!.clear()
+                        binding.edtSearch.append(result[0])
                         callSearch(result[0])
                     }
                 }

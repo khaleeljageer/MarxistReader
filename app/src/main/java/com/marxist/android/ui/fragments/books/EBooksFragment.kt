@@ -2,23 +2,20 @@ package com.marxist.android.ui.fragments.books
 
 import android.content.Context
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.marxist.android.R
 import com.marxist.android.database.AppDatabase
+import com.marxist.android.databinding.FragmentsBooksBinding
 import com.marxist.android.utils.GridItemSpace
 import com.marxist.android.utils.toPixel
+import com.marxist.android.utils.viewBinding
 import com.marxist.android.viewmodel.BookListViewModel
-import kotlinx.android.synthetic.main.fragments_books.*
-import kotlinx.android.synthetic.main.fragments_books.view.*
-import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
 import org.koin.android.ext.android.inject
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class EBooksFragment : Fragment() {
+class EBooksFragment : Fragment(R.layout.fragments_books) {
     private val bookListViewModel: BookListViewModel by viewModel()
     private val appDatabase: AppDatabase by inject()
     private val bookAdapter by lazy {
@@ -39,7 +36,7 @@ class EBooksFragment : Fragment() {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     hideEmptyView()
-                    rvListView.visibility = View.VISIBLE
+                    binding.rvListView.visibility = View.VISIBLE
                     bookAdapter.setItems(it)
                 } else {
                     showEmptyView()
@@ -51,35 +48,28 @@ class EBooksFragment : Fragment() {
     }
 
     private fun hideEmptyView() {
-        rvListView.visibility = View.VISIBLE
-        emptyView.visibility = View.GONE
-        lavEmptyImage.clearAnimation()
+        binding.rvListView.visibility = View.VISIBLE
+        binding.noBooks.emptyView.visibility = View.GONE
+        binding.noBooks.lavEmptyImage.clearAnimation()
     }
 
     private fun showEmptyView() {
-        rvListView.visibility = View.GONE
-        emptyView.visibility = View.VISIBLE
-        lavEmptyImage.setAnimation(R.raw.loading_books)
+        binding.rvListView.visibility = View.GONE
+        binding.noBooks.emptyView.visibility = View.VISIBLE
+        binding.noBooks.lavEmptyImage.setAnimation(R.raw.loading_books)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragments_books, container, false)
+    private val binding by viewBinding(FragmentsBooksBinding::bind)
 
-        with(view.rvListView) {
-            addItemDecoration(GridItemSpace(mContext, 5.toPixel(context)))
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        with(binding.rvListView) {
             setHasFixedSize(true)
             adapter = bookAdapter
+            addItemDecoration(GridItemSpace(mContext, 5.toPixel(context)))
         }
 
-        return view
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         initData()
     }
 }

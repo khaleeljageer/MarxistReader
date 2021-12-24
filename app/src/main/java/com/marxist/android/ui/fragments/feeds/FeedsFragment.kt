@@ -9,17 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.databinding.FragmentsListBinding
 import com.marxist.android.ui.activities.DetailsActivity
 import com.marxist.android.ui.activities.search.SearchActivity
 import com.marxist.android.ui.base.ItemClickListener
-import com.marxist.android.utils.PrintLog
+import com.marxist.android.utils.viewBinding
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.fragments_list.*
-import kotlinx.android.synthetic.main.fragments_list.view.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FeedsFragment : Fragment(), ItemClickListener {
+class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
     private var feedDisposable: Disposable? = null
+    private val binding by viewBinding(FragmentsListBinding::bind)
     private val feedAdapter by lazy {
         FeedListAdapter(mContext, mutableListOf(), this@FeedsFragment)
     }
@@ -61,7 +61,7 @@ class FeedsFragment : Fragment(), ItemClickListener {
         feedsViewModel.getFeeds()
         feedsViewModel.feedList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
             if (it != null) {
-                rvListView.visibility = View.VISIBLE
+                binding.rvListView.visibility = View.VISIBLE
                 feedAdapter.addFeed(it)
             }
             loading = false
@@ -81,26 +81,20 @@ class FeedsFragment : Fragment(), ItemClickListener {
         })*/
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragments_list, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setRecyclerListener(view)
         initData()
-
-        return view
     }
 
     private fun setRecyclerListener(view: View) {
         val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
-        view.rvListView.setHasFixedSize(true)
-        view.rvListView.layoutManager = layoutManager
-        view.rvListView.adapter = feedAdapter
+        binding.rvListView.setHasFixedSize(true)
+        binding.rvListView.layoutManager = layoutManager
+        binding.rvListView.adapter = feedAdapter
 
-        view.rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 firstVisibleItemPosition =

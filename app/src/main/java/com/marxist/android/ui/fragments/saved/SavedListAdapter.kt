@@ -1,10 +1,11 @@
 package com.marxist.android.ui.fragments.saved
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.databinding.FeedItemViewBinding
 import com.marxist.android.ui.base.ItemClickListener
 
 class SavedListAdapter(
@@ -14,7 +15,8 @@ class SavedListAdapter(
 ) : RecyclerView.Adapter<SavedItemHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SavedItemHolder {
-        return SavedItemHolder(parent, R.layout.feed_item_view)
+        val binding = FeedItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SavedItemHolder(binding)
     }
 
     override fun getItemCount() = mutableList.size

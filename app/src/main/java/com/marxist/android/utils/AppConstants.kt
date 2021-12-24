@@ -1,6 +1,7 @@
 package com.marxist.android.utils
 
 object AppConstants {
+    const val ASPECT_RATIO: Double = 0.5625
     const val AUDIO = "audio"
     const val BOOKS = "books"
     val NIGHT_MODE: Boolean

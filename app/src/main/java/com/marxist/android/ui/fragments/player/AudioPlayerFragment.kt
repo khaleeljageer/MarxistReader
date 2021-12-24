@@ -17,9 +17,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.download.library.DownloadImpl
@@ -28,20 +26,24 @@ import com.download.library.Extra
 import com.marxist.android.R
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.databinding.AudioPlayerControlFragmentBinding
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.RxBus
-import kotlinx.android.synthetic.main.audio_player_control_fragment.*
+import com.marxist.android.utils.viewBinding
 import org.koin.android.ext.android.inject
 import java.io.File
 import java.io.IOException
 import java.util.*
 
-class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
+class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
+    MediaPlayer.OnCompletionListener,
     MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
     MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,
     AudioManager.OnAudioFocusChangeListener {
+
+    private val binding by viewBinding(AudioPlayerControlFragmentBinding::bind)
 
     private var isPrepared: Boolean = false
     private var bufferedPosition: Int = 0
@@ -95,16 +97,6 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         registerBecomingNoisyReceiver()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(
-            R.layout.audio_player_control_fragment, container, false
-        )
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -112,60 +104,60 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         seekDispatcher = DEFAULT_SEEK_DISPATCHER
         formatBuilder = StringBuilder()
         formatter = Formatter(formatBuilder, Locale.getDefault())
-        sbPlayer.max = PROGRESS_BAR_MAX
+        binding.sbPlayer.max = PROGRESS_BAR_MAX
 
-        btnPlayPause.tag = "PLAY"
-        pbPrepare.visibility = View.INVISIBLE
-        btnPlayPause.addAnimatorListener(animatorListener)
-        btnPlayPause.setOnClickListener {
-            if (btnPlayPause.tag == "PLAY") {
-                btnPlayPause.tag = "PAUSE"
-                btnPlayPause.setMinAndMaxFrame(0, 33)
+        binding.btnPlayPause.tag = "PLAY"
+        binding.pbPrepare.visibility = View.INVISIBLE
+        binding.btnPlayPause.addAnimatorListener(animatorListener)
+        binding.btnPlayPause.setOnClickListener {
+            if (binding.btnPlayPause.tag == "PLAY") {
+                binding.btnPlayPause.tag = "PAUSE"
+                binding.btnPlayPause.setMinAndMaxFrame(0, 33)
                 if (isPrepared)
                     playMedia()
             } else {
-                btnPlayPause.tag = "PLAY"
-                btnPlayPause.setMinAndMaxFrame(33, 66)
+                binding.btnPlayPause.tag = "PLAY"
+                binding.btnPlayPause.setMinAndMaxFrame(33, 66)
                 if (isPrepared)
                     pauseMedia()
             }
-            btnPlayPause.playAnimation()
-            btnPlayPause.isActivated = btnPlayPause.isAnimating
-            btnPlayPause.postInvalidate()
+            binding.btnPlayPause.playAnimation()
+            binding.btnPlayPause.isActivated = binding.btnPlayPause.isAnimating
+            binding.btnPlayPause.postInvalidate()
 
             if (mediaPlayer == null) {
-                pbPrepare.visibility = View.VISIBLE
-                btnPlayPause.visibility = View.GONE
+                binding.pbPrepare.visibility = View.VISIBLE
+                binding.btnPlayPause.visibility = View.GONE
                 initMediaPlayer()
             }
         }
 
-        btnForward.setOnClickListener {
-            btnForward.playAnimation()
+        binding.btnForward.setOnClickListener {
+            binding.btnForward.playAnimation()
             forward()
         }
 
-        btnRewind.setOnClickListener {
-            btnRewind.playAnimation()
+        binding.btnRewind.setOnClickListener {
+            binding.btnRewind.playAnimation()
             rewind()
         }
 
-        btnRemove.setOnClickListener {
+        binding.btnRemove.setOnClickListener {
             removeDownloads()
         }
 
-        btnDownload.setOnClickListener {
+        binding.btnDownload.setOnClickListener {
             if (localFeeds != null) {
                 downloadItem(localFeeds!!)
             }
         }
 
-        sbPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.sbPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     val position = positionValue(progress)
-                    if (txtPosition != null) {
-                        txtPosition.text = stringForTime(position)
+                    if (binding.txtPosition != null) {
+                        binding.txtPosition.text = stringForTime(position)
                     }
                     if (mediaPlayer != null && !dragging) {
                         seekTo(position)
@@ -187,7 +179,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     private fun removeDownloads() {
-        btnRemove.visibility = View.INVISIBLE
+        binding.btnRemove.visibility = View.INVISIBLE
         val filePath = File(localFeeds!!.downloadPath)
         appDatabase.localFeedsDao()
             .resetAudioStatus(false, "", localFeeds!!.title, localFeeds!!.pubDate)
@@ -199,12 +191,12 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     }
 
     private val animatorListener = AnimatorListenerAdapter(
-        onStart = { btnPlayPause.isActivated = true },
+        onStart = { binding.btnPlayPause.isActivated = true },
         onEnd = {
-            btnPlayPause.isActivated = false
+            binding.btnPlayPause.isActivated = false
         },
         onCancel = {
-            btnPlayPause.isActivated = false
+            binding.btnPlayPause.isActivated = false
         },
         onRepeat = {
         }
@@ -212,13 +204,13 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
     private fun downloadItem(feed: LocalFeeds) {
         RxBus.publish(ShowSnackBar(getString(R.string.download_started)))
-        btnDownload.visibility = View.INVISIBLE
-        progress.visibility = View.VISIBLE
+        binding.btnDownload.visibility = View.INVISIBLE
+        binding.progress.visibility = View.VISIBLE
 
         val targetPath = DeviceUtils.getRootDirPath(mContext).plus("/audio")
 
-        DownloadImpl.getInstance()
-            .with(mContext)
+        DownloadImpl.getInstance(mContext)
+            .with(feed.audioUrl)
             .setUniquePath(true)
             .setEnableIndicator(true)
             .setRetry(3)
@@ -242,12 +234,12 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
                     extra: Extra?
                 ): Boolean {
                     url?.let {
-                        val isExist1 = DownloadImpl.getInstance().exist(feed.audioUrl)
+                        val isExist1 = DownloadImpl.getInstance(mContext).exist(feed.audioUrl)
                         if (isExist1) {
-                            progress.visibility = View.INVISIBLE
+                            binding.progress.visibility = View.INVISIBLE
                             appDatabase.localFeedsDao()
                                 .updateAudioStatus(true, path.toString(), feed.title)
-                            btnRemove.visibility = View.VISIBLE
+                            binding.btnRemove.visibility = View.VISIBLE
                         }
                     }
                     return super.onResult(throwable, path, url, extra)
@@ -274,11 +266,11 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         localFeeds!!.downloadPath = filePath.toString()
 
         if (fileExist) {
-            btnDownload.visibility = View.INVISIBLE
-            btnRemove.visibility = View.VISIBLE
+            binding.btnDownload.visibility = View.INVISIBLE
+            binding.btnRemove.visibility = View.VISIBLE
         } else {
-            btnDownload.visibility = View.VISIBLE
-            btnRemove.visibility = View.INVISIBLE
+            binding.btnDownload.visibility = View.VISIBLE
+            binding.btnRemove.visibility = View.INVISIBLE
         }
     }
 
@@ -439,16 +431,16 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
     override fun onCompletion(p0: MediaPlayer?) {
         stopMedia()
-        btnPlayPause.tag = "PLAY"
-        btnPlayPause.setMinAndMaxFrame(33, 66)
-        btnPlayPause.isActivated = btnPlayPause.isAnimating
-        btnPlayPause.postInvalidate()
+        binding.btnPlayPause.tag = "PLAY"
+        binding.btnPlayPause.setMinAndMaxFrame(33, 66)
+        binding.btnPlayPause.isActivated = binding.btnPlayPause.isAnimating
+        binding.btnPlayPause.postInvalidate()
     }
 
     override fun onPrepared(p0: MediaPlayer?) {
         isPrepared = true
-        pbPrepare.visibility = View.INVISIBLE
-        btnPlayPause.visibility = View.VISIBLE
+        binding.pbPrepare.visibility = View.INVISIBLE
+        binding.btnPlayPause.visibility = View.VISIBLE
         handler!!.post(updateProgressAction)
         playMedia()
     }
@@ -509,20 +501,20 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     private fun updateProgress() {
         val duration = (if (mediaPlayer == null) 0 else mediaPlayer!!.duration).toLong()
         val position = (if (mediaPlayer == null) 0 else mediaPlayer!!.currentPosition).toLong()
-        if (txtDuration != null) {
-            txtDuration.text = stringForTime(duration)
+        if (binding.txtDuration != null) {
+            binding.txtDuration.text = stringForTime(duration)
         }
-        if (txtPosition != null && !dragging) {
-            txtPosition.text = stringForTime(position)
+        if (binding.txtPosition != null && !dragging) {
+            binding.txtPosition.text = stringForTime(position)
         }
 
-        if (sbPlayer != null) {
+        if (binding.sbPlayer != null) {
             if (!dragging) {
-                sbPlayer.progress = progressBarValue(position)
+                binding.sbPlayer.progress = progressBarValue(position)
             }
             val bufferedPosition =
                 (if (mediaPlayer == null) 0 else bufferedPosition).toLong()
-            sbPlayer.secondaryProgress = progressBarValue(bufferedPosition)
+            binding.sbPlayer.secondaryProgress = progressBarValue(bufferedPosition)
         }
         handler!!.removeCallbacks(updateProgressAction)
 

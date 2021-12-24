@@ -9,6 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.marxist.android.R
+import com.marxist.android.databinding.ActivityMainBinding
 import com.marxist.android.model.ConnectivityType
 import com.marxist.android.model.DarkModeChanged
 import com.marxist.android.model.NetWorkMessage
@@ -19,9 +20,11 @@ import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.RxBus
 import com.marxist.android.utils.network.NetworkSchedulerService
 import com.marxist.android.utils.setupWithNavController
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : BaseActivity() {
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
 
     companion object {
         const val PLAY_NEW_VIDEO = "com.marxist.android.ui.activities.PLAY_NEW_VIDEO"
@@ -29,14 +32,14 @@ class MainActivity : BaseActivity() {
 
     private var currentNavController: LiveData<NavController>? = null
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         setupBottomNavigationBar()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(binding.root)
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
@@ -45,14 +48,18 @@ class MainActivity : BaseActivity() {
 
         RxBus.subscribe({
             when (it) {
-                is NetWorkMessage -> displayMaterialSnackBar(it.message, it.type, container2)
+                is NetWorkMessage -> displayMaterialSnackBar(
+                    it.message,
+                    it.type,
+                    binding.container2
+                )
                 is DarkModeChanged -> Handler().post {
                     recreate()
                 }
                 is ShowSnackBar -> displayMaterialSnackBar(
                     it.message,
                     ConnectivityType.OTHER,
-                    container2
+                    binding.container2
                 )
             }
         }, {
@@ -80,7 +87,7 @@ class MainActivity : BaseActivity() {
         )
 
         // Whenever the selected controller changes, setup the action bar.
-        controller.observe(this, Observer { navController ->
+        controller.observe(this, { navController ->
             setupActionBarWithNavController(navController)
         })
         currentNavController = controller

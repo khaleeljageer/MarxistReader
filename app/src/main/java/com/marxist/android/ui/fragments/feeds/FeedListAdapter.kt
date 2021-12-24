@@ -1,10 +1,12 @@
 package com.marxist.android.ui.fragments.feeds
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.databinding.FeedItemViewBinding
+import com.marxist.android.databinding.ListFeedsBottomProgressBinding
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.base.ProgressViewHolder
 
@@ -18,9 +20,11 @@ class FeedListAdapter(
     private val VIEW_PROG = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_ITEM) {
-            FeedItemHolder(parent, R.layout.feed_item_view)
+            val binding = FeedItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            FeedItemHolder(binding)
         } else {
-            ProgressViewHolder(parent, R.layout.list_feeds_bottom_progress)
+            val binding = ListFeedsBottomProgressBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ProgressViewHolder(binding)
         }
     }
 

@@ -4,31 +4,31 @@ import android.content.Context
 import android.net.Uri
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
+import coil.load
 import com.download.library.DownloadImpl
 import com.download.library.DownloadListenerAdapter
 import com.download.library.Extra
 import com.marxist.android.R
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalBooks
+import com.marxist.android.databinding.BookListItemBinding
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.utils.RxBus
 import com.marxist.android.utils.download.DownloadUtil
-import kotlinx.android.synthetic.main.book_list_item.view.*
 import java.io.File
 
 
 class BookViewHolder(
     private val context: Context,
-    view: View,
+    private val binding: BookListItemBinding,
     private val targetPath: String
-) : RecyclerView.ViewHolder(view) {
+) : RecyclerView.ViewHolder(binding.root) {
 
     fun bindData(
         book: LocalBooks,
         appDatabase: AppDatabase
     ) {
-        itemView.arBookImage.load(book.image) {
+        binding.arBookImage.load(book.image) {
             placeholder(R.drawable.placeholder)
         }
         itemView.setOnClickListener {
@@ -39,11 +39,11 @@ class BookViewHolder(
                 if (fileExist) {
                     DownloadUtil.openSavedBook(context, path.toString())
                 } else {
-                    itemView.pbDownloadProgress.visibility = View.VISIBLE
+                    binding.pbDownloadProgress.visibility = View.VISIBLE
                     downloadFile(book, appDatabase)
                 }
             } else {
-                itemView.pbDownloadProgress.visibility = View.VISIBLE
+                binding.pbDownloadProgress.visibility = View.VISIBLE
                 downloadFile(book, appDatabase)
             }
         }
@@ -53,8 +53,8 @@ class BookViewHolder(
         book: LocalBooks,
         appDatabase: AppDatabase
     ) {
-        DownloadImpl.getInstance()
-            .with(context)
+        DownloadImpl.getInstance(context)
+            .with(book.epub)
             .setUniquePath(true)
             .setEnableIndicator(false)
             .setRetry(3)
@@ -70,7 +70,7 @@ class BookViewHolder(
                     contentLength: Long,
                     extra: Extra?
                 ) {
-                    itemView.pbDownloadProgress.visibility = View.VISIBLE
+                    binding.pbDownloadProgress.visibility = View.VISIBLE
                     RxBus.publish(ShowSnackBar("${book.title} Downloading"))
                 }
 
@@ -81,7 +81,7 @@ class BookViewHolder(
                     usedTime: Long
                 ) {
                     val percent = (downloaded.div(length)) * 100
-                    itemView.pbDownloadProgress.progress = percent.toInt()
+                    binding.pbDownloadProgress.progress = percent.toInt()
                 }
 
                 override fun onResult(
@@ -91,9 +91,9 @@ class BookViewHolder(
                     extra: Extra?
                 ): Boolean {
                     url?.let {
-                        val isExist1 = DownloadImpl.getInstance().exist(book.epub)
+                        val isExist1 = DownloadImpl.getInstance(context).exist(book.epub)
                         if (isExist1) {
-                            itemView.pbDownloadProgress.visibility = View.INVISIBLE
+                            binding.pbDownloadProgress.visibility = View.INVISIBLE
                             RxBus.publish(ShowSnackBar("${book.title} Completed"))
                             appDatabase.localBooksDao()
                                 .updateDownloadDetails(path.toString(), true, book.bookid)

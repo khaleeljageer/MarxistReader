@@ -3,24 +3,21 @@ package com.marxist.android.ui.fragments.saved
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.databinding.FragmentsListBinding
 import com.marxist.android.ui.activities.DetailsActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.fragments.feeds.FeedsViewModel
-import kotlinx.android.synthetic.main.fragments_list.*
-import kotlinx.android.synthetic.main.fragments_list.view.*
-import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
-import org.koin.android.viewmodel.ext.android.viewModel
+import com.marxist.android.utils.viewBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SavedFragment : Fragment(), ItemClickListener {
+class SavedFragment : Fragment(R.layout.fragments_list), ItemClickListener {
     override fun feedItemClickListener(
         article: Any,
         adapterPosition: Int,
@@ -33,15 +30,17 @@ class SavedFragment : Fragment(), ItemClickListener {
         }
     }
 
+    private val binding by viewBinding(FragmentsListBinding::bind)
+
     private val feedsViewModel: FeedsViewModel by viewModel()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        binding.rvListView.setHasFixedSize(true)
+        binding.rvListView.layoutManager =
+            LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
+        binding.rvListView.adapter = savedAdapter
 
         initData()
     }
@@ -51,16 +50,17 @@ class SavedFragment : Fragment(), ItemClickListener {
         feedsViewModel.feedsDownloaded.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    rvListView.visibility = View.VISIBLE
-                    emptyView.visibility = View.GONE
+                    binding.rvListView.visibility = View.VISIBLE
+                    binding.noFeed.emptyView.visibility = View.GONE
                     savedAdapter.addFeeds(it)
                 } else {
-                    rvListView.visibility = View.GONE
-                    emptyView.visibility = View.VISIBLE
-                    txtTitle.text = getString(R.string.no_downloads)
-                    txtHelper.text = getString(R.string.you_can_add_download_from_any_article)
-                    lavEmptyImage.scale = 0.25f
-                    lavEmptyImage.setAnimation(R.raw.empty_music)
+                    binding.rvListView.visibility = View.GONE
+                    binding.noFeed.emptyView.visibility = View.VISIBLE
+                    binding.noFeed.txtTitle.text = getString(R.string.no_downloads)
+                    binding.noFeed.txtHelper.text =
+                        getString(R.string.you_can_add_download_from_any_article)
+                    binding.noFeed.lavEmptyImage.scale = 0.25f
+                    binding.noFeed.lavEmptyImage.setAnimation(R.raw.empty_music)
                 }
             }
         })
@@ -73,19 +73,5 @@ class SavedFragment : Fragment(), ItemClickListener {
         super.onAttach(context)
         mContext = context
         savedAdapter = SavedListAdapter(mContext, mutableListOf(), this@SavedFragment)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragments_list, container, false)
-
-        view.rvListView.setHasFixedSize(true)
-        view.rvListView.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
-        view.rvListView.adapter = savedAdapter
-
-        return view
     }
 }

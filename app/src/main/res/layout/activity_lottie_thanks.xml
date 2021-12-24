@@ -5,19 +5,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:elevation="5dp">
-
-        <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="@drawable/ic_arrow_back_24dp"
-                app:title="@string/lottie_credits" />
-    </com.google.android.material.appbar.AppBarLayout>
-
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

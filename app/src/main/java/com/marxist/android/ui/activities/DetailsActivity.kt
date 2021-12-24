@@ -9,6 +9,7 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.databinding.ActivityDetailsBinding
 import com.marxist.android.model.*
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.fragments.player.AudioPlayerFragment
@@ -17,7 +18,7 @@ import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.RxBus
 import io.reactivex.disposables.Disposable
-import kotlinx.android.synthetic.main.activity_details.*
+import org.sufficientlysecure.htmltextview.HtmlTextView
 
 class DetailsActivity : BaseActivity() {
     private lateinit var disposable: Disposable
@@ -52,21 +53,25 @@ class DetailsActivity : BaseActivity() {
     private fun applyFont(fontId: Int) {
         val typeface = ResourcesCompat.getFont(baseContext, fontId)
         typeface?.let { f ->
-            txtContent.typeface = f
-            txtTitle.typeface = f
+            binding.txtContent.typeface = f
+            binding.txtTitle.typeface = f
         }
+    }
+
+    private val binding by lazy {
+        ActivityDetailsBinding.inflate(layoutInflater)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_details)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.title = ""
 
         article = intent.getSerializableExtra(ARTICLE) as LocalFeeds
 
-        txtTitle.text = article!!.title
+        binding.txtTitle.text = article!!.title
 
         val selectedFont = appPreference[getString(R.string.pref_key_preferred_font), "Hind"]
         val fontsId = arrayOf(
@@ -81,7 +86,7 @@ class DetailsActivity : BaseActivity() {
 
         val type = 1
         if (article!!.audioUrl.isNotEmpty()) {
-            cvPlayerView.visibility = View.VISIBLE
+            binding.cvPlayerView.visibility = View.VISIBLE
             Handler().post {
                 supportFragmentManager.beginTransaction()
                     .setCustomAnimations(
@@ -89,13 +94,13 @@ class DetailsActivity : BaseActivity() {
                         R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom
                     )
                     .replace(
-                        flAudioPlayer.id,
+                        binding.flAudioPlayer.id,
                         AudioPlayerFragment.newInstance(article!!, type)
                     )
                     .commit()
             }
         } else {
-            cvPlayerView.visibility = View.GONE
+            binding.cvPlayerView.visibility = View.GONE
         }
 
         var content = article!!.content
@@ -107,9 +112,9 @@ class DetailsActivity : BaseActivity() {
         } catch (e: Exception) {
             e.printStackTrace()
         } finally {
-            txtContent.apply {
+            binding.txtContent.apply {
                 setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize.toFloat())
-                setHtml(content)
+                setHtmlFromString(content, HtmlTextView.RemoteImageGetter())
             }
         }
 
@@ -120,26 +125,26 @@ class DetailsActivity : BaseActivity() {
                     applyFont(it.fontId)
                 }
                 is FontSizeChange -> {
-                    txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, it.fontSize)
+                    binding.txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, it.fontSize)
                 }
                 is ShowSnackBar -> displayMaterialSnackBar(
                     it.message,
                     ConnectivityType.OTHER,
-                    rootView
+                    binding.rootView
                 )
                 is ReaderBgChange -> {
                     if (it.color == 0xff282828) {
-                        txtTitle.setTextColor(0xffffffff.toInt())
-                        txtContent.setTextColor(0xffffffff.toInt())
+                        binding.txtTitle.setTextColor(0xffffffff.toInt())
+                        binding.txtContent.setTextColor(0xffffffff.toInt())
                     } else {
-                        txtTitle.setTextColor(0xff000000.toInt())
-                        txtContent.setTextColor(0xff000000.toInt())
+                        binding.txtTitle.setTextColor(0xff000000.toInt())
+                        binding.txtContent.setTextColor(0xff000000.toInt())
                     }
 
                     it.color.toInt().run {
-                        txtContent.setBackgroundColor(this)
-                        txtTitle.setBackgroundColor(this)
-                        toolbar.setBackgroundColor(this)
+                        binding.txtContent.setBackgroundColor(this)
+                        binding.txtTitle.setBackgroundColor(this)
+                        binding.toolbar.setBackgroundColor(this)
                         window.statusBarColor = this
                     }
                 }
@@ -150,7 +155,7 @@ class DetailsActivity : BaseActivity() {
     }
 
     private fun initListeners() {
-        toolbar.setNavigationOnClickListener {
+        binding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
     }

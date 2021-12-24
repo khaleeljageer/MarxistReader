@@ -1,22 +1,21 @@
 package com.marxist.android.ui.fragments.feeds
 
 import android.view.View
-import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.ui.base.BaseViewHolder
+import com.marxist.android.databinding.FeedItemViewBinding
 import com.marxist.android.utils.DeviceUtils
-import kotlinx.android.synthetic.main.feed_item_view.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
 
-class FeedItemHolder(private val parent: ViewGroup, layoutID: Int) :
-    BaseViewHolder<LocalFeeds>(parent, layoutID) {
-    override fun bindData(item: LocalFeeds) {
-        itemView.txtFeedTitle.text = item.title
+class FeedItemHolder(private val parent: FeedItemViewBinding) :
+    RecyclerView.ViewHolder(parent.root) {
+    fun bindData(item: LocalFeeds) {
+        parent.txtFeedTitle.text = item.title
 //        itemView.txtFeedDesc.text =
 //            HtmlCompat.fromHtml(item.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
         val pubDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
@@ -25,11 +24,12 @@ class FeedItemHolder(private val parent: ViewGroup, layoutID: Int) :
         val wordCount = item.content.wordCount()
         val estimated = wordCount.estimateTime()
 
-        itemView.txtPubDate.text = pubDate
-        itemView.txtEstimate.text = parent.context.getString(R.string.estimate).plus(estimated)
-        itemView.rootCard.setCardBackgroundColor(DeviceUtils.getColor(parent.context))
+        parent.txtPubDate.text = pubDate
+        parent.txtEstimate.text =
+            parent.txtEstimate.context.getString(R.string.estimate).plus(estimated)
+        parent.rootCard.setCardBackgroundColor(DeviceUtils.getColor(parent.rootCard.context))
 
-        itemView.ivAudioLogo.visibility = if (item.audioUrl.isEmpty()) {
+        parent.ivAudioLogo.visibility = if (item.audioUrl.isEmpty()) {
             View.INVISIBLE
         } else {
             View.VISIBLE
