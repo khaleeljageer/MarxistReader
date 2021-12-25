@@ -46,7 +46,7 @@ class SearchActivity : BaseActivity(), ItemClickListener {
         with(window) {
             statusBarColor = ContextCompat.getColor(baseContext, R.color.colorSecondaryDark)
         }
-        setContentView(R.layout.activity_search)
+        setContentView(binding.root)
         supportActionBar?.hide()
 
         binding.ivVoiceSearch.setOnClickListener {

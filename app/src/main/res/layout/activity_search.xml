@@ -4,6 +4,22 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:spanCount="@integer/recycler_view_span_count" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/rootView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
     <FrameLayout
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
@@ -62,20 +78,4 @@
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
-
-    <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvListView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="70dp"
-            android:background="@color/colorPrimary"
-            app:layout_constraintTop_toBottomOf="@+id/frameLayout"
-            app:layout_constraintTop_toTopOf="parent"
-            app:spanCount="@integer/recycler_view_span_count" />
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/rootView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
