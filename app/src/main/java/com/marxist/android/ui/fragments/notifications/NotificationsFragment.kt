@@ -10,18 +10,15 @@ import com.marxist.android.R
 import com.marxist.android.databinding.FragmentsListBinding
 import com.marxist.android.model.LocalNotifications
 import com.marxist.android.ui.base.ItemClickListener
-import com.marxist.android.utils.api.GitHubService
-import com.marxist.android.utils.api.RetryWithDelay
 import com.marxist.android.utils.viewBinding
-import io.reactivex.android.schedulers.AndroidSchedulers
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import org.koin.android.ext.android.inject
 
+@AndroidEntryPoint
 class NotificationsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
     private val binding by viewBinding(FragmentsListBinding::bind)
 
-    private val gitHubService: GitHubService by inject()
+//    private val gitHubService: GitHubService by inject()
 
     private var disposable: Disposable? = null
 
@@ -62,29 +59,29 @@ class NotificationsFragment : Fragment(R.layout.fragments_list), ItemClickListen
     }
 
     private fun callBookApi() {
-        disposable = gitHubService.getNotifications()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .retryWhen(RetryWithDelay())
-            .subscribe({
-                if (it != null) {
-                    if (it.notifications.isNotEmpty()) {
-                        binding.rvListView.visibility = View.VISIBLE
-                        binding.noFeed.emptyView.visibility = View.GONE
-                        notificationsAdapter.updateNotifications(it.notifications);
-                    } else {
-                        binding.rvListView.visibility = View.GONE
-                        binding.noFeed.emptyView.visibility = View.VISIBLE
-                        binding.noFeed.txtTitle.text = getString(R.string.no_notifications_to_show)
-                        showImage()
-                    }
-                }
-            }, {
-                it.printStackTrace()
-                binding.rvListView.visibility = View.GONE
-                binding.noFeed.emptyView.visibility = View.VISIBLE
-                showImage()
-            })
+//        disposable = gitHubService.getNotifications()
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .retryWhen(RetryWithDelay())
+//            .subscribe({
+//                if (it != null) {
+//                    if (it.notifications.isNotEmpty()) {
+//                        binding.rvListView.visibility = View.VISIBLE
+//                        binding.noFeed.emptyView.visibility = View.GONE
+//                        notificationsAdapter.updateNotifications(it.notifications);
+//                    } else {
+//                        binding.rvListView.visibility = View.GONE
+//                        binding.noFeed.emptyView.visibility = View.VISIBLE
+//                        binding.noFeed.txtTitle.text = getString(R.string.no_notifications_to_show)
+//                        showImage()
+//                    }
+//                }
+//            }, {
+//                it.printStackTrace()
+//                binding.rvListView.visibility = View.GONE
+//                binding.noFeed.emptyView.visibility = View.VISIBLE
+//                showImage()
+//            })
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

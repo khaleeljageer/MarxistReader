@@ -10,10 +10,11 @@ import com.google.android.material.snackbar.Snackbar
 import com.marxist.android.R
 import com.marxist.android.model.ConnectivityType
 import com.marxist.android.utils.DeviceUtils
-import org.koin.android.ext.android.inject
+import javax.inject.Inject
 
 abstract class BaseActivity : AppCompatActivity() {
-    val appPreference: SharedPreferences by inject()
+    @Inject
+    lateinit var appPreference: SharedPreferences
 
     internal fun displayMaterialSnackBar(
         message: String,

@@ -74,11 +74,6 @@
                 android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize" />
 
-        <service
-                android:name=".utils.network.NetworkSchedulerService"
-                android:exported="true"
-                android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <meta-data
                 android:name="com.google.firebase.messaging.default_notification_icon"
                 android:resource="@drawable/ic_notification_small" />

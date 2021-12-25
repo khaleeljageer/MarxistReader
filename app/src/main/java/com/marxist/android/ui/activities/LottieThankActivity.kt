@@ -5,7 +5,9 @@ import android.view.MenuItem
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityLottieThanksBinding
 import com.marxist.android.ui.base.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class LottieThankActivity : BaseActivity() {
 
     private val binding by lazy {

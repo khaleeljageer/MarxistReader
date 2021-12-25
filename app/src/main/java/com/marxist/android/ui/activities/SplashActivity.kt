@@ -7,6 +7,7 @@ import android.view.animation.*
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivitySplashBinding
 import com.marxist.android.ui.base.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -14,6 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 
 
+@AndroidEntryPoint
 class SplashActivity : BaseActivity() {
     private val binding by lazy {
         ActivitySplashBinding.inflate(layoutInflater)

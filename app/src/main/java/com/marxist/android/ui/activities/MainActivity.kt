@@ -1,10 +1,8 @@
 package com.marxist.android.ui.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -18,9 +16,10 @@ import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.RxBus
-import com.marxist.android.utils.network.NetworkSchedulerService
 import com.marxist.android.utils.setupWithNavController
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
@@ -95,20 +94,5 @@ class MainActivity : BaseActivity() {
 
     override fun onSupportNavigateUp(): Boolean {
         return currentNavController?.value?.navigateUp() ?: false
-    }
-
-    override fun onStart() {
-        super.onStart()
-        try {
-            val startServiceIntent = Intent(this@MainActivity, NetworkSchedulerService::class.java)
-            startService(startServiceIntent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun onStop() {
-        stopService(Intent(this@MainActivity, NetworkSchedulerService::class.java))
-        super.onStop()
     }
 }

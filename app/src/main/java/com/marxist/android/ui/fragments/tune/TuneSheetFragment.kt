@@ -18,10 +18,14 @@ import com.marxist.android.model.ReaderBgChange
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.AppPreference.set
 import com.marxist.android.utils.RxBus
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class TuneSheetFragment : BottomSheetDialogFragment() {
-    private val appPreference: SharedPreferences by inject()
+    @Inject
+    lateinit var appPreference: SharedPreferences
     private var binding: DetailsTuneViewBinding? = null
 
     override fun getTheme(): Int = R.style.BottomSheetDialogTheme

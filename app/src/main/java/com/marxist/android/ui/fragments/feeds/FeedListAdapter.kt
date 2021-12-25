@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.data.model.WPPost
 import com.marxist.android.databinding.FeedItemViewBinding
 import com.marxist.android.databinding.ListFeedsBottomProgressBinding
 import com.marxist.android.ui.base.ItemClickListener
@@ -12,7 +12,7 @@ import com.marxist.android.ui.base.ProgressViewHolder
 
 class FeedListAdapter(
     private val mContext: Context,
-    private val mutableList: MutableList<LocalFeeds?>,
+    private val mutableList: MutableList<WPPost?>,
     private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -52,12 +52,12 @@ class FeedListAdapter(
         }
     }
 
-    fun addFeed(articles: List<LocalFeeds>) {
+    fun addFeed(articles: List<WPPost>) {
         mutableList.addAll(articles)
         notifyItemRangeInserted(mutableList.size, articles.size)
     }
 
-    fun addFeeds(articles: MutableList<LocalFeeds>) {
+    fun addFeeds(articles: MutableList<WPPost>) {
         mutableList.addAll(articles)
         notifyDataSetChanged()
     }

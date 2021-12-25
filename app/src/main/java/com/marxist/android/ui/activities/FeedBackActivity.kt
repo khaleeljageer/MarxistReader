@@ -10,6 +10,7 @@ import com.marxist.android.model.ConnectivityType
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.api.ApiService
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -17,6 +18,7 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
+@AndroidEntryPoint
 class FeedBackActivity : BaseActivity() {
     private var disposable: Disposable? = null
 

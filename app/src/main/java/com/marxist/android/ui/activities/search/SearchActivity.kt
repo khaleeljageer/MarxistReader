@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.speech.RecognizerIntent
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
@@ -18,21 +19,22 @@ import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.fragments.feeds.FeedListAdapter
 import com.marxist.android.utils.DeviceUtils
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
+@AndroidEntryPoint
 class SearchActivity : BaseActivity(), ItemClickListener {
     companion object {
         const val RECOGNIZER_REQ_CODE = 1234
     }
 
-    private val searchViewModel: SearchViewModel by viewModel()
+    private val searchViewModel: SearchViewModel by viewModels()
     private val feedAdapter by lazy {
         FeedListAdapter(baseContext, mutableListOf(), this)
     }
@@ -87,7 +89,7 @@ class SearchActivity : BaseActivity(), ItemClickListener {
 
         searchViewModel.searchFeedList.observe(this, {
             if (it != null) {
-                feedAdapter.addFeed(it)
+//                feedAdapter.addFeed(it)
             }
             loading = false
         })

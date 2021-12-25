@@ -32,11 +32,13 @@ import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.RxBus
 import com.marxist.android.utils.viewBinding
-import org.koin.android.ext.android.inject
+import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.IOException
 import java.util.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
     MediaPlayer.OnCompletionListener,
     MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
@@ -64,7 +66,8 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
     private var phoneStateListener: PhoneStateListener? = null
     private var telephonyManager: TelephonyManager? = null
 
-    private val appDatabase: AppDatabase by inject()
+    @Inject
+    lateinit var appDatabase: AppDatabase
 
     companion object {
         const val PROGRESS_BAR_MAX = 1000

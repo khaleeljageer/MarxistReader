@@ -5,9 +5,11 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityAboutBinding
+import dagger.hilt.android.AndroidEntryPoint
 import org.sufficientlysecure.htmltextview.HtmlTextView
 
 
+@AndroidEntryPoint
 class AboutActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivityAboutBinding.inflate(layoutInflater)

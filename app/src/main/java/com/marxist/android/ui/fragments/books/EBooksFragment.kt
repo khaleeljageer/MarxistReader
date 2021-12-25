@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.marxist.android.R
 import com.marxist.android.database.AppDatabase
@@ -12,12 +13,17 @@ import com.marxist.android.utils.GridItemSpace
 import com.marxist.android.utils.toPixel
 import com.marxist.android.utils.viewBinding
 import com.marxist.android.viewmodel.BookListViewModel
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class EBooksFragment : Fragment(R.layout.fragments_books) {
-    private val bookListViewModel: BookListViewModel by viewModel()
-    private val appDatabase: AppDatabase by inject()
+
+    private val bookListViewModel: BookListViewModel by viewModels()
+
+    @Inject
+    lateinit var appDatabase: AppDatabase
+
     private val bookAdapter by lazy {
         BookListAdapter(mContext, mutableListOf(), appDatabase)
     }

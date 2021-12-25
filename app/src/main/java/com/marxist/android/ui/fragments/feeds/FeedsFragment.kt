@@ -5,18 +5,21 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.R
+import com.marxist.android.data.model.WPPost
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.databinding.FragmentsListBinding
 import com.marxist.android.ui.activities.DetailsActivity
 import com.marxist.android.ui.activities.search.SearchActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.utils.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
+@AndroidEntryPoint
 class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
     private var feedDisposable: Disposable? = null
     private val binding by viewBinding(FragmentsListBinding::bind)
@@ -24,7 +27,8 @@ class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
         FeedListAdapter(mContext, mutableListOf(), this@FeedsFragment)
     }
     private lateinit var mContext: Context
-    private val feedsViewModel: FeedsViewModel by viewModel()
+
+    private val feedsViewModel: FeedsViewModel by viewModels()
 
     private var visibleItemCount: Int = 0
     private var totalItemCount: Int = 0
@@ -59,12 +63,19 @@ class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
 
     private fun initData() {
         feedsViewModel.getFeeds()
-        feedsViewModel.feedList.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+//        feedsViewModel.feedList.observe(viewLifecycleOwner, {
+//            if (it != null) {
+//                binding.rvListView.visibility = View.VISIBLE
+//                feedAdapter.addFeed(it)
+//            }
+//            loading = false
+//        })
+
+        feedsViewModel.wpPost.observe(viewLifecycleOwner, {
             if (it != null) {
                 binding.rvListView.visibility = View.VISIBLE
                 feedAdapter.addFeed(it)
             }
-            loading = false
         })
 /*        feedsViewModel.getLiveFeeds().observe(this, Observer {
             if (it != null) {
@@ -120,7 +131,7 @@ class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
         adapterPosition: Int,
         view: View
     ) {
-        if (article is LocalFeeds) {
+        if (article is WPPost) {
             val intent = Intent(mContext, DetailsActivity::class.java)
             intent.putExtra(DetailsActivity.ARTICLE, article)
             startActivity(intent)
