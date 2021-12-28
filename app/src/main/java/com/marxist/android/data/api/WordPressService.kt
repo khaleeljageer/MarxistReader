@@ -1,4 +1,4 @@
-package com.marxist.android.utils.api
+package com.marxist.android.data.api
 
 import com.marxist.android.data.model.WPPost
 import retrofit2.Response

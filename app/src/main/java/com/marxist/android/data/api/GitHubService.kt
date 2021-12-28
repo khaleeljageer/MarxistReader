@@ -1,14 +1,14 @@
-package com.marxist.android.utils.api
+package com.marxist.android.data.api
 
 import com.marxist.android.model.BooksResponse
 import com.marxist.android.model.NotificationResponse
-import io.reactivex.Observable
+import retrofit2.Response
 import retrofit2.http.GET
 
 interface GitHubService {
     @GET("master/booksdb.json")
-    fun getBooks(): Observable<BooksResponse>
+    suspend fun getBooks(): Response<BooksResponse>
 
     @GET("master/notifications.json")
-    fun getNotifications(): Observable<NotificationResponse>
+    suspend fun getNotifications(): Response<NotificationResponse>
 }

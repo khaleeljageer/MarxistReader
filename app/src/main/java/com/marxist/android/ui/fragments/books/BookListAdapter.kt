@@ -22,7 +22,7 @@ class BookListAdapter(
 
         val lp = binding.root.layoutParams
         val width = parent.measuredWidth
-        lp.height = ((width / AppConstants.ASPECT_RATIO) / 2.5).toInt()
+        lp.height = ((width / AppConstants.ASPECT_RATIO) / 4).toInt()
         binding.root.layoutParams = lp
 
         val targetPath = DeviceUtils.getRootDirPath(mContext).plus("/books")

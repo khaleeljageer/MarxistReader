@@ -1,5 +1,6 @@
 package com.marxist.android.ui.fragments.feeds
 
+import android.content.Context
 import android.view.View
 import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -13,29 +14,24 @@ import kotlin.math.floor
 import kotlin.math.roundToInt
 
 
-class FeedItemHolder(private val parent: FeedItemViewBinding) :
+class FeedItemHolder(private val context: Context, private val parent: FeedItemViewBinding) :
     RecyclerView.ViewHolder(parent.root) {
     fun bindData(item: WPPost) {
         parent.txtFeedTitle.text =
             HtmlCompat.fromHtml(item.title.rendered, HtmlCompat.FROM_HTML_MODE_COMPACT)
-//        itemView.txtFeedDesc.text =
-//            HtmlCompat.fromHtml(item.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
-//        val pubDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
-//            Date(item.pubDate)
-//        ).toString()
+
         val wordCount = item.content.rendered.wordCount()
         val estimated = wordCount.estimateTime()
-
-        parent.txtPubDate.text = "pubDate"
+        parent.txtPubDate.text = formatDate(item.date)
         parent.txtEstimate.text =
-            parent.txtEstimate.context.getString(R.string.estimate).plus(estimated)
-        parent.rootCard.setCardBackgroundColor(DeviceUtils.getColor(parent.rootCard.context))
+            context.getString(R.string.estimate).plus(estimated)
+        parent.rootCard.setCardBackgroundColor(DeviceUtils.getColor(context))
 
-//        parent.ivAudioLogo.visibility = if (item.audioUrl.isEmpty()) {
-//            View.INVISIBLE
-//        } else {
-//            View.VISIBLE
-//        }
+        parent.ivAudioLogo.visibility = if (item.audioUrl.isNullOrEmpty()) {
+            View.INVISIBLE
+        } else {
+            View.VISIBLE
+        }
     }
 
     private fun Int.estimateTime(): String {
@@ -54,6 +50,19 @@ class FeedItemHolder(private val parent: FeedItemViewBinding) :
                 }
                 "$hour min read"
             }
+        }
+    }
+
+    private fun formatDate(pubDate: String): String {
+        val wpDateFormat =
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(pubDate)
+
+        return try {
+            val sdf = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+            sdf.format(wpDateFormat)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            pubDate
         }
     }
 

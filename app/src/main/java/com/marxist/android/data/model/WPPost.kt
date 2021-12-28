@@ -9,5 +9,6 @@ data class WPPost(
     val title: Rendered,
     val content: Rendered,
     val link: String,
-    val date: String
+    val date: String,
+    var audioUrl: String = ""
 ) : Parcelable

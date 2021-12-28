@@ -5,6 +5,9 @@ import com.marxist.android.data.model.WPPost
 import com.marxist.android.utils.network.NetworkResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -14,8 +17,19 @@ class WordPressRepository @Inject constructor(private val wordPressHelper: WordP
     suspend fun getPosts(count: Int, page: Int): Flow<NetworkResponse<List<WPPost>>> = flow {
         val response = wordPressHelper.getPosts(count, page)
         if (response.isSuccessful) {
-            val list = response.body()
+            val list: List<WPPost>? = response.body()
             if (list != null && list.isNotEmpty()) {
+                list.forEach {
+                    it.apply {
+                        val jsoup: Document = Jsoup.parse(it.content.rendered)
+                        val audioTag = jsoup.getElementsByTag("audio").first()
+                        if (audioTag != null) {
+                            this.audioUrl = audioTag.absUrl("src")
+                        } else {
+                            this.audioUrl = ""
+                        }
+                    }
+                }
                 emit(NetworkResponse.Success(list))
             } else {
                 emit(NetworkResponse.EmptyResponse)

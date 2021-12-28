@@ -1,7 +1,6 @@
 package com.marxist.android.data.api
 
 import com.marxist.android.data.model.WPPost
-import com.marxist.android.utils.api.WordPressService
 import retrofit2.Response
 import javax.inject.Inject
 import javax.inject.Singleton

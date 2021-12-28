@@ -21,7 +21,7 @@ class FeedListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_ITEM) {
             val binding = FeedItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-            FeedItemHolder(binding)
+            FeedItemHolder(parent.context, binding)
         } else {
             val binding = ListFeedsBottomProgressBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             ProgressViewHolder(binding)

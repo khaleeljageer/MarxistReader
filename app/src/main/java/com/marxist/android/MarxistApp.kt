@@ -9,6 +9,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.marxist.android.utils.DeviceUtils
 import dagger.hilt.android.HiltAndroidApp
 import org.geometerplus.android.fbreader.FBReaderApplication
+import timber.log.Timber
 import java.io.File
 import java.util.*
 
@@ -19,6 +20,9 @@ class MarxistApp : FBReaderApplication() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
         MultiDex.install(this@MarxistApp)
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
 
         initPRDownloader()
 

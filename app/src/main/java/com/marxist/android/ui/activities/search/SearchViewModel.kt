@@ -3,7 +3,7 @@ package com.marxist.android.ui.activities.search
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.utils.api.WordPressService
+import com.marxist.android.data.api.WordPressService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject

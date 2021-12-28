@@ -24,8 +24,8 @@ import com.download.library.DownloadImpl
 import com.download.library.DownloadListenerAdapter
 import com.download.library.Extra
 import com.marxist.android.R
+import com.marxist.android.data.model.WPPost
 import com.marxist.android.database.AppDatabase
-import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.databinding.AudioPlayerControlFragmentBinding
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.utils.DeviceUtils
@@ -49,7 +49,7 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
 
     private var isPrepared: Boolean = false
     private var bufferedPosition: Int = 0
-    private var localFeeds: LocalFeeds? = null
+    private var localFeeds: WPPost? = null
     private var resumePosition: Int = 0
     private lateinit var mContext: Context
     private var mediaPlayer: MediaPlayer? = null
@@ -78,9 +78,9 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
         const val ACTION_REWIND = "com.marxist.android.ui.fragments.player.ACTION_REWIND"
         const val ACTION_STOP = "com.marxist.android.ui.fragments.player.ACTION_STOP"
 
-        fun newInstance(localFeeds: LocalFeeds, type: Int): AudioPlayerFragment {
+        fun newInstance(wpPost: WPPost, type: Int): AudioPlayerFragment {
             val bundle = Bundle()
-            bundle.putSerializable("KEY_LOCAL_FEEDS", localFeeds)
+            bundle.putParcelable("KEY_WP_POST_FEEDS", wpPost)
             bundle.putInt("KEY_AUDIO_TYPE", type)
             val fragment = AudioPlayerFragment()
             fragment.arguments = bundle
@@ -183,12 +183,12 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
 
     private fun removeDownloads() {
         binding.btnRemove.visibility = View.INVISIBLE
-        val filePath = File(localFeeds!!.downloadPath)
-        appDatabase.localFeedsDao()
-            .resetAudioStatus(false, "", localFeeds!!.title, localFeeds!!.pubDate)
-        filePath.delete()
-        localFeeds!!.downloadPath = ""
-        localFeeds!!.isDownloaded = false
+//        val filePath = File(localFeeds!!.downloadPath)
+//        appDatabase.localFeedsDao()
+//            .resetAudioStatus(false, "", localFeeds!!.title, localFeeds!!.pubDate)
+//        filePath.delete()
+//        localFeeds!!.downloadPath = ""
+//        localFeeds!!.isDownloaded = false
 
         RxBus.publish(ShowSnackBar(getString(R.string.audio_deleted)))
     }
@@ -205,7 +205,7 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
         }
     )
 
-    private fun downloadItem(feed: LocalFeeds) {
+    private fun downloadItem(feed: WPPost) {
         RxBus.publish(ShowSnackBar(getString(R.string.download_started)))
         binding.btnDownload.visibility = View.INVISIBLE
         binding.progress.visibility = View.VISIBLE
@@ -240,8 +240,8 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
                         val isExist1 = DownloadImpl.getInstance(mContext).exist(feed.audioUrl)
                         if (isExist1) {
                             binding.progress.visibility = View.INVISIBLE
-                            appDatabase.localFeedsDao()
-                                .updateAudioStatus(true, path.toString(), feed.title)
+//                            appDatabase.localFeedsDao()
+//                                .updateAudioStatus(true, path.toString(), feed.title)
                             binding.btnRemove.visibility = View.VISIBLE
                         }
                     }
@@ -253,7 +253,7 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        localFeeds = (requireArguments().getSerializable("KEY_LOCAL_FEEDS") as LocalFeeds?)!!
+        localFeeds = (requireArguments().getParcelable("KEY_WP_POST_FEEDS") as? WPPost)!!
         if (mediaSessionManager == null) {
             try {
                 initMediaSession()
@@ -265,8 +265,8 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
 
         val filePath = File(targetPath, "${localFeeds!!.title}.mp3")
         val fileExist = filePath.exists()
-        localFeeds!!.isDownloaded = fileExist
-        localFeeds!!.downloadPath = filePath.toString()
+//        localFeeds!!.isDownloaded = fileExist
+//        localFeeds!!.downloadPath = filePath.toString()
 
         if (fileExist) {
             binding.btnDownload.visibility = View.INVISIBLE
@@ -295,11 +295,11 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
         )
         try {
-            if (localFeeds!!.isDownloaded) {
-                mediaPlayer!!.setDataSource("file://${localFeeds!!.downloadPath}")
-            } else {
-                mediaPlayer!!.setDataSource(localFeeds!!.audioUrl)
-            }
+//            if (localFeeds!!.isDownloaded) {
+//                mediaPlayer!!.setDataSource("file://${localFeeds!!.downloadPath}")
+//            } else {
+            mediaPlayer!!.setDataSource(localFeeds!!.audioUrl)
+//            }
         } catch (e: IOException) {
             e.printStackTrace()
         }

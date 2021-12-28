@@ -1,9 +1,11 @@
 package com.marxist.android.ui.activities
 
 import android.os.Bundle
+import android.os.Handler
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import com.marxist.android.R
@@ -11,12 +13,15 @@ import com.marxist.android.data.model.WPPost
 import com.marxist.android.databinding.ActivityDetailsBinding
 import com.marxist.android.model.*
 import com.marxist.android.ui.base.BaseActivity
+import com.marxist.android.ui.fragments.player.AudioPlayerFragment
 import com.marxist.android.ui.fragments.tune.TuneSheetFragment
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.RxBus
 import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.sufficientlysecure.htmltextview.HtmlTextView
 
 @AndroidEntryPoint
@@ -90,23 +95,23 @@ class DetailsActivity : BaseActivity() {
         val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
 
         val type = 1
-//        if (article!!.audioUrl.isNotEmpty()) {
-//            binding.cvPlayerView.visibility = View.VISIBLE
-//            Handler().post {
-//                supportFragmentManager.beginTransaction()
-//                    .setCustomAnimations(
-//                        R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom,
-//                        R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom
-//                    )
-//                    .replace(
-//                        binding.flAudioPlayer.id,
-//                        AudioPlayerFragment.newInstance(article!!, type)
-//                    )
-//                    .commit()
-//            }
-//        } else {
-//            binding.cvPlayerView.visibility = View.GONE
-//        }
+        if (article!!.audioUrl.isNotEmpty()) {
+            binding.cvPlayerView.visibility = View.VISIBLE
+            MainScope().launch {
+                supportFragmentManager.beginTransaction()
+                    .setCustomAnimations(
+                        R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom,
+                        R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom
+                    )
+                    .replace(
+                        binding.flAudioPlayer.id,
+                        AudioPlayerFragment.newInstance(article!!, type)
+                    )
+                    .commit()
+            }
+        } else {
+            binding.cvPlayerView.visibility = View.GONE
+        }
 
         var content = article!!.content.rendered
         try {

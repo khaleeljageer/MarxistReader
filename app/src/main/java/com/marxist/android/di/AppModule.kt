@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.utils.AppPreference
-import com.marxist.android.utils.api.GitHubService
-import com.marxist.android.utils.api.WordPressService
+import com.marxist.android.data.api.GitHubService
+import com.marxist.android.data.api.WordPressService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

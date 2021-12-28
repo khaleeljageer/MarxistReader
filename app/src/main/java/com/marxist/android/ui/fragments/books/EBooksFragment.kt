@@ -12,33 +12,25 @@ import com.marxist.android.databinding.FragmentsBooksBinding
 import com.marxist.android.utils.GridItemSpace
 import com.marxist.android.utils.toPixel
 import com.marxist.android.utils.viewBinding
-import com.marxist.android.viewmodel.BookListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class EBooksFragment : Fragment(R.layout.fragments_books) {
 
-    private val bookListViewModel: BookListViewModel by viewModels()
+    private val booksViewModel: BooksViewModel by viewModels()
 
     @Inject
     lateinit var appDatabase: AppDatabase
 
     private val bookAdapter by lazy {
-        BookListAdapter(mContext, mutableListOf(), appDatabase)
-    }
-
-    private lateinit var mContext: Context
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
+        BookListAdapter(requireContext(), mutableListOf(), appDatabase)
     }
 
     private fun initData() {
         showEmptyView()
-        bookListViewModel.callBookApi()
-        bookListViewModel.getLocalBooks().observe(viewLifecycleOwner, Observer {
+        booksViewModel.callBookApi()
+        booksViewModel.booksLiveData.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     hideEmptyView()
@@ -73,7 +65,7 @@ class EBooksFragment : Fragment(R.layout.fragments_books) {
         with(binding.rvListView) {
             setHasFixedSize(true)
             adapter = bookAdapter
-            addItemDecoration(GridItemSpace(mContext, 5.toPixel(context)))
+            addItemDecoration(GridItemSpace(requireContext(), 5.toPixel(context)))
         }
 
         initData()
