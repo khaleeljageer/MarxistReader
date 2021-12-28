@@ -1,11 +1,11 @@
-package com.marxist.android.ui.activities
+package com.marxist.android.ui.activities.details
 
 import android.os.Bundle
-import android.os.Handler
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
 import com.marxist.android.R
@@ -28,6 +28,8 @@ import org.sufficientlysecure.htmltextview.HtmlTextView
 class DetailsActivity : BaseActivity() {
     private lateinit var disposable: Disposable
     private var article: WPPost? = null
+
+    private val detailsViewModel: DetailsViewModel by viewModels()
 
     private val tuneSheet by lazy {
         TuneSheetFragment()
@@ -80,54 +82,48 @@ class DetailsActivity : BaseActivity() {
 
         article = intent.getParcelableExtra(ARTICLE) as? WPPost
 
-        binding.txtTitle.text =
-            HtmlCompat.fromHtml(article!!.title.rendered, HtmlCompat.FROM_HTML_MODE_COMPACT)
+        article?.let {
+            detailsViewModel.callJsoup(it.link)
 
-        val selectedFont = appPreference[getString(R.string.pref_key_preferred_font), "Hind"]
-        val fontsId = arrayOf(
-            R.font.arima_madurai, R.font.catamaran, R.font.hind_regular,
-            R.font.meera_inimai, R.font.mukta_malar, R.font.pavanam
-        )
-        val fonts = arrayOf("Arima", "Catamaran", "Hind", "Meera", "Mukta", "Pavanam")
-        val fontId = fontsId[fonts.indexOf(selectedFont)]
-        applyFont(fontId)
+            binding.txtTitle.text =
+                HtmlCompat.fromHtml(it.title.rendered, HtmlCompat.FROM_HTML_MODE_COMPACT)
 
-        val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
-
-        val type = 1
-        if (article!!.audioUrl.isNotEmpty()) {
-            binding.cvPlayerView.visibility = View.VISIBLE
-            MainScope().launch {
-                supportFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom,
-                        R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom
-                    )
-                    .replace(
-                        binding.flAudioPlayer.id,
-                        AudioPlayerFragment.newInstance(article!!, type)
-                    )
-                    .commit()
+            val type = 1
+            if (it.audioUrl.isNotEmpty()) {
+                binding.cvPlayerView.visibility = View.VISIBLE
+                MainScope().launch {
+                    supportFragmentManager.beginTransaction()
+                        .setCustomAnimations(
+                            R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom,
+                            R.animator.slide_in_from_bottom, R.animator.slide_out_to_bottom
+                        )
+                        .replace(
+                            binding.flAudioPlayer.id,
+                            AudioPlayerFragment.newInstance(article!!, type)
+                        )
+                        .commit()
+                }
+            } else {
+                binding.cvPlayerView.visibility = View.GONE
             }
-        } else {
-            binding.cvPlayerView.visibility = View.GONE
-        }
 
-        var content = article!!.content.rendered
-        try {
-            val regex1 = Regex("(?s)<div class=\"wpcnt\">.*?</div>")
-            content = content.replace(regex1, "")
-            val regex2 = Regex("(?s)<script type=\"text/javascript\">.*?</script>")
-            content = content.replace(regex2, "")
-        } catch (e: Exception) {
-            e.printStackTrace()
-        } finally {
-            binding.txtContent.apply {
-                setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize.toFloat())
-                setHtmlFromString(content, HtmlTextView.RemoteImageGetter())
+            var content = it.content.rendered
+            val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
+            try {
+                val regex1 = Regex("(?s)<div class=\"wpcnt\">.*?</div>")
+                content = content.replace(regex1, "")
+                val regex2 = Regex("(?s)<script type=\"text/javascript\">.*?</script>")
+                content = content.replace(regex2, "")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                binding.txtContent.apply {
+                    setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize.toFloat())
+                    setHtmlFromString(content, HtmlTextView.RemoteImageGetter())
+                }
             }
         }
-
+        initFont()
         initListeners()
         disposable = RxBus.subscribe({
             when (it) {
@@ -162,6 +158,17 @@ class DetailsActivity : BaseActivity() {
         }, {
             it.printStackTrace()
         })
+    }
+
+    private fun initFont() {
+        val selectedFont = appPreference[getString(R.string.pref_key_preferred_font), "Hind"]
+        val fontsId = arrayOf(
+            R.font.arima_madurai, R.font.catamaran, R.font.hind_regular,
+            R.font.meera_inimai, R.font.mukta_malar, R.font.pavanam
+        )
+        val fonts = arrayOf("Arima", "Catamaran", "Hind", "Meera", "Mukta", "Pavanam")
+        val fontId = fontsId[fonts.indexOf(selectedFont)]
+        applyFont(fontId)
     }
 
     private fun initListeners() {

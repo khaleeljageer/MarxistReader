@@ -14,7 +14,7 @@ import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.databinding.ActivitySearchBinding
 import com.marxist.android.model.ConnectivityType
-import com.marxist.android.ui.activities.DetailsActivity
+import com.marxist.android.ui.activities.details.DetailsActivity
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.fragments.feeds.FeedListAdapter

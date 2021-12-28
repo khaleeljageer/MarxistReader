@@ -103,8 +103,6 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
     implementation("com.squareup.okhttp3:logging-interceptor")
     implementation 'org.jsoup:jsoup:1.12.1'
-
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
 }
 
 kapt {

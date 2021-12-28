@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -15,6 +14,7 @@ import javax.inject.Singleton
 class WordPressRepository @Inject constructor(private val wordPressHelper: WordPressHelper) {
 
     suspend fun getPosts(count: Int, page: Int): Flow<NetworkResponse<List<WPPost>>> = flow {
+        emit(NetworkResponse.Loading)
         val response = wordPressHelper.getPosts(count, page)
         if (response.isSuccessful) {
             val list: List<WPPost>? = response.body()

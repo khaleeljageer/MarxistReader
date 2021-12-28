@@ -26,9 +26,6 @@ class FeedsViewModel @Inject constructor(
     private var _feedsDownloaded: MutableLiveData<MutableList<LocalFeeds>> = MutableLiveData()
     val feedsDownloaded: MutableLiveData<MutableList<LocalFeeds>> = _feedsDownloaded
 
-    private var _feedList: MutableLiveData<List<LocalFeeds>> = MutableLiveData()
-    val feedList: MutableLiveData<List<LocalFeeds>> = _feedList
-
     private val _wpPost: MutableLiveData<List<WPPost>> = MutableLiveData()
     val wpPost: LiveData<List<WPPost>> = _wpPost
 
@@ -43,11 +40,11 @@ class FeedsViewModel @Inject constructor(
     }
 
     private var pageNumber = 1
+    private var perPage = 20
 
-    fun getFeeds(count: Int = 20, page: Int = 1) {
-        _loading.value = true
+    fun getFeeds() {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.getPosts(count, page).collect {
+            repository.getPosts(perPage, pageNumber).collect {
                 when (it) {
                     is NetworkResponse.Loading -> {
                         _loading.postValue(true)
@@ -56,6 +53,8 @@ class FeedsViewModel @Inject constructor(
                         _loading.postValue(false)
                     }
                     is NetworkResponse.Success -> {
+                        perPage += 20
+                        pageNumber += 1
                         _loading.postValue(false)
                         _wpPost.postValue(it.data)
                     }
@@ -66,48 +65,9 @@ class FeedsViewModel @Inject constructor(
                 }
             }
         }
-//        disposable.add(
-//            apiService.getFeeds(pageNumber).subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .retryWhen(RetryWithDelay())
-//                .subscribe({
-//                    if (it?.channel != null && it.channel!!.itemList != null) {
-//                        val itemList = it.channel!!.itemList
-//                        if (itemList != null && itemList.isNotEmpty()) {
-//                            val localFeeds = mutableListOf<LocalFeeds>()
-//                            itemList.forEach { feed ->
-//                                val simpleDateFormat =
-//                                    SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
-//                                val mDate = simpleDateFormat.parse(feed.pubDate)
-//                                val timeInMillis = mDate!!.time
-//                                val localFeed = LocalFeeds(
-//                                    feed.title!!,
-//                                    feed.link!!,
-//                                    timeInMillis,
-//                                    feed.content!!,
-//                                    if (feed.enclosure == null) {
-//                                        ""
-//                                    } else {
-//                                        feed.enclosure!!.audioUrl!!
-//                                    },
-//                                    isDownloaded = false
-//                                )
-//                                localFeeds.add(localFeed)
-//                            }
-//                            _feedList.value = localFeeds
-//
-//                            pageNumber += 1
-//                        }
-//                    }
-//                }, {})
-//        )
     }
 
     fun getDownloadedFeeds() {
         _feedsDownloaded.value = feedsDao.getDownloaded(true)
-    }
-
-    fun resetList() {
-        _feedList.value = mutableListOf()
     }
 }

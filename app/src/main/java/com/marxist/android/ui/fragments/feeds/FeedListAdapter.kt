@@ -9,6 +9,7 @@ import com.marxist.android.databinding.FeedItemViewBinding
 import com.marxist.android.databinding.ListFeedsBottomProgressBinding
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.base.ProgressViewHolder
+import com.marxist.android.utils.PrintLog
 
 class FeedListAdapter(
     private val mContext: Context,
@@ -57,19 +58,20 @@ class FeedListAdapter(
         notifyItemRangeInserted(mutableList.size, articles.size)
     }
 
-    fun addFeeds(articles: MutableList<WPPost>) {
-        mutableList.addAll(articles)
-        notifyDataSetChanged()
-    }
-
     fun addLoaderItem() {
         mutableList.add(null)
         notifyItemInserted(mutableList.size + 1)
     }
 
     fun removeLoaderItem() {
-        this.mutableList.removeAt(itemCount - 1)
-        notifyItemRemoved(itemCount)
+        val lastItemIndex = itemCount - 1
+        val item = mutableList[lastItemIndex]
+        if(item == null) {
+            PrintLog.debug("Khaleel", "Before : ${mutableList.size}")
+            this.mutableList.removeAt(lastItemIndex)
+            PrintLog.debug("Khaleel", "After : ${mutableList.size}")
+            notifyItemRangeRemoved(lastItemIndex, 1)
+        }
     }
 
     fun clear() {

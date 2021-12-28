@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/rlFeedProgress"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="?attr/actionBarSize"
         android:orientation="vertical">
 
-    <ProgressBar
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerInParent="true" />
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressLoader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:indeterminate="true"
+            android:visibility="visible"
+            app:indicatorColor="@color/colorSecondaryDark"
+            app:indicatorSize="35dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="@color/colorAccent"
+            app:trackThickness="3dp" />
 </RelativeLayout>

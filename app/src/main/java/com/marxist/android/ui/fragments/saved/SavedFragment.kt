@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.marxist.android.R
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.databinding.FragmentsListBinding
-import com.marxist.android.ui.activities.DetailsActivity
+import com.marxist.android.ui.activities.details.DetailsActivity
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.fragments.feeds.FeedsViewModel
 import com.marxist.android.utils.viewBinding
