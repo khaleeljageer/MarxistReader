@@ -97,11 +97,11 @@ class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setRecyclerListener(view)
+        setRecyclerListener()
         initData()
     }
 
-    private fun setRecyclerListener(view: View) {
+    private fun setRecyclerListener() {
         val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
         binding.rvListView.setHasFixedSize(true)
         binding.rvListView.layoutManager = layoutManager

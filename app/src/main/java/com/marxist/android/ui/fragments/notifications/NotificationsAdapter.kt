@@ -14,7 +14,8 @@ class NotificationsAdapter(
     private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<NotificationItemHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationItemHolder {
-        val binding = HighlightItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            HighlightItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NotificationItemHolder(binding)
     }
 
@@ -25,12 +26,12 @@ class NotificationsAdapter(
         holder.bindData(item)
     }
 
-    fun addNotifications(highLights: MutableList<LocalNotifications>) {
+    fun addNotifications(highLights: List<LocalNotifications>) {
         mutableList.addAll(highLights)
         notifyDataSetChanged()
     }
 
-    fun updateNotifications(highLights: MutableList<LocalNotifications>) {
+    fun updateNotifications(highLights: List<LocalNotifications>) {
         mutableList.clear()
         mutableList.addAll(highLights)
         notifyDataSetChanged()

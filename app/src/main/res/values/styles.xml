@@ -4,7 +4,7 @@
 
     <style name="DetailsTheme" parent="MRDetailsBaseTheme" />
 
-    <style name="MRSplashTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="MRSplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/colorSecondary</item>
@@ -14,7 +14,7 @@
         <item name="android:windowBackground">@drawable/splash_window_bg</item>
     </style>
 
-    <style name="MRDetailsBaseTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="MRDetailsBaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -26,7 +26,7 @@
         <item name="android:fontFamily">@font/hind_regular</item>
     </style>
 
-    <style name="MRBaseTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="MRBaseTheme" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -55,7 +55,7 @@
 
     <style name="Splash_Theme" parent="MRSplashTheme" />
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Nav_Active_Text">
         <item name="android:fontFamily">@font/hind_bold</item>
