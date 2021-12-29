@@ -13,8 +13,10 @@ import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalBooks
 import com.marxist.android.databinding.BookListItemBinding
 import com.marxist.android.model.ShowSnackBar
-import com.marxist.android.utils.RxBus
+import com.marxist.android.utils.EventBus
 import com.marxist.android.utils.download.DownloadUtil
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -71,7 +73,9 @@ class BookViewHolder(
                     extra: Extra?
                 ) {
                     binding.pbDownloadProgress.visibility = View.VISIBLE
-                    RxBus.publish(ShowSnackBar("${book.title} Downloading"))
+                    MainScope().launch {
+                        EventBus.invokeEvent(ShowSnackBar("${book.title} Downloading"))
+                    }
                 }
 
                 override fun onProgress(
@@ -94,7 +98,9 @@ class BookViewHolder(
                         val isExist1 = DownloadImpl.getInstance(context).exist(book.epub)
                         if (isExist1) {
                             binding.pbDownloadProgress.visibility = View.INVISIBLE
-                            RxBus.publish(ShowSnackBar("${book.title} Completed"))
+                            MainScope().launch {
+                                EventBus.invokeEvent(ShowSnackBar("${book.title} Completed"))
+                            }
                             appDatabase.localBooksDao()
                                 .updateDownloadDetails(path.toString(), true, book.bookid)
                         }

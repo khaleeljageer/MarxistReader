@@ -25,10 +25,10 @@
             android:theme="@style/AppTheme"
             tools:ignore="GoogleAppIndexingWarning">
         <activity
-                android:name=".ui.activities.SplashActivity"
+                android:name=".ui.activities.splash.LauncherActivity"
                 android:exported="true"
                 android:screenOrientation="portrait"
-                android:theme="@style/Splash_Theme">
+                android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

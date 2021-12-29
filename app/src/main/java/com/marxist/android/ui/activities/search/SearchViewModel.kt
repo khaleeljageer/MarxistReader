@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.data.api.WordPressService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.reactivex.disposables.Disposable
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,7 +18,6 @@ class SearchViewModel @Inject constructor(
     private var _searchFeedList: MutableLiveData<List<LocalFeeds>> = MutableLiveData()
     val searchFeedList: MutableLiveData<List<LocalFeeds>> = _searchFeedList
 
-    private var disposable: Disposable? = null
     private var page = 1
     var searchKey: String = ""
 
@@ -59,11 +57,6 @@ class SearchViewModel @Inject constructor(
 //            }, {
 //                _errorView.value = true
 //            })
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposable?.dispose()
     }
 
     fun resetList() {

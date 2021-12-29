@@ -8,6 +8,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.text.HtmlCompat
+import androidx.lifecycle.lifecycleScope
 import com.marxist.android.R
 import com.marxist.android.data.model.WPPost
 import com.marxist.android.databinding.ActivityDetailsBinding
@@ -17,17 +18,20 @@ import com.marxist.android.ui.fragments.player.AudioPlayerFragment
 import com.marxist.android.ui.fragments.tune.TuneSheetFragment
 import com.marxist.android.utils.AppPreference.get
 import com.marxist.android.utils.DeviceUtils
-import com.marxist.android.utils.RxBus
+import com.marxist.android.utils.EventBus
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import org.sufficientlysecure.htmltextview.HtmlTextView
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailsActivity : BaseActivity() {
-    private lateinit var disposable: Disposable
     private var article: WPPost? = null
+
+    @Inject
+    lateinit var eventBus: EventBus
 
     private val detailsViewModel: DetailsViewModel by viewModels()
 
@@ -125,39 +129,41 @@ class DetailsActivity : BaseActivity() {
         }
         initFont()
         initListeners()
-        disposable = RxBus.subscribe({
-            when (it) {
-                is FontChange -> {
-                    applyFont(it.fontId)
-                }
-                is FontSizeChange -> {
-                    binding.txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, it.fontSize)
-                }
-                is ShowSnackBar -> displayMaterialSnackBar(
-                    it.message,
-                    ConnectivityType.OTHER,
-                    binding.rootView
-                )
-                is ReaderBgChange -> {
-                    if (it.color == 0xff282828) {
-                        binding.txtTitle.setTextColor(0xffffffff.toInt())
-                        binding.txtContent.setTextColor(0xffffffff.toInt())
-                    } else {
-                        binding.txtTitle.setTextColor(0xff000000.toInt())
-                        binding.txtContent.setTextColor(0xff000000.toInt())
-                    }
 
-                    it.color.toInt().run {
-                        binding.txtContent.setBackgroundColor(this)
-                        binding.txtTitle.setBackgroundColor(this)
-                        binding.toolbar.setBackgroundColor(this)
-                        window.statusBarColor = this
+
+        lifecycleScope.launch {
+            eventBus.events.collect {
+                when (it) {
+                    is FontChange -> {
+                        applyFont(it.fontId)
+                    }
+                    is FontSizeChange -> {
+                        binding.txtContent.setTextSize(TypedValue.COMPLEX_UNIT_SP, it.fontSize)
+                    }
+                    is ShowSnackBar -> displayMaterialSnackBar(
+                        it.message,
+                        ConnectivityType.OTHER,
+                        binding.rootView
+                    )
+                    is ReaderBgChange -> {
+                        if (it.color == 0xff282828) {
+                            binding.txtTitle.setTextColor(0xffffffff.toInt())
+                            binding.txtContent.setTextColor(0xffffffff.toInt())
+                        } else {
+                            binding.txtTitle.setTextColor(0xff000000.toInt())
+                            binding.txtContent.setTextColor(0xff000000.toInt())
+                        }
+
+                        it.color.toInt().run {
+                            binding.txtContent.setBackgroundColor(this)
+                            binding.txtTitle.setBackgroundColor(this)
+                            binding.toolbar.setBackgroundColor(this)
+                            window.statusBarColor = this
+                        }
                     }
                 }
             }
-        }, {
-            it.printStackTrace()
-        })
+        }
     }
 
     private fun initFont() {
@@ -179,9 +185,7 @@ class DetailsActivity : BaseActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        if (this::disposable.isInitialized) {
-            disposable.dispose()
-        }
         System.gc()
     }
+
 }

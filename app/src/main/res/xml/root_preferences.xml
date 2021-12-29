@@ -56,4 +56,17 @@
                 app:key="@string/about_us"
                 app:title="@string/about_us" />
     </PreferenceCategory>
+
+<!--    <PreferenceCategory-->
+<!--            app:allowDividerAbove="true"-->
+<!--            app:iconSpaceReserved="false"-->
+<!--            app:title="Contribute">-->
+
+<!--        <Preference-->
+<!--                app:allowDividerBelow="true"-->
+<!--                app:iconSpaceReserved="false"-->
+<!--                app:key="support_by_video"-->
+<!--                app:summary="Support us by watching videos"-->
+<!--                app:title="Support us" />-->
+<!--    </PreferenceCategory>-->
 </PreferenceScreen>

@@ -2,10 +2,11 @@ package com.marxist.android.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.marxist.android.database.AppDatabase
-import com.marxist.android.utils.AppPreference
 import com.marxist.android.data.api.GitHubService
 import com.marxist.android.data.api.WordPressService
+import com.marxist.android.database.AppDatabase
+import com.marxist.android.utils.AppPreference
+import com.marxist.android.utils.EventBus
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,6 +20,12 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    @Singleton
+    fun provideEventBus(): EventBus {
+        return EventBus
+    }
 
     @Provides
     @Singleton

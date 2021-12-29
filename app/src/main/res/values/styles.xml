@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="MRBaseTheme" />
 
@@ -53,7 +53,7 @@
         <item name="itemIconTint">@drawable/bottom_view_icon_tint_color</item>
     </style>
 
-    <style name="Splash_Theme" parent="MRSplashTheme" />
+    <style name="Launcher_Theme" parent="MRSplashTheme" />
 
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light" />
 
@@ -97,4 +97,37 @@
     <declare-styleable name="SDHtmlTextView">
         <attr name="tableHeaderCentered" format="boolean" />
     </declare-styleable>
+
+
+    <style name="Theme.App.Starting" parent="Theme.App.Starting_Base">
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+
+    <style name="Theme.App.Starting_Base" parent="Theme.SplashScreen">
+        // Set the splash screen background, animated icon, and animation duration.
+        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
+
+        // Use windowSplashScreenAnimatedIcon to add either a drawable or an
+        // animated drawable. One of these is required.
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_splash</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        # Required for
+        # animated icons
+
+        // Set the theme of the Activity that directly follows your splash screen.
+        <item name="postSplashScreenTheme">@style/Splash_Theme</item>
+        # Required.
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+
+    <style name="Splash_Base" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Splash_Theme" parent="Splash_Base">
+        <item name="android:windowBackground">@drawable/splash_window_bg</item>
+    </style>
 </resources>

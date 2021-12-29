@@ -5,26 +5,21 @@
             android:id="@+id/nav_feeds"
             android:icon="@drawable/ic_rss_feed"
             android:orderInCategory="1"
-            android:title="@string/feeds" />
+            android:title="@string/app_name" />
     <item
             android:id="@+id/nav_ebooks"
             android:icon="@drawable/ic_book_black_24dp"
             android:orderInCategory="2"
             android:title="@string/books" />
-    <item
-            android:id="@+id/nav_saved"
-            android:icon="@drawable/ic_music_black"
-            android:orderInCategory="3"
-            android:title="@string/saved" />
 
     <item
             android:id="@+id/nav_notification"
             android:icon="@drawable/ic_notifications"
-            android:orderInCategory="4"
+            android:orderInCategory="3"
             android:title="@string/notifications" />
     <item
             android:id="@+id/nav_settings"
             android:icon="@drawable/ic_settings_black"
-            android:orderInCategory="5"
+            android:orderInCategory="4"
             android:title="@string/settings" />
 </menu>

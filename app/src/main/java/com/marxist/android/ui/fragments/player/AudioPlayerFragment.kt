@@ -8,32 +8,25 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.session.MediaSessionManager
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.RemoteException
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
-import android.util.Log
 import android.view.View
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
-import com.download.library.DownloadImpl
-import com.download.library.DownloadListenerAdapter
-import com.download.library.Extra
 import com.marxist.android.R
 import com.marxist.android.data.model.WPPost
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.databinding.AudioPlayerControlFragmentBinding
-import com.marxist.android.model.ShowSnackBar
-import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.PrintLog
-import com.marxist.android.utils.RxBus
 import com.marxist.android.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
+import timber.log.Timber
 import java.io.IOException
 import java.util.*
 import javax.inject.Inject
@@ -103,7 +96,7 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        handler = Handler()
+        handler = Handler(Looper.getMainLooper())
         seekDispatcher = DEFAULT_SEEK_DISPATCHER
         formatBuilder = StringBuilder()
         formatter = Formatter(formatBuilder, Locale.getDefault())
@@ -145,23 +138,11 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
             rewind()
         }
 
-        binding.btnRemove.setOnClickListener {
-            removeDownloads()
-        }
-
-        binding.btnDownload.setOnClickListener {
-            if (localFeeds != null) {
-                downloadItem(localFeeds!!)
-            }
-        }
-
         binding.sbPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     val position = positionValue(progress)
-                    if (binding.txtPosition != null) {
-                        binding.txtPosition.text = stringForTime(position)
-                    }
+                    binding.txtPosition.text = stringForTime(position)
                     if (mediaPlayer != null && !dragging) {
                         seekTo(position)
                     }
@@ -181,18 +162,6 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
         })
     }
 
-    private fun removeDownloads() {
-        binding.btnRemove.visibility = View.INVISIBLE
-//        val filePath = File(localFeeds!!.downloadPath)
-//        appDatabase.localFeedsDao()
-//            .resetAudioStatus(false, "", localFeeds!!.title, localFeeds!!.pubDate)
-//        filePath.delete()
-//        localFeeds!!.downloadPath = ""
-//        localFeeds!!.isDownloaded = false
-
-        RxBus.publish(ShowSnackBar(getString(R.string.audio_deleted)))
-    }
-
     private val animatorListener = AnimatorListenerAdapter(
         onStart = { binding.btnPlayPause.isActivated = true },
         onEnd = {
@@ -205,51 +174,6 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
         }
     )
 
-    private fun downloadItem(feed: WPPost) {
-        RxBus.publish(ShowSnackBar(getString(R.string.download_started)))
-        binding.btnDownload.visibility = View.INVISIBLE
-        binding.progress.visibility = View.VISIBLE
-
-        val targetPath = DeviceUtils.getRootDirPath(mContext).plus("/audio")
-
-        DownloadImpl.getInstance(mContext)
-            .with(feed.audioUrl)
-            .setUniquePath(true)
-            .setEnableIndicator(true)
-            .setRetry(3)
-            .setParallelDownload(true)
-            .setForceDownload(true)
-            .target(File(targetPath, "${feed.title}.mp3"))
-            .url(feed.audioUrl).enqueue(object : DownloadListenerAdapter() {
-                override fun onProgress(
-                    url: String?,
-                    downloaded: Long,
-                    length: Long,
-                    usedTime: Long
-                ) {
-                    PrintLog.debug("Khaleel", "downloaded : $downloaded")
-                }
-
-                override fun onResult(
-                    throwable: Throwable?,
-                    path: Uri?,
-                    url: String?,
-                    extra: Extra?
-                ): Boolean {
-                    url?.let {
-                        val isExist1 = DownloadImpl.getInstance(mContext).exist(feed.audioUrl)
-                        if (isExist1) {
-                            binding.progress.visibility = View.INVISIBLE
-//                            appDatabase.localFeedsDao()
-//                                .updateAudioStatus(true, path.toString(), feed.title)
-                            binding.btnRemove.visibility = View.VISIBLE
-                        }
-                    }
-                    return super.onResult(throwable, path, url, extra)
-                }
-            })
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
@@ -260,20 +184,6 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
-        }
-        val targetPath = DeviceUtils.getRootDirPath(mContext).plus("/audio")
-
-        val filePath = File(targetPath, "${localFeeds!!.title}.mp3")
-        val fileExist = filePath.exists()
-//        localFeeds!!.isDownloaded = fileExist
-//        localFeeds!!.downloadPath = filePath.toString()
-
-        if (fileExist) {
-            binding.btnDownload.visibility = View.INVISIBLE
-            binding.btnRemove.visibility = View.VISIBLE
-        } else {
-            binding.btnDownload.visibility = View.VISIBLE
-            binding.btnRemove.visibility = View.INVISIBLE
         }
     }
 
@@ -295,11 +205,7 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
         )
         try {
-//            if (localFeeds!!.isDownloaded) {
-//                mediaPlayer!!.setDataSource("file://${localFeeds!!.downloadPath}")
-//            } else {
             mediaPlayer!!.setDataSource(localFeeds!!.audioUrl)
-//            }
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -451,18 +357,12 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
 
     override fun onError(p0: MediaPlayer?, what: Int, extra: Int): Boolean {
         when (what) {
-            MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK -> Log.d(
-                "MediaPlayer Error",
-                "MEDIA ERROR NOT VALID FOR PROGRESSIVE PLAYBACK $extra"
-            )
-            MediaPlayer.MEDIA_ERROR_SERVER_DIED -> Log.d(
-                "MediaPlayer Error",
-                "MEDIA ERROR SERVER DIED $extra"
-            )
-            MediaPlayer.MEDIA_ERROR_UNKNOWN -> Log.d(
-                "MediaPlayer Error",
-                "MEDIA ERROR UNKNOWN $extra"
-            )
+            MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK -> Timber.tag("MediaPlayer Error")
+                .d("MEDIA ERROR NOT VALID FOR PROGRESSIVE PLAYBACK %s", extra)
+            MediaPlayer.MEDIA_ERROR_SERVER_DIED -> Timber.tag("MediaPlayer Error")
+                .d("MEDIA ERROR SERVER DIED %s", extra)
+            MediaPlayer.MEDIA_ERROR_UNKNOWN -> Timber.tag("MediaPlayer Error")
+                .d("MEDIA ERROR UNKNOWN %s", extra)
         }
         return false
     }
@@ -504,21 +404,17 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
     private fun updateProgress() {
         val duration = (if (mediaPlayer == null) 0 else mediaPlayer!!.duration).toLong()
         val position = (if (mediaPlayer == null) 0 else mediaPlayer!!.currentPosition).toLong()
-        if (binding.txtDuration != null) {
-            binding.txtDuration.text = stringForTime(duration)
-        }
-        if (binding.txtPosition != null && !dragging) {
+        binding.txtDuration.text = stringForTime(duration)
+        if (!dragging) {
             binding.txtPosition.text = stringForTime(position)
         }
 
-        if (binding.sbPlayer != null) {
-            if (!dragging) {
-                binding.sbPlayer.progress = progressBarValue(position)
-            }
-            val bufferedPosition =
-                (if (mediaPlayer == null) 0 else bufferedPosition).toLong()
-            binding.sbPlayer.secondaryProgress = progressBarValue(bufferedPosition)
+        if (!dragging) {
+            binding.sbPlayer.progress = progressBarValue(position)
         }
+        val bufferedPosition =
+            (if (mediaPlayer == null) 0 else bufferedPosition).toLong()
+        binding.sbPlayer.secondaryProgress = progressBarValue(bufferedPosition)
         handler!!.removeCallbacks(updateProgressAction)
 
         if (mediaPlayer!!.isPlaying) {

@@ -21,7 +21,6 @@
     <string name="loading">Loading&#8230;</string>
     <string name="connected_to_internet">Connected to Internet</string>
     <string name="no_internet">Connection Lost</string>
-    <string name="feeds">Feeds</string>
     <string name="books">E-Books</string>
     <string name="bookmarks">Highlights</string>
     <string name="bookmark">Highlight</string>
@@ -29,7 +28,7 @@
     <string name="settings">Settings</string>
 
     <string-array name="splash_loading">
-        <item>Loading Feeds&#8230;</item>
+        <item>Loading Articles&#8230;</item>
         <item>Please wait&#8230;</item>
     </string-array>
 

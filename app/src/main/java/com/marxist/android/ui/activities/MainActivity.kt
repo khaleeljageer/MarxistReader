@@ -1,29 +1,31 @@
 package com.marxist.android.ui.activities
 
 import android.os.Bundle
-import android.os.Handler
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityMainBinding
 import com.marxist.android.model.ConnectivityType
-import com.marxist.android.model.DarkModeChanged
-import com.marxist.android.model.NetWorkMessage
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BaseActivity
-import com.marxist.android.utils.DeviceUtils
-import com.marxist.android.utils.PrintLog
-import com.marxist.android.utils.RxBus
+import com.marxist.android.utils.EventBus
 import com.marxist.android.utils.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+
+    @Inject
+    lateinit var eventBus: EventBus
 
     companion object {
         const val PLAY_NEW_VIDEO = "com.marxist.android.ui.activities.PLAY_NEW_VIDEO"
@@ -43,27 +45,17 @@ class MainActivity : BaseActivity() {
             setupBottomNavigationBar()
         }
 
-        val path = DeviceUtils.getRootDirPath(baseContext)
-
-        RxBus.subscribe({
-            when (it) {
-                is NetWorkMessage -> displayMaterialSnackBar(
-                    it.message,
-                    it.type,
-                    binding.container2
-                )
-                is DarkModeChanged -> Handler().post {
-                    recreate()
+        lifecycleScope.launch {
+            eventBus.events.collect {
+                when (it) {
+                    is ShowSnackBar -> displayMaterialSnackBar(
+                        it.message,
+                        ConnectivityType.OTHER,
+                        binding.container2
+                    )
                 }
-                is ShowSnackBar -> displayMaterialSnackBar(
-                    it.message,
-                    ConnectivityType.OTHER,
-                    binding.container2
-                )
             }
-        }, {
-            PrintLog.debug("Marxist", "$it")
-        })
+        }
     }
 
     private fun setupBottomNavigationBar() {
@@ -72,7 +64,6 @@ class MainActivity : BaseActivity() {
         val navGraphIds = listOf(
             R.navigation.nav_feeds,
             R.navigation.nav_ebooks,
-            R.navigation.nav_saved,
             R.navigation.nav_notification,
             R.navigation.nav_settings
         )
