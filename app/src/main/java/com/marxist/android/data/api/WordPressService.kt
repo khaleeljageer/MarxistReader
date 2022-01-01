@@ -14,7 +14,8 @@ interface WordPressService {
     @GET("posts")
     suspend fun searchByTerms(
         @Query("search") key: String,
-        @Query("per_page") page: Int
+        @Query("per_page") count: Int,
+        @Query("page") page: Int
     ): Response<List<WPPost>>
 
     @FormUrlEncoded

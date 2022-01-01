@@ -1,65 +1,63 @@
 package com.marxist.android.ui.activities.search
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.data.api.WordPressService
+import androidx.lifecycle.viewModelScope
+import com.marxist.android.data.model.WPPost
+import com.marxist.android.data.repository.WordPressRepository
+import com.marxist.android.utils.network.NetworkResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    private val apiService: WordPressService
+    private val repository: WordPressRepository
 ) : ViewModel() {
 
-    private var _errorView: MutableLiveData<Boolean> = MutableLiveData()
-    val errorView: MutableLiveData<Boolean> = _errorView
+    private val _wpPost: MutableLiveData<List<WPPost>> = MutableLiveData()
+    val wpPost: LiveData<List<WPPost>> = _wpPost
 
-    private var _searchFeedList: MutableLiveData<List<LocalFeeds>> = MutableLiveData()
-    val searchFeedList: MutableLiveData<List<LocalFeeds>> = _searchFeedList
+    private val _loading: MutableLiveData<Boolean> = MutableLiveData()
+    val loading: LiveData<Boolean> = _loading
 
-    private var page = 1
-    var searchKey: String = ""
+    private val _errorMessage: MutableLiveData<String> = MutableLiveData()
+    val errorMessage: LiveData<String> = _errorMessage
 
-    fun search() {
-        if (searchKey.isEmpty()) return
-//        disposable = apiService.search(searchKey, page).subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .retryWhen(RetryWithDelay())
-//            .subscribe({
-//                if (it?.channel != null && it.channel!!.itemList != null) {
-//                    val itemList = it.channel!!.itemList
-//                    if (itemList != null && itemList.isNotEmpty()) {
-//                        val localFeeds = mutableListOf<LocalFeeds>()
-//                        itemList.forEach { feed ->
-//                            val simpleDateFormat =
-//                                SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
-//                            val mDate = simpleDateFormat.parse(feed.pubDate)
-//                            val timeInMillis = mDate!!.time
-//                            val localFeed = LocalFeeds(
-//                                feed.title!!,
-//                                feed.link!!,
-//                                timeInMillis,
-//                                feed.content!!,
-//                                if (feed.enclosure == null) {
-//                                    ""
-//                                } else {
-//                                    feed.enclosure!!.audioUrl!!
-//                                },
-//                                isDownloaded = false
-//                            )
-//                            localFeeds.add(localFeed)
-//                        }
-//                        _searchFeedList.value = localFeeds
-//                        page += 1
-//                    }
-//                }
-//            }, {
-//                _errorView.value = true
-//            })
+    private var pageNumber = 1
+    private var perPage = 50
+
+    fun resetQueryParams() {
+        pageNumber = 1
+        perPage = 50
     }
 
-    fun resetList() {
-        _searchFeedList.value = mutableListOf()
+    fun search(searchKey: String) {
+        if (searchKey.isEmpty()) return
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getSearch(searchKey, perPage, pageNumber).collect {
+                when (it) {
+                    is NetworkResponse.Loading -> {
+                        _loading.postValue(true)
+                    }
+                    is NetworkResponse.EmptyResponse -> {
+                        _loading.postValue(false)
+                    }
+                    is NetworkResponse.Success -> {
+                        perPage += 50
+                        pageNumber += 1
+                        _loading.postValue(false)
+                        _wpPost.postValue(it.data)
+                    }
+                    is NetworkResponse.Error -> {
+                        _loading.postValue(false)
+                        _errorMessage.postValue(it.message)
+                    }
+                }
+            }
+        }
     }
 }

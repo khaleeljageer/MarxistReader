@@ -1,5 +1,6 @@
 package com.marxist.android.ui.fragments.feeds
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -21,10 +22,15 @@ class FeedListAdapter(
     private val VIEW_PROG = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_ITEM) {
-            val binding = FeedItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding =
+                FeedItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             FeedItemHolder(parent.context, binding)
         } else {
-            val binding = ListFeedsBottomProgressBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding = ListFeedsBottomProgressBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
             ProgressViewHolder(binding)
         }
     }
@@ -64,16 +70,17 @@ class FeedListAdapter(
     }
 
     fun removeLoaderItem() {
-        val lastItemIndex = itemCount - 1
-        val item = mutableList[lastItemIndex]
-        if(item == null) {
-            PrintLog.debug("Khaleel", "Before : ${mutableList.size}")
-            this.mutableList.removeAt(lastItemIndex)
-            PrintLog.debug("Khaleel", "After : ${mutableList.size}")
-            notifyItemRangeRemoved(lastItemIndex, 1)
+        if (itemCount > 1) {
+            val lastItemIndex = itemCount - 1
+            val item = mutableList[lastItemIndex]
+            if (item == null) {
+                this.mutableList.removeAt(lastItemIndex)
+                notifyItemRangeRemoved(lastItemIndex, 1)
+            }
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun clear() {
         mutableList.clear()
         notifyDataSetChanged()

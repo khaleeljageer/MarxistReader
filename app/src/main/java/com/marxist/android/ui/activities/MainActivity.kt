@@ -1,9 +1,10 @@
 package com.marxist.android.ui.activities
 
 import android.os.Bundle
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.marxist.android.R
@@ -31,7 +32,9 @@ class MainActivity : BaseActivity() {
         const val PLAY_NEW_VIDEO = "com.marxist.android.ui.activities.PLAY_NEW_VIDEO"
     }
 
-    private var currentNavController: LiveData<NavController>? = null
+    private lateinit var currentNavController: NavController
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -67,6 +70,9 @@ class MainActivity : BaseActivity() {
             R.navigation.nav_notification,
             R.navigation.nav_settings
         )
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.feeds, R.id.ebook, R.id.notifications, R.id.settings)
+        )
 
         // Setup the bottom navigation view with a list of navigation graphs
         val controller = navigationView.setupWithNavController(
@@ -78,12 +84,12 @@ class MainActivity : BaseActivity() {
 
         // Whenever the selected controller changes, setup the action bar.
         controller.observe(this, { navController ->
+            currentNavController = navController
             setupActionBarWithNavController(navController)
         })
-        currentNavController = controller
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        return currentNavController?.value?.navigateUp() ?: false
+        return currentNavController.navigateUp(appBarConfiguration)
     }
 }

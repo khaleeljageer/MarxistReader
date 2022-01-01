@@ -24,7 +24,7 @@
             android:id="@+id/frameLayout"
             android:layout_width="match_parent"
             android:layout_height="70dp"
-            android:background="@color/colorSecondary"
+            android:background="@color/colorPrimary"
             android:elevation="5dp"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
@@ -78,4 +78,23 @@
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
+
+    <include
+            android:id="@+id/noFeed"
+            layout="@layout/layout_lottie_no_feed" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/progressLoader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"
+            app:indicatorColor="@color/colorSecondaryDark"
+            app:indicatorSize="@dimen/margin_55dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="@color/colorAccent"
+            app:trackThickness="@dimen/margin_4dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

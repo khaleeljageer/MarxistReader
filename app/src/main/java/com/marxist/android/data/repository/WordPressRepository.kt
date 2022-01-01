@@ -38,4 +38,30 @@ class WordPressRepository @Inject constructor(private val wordPressHelper: WordP
             emit(NetworkResponse.Error(response.message() ?: "Unknown error"))
         }
     }
+
+    suspend fun getSearch(key: String, count: Int, page: Int): Flow<NetworkResponse<List<WPPost>>> = flow {
+        emit(NetworkResponse.Loading)
+        val response = wordPressHelper.searchByTerms(key, count, page)
+        if (response.isSuccessful) {
+            val list: List<WPPost>? = response.body()
+            if (list != null && list.isNotEmpty()) {
+                list.forEach {
+                    it.apply {
+                        val jsoup: Document = Jsoup.parse(it.content.rendered)
+                        val audioTag = jsoup.getElementsByTag("audio").first()
+                        if (audioTag != null) {
+                            this.audioUrl = audioTag.absUrl("src")
+                        } else {
+                            this.audioUrl = ""
+                        }
+                    }
+                }
+                emit(NetworkResponse.Success(list))
+            } else {
+                emit(NetworkResponse.EmptyResponse)
+            }
+        } else {
+            emit(NetworkResponse.Error(response.message() ?: "Unknown error"))
+        }
+    }
 }

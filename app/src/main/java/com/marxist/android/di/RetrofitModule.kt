@@ -41,6 +41,9 @@ object RetrofitModule {
     ): OkHttpClient {
         val httpClient = OkHttpClient.Builder()
         httpClient.apply {
+            connectTimeout(2, TimeUnit.MINUTES)
+            writeTimeout(2, TimeUnit.MINUTES)
+            readTimeout(2, TimeUnit.MINUTES)
             cache(cache)
             addInterceptor(offlineInterceptor)
             addNetworkInterceptor(networkInterceptor) // only used when network is on

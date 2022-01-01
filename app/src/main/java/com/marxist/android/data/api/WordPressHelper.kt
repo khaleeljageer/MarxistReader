@@ -10,5 +10,5 @@ class WordPressHelper @Inject constructor(private val apiService: WordPressServi
 
     suspend fun getPosts(count: Int, page: Int): Response<List<WPPost>> = apiService.getPosts(count, page)
 
-    suspend fun searchByTerms(key: String, count: Int) = apiService.searchByTerms(key, count)
+    suspend fun searchByTerms(key: String, count: Int, page: Int) = apiService.searchByTerms(key, count, page)
 }
