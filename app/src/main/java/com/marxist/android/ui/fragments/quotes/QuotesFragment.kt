@@ -53,7 +53,7 @@ class QuotesFragment : Fragment(R.layout.fragments_list), QuoteClickListener {
     override fun quoteClickListener(quote: Quote) {
         val sendIntent: Intent = Intent().apply {
             action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, "${quote.quote}\n${quote.link}")
+            putExtra(Intent.EXTRA_TEXT, "${quote.quote}\n${quote.reference}\n${quote.link}")
             type = "text/plain"
         }
 
