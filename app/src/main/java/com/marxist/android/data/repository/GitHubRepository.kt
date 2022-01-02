@@ -2,7 +2,7 @@ package com.marxist.android.data.repository
 
 import com.marxist.android.data.api.GitHubHelper
 import com.marxist.android.model.BooksResponse
-import com.marxist.android.model.NotificationResponse
+import com.marxist.android.model.QuotesResponse
 import com.marxist.android.utils.network.NetworkResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -26,11 +26,11 @@ class GitHubRepository @Inject constructor(private val gitHubHelper: GitHubHelpe
         }
     }
 
-    suspend fun getNotification(): Flow<NetworkResponse<NotificationResponse>> = flow {
-        val response = gitHubHelper.getNotifications()
+    suspend fun getQuotes(): Flow<NetworkResponse<QuotesResponse>> = flow {
+        val response = gitHubHelper.getQuotes()
         if (response.isSuccessful) {
-            val list: NotificationResponse? = response.body()
-            if (list != null && list.notifications.isNotEmpty()) {
+            val list: QuotesResponse? = response.body()
+            if (list != null && list.quotes.isNotEmpty()) {
                 emit(NetworkResponse.Success(list))
             } else {
                 emit(NetworkResponse.EmptyResponse)

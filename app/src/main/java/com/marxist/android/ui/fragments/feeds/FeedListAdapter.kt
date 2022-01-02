@@ -10,7 +10,6 @@ import com.marxist.android.databinding.FeedItemViewBinding
 import com.marxist.android.databinding.ListFeedsBottomProgressBinding
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.base.ProgressViewHolder
-import com.marxist.android.utils.PrintLog
 
 class FeedListAdapter(
     private val mContext: Context,

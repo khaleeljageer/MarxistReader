@@ -23,7 +23,6 @@ import com.marxist.android.R
 import com.marxist.android.data.model.WPPost
 import com.marxist.android.database.AppDatabase
 import com.marxist.android.databinding.AudioPlayerControlFragmentBinding
-import com.marxist.android.utils.PrintLog
 import com.marxist.android.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -368,9 +367,7 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
     }
 
     override fun onSeekComplete(p0: MediaPlayer?) {
-        PrintLog.debug(
-            "Khaleel", "onSeekComplete"
-        )
+
     }
 
     override fun onInfo(p0: MediaPlayer?, p1: Int, p2: Int): Boolean = false

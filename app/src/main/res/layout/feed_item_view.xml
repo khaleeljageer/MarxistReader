@@ -69,7 +69,7 @@
                     android:contentDescription="@string/audio_available"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_music_black"
-                    android:tint="@color/colorTextPrimary" />
+                    app:tint="@color/colorTextPrimary" />
         </FrameLayout>
     </RelativeLayout>
 </androidx.cardview.widget.CardView>

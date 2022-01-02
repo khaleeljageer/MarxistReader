@@ -38,12 +38,6 @@ object DeviceUtils {
         return String.format(Locale.ENGLISH, "%.2fMb", bytes / (1024.00 * 1024.00))
     }
 
-    fun isConnectedToNetwork(context: Context): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = cm.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
-    }
-
     fun hideSoftKeyboard(activity: Activity) {
         val view = activity.currentFocus
         if (view != null) {
@@ -72,17 +66,6 @@ object DeviceUtils {
         )
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         baseContext.startActivity(shareIntent)
-    }
-
-    fun isEmailValid(email: String): Boolean {
-        return Pattern.compile(
-            "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
-                    + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                    + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
-                    + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
-        ).matcher(email).matches()
     }
 
     fun getColor(context: Context): Int = context.resources.getIntArray(R.array.bg_colors).random()

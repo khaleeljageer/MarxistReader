@@ -28,10 +28,6 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var eventBus: EventBus
 
-    companion object {
-        const val PLAY_NEW_VIDEO = "com.marxist.android.ui.activities.PLAY_NEW_VIDEO"
-    }
-
     private lateinit var currentNavController: NavController
 
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -67,11 +63,11 @@ class MainActivity : BaseActivity() {
         val navGraphIds = listOf(
             R.navigation.nav_feeds,
             R.navigation.nav_ebooks,
-            R.navigation.nav_notification,
+            R.navigation.nav_quotes,
             R.navigation.nav_settings
         )
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.feeds, R.id.ebook, R.id.notifications, R.id.settings)
+            setOf(R.id.feeds, R.id.ebook, R.id.quotes, R.id.settings)
         )
 
         // Setup the bottom navigation view with a list of navigation graphs
