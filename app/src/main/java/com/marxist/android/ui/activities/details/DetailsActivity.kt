@@ -87,7 +87,7 @@ class DetailsActivity : BaseActivity() {
         article = intent.getParcelableExtra(ARTICLE) as? WPPost
 
         article?.let {
-            detailsViewModel.callJsoup(it.link)
+            detailsViewModel.triggerArticleLink(it.link)
 
             binding.txtTitle.text =
                 HtmlCompat.fromHtml(it.title.rendered, HtmlCompat.FROM_HTML_MODE_COMPACT)
@@ -142,7 +142,6 @@ class DetailsActivity : BaseActivity() {
                     }
                     is ShowSnackBar -> displayMaterialSnackBar(
                         it.message,
-                        ConnectivityType.OTHER,
                         binding.rootView
                     )
                     is ReaderBgChange -> {

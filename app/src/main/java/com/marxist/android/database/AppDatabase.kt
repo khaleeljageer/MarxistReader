@@ -5,18 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.marxist.android.database.dao.LocalBooksDao
-import com.marxist.android.database.dao.LocalFeedsDao
 import com.marxist.android.database.entities.LocalBooks
-import com.marxist.android.database.entities.LocalFeeds
 
 @Database(
-    entities = [LocalFeeds::class, LocalBooks::class],
-    version = 3,
+    entities = [LocalBooks::class],
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun localFeedsDao(): LocalFeedsDao
     abstract fun localBooksDao(): LocalBooksDao
 
     companion object {

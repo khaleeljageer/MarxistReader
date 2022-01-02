@@ -6,7 +6,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityFeedbackBinding
-import com.marxist.android.model.ConnectivityType
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.DeviceUtils
 import com.marxist.android.utils.api.ApiService
@@ -111,14 +110,12 @@ class FeedBackActivity : BaseActivity() {
 
                 displayMaterialSnackBar(
                     getString(R.string.thanks_feedback),
-                    ConnectivityType.OTHER,
                     binding.rootView
                 )
             }, { error ->
                 dialog.dismiss()
                 displayMaterialSnackBar(
                     getString(R.string.try_later),
-                    ConnectivityType.OTHER,
                     binding.rootView
                 )
             })

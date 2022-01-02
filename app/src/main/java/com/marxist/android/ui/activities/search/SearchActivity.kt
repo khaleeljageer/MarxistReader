@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.marxist.android.data.model.WPPost
 import com.marxist.android.databinding.ActivitySearchBinding
-import com.marxist.android.model.ConnectivityType
 import com.marxist.android.ui.activities.details.DetailsActivity
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.base.ItemClickListener
@@ -117,7 +116,7 @@ class SearchActivity : BaseActivity(), ItemClickListener {
         })
 
         searchViewModel.errorMessage.observe(this, {
-            displayMaterialSnackBar("No result found", ConnectivityType.OTHER, binding.rootView)
+            displayMaterialSnackBar("No result found", binding.rootView)
         })
     }
 

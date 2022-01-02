@@ -1,6 +1,7 @@
 package com.marxist.android.ui.activities
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -9,8 +10,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityMainBinding
-import com.marxist.android.model.ConnectivityType
 import com.marxist.android.model.ShowSnackBar
+import com.marxist.android.ui.activities.details.DetailsViewModel
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.EventBus
 import com.marxist.android.utils.setupWithNavController
@@ -24,6 +25,7 @@ class MainActivity : BaseActivity() {
     private val binding by lazy {
         ActivityMainBinding.inflate(layoutInflater)
     }
+    private val detailsViewModel: DetailsViewModel by viewModels()
 
     @Inject
     lateinit var eventBus: EventBus
@@ -43,13 +45,13 @@ class MainActivity : BaseActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
+        detailsViewModel.triggerArticleLink("https://marxistreader.home.blog")
 
         lifecycleScope.launch {
             eventBus.events.collect {
                 when (it) {
                     is ShowSnackBar -> displayMaterialSnackBar(
                         it.message,
-                        ConnectivityType.OTHER,
                         binding.container2
                     )
                 }

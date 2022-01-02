@@ -6,9 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.marxist.android.data.model.WPPost
 import com.marxist.android.data.repository.WordPressRepository
-import com.marxist.android.database.AppDatabase
-import com.marxist.android.database.dao.LocalFeedsDao
-import com.marxist.android.database.entities.LocalFeeds
 import com.marxist.android.utils.network.NetworkResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -18,14 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedsViewModel @Inject constructor(
-    private val appDatabase: AppDatabase,
     private val repository: WordPressRepository
 ) : ViewModel() {
-    private var feedsDao: LocalFeedsDao = appDatabase.localFeedsDao()
-
-    private var _feedsDownloaded: MutableLiveData<MutableList<LocalFeeds>> = MutableLiveData()
-    val feedsDownloaded: MutableLiveData<MutableList<LocalFeeds>> = _feedsDownloaded
-
     private val _wpPost: MutableLiveData<List<WPPost>> = MutableLiveData()
     val wpPost: LiveData<List<WPPost>> = _wpPost
 
@@ -34,10 +25,6 @@ class FeedsViewModel @Inject constructor(
 
     private val _errorMessage: MutableLiveData<String> = MutableLiveData()
     val errorMessage: LiveData<String> = _errorMessage
-
-    init {
-        _feedsDownloaded.value = feedsDao.getDownloaded(true)
-    }
 
     private var pageNumber = 1
     private var perPage = 20
@@ -65,9 +52,5 @@ class FeedsViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun getDownloadedFeeds() {
-        _feedsDownloaded.value = feedsDao.getDownloaded(true)
     }
 }

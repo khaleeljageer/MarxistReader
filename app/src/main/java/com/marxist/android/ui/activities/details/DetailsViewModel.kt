@@ -12,7 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(appDatabase: AppDatabase) : ViewModel() {
 
-    fun callJsoup(link: String) {
+    fun triggerArticleLink(link: String) {
         viewModelScope.launch(Dispatchers.IO) {
             Jsoup.connect(link)
         }

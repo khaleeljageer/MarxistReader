@@ -8,7 +8,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.marxist.android.R
-import com.marxist.android.model.ConnectivityType
 import com.marxist.android.utils.DeviceUtils
 import javax.inject.Inject
 
@@ -18,7 +17,6 @@ abstract class BaseActivity : AppCompatActivity() {
 
     internal fun displayMaterialSnackBar(
         message: String,
-        type: ConnectivityType,
         container: CoordinatorLayout,
         actionName: String = "",
         title: String = "",
@@ -28,7 +26,6 @@ abstract class BaseActivity : AppCompatActivity() {
             container,
             message,
             when {
-                type == ConnectivityType.LOST -> Snackbar.LENGTH_INDEFINITE
                 actionName.isNotEmpty() -> Snackbar.LENGTH_LONG
                 else -> Snackbar.LENGTH_SHORT
             }
