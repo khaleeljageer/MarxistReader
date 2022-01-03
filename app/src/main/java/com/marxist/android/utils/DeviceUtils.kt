@@ -4,17 +4,38 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.os.Environment
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import com.marxist.android.R
+import java.io.File
+import java.util.*
 import java.util.regex.Pattern
 
 
 object DeviceUtils {
 
-    fun isConnectedToNetwork(context: Context): Boolean {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = cm.activeNetworkInfo
-        return activeNetwork != null && activeNetwork.isConnected
+    fun getRootDirPath(context: Context): String {
+        return if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()) {
+            val file: File = ContextCompat.getExternalFilesDirs(
+                context.applicationContext,
+                null
+            )[0]
+            file.absolutePath
+        } else {
+            context.applicationContext.filesDir.absolutePath
+        }
+    }
+
+    fun getProgressDisplayLine(
+        currentBytes: Long,
+        totalBytes: Long
+    ): String? {
+        return getBytesToMBString(currentBytes) + "/" + getBytesToMBString(totalBytes)
+    }
+
+    private fun getBytesToMBString(bytes: Long): String {
+        return String.format(Locale.ENGLISH, "%.2fMb", bytes / (1024.00 * 1024.00))
     }
 
     fun hideSoftKeyboard(activity: Activity) {
@@ -47,14 +68,5 @@ object DeviceUtils {
         baseContext.startActivity(shareIntent)
     }
 
-    fun isEmailValid(email: String): Boolean {
-        return Pattern.compile(
-            "^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
-                    + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                    + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                    + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
-                    + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$"
-        ).matcher(email).matches()
-    }
+    fun getColor(context: Context): Int = context.resources.getIntArray(R.array.bg_colors).random()
 }

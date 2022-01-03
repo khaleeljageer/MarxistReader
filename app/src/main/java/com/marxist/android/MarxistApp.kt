@@ -1,52 +1,50 @@
 package com.marxist.android
 
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.job.JobInfo
-import android.app.job.JobScheduler
-import android.content.ComponentName
 import android.content.Context
 import androidx.multidex.MultiDex
 import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
-import com.marxist.android.database.AppDatabase
-import com.marxist.android.utils.api.ApiClient
-import com.marxist.android.utils.network.NetworkSchedulerService
+import com.marxist.android.utils.DeviceUtils
+import dagger.hilt.android.HiltAndroidApp
 import org.geometerplus.android.fbreader.FBReaderApplication
+import timber.log.Timber
+import java.io.File
 import java.util.*
 
-
+@HiltAndroidApp
 class MarxistApp : FBReaderApplication() {
 
     override fun onCreate() {
         super.onCreate()
         FirebaseApp.initializeApp(this)
         MultiDex.install(this@MarxistApp)
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
 
-        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_channel_id))
-//        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.default_notification_channel_id_test))
-        FirebaseMessaging.getInstance().subscribeToTopic(getString(R.string.marxist_instant_news))
+        initPRDownloader()
 
-        AppDatabase.getAppDatabase(applicationContext)
-        scheduleJob()
-        ApiClient.setApiService()
-        ApiClient.setGitHubService()
-        ApiClient.setDownloadService()
+        FirebaseMessaging.getInstance()
+            .subscribeToTopic(getString(R.string.default_notification_channel_id))
+        FirebaseMessaging.getInstance()
+            .subscribeToTopic(getString(R.string.marxist_instant_news))
 
         initNotificationChannel()
     }
 
-    private fun scheduleJob() {
-        val myJob = JobInfo.Builder(0, ComponentName(this, NetworkSchedulerService::class.java))
-            .setMinimumLatency(1000)
-            .setOverrideDeadline(2000)
-            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
-            .setPersisted(true)
-            .build()
+    private fun initPRDownloader() {
+        val path = DeviceUtils.getRootDirPath(applicationContext)
+        val booksPath = File(path.plus("/books"))
+        if (!booksPath.exists()) {
+            booksPath.mkdir()
+        }
 
-        val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-        jobScheduler.schedule(myJob)
+        val audioPath = File(path.plus("/audio"))
+        if (!audioPath.exists()) {
+            audioPath.mkdir()
+        }
     }
 
     private fun initNotificationChannel() {

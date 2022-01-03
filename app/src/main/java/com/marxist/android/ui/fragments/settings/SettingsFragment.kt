@@ -6,12 +6,10 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.marxist.android.R
-import com.marxist.android.model.DarkModeChanged
 import com.marxist.android.ui.activities.AboutActivity
 import com.marxist.android.ui.activities.FeedBackActivity
 import com.marxist.android.ui.activities.LottieThankActivity
 import com.marxist.android.utils.AppConstants
-import com.marxist.android.utils.RxBus
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -29,10 +27,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onPreferenceTreeClick(preference: Preference?): Boolean {
         return when (preference!!.key) {
-            getString(R.string.pref_key_dark_mode) -> {
-                RxBus.publish(DarkModeChanged(""))
-                true
-            }
             getString(R.string.about_us) -> {
                 startActivity(Intent(mContext, AboutActivity::class.java))
                 true

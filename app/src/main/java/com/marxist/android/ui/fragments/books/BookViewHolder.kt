@@ -1,94 +1,112 @@
 package com.marxist.android.ui.fragments.books
 
+import android.content.Context
+import android.net.Uri
 import android.view.View
-import android.view.ViewGroup
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import androidx.recyclerview.widget.RecyclerView
+import coil.load
+import com.download.library.DownloadImpl
+import com.download.library.DownloadListenerAdapter
+import com.download.library.Extra
 import com.marxist.android.R
+import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalBooks
-import com.marxist.android.ui.base.BaseBookViewHolder
-import kotlinx.android.synthetic.main.book_list_item.view.*
+import com.marxist.android.databinding.BookListItemBinding
+import com.marxist.android.model.ShowSnackBar
+import com.marxist.android.utils.EventBus
+import com.marxist.android.utils.download.DownloadUtil
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import java.io.File
 
 
 class BookViewHolder(
-    private val viewGroup: ViewGroup, view: View
-) :
-    BaseBookViewHolder<LocalBooks>(view) {
-    override fun bindData(book: LocalBooks) {
-        Glide.with(viewGroup.context)
-            .load(book.image)
-            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .override(212, 300)
-            .into(itemView.arBookImage)
-        val expanded = book.isExpanded
-        itemView.fabDownload.run {
-            show()
-            itemView.pbDownloadProgress.visibility = View.INVISIBLE
-            if (book.isDownloaded) {
-                setImageResource(R.drawable.ic_chrome_reader_mode_black_24dp)
+    private val context: Context,
+    private val binding: BookListItemBinding,
+    private val targetPath: String
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun bindData(
+        book: LocalBooks,
+        appDatabase: AppDatabase
+    ) {
+        binding.arBookImage.load(book.image) {
+            placeholder(R.drawable.placeholder)
+        }
+        itemView.setOnClickListener {
+            val isExist = appDatabase.localBooksDao().getDownloadStatus(book.bookid)
+            if (isExist) {
+                val path = File(targetPath, "${book.title}.epub")
+                val fileExist = path.exists()
+                if (fileExist) {
+                    DownloadUtil.openSavedBook(context, path.toString())
+                } else {
+                    binding.pbDownloadProgress.visibility = View.VISIBLE
+                    downloadFile(book, appDatabase)
+                }
             } else {
-                setImageResource(R.drawable.ic_save_black)
+                binding.pbDownloadProgress.visibility = View.VISIBLE
+                downloadFile(book, appDatabase)
             }
         }
-        // Set the visibility based on state
-        itemView.rlDownloadView.visibility = if (expanded) View.VISIBLE else View.GONE
     }
 
+    private fun downloadFile(
+        book: LocalBooks,
+        appDatabase: AppDatabase
+    ) {
+        DownloadImpl.getInstance(context)
+            .with(book.epub)
+            .setUniquePath(true)
+            .setEnableIndicator(false)
+            .setRetry(3)
+            .setParallelDownload(true)
+            .setForceDownload(true)
+            .target(File(targetPath, "${book.title}.epub"))
+            .url(book.epub).enqueue(object : DownloadListenerAdapter() {
+                override fun onStart(
+                    url: String?,
+                    userAgent: String?,
+                    contentDisposition: String?,
+                    mimetype: String?,
+                    contentLength: Long,
+                    extra: Extra?
+                ) {
+                    binding.pbDownloadProgress.visibility = View.VISIBLE
+                    MainScope().launch {
+                        EventBus.invokeEvent(ShowSnackBar("${book.title} Downloading"))
+                    }
+                }
 
-/*
-    override fun bindData(book: LocalBooks, adapterPosition: Int) {
-        *//*Glide.with(mContext)
-            .load(book.image)
-            .diskCacheStrategy(DiskCacheStrategy.ALL)
-            .override(212, 300)
-            .into(itemView.arBookImage)*//*
+                override fun onProgress(
+                    url: String?,
+                    downloaded: Long,
+                    length: Long,
+                    usedTime: Long
+                ) {
+                    val percent = (downloaded.div(length)) * 100
+                    binding.pbDownloadProgress.progress = percent.toInt()
+                }
 
-        val expanded = book.isExpanded
-
-        itemView.fabDownload.run {
-            if (book.isDownloaded) {
-                itemView.fabDelete.visibility = View.VISIBLE
-                itemView.fabDownload.visibility = View.VISIBLE
-                itemView.pbDownloadProgress.visibility = View.INVISIBLE
-                setImageResource(R.drawable.ic_chrome_reader_mode_black_24dp)
-            } else {
-                itemView.fabDelete.visibility = View.INVISIBLE
-                itemView.fabDownload.visibility = View.VISIBLE
-                itemView.pbDownloadProgress.visibility = View.INVISIBLE
-                setImageResource(R.drawable.ic_save_black)
-            }
-        }
-
-        // Set the visibility based on state
-        itemView.rlDownloadView.visibility = if (expanded) View.VISIBLE else View.GONE
-        if (expanded) {
-            val scaleAnim = ScaleAnimation(
-                0f, 1f,
-                0f, 1f,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-            )
-            val alphaAnim = AlphaAnimation(0f, 1f)
-            val animSet = AnimationSet(true)
-            animSet.addAnimation(scaleAnim)
-            animSet.addAnimation(alphaAnim)
-            animSet.isFillEnabled = true
-
-            animSet.interpolator = OvershootInterpolator()
-            animSet.duration = 300
-            animSet.startOffset = 100
-            itemView.fabDownload.startAnimation(animSet)
-        }
-        itemView.fabDelete.setOnClickListener {
-            listener.bookRemoveClickListener(adapterPosition, book)
-        }
-
-        itemView.fabDownload.setOnClickListener {
-            if (!book.isDownloaded) {
-                itemView.fabDownload.visibility = View.INVISIBLE
-                itemView.pbDownloadProgress.visibility = View.VISIBLE
-            }
-            listener.bookItemClickListener(adapterPosition, book)
-        }
-    }*/
+                override fun onResult(
+                    throwable: Throwable?,
+                    path: Uri?,
+                    url: String?,
+                    extra: Extra?
+                ): Boolean {
+                    url?.let {
+                        val isExist1 = DownloadImpl.getInstance(context).exist(book.epub)
+                        if (isExist1) {
+                            binding.pbDownloadProgress.visibility = View.INVISIBLE
+                            MainScope().launch {
+                                EventBus.invokeEvent(ShowSnackBar("${book.title} Completed"))
+                            }
+                            appDatabase.localBooksDao()
+                                .updateDownloadDetails(path.toString(), true, book.bookid)
+                        }
+                    }
+                    return super.onResult(throwable, path, url, extra)
+                }
+            })
+    }
 }

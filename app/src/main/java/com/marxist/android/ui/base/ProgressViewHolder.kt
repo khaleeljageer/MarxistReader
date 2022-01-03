@@ -1,13 +1,13 @@
 package com.marxist.android.ui.base
 
 import android.view.View
-import android.view.ViewGroup
-import kotlinx.android.synthetic.main.list_feeds_bottom_progress.view.*
+import androidx.recyclerview.widget.RecyclerView
+import com.marxist.android.databinding.ListFeedsBottomProgressBinding
 
-internal class ProgressViewHolder(parent: ViewGroup, layoutID: Int) :
-    BaseViewHolder<Any>(parent, layoutID) {
-    override fun bindData(item: Any) {
-        itemView.rlFeedProgress.visibility = View.VISIBLE
-        itemView.rlFeedProgress.isClickable = false
+internal class ProgressViewHolder(private val parent: ListFeedsBottomProgressBinding) :
+    RecyclerView.ViewHolder(parent.root) {
+    fun bindData(item: Any) {
+        parent.rlFeedProgress.visibility = View.VISIBLE
+        parent.rlFeedProgress.isClickable = false
     }
 }

@@ -2,71 +2,51 @@ package com.marxist.android.ui.fragments.books
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.marxist.android.R
+import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalBooks
-import com.marxist.android.ui.base.BookClickListener
-import kotlinx.android.synthetic.main.book_list_item.view.*
+import com.marxist.android.databinding.BookListItemBinding
+import com.marxist.android.utils.AppConstants
+import com.marxist.android.utils.DeviceUtils
 
 class BookListAdapter(
     private val mContext: Context,
     private var booksList: MutableList<LocalBooks>,
-    private val listener: BookClickListener
+    private val appDatabase: AppDatabase
 ) : RecyclerView.Adapter<BookViewHolder>() {
-    private var previousClickedPosition: Int = -1
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
-        val layoutId = R.layout.book_list_item
-        val view = LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
-        val lp = view.layoutParams as GridLayoutManager.LayoutParams
-        lp.height = (parent.measuredHeight / 2.5).toInt()
-        view.layoutParams = lp
-        return BookViewHolder(parent, view)
+        val binding =
+            BookListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        val lp = binding.root.layoutParams
+        val width = parent.measuredWidth
+        lp.height = ((width / AppConstants.ASPECT_RATIO) / 4).toInt()
+        binding.root.layoutParams = lp
+
+        val targetPath = DeviceUtils.getRootDirPath(mContext).plus("/books")
+        return BookViewHolder(mContext, binding, targetPath)
     }
 
-    override fun getItemCount(): Int = booksList.size
+    override fun getItemCount(): Int {
+        return if (booksList.isNullOrEmpty()) 0 else booksList.size
+    }
+
+    private fun getItem(position: Int): LocalBooks {
+        return booksList[position]
+    }
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-        val bookItem = booksList[holder.adapterPosition]
-        holder.bindData(bookItem)
-
-        holder.itemView.fabDownload.setOnClickListener {
-            if (!bookItem.isDownloaded) {
-                holder.itemView.fabDownload.hide()
-                holder.itemView.pbDownloadProgress.visibility = View.VISIBLE
-            }
-            listener.bookItemClickListener(holder.adapterPosition, bookItem)
-        }
-
-        holder.itemView.setOnClickListener {
-            if (previousClickedPosition == holder.adapterPosition) {
-                return@setOnClickListener
-            }
-            if (previousClickedPosition != -1) {
-                booksList[previousClickedPosition].isExpanded = false
-                notifyItemChanged(previousClickedPosition)
-            }
-            previousClickedPosition = holder.adapterPosition
-            val expanded = bookItem.isExpanded
-            bookItem.isExpanded = !expanded
-            notifyItemChanged(holder.adapterPosition)
-        }
+        holder.bindData(getItem(position), appDatabase)
     }
 
     fun setItems(it: MutableList<LocalBooks>) {
         booksList = it
         notifyDataSetChanged()
-    }
-
-    fun updateDownloadId(itemPosition: Int) {
-        previousClickedPosition = -1
-        notifyItemChanged(itemPosition)
     }
 }

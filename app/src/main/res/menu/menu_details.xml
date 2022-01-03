@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+            android:id="@+id/menu_tune"
+            android:icon="@drawable/ic_round_tune_24"
+            android:title="@string/tune"
+            app:showAsAction="always" />
     <item
             android:id="@+id/menu_share"
             android:icon="@drawable/ic_share_black"
-            android:title="@string/share_text" />
+            android:title="@string/share_text"
+            app:showAsAction="ifRoom" />
 
 </menu>

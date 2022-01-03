@@ -1,8 +1,10 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="MRBaseTheme" />
 
-    <style name="MRSplashTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="DetailsTheme" parent="MRDetailsBaseTheme" />
+
+    <style name="MRSplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="android:textColorSecondary">@color/colorSecondary</item>
@@ -12,37 +14,120 @@
         <item name="android:windowBackground">@drawable/splash_window_bg</item>
     </style>
 
-    <style name="MRBaseTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <item name="android:windowBackground">@color/colorPrimary</item>
+    <style name="MRDetailsBaseTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="titleTextColor">@color/colorTextPrimary</item>
-        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
-        <item name="android:textColorSecondary">@color/colorSecondary</item>
         <item name="android:statusBarColor">@color/statusBarColor</item>
 
+
+        <item name="bottomNavigationStyle">@style/CustomBottomNavigation</item>
+        <item name="tabStyle">@style/CustomTabStyle</item>
         <item name="android:fontFamily">@font/hind_regular</item>
     </style>
 
-    <style name="Splash_Theme" parent="MRSplashTheme" />
+    <style name="MRBaseTheme" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
+
+        <item name="bottomNavigationStyle">@style/CustomBottomNavigation</item>
+        <item name="tabStyle">@style/CustomTabStyle</item>
+        <item name="android:fontFamily">@font/hind_regular</item>
+    </style>
+
+    <style name="CustomTabStyle" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabIndicator">@drawable/custom_tab_indicator</item>
+        <item name="tabIndicatorColor">@color/colorAccent</item>
+        <item name="tabTextAppearance">@style/TabTextAppearance</item>
+        <item name="tabUnboundedRipple">true</item>
+        <item name="tabSelectedTextColor">@color/colorAccent</item>
+    </style>
+
+    <style name="CustomBottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemTextColor">@color/colorSecondaryDark</item>
+        <item name="itemTextAppearanceActive">@style/Nav_Active_Text</item>
+        <item name="itemTextAppearanceInactive">@style/Nav_InActive_Text</item>
+        <item name="itemIconTint">@drawable/bottom_view_icon_tint_color</item>
+    </style>
+
+    <style name="Launcher_Theme" parent="MRSplashTheme" />
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="Nav_Active_Text">
         <item name="android:fontFamily">@font/hind_bold</item>
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/colorSecondaryDark</item>
     </style>
 
     <style name="Nav_InActive_Text">
         <item name="android:fontFamily">@font/hind_regular</item>
         <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/colorTextPrimary</item>
     </style>
 
     <style name="CustomAlertDialog" parent="Theme.MaterialComponents.Light.Dialog.Alert">
         <item name="windowFixedWidthMajor">45%</item>
         <item name="windowFixedWidthMinor">45%</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="BaseBottomSheetDialog">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="BaseBottomSheetDialog" parent="@style/Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="bottomSheetStyle">@style/BottomSheet</item>
+    </style>
+
+    <!-- set the rounded drawable as background to your bottom sheet -->
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_bottom_sheet_dialog_fragment</item>
+    </style>
+
+    <style name="TabTextAppearance">
+        <item name="fontFamily">@font/hind_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+
+    <declare-styleable name="SDHtmlTextView">
+        <attr name="tableHeaderCentered" format="boolean" />
+    </declare-styleable>
+
+
+    <style name="Theme.App.Starting" parent="Theme.App.Starting_Base">
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+    </style>
+
+    <style name="Theme.App.Starting_Base" parent="Theme.SplashScreen">
+        // Set the splash screen background, animated icon, and animation duration.
+        <item name="windowSplashScreenBackground">@color/colorPrimary</item>
+
+        // Use windowSplashScreenAnimatedIcon to add either a drawable or an
+        // animated drawable. One of these is required.
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_splash</item>
+        <item name="windowSplashScreenAnimationDuration">300</item>
+        # Required for
+        # animated icons
+
+        // Set the theme of the Activity that directly follows your splash screen.
+        <item name="postSplashScreenTheme">@style/Splash_Theme</item>
+        # Required.
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+    </style>
+
+    <style name="Splash_Base" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="Splash_Theme" parent="Splash_Base">
+        <item name="android:windowBackground">@drawable/splash_window_bg</item>
     </style>
 </resources>

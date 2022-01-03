@@ -10,39 +10,38 @@ import android.media.MediaPlayer
 import android.media.session.MediaSessionManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.os.RemoteException
 import android.support.v4.media.session.MediaControllerCompat
 import android.support.v4.media.session.MediaSessionCompat
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.SeekBar
 import androidx.fragment.app.Fragment
 import com.marxist.android.R
+import com.marxist.android.data.model.WPPost
 import com.marxist.android.database.AppDatabase
-import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.model.ShowSnackBar
-import com.marxist.android.utils.AppConstants
-import com.marxist.android.utils.PrintLog
-import com.marxist.android.utils.RxBus
-import com.marxist.android.utils.download.DownloadUtil
-import com.marxist.android.utils.download.PreferencesHelper
-import kotlinx.android.synthetic.main.audio_player_control_fragment.*
-import java.io.File
+import com.marxist.android.databinding.AudioPlayerControlFragmentBinding
+import com.marxist.android.utils.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 import java.io.IOException
 import java.util.*
+import javax.inject.Inject
 
-class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
+@AndroidEntryPoint
+class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
+    MediaPlayer.OnCompletionListener,
     MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener, MediaPlayer.OnSeekCompleteListener,
     MediaPlayer.OnInfoListener, MediaPlayer.OnBufferingUpdateListener,
     AudioManager.OnAudioFocusChangeListener {
 
+    private val binding by viewBinding(AudioPlayerControlFragmentBinding::bind)
+
     private var isPrepared: Boolean = false
     private var bufferedPosition: Int = 0
-    private var localFeeds: LocalFeeds? = null
+    private var localFeeds: WPPost? = null
     private var resumePosition: Int = 0
     private lateinit var mContext: Context
     private var mediaPlayer: MediaPlayer? = null
@@ -59,6 +58,9 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     private var phoneStateListener: PhoneStateListener? = null
     private var telephonyManager: TelephonyManager? = null
 
+    @Inject
+    lateinit var appDatabase: AppDatabase
+
     companion object {
         const val PROGRESS_BAR_MAX = 1000
         const val TIME_UNSET = Long.MIN_VALUE + 1
@@ -68,9 +70,9 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         const val ACTION_REWIND = "com.marxist.android.ui.fragments.player.ACTION_REWIND"
         const val ACTION_STOP = "com.marxist.android.ui.fragments.player.ACTION_STOP"
 
-        fun newInstance(localFeeds: LocalFeeds, type: Int): AudioPlayerFragment {
+        fun newInstance(wpPost: WPPost, type: Int): AudioPlayerFragment {
             val bundle = Bundle()
-            bundle.putSerializable("KEY_LOCAL_FEEDS", localFeeds)
+            bundle.putParcelable("KEY_WP_POST_FEEDS", wpPost)
             bundle.putInt("KEY_AUDIO_TYPE", type)
             val fragment = AudioPlayerFragment()
             fragment.arguments = bundle
@@ -90,76 +92,56 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         registerBecomingNoisyReceiver()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(
-            R.layout.audio_player_control_fragment, container, false
-        )
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        handler = Handler()
+        handler = Handler(Looper.getMainLooper())
         seekDispatcher = DEFAULT_SEEK_DISPATCHER
         formatBuilder = StringBuilder()
         formatter = Formatter(formatBuilder, Locale.getDefault())
-        sbPlayer.max = PROGRESS_BAR_MAX
+        binding.sbPlayer.max = PROGRESS_BAR_MAX
 
-        btnPlayPause.tag = "PLAY"
-        pbPrepare.visibility = View.INVISIBLE
-        btnPlayPause.addAnimatorListener(animatorListener)
-        btnPlayPause.setOnClickListener {
-            if (btnPlayPause.tag == "PLAY") {
-                btnPlayPause.tag = "PAUSE"
-                btnPlayPause.setMinAndMaxFrame(0, 33)
+        binding.btnPlayPause.tag = "PLAY"
+        binding.pbPrepare.visibility = View.INVISIBLE
+        binding.btnPlayPause.addAnimatorListener(animatorListener)
+        binding.btnPlayPause.setOnClickListener {
+            if (binding.btnPlayPause.tag == "PLAY") {
+                binding.btnPlayPause.tag = "PAUSE"
+                binding.btnPlayPause.setMinAndMaxFrame(0, 33)
                 if (isPrepared)
                     playMedia()
             } else {
-                btnPlayPause.tag = "PLAY"
-                btnPlayPause.setMinAndMaxFrame(33, 66)
+                binding.btnPlayPause.tag = "PLAY"
+                binding.btnPlayPause.setMinAndMaxFrame(33, 66)
                 if (isPrepared)
                     pauseMedia()
             }
-            btnPlayPause.playAnimation()
-            btnPlayPause.isActivated = btnPlayPause.isAnimating
-            btnPlayPause.postInvalidate()
+            binding.btnPlayPause.playAnimation()
+            binding.btnPlayPause.isActivated = binding.btnPlayPause.isAnimating
+            binding.btnPlayPause.postInvalidate()
 
             if (mediaPlayer == null) {
-                pbPrepare.visibility = View.VISIBLE
-                btnPlayPause.visibility = View.GONE
+                binding.pbPrepare.visibility = View.VISIBLE
+                binding.btnPlayPause.visibility = View.GONE
                 initMediaPlayer()
             }
         }
 
-        btnForward.setOnClickListener {
-            btnForward.playAnimation()
+        binding.btnForward.setOnClickListener {
+            binding.btnForward.playAnimation()
             forward()
         }
 
-        btnRewind.setOnClickListener {
-            btnRewind.playAnimation()
+        binding.btnRewind.setOnClickListener {
+            binding.btnRewind.playAnimation()
             rewind()
         }
 
-        btnRemove.setOnClickListener {
-            removeDownloads()
-        }
-
-        btnDownload.setOnClickListener {
-            downloadItem()
-        }
-
-        sbPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.sbPlayer.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     val position = positionValue(progress)
-                    if (txtPosition != null) {
-                        txtPosition.text = stringForTime(position)
-                    }
+                    binding.txtPosition.text = stringForTime(position)
                     if (mediaPlayer != null && !dragging) {
                         seekTo(position)
                     }
@@ -179,60 +161,28 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
         })
     }
 
-    private fun removeDownloads() {
-        btnRemove.visibility = View.INVISIBLE
-        val filePath = File(localFeeds!!.downloadPath)
-        AppDatabase.getAppDatabase(mContext).localFeedsDao()
-            .resetAudioStatus(false, "", localFeeds!!.title, localFeeds!!.pubDate)
-        filePath.delete()
-        localFeeds!!.downloadPath = ""
-        localFeeds!!.isDownloaded = false
-
-        RxBus.publish(ShowSnackBar(getString(R.string.audio_deleted)))
-    }
-
     private val animatorListener = AnimatorListenerAdapter(
-        onStart = { btnPlayPause.isActivated = true },
+        onStart = { binding.btnPlayPause.isActivated = true },
         onEnd = {
-            btnPlayPause.isActivated = false
+            binding.btnPlayPause.isActivated = false
         },
         onCancel = {
-            btnPlayPause.isActivated = false
+            binding.btnPlayPause.isActivated = false
         },
         onRepeat = {
         }
     )
 
-    private fun downloadItem() {
-        DownloadUtil.queueForDownload(
-            mContext,
-            localFeeds!!.title,
-            localFeeds!!.audioUrl,
-            localFeeds!!.pubDate,
-            AppConstants.AUDIO
-        )
-
-        RxBus.publish(ShowSnackBar(getString(R.string.download_started)))
-        btnDownload.visibility = View.INVISIBLE
-    }
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        localFeeds = (arguments!!.getSerializable("KEY_LOCAL_FEEDS") as LocalFeeds?)!!
+        localFeeds = (requireArguments().getParcelable("KEY_WP_POST_FEEDS") as? WPPost)!!
         if (mediaSessionManager == null) {
             try {
                 initMediaSession()
             } catch (e: RemoteException) {
                 e.printStackTrace()
             }
-        }
-        if (localFeeds!!.isDownloaded) {
-            btnDownload.visibility = View.INVISIBLE
-            btnRemove.visibility = View.VISIBLE
-        } else {
-            btnDownload.visibility = View.VISIBLE
-            btnRemove.visibility = View.INVISIBLE
         }
     }
 
@@ -254,11 +204,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC).build()
         )
         try {
-            if (localFeeds!!.isDownloaded) {
-                mediaPlayer!!.setDataSource("file://${localFeeds!!.downloadPath}")
-            } else {
-                mediaPlayer!!.setDataSource(localFeeds!!.audioUrl)
-            }
+            mediaPlayer!!.setDataSource(localFeeds!!.audioUrl)
         } catch (e: IOException) {
             e.printStackTrace()
         }
@@ -393,16 +339,16 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
     override fun onCompletion(p0: MediaPlayer?) {
         stopMedia()
-        btnPlayPause.tag = "PLAY"
-        btnPlayPause.setMinAndMaxFrame(33, 66)
-        btnPlayPause.isActivated = btnPlayPause.isAnimating
-        btnPlayPause.postInvalidate()
+        binding.btnPlayPause.tag = "PLAY"
+        binding.btnPlayPause.setMinAndMaxFrame(33, 66)
+        binding.btnPlayPause.isActivated = binding.btnPlayPause.isAnimating
+        binding.btnPlayPause.postInvalidate()
     }
 
     override fun onPrepared(p0: MediaPlayer?) {
         isPrepared = true
-        pbPrepare.visibility = View.INVISIBLE
-        btnPlayPause.visibility = View.VISIBLE
+        binding.pbPrepare.visibility = View.INVISIBLE
+        binding.btnPlayPause.visibility = View.VISIBLE
         handler!!.post(updateProgressAction)
         playMedia()
     }
@@ -410,26 +356,18 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
 
     override fun onError(p0: MediaPlayer?, what: Int, extra: Int): Boolean {
         when (what) {
-            MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK -> Log.d(
-                "MediaPlayer Error",
-                "MEDIA ERROR NOT VALID FOR PROGRESSIVE PLAYBACK $extra"
-            )
-            MediaPlayer.MEDIA_ERROR_SERVER_DIED -> Log.d(
-                "MediaPlayer Error",
-                "MEDIA ERROR SERVER DIED $extra"
-            )
-            MediaPlayer.MEDIA_ERROR_UNKNOWN -> Log.d(
-                "MediaPlayer Error",
-                "MEDIA ERROR UNKNOWN $extra"
-            )
+            MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK -> Timber.tag("MediaPlayer Error")
+                .d("MEDIA ERROR NOT VALID FOR PROGRESSIVE PLAYBACK %s", extra)
+            MediaPlayer.MEDIA_ERROR_SERVER_DIED -> Timber.tag("MediaPlayer Error")
+                .d("MEDIA ERROR SERVER DIED %s", extra)
+            MediaPlayer.MEDIA_ERROR_UNKNOWN -> Timber.tag("MediaPlayer Error")
+                .d("MEDIA ERROR UNKNOWN %s", extra)
         }
         return false
     }
 
     override fun onSeekComplete(p0: MediaPlayer?) {
-        PrintLog.debug(
-            "Khaleel", "onSeekComplete"
-        )
+
     }
 
     override fun onInfo(p0: MediaPlayer?, p1: Int, p2: Int): Boolean = false
@@ -463,21 +401,17 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     private fun updateProgress() {
         val duration = (if (mediaPlayer == null) 0 else mediaPlayer!!.duration).toLong()
         val position = (if (mediaPlayer == null) 0 else mediaPlayer!!.currentPosition).toLong()
-        if (txtDuration != null) {
-            txtDuration.text = stringForTime(duration)
-        }
-        if (txtPosition != null && !dragging) {
-            txtPosition.text = stringForTime(position)
+        binding.txtDuration.text = stringForTime(duration)
+        if (!dragging) {
+            binding.txtPosition.text = stringForTime(position)
         }
 
-        if (sbPlayer != null) {
-            if (!dragging) {
-                sbPlayer.progress = progressBarValue(position)
-            }
-            val bufferedPosition =
-                (if (mediaPlayer == null) 0 else bufferedPosition).toLong()
-            sbPlayer.secondaryProgress = progressBarValue(bufferedPosition)
+        if (!dragging) {
+            binding.sbPlayer.progress = progressBarValue(position)
         }
+        val bufferedPosition =
+            (if (mediaPlayer == null) 0 else bufferedPosition).toLong()
+        binding.sbPlayer.secondaryProgress = progressBarValue(bufferedPosition)
         handler!!.removeCallbacks(updateProgressAction)
 
         if (mediaPlayer!!.isPlaying) {
@@ -539,7 +473,7 @@ class AudioPlayerFragment : Fragment(), MediaPlayer.OnCompletionListener,
     /**
      * Default [SeekDispatcher] that dispatches seeks to the player without modification.
      */
-    val DEFAULT_SEEK_DISPATCHER: SeekDispatcher = object : SeekDispatcher {
+    private val DEFAULT_SEEK_DISPATCHER: SeekDispatcher = object : SeekDispatcher {
 
         override fun dispatchSeek(
             player: MediaPlayer,

@@ -8,91 +8,72 @@
 
     <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="15dp">
 
-        <com.google.android.material.appbar.AppBarLayout
+        <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:elevation="5dp">
+                android:layout_height="wrap_content"
+                android:hint="@string/name"
+                app:boxBackgroundColor="@color/colorPrimary">
 
-            <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/toolbar"
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtName"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    app:navigationIcon="@drawable/ic_arrow_back_24dp"
-                    app:title="@string/feed_back" />
-        </com.google.android.material.appbar.AppBarLayout>
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:imeOptions="actionNext"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:padding="15dp">
+                android:layout_height="wrap_content"
+                android:hint="@string/phone"
+                app:boxBackgroundColor="@color/colorPrimary">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/name"
-                    app:boxBackgroundColor="@color/colorPrimary">
+                    android:imeOptions="actionNext"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
+                    android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:imeOptions="actionNext"
-                        android:inputType="textPersonName"
-                        android:maxLines="1"
-                        android:scrollHorizontally="true"
-                        android:textCursorDrawable="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/comments"
+                app:boxBackgroundColor="@color/colorPrimary"
+                app:counterEnabled="true"
+                app:counterMaxLength="1000">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtComments"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/phone"
-                    app:boxBackgroundColor="@color/colorPrimary">
+                    android:maxLines="10"
+                    android:textCursorDrawable="@null" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtPhone"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:imeOptions="actionNext"
-                        android:inputType="phone"
-                        android:maxLines="1"
-                        android:scrollHorizontally="true"
-                        android:textCursorDrawable="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/comments"
-                    app:boxBackgroundColor="@color/colorPrimary"
-                    app:counterEnabled="true"
-                    app:counterMaxLength="1000">
-
-                <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edtComments"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="10"
-                        android:textCursorDrawable="@null" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnSubmit"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="end"
-                    android:layout_marginTop="15dp"
-                    android:gravity="center"
-                    android:padding="5dp"
-                    android:text="@string/submit"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/colorAccent"
-                    app:cornerRadius="25dp" />
-        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSubmit"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:padding="5dp"
+                android:text="@string/submit"
+                android:textStyle="bold"
+                app:backgroundTint="@color/colorAccent"
+                app:cornerRadius="25dp" />
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

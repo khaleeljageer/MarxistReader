@@ -3,173 +3,140 @@ package com.marxist.android.ui.fragments.feeds
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.marxist.android.R
-import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.model.ShowSnackBar
-import com.marxist.android.ui.activities.DetailsActivity
+import com.marxist.android.data.model.WPPost
+import com.marxist.android.databinding.FragmentsListBinding
+import com.marxist.android.ui.activities.details.DetailsActivity
+import com.marxist.android.ui.activities.search.SearchActivity
 import com.marxist.android.ui.base.ItemClickListener
-import com.marxist.android.utils.AppConstants
-import com.marxist.android.utils.AppPreference
-import com.marxist.android.utils.AppPreference.get
-import com.marxist.android.utils.RxBus
-import com.marxist.android.utils.api.ApiClient
-import com.marxist.android.utils.api.RetryWithDelay
-import com.marxist.android.viewmodel.FeedsViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragments_list.*
-import kotlinx.android.synthetic.main.fragments_list.view.*
-import kotlinx.android.synthetic.main.layout_lottie_no_feed.*
-import java.text.SimpleDateFormat
-import java.util.*
+import com.marxist.android.utils.viewBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class FeedsFragment : Fragment(), ItemClickListener {
-    private var pageIndex: Int = 6
-    private var feedDisposable: Disposable? = null
-    private lateinit var feedAdapter: FeedListAdapter
+@AndroidEntryPoint
+class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
+    private val binding by viewBinding(FragmentsListBinding::bind)
+    private val feedAdapter by lazy {
+        FeedListAdapter(mContext, mutableListOf(), this@FeedsFragment)
+    }
     private lateinit var mContext: Context
-    private lateinit var feedsViewModel: FeedsViewModel
+
+    private val feedsViewModel: FeedsViewModel by viewModels()
+
+    private var visibleItemCount: Int = 0
+    private var totalItemCount: Int = 0
+    private val visibleThreshold = 4
+    private var firstVisibleItemPosition = 0
+    private var loading: Boolean = false
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
-        feedAdapter = FeedListAdapter(mContext, mutableListOf(), this@FeedsFragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        initData()
-        pageIndex =
-            AppPreference.customPrefs(mContext.applicationContext)[AppConstants.SharedPreference.PAGED_INDEX, 6]
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_search, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.app_bar_search -> {
+                startActivity(Intent(requireContext(), SearchActivity::class.java))
+                return true
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initData() {
-        feedsViewModel = ViewModelProviders.of(this).get(FeedsViewModel::class.java)
-        feedsViewModel.getLiveFeeds().observe(this, Observer {
+        feedsViewModel.getFeeds()
+        feedsViewModel.loading.observe(viewLifecycleOwner, {
             if (it != null) {
-                if (it.isNotEmpty()) {
-                    rvListView.visibility = View.VISIBLE
-                    emptyView.visibility = View.GONE
-                    feedAdapter.addFeeds(it)
-                } else {
-                    rvListView.visibility = View.GONE
-                    emptyView.visibility = View.VISIBLE
+                when {
+                    it && loading -> {
+                        feedAdapter.addLoaderItem()
+                    }
+                    it -> {
+                        binding.rvListView.visibility = View.GONE
+                        binding.noFeed.emptyView.visibility = View.GONE
+                        binding.progressLoader.visibility = View.VISIBLE
+                    }
                 }
-                feedsViewModel.getLiveFeeds().removeObservers(this)
+            }
+        })
+        feedsViewModel.wpPost.observe(viewLifecycleOwner, {
+            if (it != null) {
+                if (loading) {
+                    feedAdapter.removeLoaderItem()
+                }
+                binding.rvListView.visibility = View.VISIBLE
+                binding.progressLoader.visibility = View.GONE
+                binding.noFeed.emptyView.visibility = View.GONE
+                feedAdapter.addFeed(it)
+                loading = false
+            }
+        })
+        feedsViewModel.errorMessage.observe(viewLifecycleOwner, {
+            if (it != null) {
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
             }
         })
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragments_list, container, false)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        view.rvListView.setHasFixedSize(true)
-        view.rvListView.layoutManager = LinearLayoutManager(mContext, RecyclerView.VERTICAL, false)
-        view.rvListView.adapter = feedAdapter
-
-        return view
+        setRecyclerListener()
+        initData()
     }
 
-    private var lastVisibleItem: Int = 0
-    private var totalItemCount: Int = 0
-    private val visibleThreshold = 2
-    private var loading: Boolean = false
+    private fun setRecyclerListener() {
+        val layoutManager = StaggeredGridLayoutManager(2, RecyclerView.VERTICAL)
+        binding.rvListView.setHasFixedSize(true)
+        binding.rvListView.layoutManager = layoutManager
+        binding.rvListView.adapter = feedAdapter
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        val linearLayoutManager = rvListView.layoutManager as LinearLayoutManager
-        rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.rvListView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                totalItemCount = linearLayoutManager.itemCount
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition()
-
-                if (!loading && totalItemCount <= lastVisibleItem + visibleThreshold) {
-                    loading = true
-                    fetchFeeds()
+                firstVisibleItemPosition =
+                    if (layoutManager.childCount > 0) layoutManager.findFirstVisibleItemPositions(
+                        null
+                    )[0] else 0
+                visibleItemCount = layoutManager.childCount
+                totalItemCount = layoutManager.itemCount
+                if (totalItemCount - visibleItemCount <= firstVisibleItemPosition + visibleThreshold ||
+                    totalItemCount == 0
+                ) {
+                    if (!loading) {
+                        loading = true
+                        feedsViewModel.getFeeds()
+                    }
                 }
             }
         })
     }
-
 
     override fun feedItemClickListener(
         article: Any,
         adapterPosition: Int,
         view: View
     ) {
-        if (article is LocalFeeds) {
+        if (article is WPPost) {
             val intent = Intent(mContext, DetailsActivity::class.java)
             intent.putExtra(DetailsActivity.ARTICLE, article)
             startActivity(intent)
         }
     }
-
-    private fun fetchFeeds() {
-        feedAdapter.addLoaderItem()
-        feedsViewModel.getLiveFeeds().removeObservers(this)
-        feedDisposable = ApiClient.mApiService.getFeeds(pageIndex)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .retryWhen(RetryWithDelay())
-            .subscribe({
-                if (isAdded) {
-                    feedAdapter.removeLoaderItem()
-                    if (it?.channel != null && it.channel!!.itemList != null) {
-                        val itemList = it.channel!!.itemList
-                        if (itemList != null && itemList.isNotEmpty()) {
-                            val finalList = mutableListOf<LocalFeeds>()
-                            itemList.forEach { feed ->
-                                val simpleDateFormat =
-                                    SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss z", Locale.US)
-                                val mDate = simpleDateFormat.parse(feed.pubDate)
-                                val timeInMillis = mDate!!.time
-
-                                val localFeeds = LocalFeeds(
-                                    feed.title!!,
-                                    feed.link!!,
-                                    timeInMillis,
-                                    feed.description!!,
-                                    feed.content!!,
-                                    if (feed.enclosure == null) {
-                                        ""
-                                    } else {
-                                        feed.enclosure!!.audioUrl!!
-                                    },
-                                    isDownloaded = false,
-                                    isBookMarked = false
-                                )
-                                finalList.add(localFeeds)
-                            }
-
-                            feedAdapter.addFeeds(finalList)
-                        }
-                        pageIndex++
-                    }
-
-                    loading = false
-                }
-            }, {
-                if (isAdded) {
-                    feedAdapter.removeLoaderItem()
-                    it.printStackTrace()
-                    RxBus.publish(ShowSnackBar(getString(R.string.try_later)))
-                    loading = false
-                }
-            })
-    }
-
 }

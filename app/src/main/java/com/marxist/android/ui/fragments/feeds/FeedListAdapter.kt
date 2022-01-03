@@ -1,16 +1,19 @@
 package com.marxist.android.ui.fragments.feeds
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.marxist.android.R
-import com.marxist.android.database.entities.LocalFeeds
+import com.marxist.android.data.model.WPPost
+import com.marxist.android.databinding.FeedItemViewBinding
+import com.marxist.android.databinding.ListFeedsBottomProgressBinding
 import com.marxist.android.ui.base.ItemClickListener
 import com.marxist.android.ui.base.ProgressViewHolder
 
 class FeedListAdapter(
     private val mContext: Context,
-    private val mutableList: MutableList<LocalFeeds?>,
+    private val mutableList: MutableList<WPPost?>,
     private val itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -18,9 +21,16 @@ class FeedListAdapter(
     private val VIEW_PROG = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if (viewType == VIEW_ITEM) {
-            FeedItemHolder(parent, R.layout.feed_item_view)
+            val binding =
+                FeedItemViewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            FeedItemHolder(parent.context, binding)
         } else {
-            ProgressViewHolder(parent, R.layout.list_feeds_bottom_progress)
+            val binding = ListFeedsBottomProgressBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            ProgressViewHolder(binding)
         }
     }
 
@@ -48,9 +58,9 @@ class FeedListAdapter(
         }
     }
 
-    fun addFeeds(articles: MutableList<LocalFeeds>) {
+    fun addFeed(articles: List<WPPost>) {
         mutableList.addAll(articles)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(mutableList.size, articles.size)
     }
 
     fun addLoaderItem() {
@@ -59,7 +69,19 @@ class FeedListAdapter(
     }
 
     fun removeLoaderItem() {
-        this.mutableList.removeAt(itemCount - 1)
-        notifyItemRemoved(itemCount)
+        if (itemCount > 1) {
+            val lastItemIndex = itemCount - 1
+            val item = mutableList[lastItemIndex]
+            if (item == null) {
+                this.mutableList.removeAt(lastItemIndex)
+                notifyItemRangeRemoved(lastItemIndex, 1)
+            }
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun clear() {
+        mutableList.clear()
+        notifyDataSetChanged()
     }
 }

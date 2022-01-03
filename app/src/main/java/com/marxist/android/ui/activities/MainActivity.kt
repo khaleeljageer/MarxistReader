@@ -1,85 +1,93 @@
 package com.marxist.android.ui.activities
 
-import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import androidx.navigation.findNavController
+import androidx.activity.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.marxist.android.R
-import com.marxist.android.model.ConnectivityType
-import com.marxist.android.model.DarkModeChanged
-import com.marxist.android.model.NetWorkMessage
+import com.marxist.android.databinding.ActivityMainBinding
 import com.marxist.android.model.ShowSnackBar
+import com.marxist.android.ui.activities.details.DetailsViewModel
 import com.marxist.android.ui.base.BaseActivity
-import com.marxist.android.utils.PrintLog
-import com.marxist.android.utils.RxBus
-import com.marxist.android.utils.network.NetworkSchedulerService
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.toolbar_widget.*
+import com.marxist.android.utils.EventBus
+import com.marxist.android.utils.setupWithNavController
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
+    private val binding by lazy {
+        ActivityMainBinding.inflate(layoutInflater)
+    }
+    private val detailsViewModel: DetailsViewModel by viewModels()
 
-    companion object {
-        const val PLAY_NEW_VIDEO = "com.marxist.android.ui.activities.PLAY_NEW_VIDEO"
+    @Inject
+    lateinit var eventBus: EventBus
+
+    private lateinit var currentNavController: NavController
+
+    private lateinit var appBarConfiguration: AppBarConfiguration
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        setupBottomNavigationBar()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-
-        if (intent != null && intent.data != null) {
-            PrintLog.debug("Khaleel", "Intent Data : ${intent.data!!.host}")
-            PrintLog.debug("Khaleel", "Intent Data : ${intent.data!!.encodedPath}")
+        setContentView(binding.root)
+        if (savedInstanceState == null) {
+            setupBottomNavigationBar()
         }
+        detailsViewModel.triggerArticleLink("https://marxistreader.home.blog")
 
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
-        val navController = findNavController(R.id.nav_host_fragment)
-
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_feeds,
-                R.id.navigation_ebook,
-                R.id.navigation_saved,
-                R.id.navigation_notifications,
-                R.id.navigation_settings
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-
-        RxBus.subscribe({
-            when (it) {
-                is NetWorkMessage -> displayMaterialSnackBar(it.message, it.type, container2)
-                is DarkModeChanged -> Handler().post {
-                    recreate()
+        lifecycleScope.launch {
+            eventBus.events.collect {
+                when (it) {
+                    is ShowSnackBar -> displayMaterialSnackBar(
+                        it.message,
+                        binding.container2
+                    )
                 }
-                is ShowSnackBar -> displayMaterialSnackBar(
-                    it.message,
-                    ConnectivityType.OTHER,
-                    container2
-                )
             }
-        }, {
-            PrintLog.debug("Marxist", "$it")
+        }
+    }
+
+    private fun setupBottomNavigationBar() {
+        val navigationView = findViewById<BottomNavigationView>(R.id.nav_view)
+
+        val navGraphIds = listOf(
+            R.navigation.nav_feeds,
+            R.navigation.nav_ebooks,
+            R.navigation.nav_quotes,
+            R.navigation.nav_settings
+        )
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.feeds, R.id.ebook, R.id.quotes, R.id.settings)
+        )
+
+        // Setup the bottom navigation view with a list of navigation graphs
+        val controller = navigationView.setupWithNavController(
+            navGraphIds = navGraphIds,
+            fragmentManager = supportFragmentManager,
+            containerId = R.id.nav_host_container,
+            intent = intent
+        )
+
+        // Whenever the selected controller changes, setup the action bar.
+        controller.observe(this, { navController ->
+            currentNavController = navController
+            setupActionBarWithNavController(navController)
         })
     }
 
-    override fun onStart() {
-        super.onStart()
-        try {
-            val startServiceIntent = Intent(this@MainActivity, NetworkSchedulerService::class.java)
-            startService(startServiceIntent)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    override fun onStop() {
-        stopService(Intent(this@MainActivity, NetworkSchedulerService::class.java))
-        super.onStop()
+    override fun onSupportNavigateUp(): Boolean {
+        return currentNavController.navigateUp(appBarConfiguration)
     }
 }

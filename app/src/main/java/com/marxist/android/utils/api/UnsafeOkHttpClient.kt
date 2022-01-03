@@ -8,7 +8,7 @@ import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
 object UnsafeOkHttpClient {
-    val unsafeOkHttpClient: OkHttpClient
+    val unsafeOkHttpClient: OkHttpClient.Builder
         get() {
             try {
                 val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
@@ -40,7 +40,7 @@ object UnsafeOkHttpClient {
                 builder.sslSocketFactory(sslSocketFactory, trustAllCerts[0] as X509TrustManager)
                 builder.hostnameVerifier { _, _ -> true }
 
-                return builder.build()
+                return builder
             } catch (e: Exception) {
                 throw RuntimeException(e)
             }

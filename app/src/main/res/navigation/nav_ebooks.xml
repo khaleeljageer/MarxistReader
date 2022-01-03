@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/nav_ebooks"
+        app:startDestination="@id/ebook">
+
+    <fragment
+            android:id="@+id/ebook"
+            android:name="com.marxist.android.ui.fragments.books.EBooksFragment"
+            android:label="@string/books"
+            tools:layout="@layout/fragments_list" />
+</navigation>

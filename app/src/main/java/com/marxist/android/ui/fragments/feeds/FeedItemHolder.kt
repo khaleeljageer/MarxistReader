@@ -1,36 +1,33 @@
 package com.marxist.android.ui.fragments.feeds
 
+import android.content.Context
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.marxist.android.R
-import com.marxist.android.database.entities.LocalFeeds
-import com.marxist.android.ui.base.BaseViewHolder
-import com.marxist.android.utils.PrintLog
-import kotlinx.android.synthetic.main.feed_item_view.view.*
+import com.marxist.android.data.model.WPPost
+import com.marxist.android.databinding.FeedItemViewBinding
+import com.marxist.android.utils.DeviceUtils
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.floor
 import kotlin.math.roundToInt
 
 
-class FeedItemHolder(private val parent: ViewGroup, layoutID: Int) :
-    BaseViewHolder<LocalFeeds>(parent, layoutID) {
-    override fun bindData(item: LocalFeeds) {
-        itemView.txtFeedTitle.text = item.title
-        itemView.txtFeedDesc.text =
-            HtmlCompat.fromHtml(item.description, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        val pubDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
-            Date(item.pubDate)
-        ).toString()
-        val wordCount = item.content.wordCount()
+class FeedItemHolder(private val context: Context, private val parent: FeedItemViewBinding) :
+    RecyclerView.ViewHolder(parent.root) {
+    fun bindData(item: WPPost) {
+        parent.txtFeedTitle.text =
+            HtmlCompat.fromHtml(item.title.rendered, HtmlCompat.FROM_HTML_MODE_COMPACT)
+
+        val wordCount = item.content.rendered.wordCount()
         val estimated = wordCount.estimateTime()
+        parent.txtPubDate.text = formatDate(item.date)
+        parent.txtEstimate.text =
+            context.getString(R.string.estimate).plus(estimated)
+        parent.rootCard.setCardBackgroundColor(DeviceUtils.getColor(context))
 
-        itemView.txtPubDate.text =
-            pubDate.plus(parent.context.getString(R.string.estimate))
-                .plus(estimated)
-
-        itemView.ivAudioLogo.visibility = if (item.audioUrl.isEmpty()) {
+        parent.ivAudioLogo.visibility = if (item.audioUrl.isNullOrEmpty()) {
             View.INVISIBLE
         } else {
             View.VISIBLE
@@ -53,6 +50,19 @@ class FeedItemHolder(private val parent: ViewGroup, layoutID: Int) :
                 }
                 "$hour min read"
             }
+        }
+    }
+
+    private fun formatDate(pubDate: String): String {
+        val wpDateFormat =
+            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault()).parse(pubDate)
+
+        return try {
+            val sdf = SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+            sdf.format(wpDateFormat)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            pubDate
         }
     }
 

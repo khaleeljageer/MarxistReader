@@ -1,6 +1,7 @@
 <resources>
     <string name="pref_key_dark_mode" translatable="false">dark_mode</string>
     <string name="pref_key_font_size" translatable="false">font_size</string>
+    <string name="pref_key_reader_bg" translatable="false">reader_bg</string>
     <string name="pref_key_name" translatable="false">com.marxist.android.PREFERENCE</string>
     <string name="default_notification_channel_id" translatable="false">marxist_tamil</string>
     <string name="marxist_instant_news" translatable="false">marxist_instant_news</string>
@@ -20,7 +21,6 @@
     <string name="loading">Loading&#8230;</string>
     <string name="connected_to_internet">Connected to Internet</string>
     <string name="no_internet">Connection Lost</string>
-    <string name="feeds">Feeds</string>
     <string name="books">E-Books</string>
     <string name="bookmarks">Highlights</string>
     <string name="bookmark">Highlight</string>
@@ -28,7 +28,7 @@
     <string name="settings">Settings</string>
 
     <string-array name="splash_loading">
-        <item>Loading Feeds&#8230;</item>
+        <item>Loading Articles&#8230;</item>
         <item>Please wait&#8230;</item>
     </string-array>
 
@@ -79,9 +79,10 @@
     <string name="https_lottiefiles_com_marketplace_multimedia_icons">https://lottiefiles.com/marketplace/multimedia-icons</string>
     <string name="https_lottiefiles_com_11123_music">https://lottiefiles.com/11123-music</string>
     <string name="https_lottiefiles_com_353_newspaper_spinner">https://lottiefiles.com/353-newspaper-spinner</string>
+    <string name="https_lottiefiles_com_353_stay_home">https://lottiefiles.com/18289-stay-home-stay-safe-red</string>
     <string name="lottie_credits">Lottie Credits</string>
     <string name="default_notification_channel_id_test">marxist_tamil_test</string>
-    <string name="notifications">Notifications</string>
+    <string name="quotes">Quotes</string>
     <string name="about_text"><![CDATA[
 <p><b>Marxist Reader</b> செயலியானது, மார்க்சிஸ்ட் மாத இதழின் இணைய பதிப்பு, ஒலிப் பதிவுகள் மற்றும் மின் நூல் வடிவத்தை உள்ளடக்கிய ஒன்றாகும். மார்க்சிய தத்துவ மாத இதழாக 1989, ஜூன் மாதத்தில் இருந்து வெளியாகிறது \'மார்க்சிஸ்ட்\'. இப்போது நவீன வடிவங்களிலும் வாசகர்களை வந்தடைகிறது.</p>
 
@@ -106,4 +107,10 @@
     <string name="phone">Phone</string>
     <string name="download_completed">Download Completed</string>
     <string name="download_failed">Download Failed</string>
+    <string name="text_size">Text Size</string>
+    <string name="tune">Tune</string>
+    <string name="tune_reader">Tune Reader</string>
+    <string name="pref_key_preferred_font">preferred_font</string>
+    <string name="search">Search</string>
+    <string name="clear">Clear</string>
 </resources>
