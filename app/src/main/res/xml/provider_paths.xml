@@ -1,5 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-path name="audio" path="."/>
-    <external-path name="books" path="."/>
+    <!-- Share folder under internal file folder. The base folder is context.getFilesDir() -->
+    <files-path
+            name="internal_files"
+            path="." />
+
+    <!-- Share folder under internal cache folder. The base folder is context.getCacheDir() -->
+    <cache-path
+            name="internal_cache"
+            path="." />
+
+    <!-- Share folder under public external storage folder.The base folder is Environment.getExternalStorageDirectory()-->
+    <external-path
+            name="external"
+            path="Android/data/com.marxist.android/files/" />
+
+    <!-- Share folder under app specific external file folder.The base folder is context.getExternalFilesDirs()-->
+    <external-files-path
+            name="external_files"
+            path="." />
+
+    <!-- Share folder under app specific external cache folder.The base folder is context.getExternalCacheDirs()-->
+    <external-cache-path
+            name="external_cache"
+            path="." />
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+    <!--<paths>-->
+    <!--    <external-path name="audio" path="."/>-->
+    <!--    <external-path name="books" path="."/>-->
+    <!--    -->
+    <!--</paths>-->
 </paths>

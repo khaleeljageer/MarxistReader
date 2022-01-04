@@ -1,18 +1,25 @@
 package com.marxist.android.ui.fragments.books
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.marxist.android.R
+import com.marxist.android.data.model.DownloadResult
 import com.marxist.android.database.AppDatabase
+import com.marxist.android.database.entities.LocalBooks
 import com.marxist.android.databinding.FragmentsBooksBinding
-import com.marxist.android.utils.GridItemSpace
-import com.marxist.android.utils.toPixel
-import com.marxist.android.utils.viewBinding
+import com.marxist.android.utils.*
+import com.marxist.android.utils.download.DownloadUtil
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -23,14 +30,17 @@ class EBooksFragment : Fragment(R.layout.fragments_books) {
     @Inject
     lateinit var appDatabase: AppDatabase
 
+    @Inject
+    lateinit var okHttpClient: OkHttpClient
+
     private val bookAdapter by lazy {
-        BookListAdapter(requireContext(), mutableListOf(), appDatabase)
+        BookListAdapter(mutableListOf(), ::downloadWithFlow)
     }
 
     private fun initData() {
         showEmptyView()
         booksViewModel.callBookApi()
-        booksViewModel.booksLiveData.observe(viewLifecycleOwner, Observer {
+        booksViewModel.booksLiveData.observe(viewLifecycleOwner, {
             if (it != null) {
                 if (it.isNotEmpty()) {
                     hideEmptyView()
@@ -68,6 +78,37 @@ class EBooksFragment : Fragment(R.layout.fragments_books) {
             addItemDecoration(GridItemSpace(requireContext(), 5.toPixel(context)))
         }
 
+
         initData()
+    }
+
+    private fun downloadWithFlow(book: LocalBooks) {
+        CoroutineScope(Dispatchers.IO).launch {
+
+            val targetPath = DeviceUtils.getRootDirPath(requireContext()).plus("/books")
+            val path = File(targetPath, "${book.title}.epub")
+            if (path.exists()) {
+                DownloadUtil.openSavedBook(requireContext(), path.toString())
+            } else {
+                okHttpClient.downloadFile(path, book.epub).collect {
+                    withContext(Dispatchers.Main) {
+                        when (it) {
+                            is DownloadResult.Success -> {
+                                bookAdapter.setDownloading(book, false)
+                                Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT)
+                                    .show()
+                            }
+                            is DownloadResult.Error -> {
+                                bookAdapter.setDownloading(book, false)
+                                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                            }
+                            DownloadResult.Loading -> {
+                                bookAdapter.setDownloading(book, true)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
