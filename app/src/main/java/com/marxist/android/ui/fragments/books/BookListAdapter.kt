@@ -1,6 +1,5 @@
 package com.marxist.android.ui.fragments.books
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,12 +7,10 @@ import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalBooks
 import com.marxist.android.databinding.BookListItemBinding
 import com.marxist.android.utils.AppConstants
-import com.marxist.android.utils.DeviceUtils
 
 class BookListAdapter(
-    private val mContext: Context,
     private var booksList: MutableList<LocalBooks>,
-    private val appDatabase: AppDatabase
+    private val listener: (LocalBooks) -> Unit
 ) : RecyclerView.Adapter<BookViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BookViewHolder {
@@ -25,8 +22,7 @@ class BookListAdapter(
         lp.height = ((width / AppConstants.ASPECT_RATIO) / 4).toInt()
         binding.root.layoutParams = lp
 
-        val targetPath = DeviceUtils.getRootDirPath(mContext).plus("/books")
-        return BookViewHolder(mContext, binding, targetPath)
+        return BookViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
@@ -42,11 +38,18 @@ class BookListAdapter(
     }
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
-        holder.bindData(getItem(position), appDatabase)
+        holder.bindData(getItem(position), listener)
     }
 
     fun setItems(it: MutableList<LocalBooks>) {
         booksList = it
         notifyDataSetChanged()
     }
+
+    fun setDownloading(book: LocalBooks, isDownloading: Boolean) {
+        getBook(book)?.isDownloading = isDownloading
+        notifyItemChanged(booksList.indexOf(book))
+    }
+
+    private fun getBook(book: LocalBooks) = booksList.find { book.bookid == it.bookid }
 }

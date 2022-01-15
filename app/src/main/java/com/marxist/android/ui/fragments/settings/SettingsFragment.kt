@@ -44,4 +44,10 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
         }
     }
+
+    companion object {
+        fun newInstance(): SettingsFragment {
+            return SettingsFragment()
+        }
+    }
 }

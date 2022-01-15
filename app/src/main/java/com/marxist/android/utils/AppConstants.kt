@@ -23,4 +23,7 @@ object AppConstants {
     const val DOWNLOAD_COMPLETE_PERCENT = 100
     const val MAX_COUNT_OF_SIMULTANEOUS_DOWNLOADS = 2
     const val INVALID_ID = -1
+
+    const val FACEBOOK_SHARE = 1
+    const val OTHER_SHARE = 2
 }

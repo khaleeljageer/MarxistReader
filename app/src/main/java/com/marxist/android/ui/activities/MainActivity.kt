@@ -3,18 +3,14 @@ package com.marxist.android.ui.activities
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationBarView
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityMainBinding
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.activities.details.DetailsViewModel
 import com.marxist.android.ui.base.BaseActivity
+import com.marxist.android.ui.base.FragmentsAdapter
 import com.marxist.android.utils.EventBus
-import com.marxist.android.utils.setupWithNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -30,9 +26,9 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var eventBus: EventBus
 
-    private lateinit var currentNavController: NavController
-
-    private lateinit var appBarConfiguration: AppBarConfiguration
+    private val fragmentsAdapter by lazy {
+        FragmentsAdapter(this@MainActivity, listOf(0, 1, 2, 3))
+    }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
@@ -57,37 +53,53 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
+
+        with(binding.viewPager) {
+            this.offscreenPageLimit = 3
+            this.adapter = fragmentsAdapter
+            this.isUserInputEnabled = false
+        }
+
+        updateTitle(0)
     }
 
     private fun setupBottomNavigationBar() {
-        val navigationView = findViewById<BottomNavigationView>(R.id.nav_view)
-
-        val navGraphIds = listOf(
-            R.navigation.nav_feeds,
-            R.navigation.nav_ebooks,
-            R.navigation.nav_quotes,
-            R.navigation.nav_settings
-        )
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.feeds, R.id.ebook, R.id.quotes, R.id.settings)
-        )
-
-        // Setup the bottom navigation view with a list of navigation graphs
-        val controller = navigationView.setupWithNavController(
-            navGraphIds = navGraphIds,
-            fragmentManager = supportFragmentManager,
-            containerId = R.id.nav_host_container,
-            intent = intent
-        )
-
-        // Whenever the selected controller changes, setup the action bar.
-        controller.observe(this, { navController ->
-            currentNavController = navController
-            setupActionBarWithNavController(navController)
-        })
+        binding.navView.setOnItemSelectedListener(onItemSelectedListener)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return currentNavController.navigateUp(appBarConfiguration)
+    private val onItemSelectedListener = NavigationBarView.OnItemSelectedListener {
+        when (it.itemId) {
+            R.id.nav_feeds -> {
+                binding.viewPager.setCurrentItem(0, false)
+                updateTitle(0)
+                return@OnItemSelectedListener true
+            }
+            R.id.nav_ebooks -> {
+                binding.viewPager.setCurrentItem(1, false)
+                updateTitle(1)
+                return@OnItemSelectedListener true
+            }
+            R.id.nav_quotes -> {
+                binding.viewPager.setCurrentItem(2, false)
+                updateTitle(2)
+                return@OnItemSelectedListener true
+            }
+            R.id.nav_settings -> {
+                binding.viewPager.setCurrentItem(3, false)
+                updateTitle(3)
+                return@OnItemSelectedListener true
+            }
+        }
+        return@OnItemSelectedListener false
+    }
+
+    private fun updateTitle(index: Int) {
+        val title = when (index) {
+            1 -> "E-Books"
+            2 -> "Quotes"
+            3 -> "Settings"
+            else -> "Marxist Reader"
+        }
+        supportActionBar?.title = title
     }
 }

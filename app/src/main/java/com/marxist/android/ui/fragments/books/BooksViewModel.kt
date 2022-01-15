@@ -46,35 +46,11 @@ class BooksViewModel @Inject constructor(
                     is NetworkResponse.EmptyResponse -> {
 
                     }
+                    NetworkResponse.Loading -> {
 
+                    }
                 }
             }
         }
-
-//        disposable = apiService.getBooks()
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .retryWhen(RetryWithDelay())
-//            .subscribe({
-//                if (it != null) {
-//                    if (it.books.isNotEmpty()) {
-//                        for (book in it.books) {
-//                            if (!booksDao.isIdAvailable(book.bookid)) {
-//                                val simpleDateFormat =
-//                                    SimpleDateFormat("MMM, yyyy", Locale.US)
-//                                val mDate = simpleDateFormat.parse(book.date)
-//                                val timeInMillis = mDate!!.time
-//
-//                                book.isDownloaded = false
-//                                book.savedPath = ""
-//                                book.pubDate = timeInMillis
-//                                insert(book)
-//                            }
-//                        }
-//                    }
-//                }
-//            }, {
-//                it.printStackTrace()
-//            })
     }
 }

@@ -8,7 +8,19 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../layout/compose-model-1642219389740.xml" value="0.125" />
+        <entry key="../../../../layout/custom_preview.xml" value="0.2462962962962963" />
+        <entry key="../../.gradle/caches/transforms-3/a5a0e8ddb8d0d587116237203087b604/transformed/jetified-facebook-common-12.3.0/res/drawable/com_facebook_auth_dialog_background.xml" value="0.440625" />
+        <entry key="../../.gradle/caches/transforms-3/a5a0e8ddb8d0d587116237203087b604/transformed/jetified-facebook-common-12.3.0/res/drawable/com_facebook_auth_dialog_cancel_background.xml" value="0.440625" />
+        <entry key="../../.gradle/caches/transforms-3/a5a0e8ddb8d0d587116237203087b604/transformed/jetified-facebook-common-12.3.0/res/drawable/com_facebook_auth_dialog_header_background.xml" value="0.440625" />
+        <entry key="../../.gradle/caches/transforms-3/a5a0e8ddb8d0d587116237203087b604/transformed/jetified-facebook-common-12.3.0/res/drawable/com_facebook_button_background.xml" value="0.440625" />
+        <entry key="../../.gradle/caches/transforms-3/a5a0e8ddb8d0d587116237203087b604/transformed/jetified-facebook-common-12.3.0/res/drawable/com_facebook_button_icon.xml" value="0.440625" />
+        <entry key="../../.gradle/caches/transforms-3/a5a0e8ddb8d0d587116237203087b604/transformed/jetified-facebook-common-12.3.0/res/drawable/com_facebook_favicon_blue.xml" value="0.440625" />
         <entry key="app/src/main/res/drawable-night/splash_window_bg.xml" value="0.37037037037037035" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back_24dp.xml" value="0.2462962962962963" />
+        <entry key="app/src/main/res/drawable/ic_book_black_24dp.xml" value="0.2462962962962963" />
+        <entry key="app/src/main/res/drawable/ic_round_format_size_24.xml" value="0.2462962962962963" />
+        <entry key="app/src/main/res/drawable/ic_round_quote_24.xml" value="0.2462962962962963" />
         <entry key="app/src/main/res/drawable/splash_window_bg.xml" value="0.37037037037037035" />
         <entry key="app/src/main/res/layout/activity_about.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.43373493975903615" />

@@ -20,8 +20,5 @@ data class LocalBooks(
     var pubDate: Long,
     val date: String,
 
-    @ColumnInfo(name = "is_downloaded")
-    var isDownloaded: Boolean,
-    @ColumnInfo(name = "saved_path")
-    var savedPath: String = ""
+    var isDownloading: Boolean = false
 ) : Serializable

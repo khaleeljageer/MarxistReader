@@ -113,4 +113,6 @@
     <string name="pref_key_preferred_font">preferred_font</string>
     <string name="search">Search</string>
     <string name="clear">Clear</string>
+    <string name="share">Share</string>
+    <string name="facebook_sahre">Facebook Share</string>
 </resources>

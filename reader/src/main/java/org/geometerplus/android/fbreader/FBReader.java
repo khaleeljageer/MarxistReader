@@ -116,6 +116,7 @@ public final class FBReader extends FBReaderMainActivity implements ZLApplicatio
 		}
 		lifeCycle = lifeCycleListener;
 		final Intent intent = defaultIntent(context);
+		intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 		intent.setData(Uri.parse(path));
 		context.startActivity(intent);
 	}
