@@ -4,22 +4,19 @@ import android.os.Bundle
 import android.telephony.PhoneNumberUtils
 import android.view.MenuItem
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.lifecycleScope
 import com.marxist.android.R
+import com.marxist.android.data.api.FeedbackHelper
 import com.marxist.android.databinding.ActivityFeedbackBinding
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.utils.DeviceUtils
-import com.marxist.android.utils.api.ApiService
 import dagger.hilt.android.AndroidEntryPoint
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import retrofit2.converter.gson.GsonConverterFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FeedBackActivity : BaseActivity() {
-    private var disposable: Disposable? = null
 
     /* URL : https://docs.google.com/forms/d/e/1FAIpQLSfTqVr8z77QxxclC_ZnvsQfOc67F1Wjw07giA2jxoXpFtuvLg/formResponse
             * name : entry_1191964018
@@ -29,6 +26,9 @@ class FeedBackActivity : BaseActivity() {
     private val binding by lazy {
         ActivityFeedbackBinding.inflate(layoutInflater)
     }
+
+    @Inject
+    lateinit var feedbackHelper: FeedbackHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,11 +52,6 @@ class FeedBackActivity : BaseActivity() {
             android.R.id.home -> onBackPressed()
         }
         return true
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        disposable?.dispose()
     }
 
     private fun submit() {
@@ -91,33 +86,30 @@ class FeedBackActivity : BaseActivity() {
 
         dialog.show()
         DeviceUtils.hideSoftKeyboard(this)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val response = feedbackHelper.postFeedBack("application/json", name, phone, comments)
+            if (response.isSuccessful) {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    dialog.dismiss()
 
-        val retrofit = Retrofit.Builder()
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://docs.google.com/forms/d/")
-            .build().create(ApiService::class.java)
+                    binding.edtName.setText("")
+                    binding.edtPhone.setText("")
+                    binding.edtComments.setText("")
 
-        disposable = retrofit.postFeedBack("application/json", name, phone, comments)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                dialog.dismiss()
-
-                binding.edtName.setText("")
-                binding.edtPhone.setText("")
-                binding.edtComments.setText("")
-
-                displayMaterialSnackBar(
-                    getString(R.string.thanks_feedback),
-                    binding.rootView
-                )
-            }, { error ->
-                dialog.dismiss()
-                displayMaterialSnackBar(
-                    getString(R.string.try_later),
-                    binding.rootView
-                )
-            })
+                    displayMaterialSnackBar(
+                        getString(R.string.thanks_feedback),
+                        binding.rootView
+                    )
+                }
+            } else {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    dialog.dismiss()
+                    displayMaterialSnackBar(
+                        getString(R.string.try_later),
+                        binding.rootView
+                    )
+                }
+            }
+        }
     }
 }

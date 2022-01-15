@@ -2,6 +2,7 @@ package com.marxist.android.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.marxist.android.data.api.FeedbackService
 import com.marxist.android.data.api.GitHubService
 import com.marxist.android.data.api.WordPressService
 import com.marxist.android.database.AppDatabase
@@ -35,6 +36,15 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build().create(GitHubService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideFeedbackService(okHttpClient: OkHttpClient): FeedbackService =
+        Retrofit.Builder()
+            .baseUrl(" https://docs.google.com/forms/d/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build().create(FeedbackService::class.java)
 
     @Provides
     @Singleton

@@ -6,9 +6,9 @@ import retrofit2.Response
 import retrofit2.http.GET
 
 interface GitHubService {
-    @GET("master/booksdb.json?token=GHSAT0AAAAAABQSWSL6XOELXCBSME5Y3BF2YPC4DUA")
+    @GET("master/booksdb.json")
     suspend fun getBooks(): Response<BooksResponse>
 
-    @GET("master/notifications.json?token=GHSAT0AAAAAABQSWSL7OC7B457GHW53A5V4YPC4ANA")
+    @GET("master/notifications.json")
     suspend fun getQuotes(): Response<QuotesResponse>
 }
