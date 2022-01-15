@@ -5,6 +5,6 @@ import org.geometerplus.android.fbreader.FBReader
 
 object DownloadUtil {
     fun openSavedBook(context: Context, path: String) {
-        FBReader.openBookActivity(context, "file://$path")
+        FBReader.openBookActivity(context, path)
     }
 }
