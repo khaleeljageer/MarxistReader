@@ -9,6 +9,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="app/src/main/res/drawable-night/splash_window_bg.xml" value="0.37037037037037035" />
+        <entry key="app/src/main/res/drawable/ic_arrow_back_24dp.xml" value="0.2462962962962963" />
         <entry key="app/src/main/res/drawable/splash_window_bg.xml" value="0.37037037037037035" />
         <entry key="app/src/main/res/layout/activity_about.xml" value="0.21875" />
         <entry key="app/src/main/res/layout/activity_details.xml" value="0.43373493975903615" />

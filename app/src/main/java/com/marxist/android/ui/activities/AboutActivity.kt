@@ -3,10 +3,10 @@ package com.marxist.android.ui.activities
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.text.HtmlCompat
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityAboutBinding
 import dagger.hilt.android.AndroidEntryPoint
-import org.sufficientlysecure.htmltextview.HtmlTextView
 
 
 @AndroidEntryPoint
@@ -26,9 +26,9 @@ class AboutActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_arrow_back_24dp)
         }
 
-        binding.txtAbout.setHtmlFromString(
+        binding.txtAbout.text = HtmlCompat.fromHtml(
             getString(R.string.about_text),
-            HtmlTextView.RemoteImageGetter()
+            HtmlCompat.FROM_HTML_MODE_LEGACY
         )
     }
 

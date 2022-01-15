@@ -34,8 +34,8 @@
                 android:id="@+id/nestedScroll"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
                 android:descendantFocusability="beforeDescendants"
+                android:orientation="vertical"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
@@ -58,7 +58,7 @@
                         android:textStyle="bold"
                         app:fontFamily="@font/hind_regular" />
 
-                <org.sufficientlysecure.htmltextview.HtmlTextView
+                <com.google.android.material.textview.MaterialTextView
                         android:id="@+id/txtContent"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"

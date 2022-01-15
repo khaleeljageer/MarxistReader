@@ -12,7 +12,10 @@ import androidx.lifecycle.lifecycleScope
 import com.marxist.android.R
 import com.marxist.android.data.model.WPPost
 import com.marxist.android.databinding.ActivityDetailsBinding
-import com.marxist.android.model.*
+import com.marxist.android.model.FontChange
+import com.marxist.android.model.FontSizeChange
+import com.marxist.android.model.ReaderBgChange
+import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.fragments.player.AudioPlayerFragment
 import com.marxist.android.ui.fragments.tune.TuneSheetFragment
@@ -23,7 +26,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import org.sufficientlysecure.htmltextview.HtmlTextView
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -111,7 +113,7 @@ class DetailsActivity : BaseActivity() {
                 binding.cvPlayerView.visibility = View.GONE
             }
 
-            var content = it.content.rendered
+            var content: String = it.content.rendered
             val fontSize = appPreference[getString(R.string.pref_key_font_size), 14]
             try {
                 val regex1 = Regex("(?s)<div class=\"wpcnt\">.*?</div>")
@@ -121,10 +123,9 @@ class DetailsActivity : BaseActivity() {
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                binding.txtContent.apply {
-                    setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize.toFloat())
-                    setHtmlFromString(content, HtmlTextView.RemoteImageGetter())
-                }
+                binding.txtContent.text =
+                    HtmlCompat.fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                binding.txtContent.textSize = fontSize.toFloat()
             }
         }
         initFont()
