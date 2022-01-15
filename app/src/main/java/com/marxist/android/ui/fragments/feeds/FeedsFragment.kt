@@ -1,6 +1,5 @@
 package com.marxist.android.ui.fragments.feeds
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
@@ -22,9 +21,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
     private val binding by viewBinding(FragmentsListBinding::bind)
     private val feedAdapter by lazy {
-        FeedListAdapter(mContext, mutableListOf(), this@FeedsFragment)
+        FeedListAdapter(requireContext(), mutableListOf(), this@FeedsFragment)
     }
-    private lateinit var mContext: Context
 
     private val feedsViewModel: FeedsViewModel by viewModels()
 
@@ -33,11 +31,6 @@ class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
     private val visibleThreshold = 4
     private var firstVisibleItemPosition = 0
     private var loading: Boolean = false
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mContext = context
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -134,9 +127,15 @@ class FeedsFragment : Fragment(R.layout.fragments_list), ItemClickListener {
         view: View
     ) {
         if (article is WPPost) {
-            val intent = Intent(mContext, DetailsActivity::class.java)
+            val intent = Intent(requireContext(), DetailsActivity::class.java)
             intent.putExtra(DetailsActivity.ARTICLE, article)
             startActivity(intent)
+        }
+    }
+
+    companion object {
+        fun newInstance(): FeedsFragment {
+            return FeedsFragment()
         }
     }
 }

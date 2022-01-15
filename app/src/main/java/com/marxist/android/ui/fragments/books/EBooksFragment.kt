@@ -71,20 +71,16 @@ class EBooksFragment : Fragment(R.layout.fragments_books) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         with(binding.rvListView) {
             setHasFixedSize(true)
             adapter = bookAdapter
             addItemDecoration(GridItemSpace(requireContext(), 5.toPixel(context)))
         }
-
-
         initData()
     }
 
     private fun downloadWithFlow(book: LocalBooks) {
         CoroutineScope(Dispatchers.IO).launch {
-
             val targetPath = DeviceUtils.getRootDirPath(requireContext()).plus("/books")
             val path = File(targetPath, "${book.title}.epub")
             if (path.exists()) {
@@ -109,6 +105,13 @@ class EBooksFragment : Fragment(R.layout.fragments_books) {
                     }
                 }
             }
+        }
+    }
+
+
+    companion object {
+        fun newInstance(): EBooksFragment {
+            return EBooksFragment()
         }
     }
 }

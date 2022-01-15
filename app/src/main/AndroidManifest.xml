@@ -27,7 +27,6 @@
         <activity
                 android:name=".ui.activities.splash.LauncherActivity"
                 android:exported="true"
-                android:screenOrientation="portrait"
                 android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -50,28 +49,21 @@
         </activity>
         <activity
                 android:name=".ui.activities.MainActivity"
-                android:exported="true"
-                android:screenOrientation="portrait" />
+                android:exported="true" />
         <activity
                 android:name=".ui.activities.details.DetailsActivity"
                 android:exported="true"
-                android:screenOrientation="portrait"
                 android:theme="@style/DetailsTheme" />
         <activity
                 android:name=".ui.activities.LottieThankActivity"
-                android:exported="true"
-                android:screenOrientation="portrait" />
+                android:exported="true" />
         <activity
                 android:name=".ui.activities.AboutActivity"
-                android:exported="true"
-                android:screenOrientation="portrait" />
-        <activity
-                android:name=".ui.activities.FeedBackActivity"
-                android:screenOrientation="portrait" />
+                android:exported="true" />
+        <activity android:name=".ui.activities.FeedBackActivity" />
         <activity
                 android:name=".ui.activities.search.SearchActivity"
                 android:exported="true"
-                android:screenOrientation="portrait"
                 android:windowSoftInputMode="adjustResize" />
 
         <meta-data
@@ -93,6 +85,13 @@
                     android:name="android.support.FILE_PROVIDER_PATHS"
                     android:resource="@xml/provider_paths" />
         </provider>
+
+        <meta-data
+                android:name="com.facebook.sdk.ApplicationId"
+                android:value="@string/facebook_app_id" />
+        <meta-data
+                android:name="com.facebook.sdk.ClientToken"
+                android:value="@string/facebook_client_token" />
     </application>
 
 </manifest>
