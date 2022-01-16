@@ -115,4 +115,5 @@
     <string name="clear">Clear</string>
     <string name="share">Share</string>
     <string name="facebook_sahre">Facebook Share</string>
+    <string name="share_to">Share with…</string>
 </resources>

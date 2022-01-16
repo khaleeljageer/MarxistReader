@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
@@ -15,7 +16,6 @@ import com.marxist.android.R
 import com.marxist.android.databinding.FragmentsListBinding
 import com.marxist.android.model.Quote
 import com.marxist.android.ui.base.QuoteClickListener
-import com.marxist.android.utils.AppConstants
 import com.marxist.android.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -55,43 +55,54 @@ class QuotesFragment : Fragment(R.layout.fragments_list), QuoteClickListener {
         initData()
     }
 
-    override fun quoteClickListener(quote: Quote, type: Int) {
-        when (type) {
-            AppConstants.FACEBOOK_SHARE -> {
-                if (ShareDialog.canShow(ShareLinkContent::class.java)) {
-                    val content = ShareLinkContent.Builder()
-                        .setContentUrl(
-                            Uri.parse(
-                                if (quote.link.isEmpty()) {
-                                    "https://marxistreader.home.blog/"
-                                } else quote.link
-                            )
-                        )
-                        .setQuote(quote.quote)
-                        .setShareHashtag(
-                            ShareHashtag.Builder()
-                                .setHashtag(quote.hashTag)
+    override fun quoteClickListener(quote: Quote) {
+        val shareList = arrayOf("Facebook", "Other")
+        val dialog = AlertDialog.Builder(requireActivity()).setTitle(getString(R.string.share_to))
+            .setCancelable(true)
+            .setItems(
+                shareList
+            ) { dialog, which ->
+                when (shareList[which]) {
+                    "Facebook" -> {
+                        if (ShareDialog.canShow(ShareLinkContent::class.java)) {
+                            val content = ShareLinkContent.Builder()
+                                .setContentUrl(
+                                    Uri.parse(
+                                        if (quote.link.isEmpty()) {
+                                            "https://marxistreader.home.blog/"
+                                        } else quote.link
+                                    )
+                                )
+                                .setQuote(quote.quote)
+                                .setShareHashtag(
+                                    ShareHashtag.Builder()
+                                        .setHashtag(quote.hashTag)
+                                        .build()
+                                )
                                 .build()
-                        )
-                        .build()
 
-                    ShareDialog.show(requireActivity(), content)
+                            ShareDialog.show(requireActivity(), content)
+                        }
+                    }
+                    "Other" -> {
+                        val sendIntent: Intent = Intent().apply {
+                            this.action = Intent.ACTION_SEND
+                            this.putExtra(
+                                Intent.EXTRA_TEXT,
+                                "${quote.quote}\n${quote.reference}\n${quote.link}"
+                            )
+                            this.type = "text/plain"
+                        }
+
+                        val shareIntent = Intent.createChooser(sendIntent, "Choose app to share")
+                        startActivity(shareIntent)
+                    }
                 }
-            }
 
-            AppConstants.OTHER_SHARE -> {
-                val sendIntent: Intent = Intent().apply {
-                    this.action = Intent.ACTION_SEND
-                    this.putExtra(
-                        Intent.EXTRA_TEXT,
-                        "${quote.quote}\n${quote.reference}\n${quote.link}"
-                    )
-                    this.type = "text/plain"
-                }
-
-                val shareIntent = Intent.createChooser(sendIntent, "Choose app to share")
-                startActivity(shareIntent)
-            }
+                dialog.dismiss()
+            }.create()
+        if (!dialog.isShowing) {
+            dialog.show()
         }
     }
 

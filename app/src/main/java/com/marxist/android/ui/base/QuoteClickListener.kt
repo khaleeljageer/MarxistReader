@@ -4,6 +4,6 @@ import com.marxist.android.model.Quote
 
 interface QuoteClickListener {
     fun quoteClickListener(
-        quote: Quote, type: Int
+        quote: Quote
     )
 }
