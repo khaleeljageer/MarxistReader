@@ -18,6 +18,7 @@
 
     <color name="colorAccent_alpha_40">#6664B5F6</color>
     <color name="black_alpha_40">#66000000</color>
+    <color name="trans">#00000000</color>
     <array name="bg_colors">
         <item>0xffffebee</item>
         <item>0xffb2dfdb</item>
