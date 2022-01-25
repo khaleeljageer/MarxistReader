@@ -2,6 +2,7 @@ package com.marxist.android.ui.fragments.settings
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -39,10 +40,23 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 startActivity(Intent(mContext, LottieThankActivity::class.java))
                 true
             }
+            getString(R.string.terms_of_use) -> {
+                "https://marxistreader.app/terms-conditions/".openUrl()
+                true
+            }
+            getString(R.string.privacy_policy) -> {
+                "https://marxistreader.app/privacy-policy/".openUrl()
+                true
+            }
             else -> {
                 super.onPreferenceTreeClick(preference)
             }
         }
+    }
+
+    private fun String.openUrl() {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(this))
+        startActivity(browserIntent)
     }
 
     companion object {

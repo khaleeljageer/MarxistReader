@@ -55,18 +55,30 @@
                 app:iconSpaceReserved="false"
                 app:key="@string/about_us"
                 app:title="@string/about_us" />
+
+        <Preference
+                app:allowDividerBelow="true"
+                app:iconSpaceReserved="false"
+                app:key="@string/terms_of_use"
+                app:title="@string/terms_of_use" />
+
+        <Preference
+                app:allowDividerBelow="true"
+                app:iconSpaceReserved="false"
+                app:key="@string/privacy_policy"
+                app:title="@string/privacy_policy" />
     </PreferenceCategory>
 
-<!--    <PreferenceCategory-->
-<!--            app:allowDividerAbove="true"-->
-<!--            app:iconSpaceReserved="false"-->
-<!--            app:title="Contribute">-->
+    <!--    <PreferenceCategory-->
+    <!--            app:allowDividerAbove="true"-->
+    <!--            app:iconSpaceReserved="false"-->
+    <!--            app:title="Contribute">-->
 
-<!--        <Preference-->
-<!--                app:allowDividerBelow="true"-->
-<!--                app:iconSpaceReserved="false"-->
-<!--                app:key="support_by_video"-->
-<!--                app:summary="Support us by watching videos"-->
-<!--                app:title="Support us" />-->
-<!--    </PreferenceCategory>-->
+    <!--        <Preference-->
+    <!--                app:allowDividerBelow="true"-->
+    <!--                app:iconSpaceReserved="false"-->
+    <!--                app:key="support_by_video"-->
+    <!--                app:summary="Support us by watching videos"-->
+    <!--                app:title="Support us" />-->
+    <!--    </PreferenceCategory>-->
 </PreferenceScreen>

@@ -3,12 +3,11 @@ package com.marxist.android.ui.fragments.books
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import com.marxist.android.R
 import com.marxist.android.data.model.DownloadResult
-import com.marxist.android.database.AppDatabase
 import com.marxist.android.database.entities.LocalBooks
 import com.marxist.android.databinding.FragmentsBooksBinding
 import com.marxist.android.utils.*
@@ -19,21 +18,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.OkHttpClient
-import timber.log.Timber
 import java.io.File
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class EBooksFragment : Fragment(R.layout.fragments_books) {
 
     private val booksViewModel: BooksViewModel by viewModels()
-
-    @Inject
-    lateinit var appDatabase: AppDatabase
-
-    @Inject
-    lateinit var okHttpClient: OkHttpClient
 
     private val bookAdapter by lazy {
         BookListAdapter(mutableListOf(), ::downloadWithFlow)
@@ -97,12 +87,11 @@ class EBooksFragment : Fragment(R.layout.fragments_books) {
                         when (it) {
                             is DownloadResult.Success -> {
                                 bookAdapter.setDownloading(book, false)
-                                Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT)
-                                    .show()
+                                showSnackBar("File ready to open")
                             }
                             is DownloadResult.Error -> {
                                 bookAdapter.setDownloading(book, false)
-                                Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+                                showSnackBar("Something went wrong")
                             }
                             DownloadResult.Loading -> {
                                 bookAdapter.setDownloading(book, true)
@@ -114,6 +103,13 @@ class EBooksFragment : Fragment(R.layout.fragments_books) {
         }
     }
 
+    private fun showSnackBar(message: String) {
+        Snackbar.make(
+            binding.root,
+            message,
+            Snackbar.LENGTH_LONG
+        ).show()
+    }
 
     companion object {
         fun newInstance(): EBooksFragment {
