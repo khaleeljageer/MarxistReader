@@ -69,7 +69,7 @@ class QuotesFragment : Fragment(R.layout.fragments_list), QuoteClickListener {
                                 .setContentUrl(
                                     Uri.parse(
                                         if (quote.link.isEmpty()) {
-                                            "https://marxistreader.home.blog/"
+                                            "https://marxistreader.app/"
                                         } else quote.link
                                     )
                                 )

@@ -50,7 +50,7 @@ object AppModule {
     @Singleton
     fun provideWordPressService(okHttpClient: OkHttpClient): WordPressService =
         Retrofit.Builder()
-            .baseUrl("https://public-api.wordpress.com/wp/v2/sites/marxistreader.home.blog/")
+            .baseUrl("https://public-api.wordpress.com/wp/v2/sites/marxistreader.app/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build().create(WordPressService::class.java)

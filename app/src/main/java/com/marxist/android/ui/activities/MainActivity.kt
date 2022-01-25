@@ -41,7 +41,7 @@ class MainActivity : BaseActivity() {
         if (savedInstanceState == null) {
             setupBottomNavigationBar()
         }
-        detailsViewModel.triggerArticleLink("https://marxistreader.home.blog")
+        detailsViewModel.triggerArticleLink("https://marxistreader.app/")
 
         lifecycleScope.launch {
             eventBus.events.collect {

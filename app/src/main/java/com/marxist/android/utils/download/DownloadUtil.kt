@@ -14,6 +14,8 @@ object DownloadUtil {
         config.allowedDirection = Config.AllowedDirection.ONLY_VERTICAL
         config.isShowTts = false
         config.isNightMode = false
+        config.font = R.font.hind_regular
+        config.fontSize = 3
         config.setThemeColorInt(ContextCompat.getColor(context, R.color.primary_red))
         val folioReader = FolioReader.get()
         folioReader.setConfig(config, true).openBook(path)

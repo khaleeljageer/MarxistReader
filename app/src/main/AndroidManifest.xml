@@ -42,6 +42,9 @@
                 <data
                         android:host="marxistreader.home.blog"
                         android:scheme="https" />
+                <data
+                        android:host="marxistreader.app"
+                        android:scheme="https" />
 
                 <action android:name="android.intent.action.VIEW" />
 
