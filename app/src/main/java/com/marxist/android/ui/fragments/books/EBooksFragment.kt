@@ -1,5 +1,6 @@
 package com.marxist.android.ui.fragments.books
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
+import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
@@ -82,11 +84,15 @@ class EBooksFragment : Fragment(R.layout.fragments_books) {
     private fun downloadWithFlow(book: LocalBooks) {
         CoroutineScope(Dispatchers.IO).launch {
             val targetPath = DeviceUtils.getRootDirPath(requireContext()).plus("/books")
-            val path = File(targetPath, "${book.title}.epub")
+            val url = Uri.parse(book.epub)
+            val name = url.pathSegments.last()
+            val path = File(targetPath, name)
             if (path.exists()) {
-                DownloadUtil.openSavedBook(requireContext(), path.toString())
+                withContext(Dispatchers.Main) {
+                    DownloadUtil.openSavedBook(requireContext(), path.toString())
+                }
             } else {
-                okHttpClient.downloadFile(path, book.epub).collect {
+                downloadFile(path, book.epub).collect {
                     withContext(Dispatchers.Main) {
                         when (it) {
                             is DownloadResult.Success -> {

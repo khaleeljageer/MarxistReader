@@ -1,5 +1,6 @@
 package com.marxist.android
 
+import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
@@ -8,13 +9,12 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.messaging.FirebaseMessaging
 import com.marxist.android.utils.DeviceUtils
 import dagger.hilt.android.HiltAndroidApp
-import org.geometerplus.android.fbreader.FBReaderApplication
 import timber.log.Timber
 import java.io.File
 import java.util.*
 
 @HiltAndroidApp
-class MarxistApp : FBReaderApplication() {
+class MarxistApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
@@ -39,11 +39,6 @@ class MarxistApp : FBReaderApplication() {
         val booksPath = File(path.plus("/books"))
         if (!booksPath.exists()) {
             booksPath.mkdir()
-        }
-
-        val audioPath = File(path.plus("/audio"))
-        if (!audioPath.exists()) {
-            audioPath.mkdir()
         }
     }
 

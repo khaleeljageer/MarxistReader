@@ -41,5 +41,15 @@
       <option name="name" value="maven2" />
       <option name="url" value="https://dl.bintray.com/sysdata/maven" />
     </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven2" />
+      <option name="name" value="maven2" />
+      <option name="url" value="https://storage.googleapis.com/download.flutter.io" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven" />
+      <option name="name" value="maven" />
+      <option name="url" value="file:$PROJECT_DIR$/folio/build/host/outputs/repo/" />
+    </remote-repository>
   </component>
 </project>

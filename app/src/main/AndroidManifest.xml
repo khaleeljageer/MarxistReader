@@ -13,6 +13,7 @@
 
     <permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
 
+    <uses-sdk tools:overrideLibrary="com.folioreader" />
     <application
             android:name=".MarxistApp"
             android:allowBackup="true"
@@ -61,7 +62,9 @@
         <activity
                 android:name=".ui.activities.AboutActivity"
                 android:exported="true" />
-        <activity android:name=".ui.activities.FeedBackActivity" />
+        <activity
+                android:name=".ui.activities.FeedBackActivity"
+                android:exported="true" />
         <activity
                 android:name=".ui.activities.search.SearchActivity"
                 android:exported="true"
@@ -80,7 +83,6 @@
         <provider
                 android:name="androidx.core.content.FileProvider"
                 android:authorities="${applicationId}.FileProvider"
-                android:enabled="true"
                 android:exported="false"
                 android:grantUriPermissions="true">
             <meta-data

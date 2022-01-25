@@ -1,6 +1,5 @@
 package com.marxist.android.ui.fragments.books
 
-import android.content.Context
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -17,8 +16,16 @@ class BookViewHolder(
         book: LocalBooks,
         listener: (LocalBooks) -> Unit
     ) {
-        binding.arBookImage.load(book.image) {
-            placeholder(R.drawable.placeholder)
+        if (book.image.isEmpty()) {
+            binding.txtLabel.visibility = View.VISIBLE
+            binding.txtLabel.text = book.title
+            binding.arBookImage.visibility = View.GONE
+        } else {
+            binding.txtLabel.visibility = View.GONE
+            binding.arBookImage.visibility = View.VISIBLE
+            binding.arBookImage.load(book.image) {
+                placeholder(R.drawable.placeholder)
+            }
         }
         binding.pbDownloadProgress.visibility = if (book.isDownloading) {
             View.VISIBLE

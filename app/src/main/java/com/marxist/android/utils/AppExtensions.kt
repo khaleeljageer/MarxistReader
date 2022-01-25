@@ -6,19 +6,31 @@ import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.File
+import java.io.FileOutputStream
 
-suspend fun OkHttpClient.downloadFile(file: File, url: String): Flow<DownloadResult> {
+suspend fun downloadFile(file: File, url: String): Flow<DownloadResult> {
     return flow {
         emit(DownloadResult.Loading)
         val request = Request.Builder().url(url).build()
-        val response = this@downloadFile.newCall(request).execute()
+        val response = OkHttpClient().newCall(request).execute()
+        try {
+            if (response.body != null) {
+                val buffer = response.body!!.byteStream()
+                val outputStream = FileOutputStream(file)
+                outputStream.use { output ->
+                    val bufferSize = ByteArray(4 * 1024)
+                    while (true) {
+                        val byteCount = buffer.read(bufferSize)
+                        if (byteCount < 0) break
+                        output.write(bufferSize, 0, byteCount)
+                    }
+                    output.flush()
+                }
+            }
 
-        val data = ByteArray(response.body?.contentLength()!!.toInt())
-        response.close()
-        if (response.isSuccessful) {
-            file.writeBytes(data)
             emit(DownloadResult.Success)
-        } else {
+        } catch (e: Exception) {
+            e.printStackTrace()
             emit(DownloadResult.Error("File not downloaded"))
         }
     }
