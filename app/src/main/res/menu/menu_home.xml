@@ -14,7 +14,7 @@
 
     <item
             android:id="@+id/nav_quotes"
-            android:icon="@drawable/ic_notifications"
+            android:icon="@drawable/ic_round_quote_24"
             android:orderInCategory="3"
             android:title="@string/quotes" />
     <item
