@@ -63,11 +63,6 @@ class MainActivity : BaseActivity() {
         }
 
         updateTitle(0)
-        initAppPreference()
-    }
-
-    private fun initAppPreference() {
-        appPreference[getString(R.string.pref_key_app_version)] = BuildConfig.VERSION_NAME
     }
 
     private fun setupBottomNavigationBar() {
