@@ -24,17 +24,20 @@ class MarxistApp : Application() {
             Timber.plant(Timber.DebugTree())
         }
 
-        initPRDownloader()
+        initDirPath()
+        initFirebase()
+        initNotificationChannel()
+    }
+
+    private fun initFirebase() {
 
         FirebaseMessaging.getInstance()
             .subscribeToTopic(getString(R.string.default_notification_channel_id))
         FirebaseMessaging.getInstance()
             .subscribeToTopic(getString(R.string.marxist_instant_news))
-
-        initNotificationChannel()
     }
 
-    private fun initPRDownloader() {
+    private fun initDirPath() {
         val path = DeviceUtils.getRootDirPath(applicationContext)
         val booksPath = File(path.plus("/books"))
         if (!booksPath.exists()) {

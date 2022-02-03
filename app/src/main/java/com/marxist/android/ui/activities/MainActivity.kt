@@ -4,12 +4,14 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationBarView
+import com.marxist.android.BuildConfig
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityMainBinding
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.activities.details.DetailsViewModel
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.base.FragmentsAdapter
+import com.marxist.android.utils.AppPreference.set
 import com.marxist.android.utils.EventBus
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
@@ -61,6 +63,11 @@ class MainActivity : BaseActivity() {
         }
 
         updateTitle(0)
+        initAppPreference()
+    }
+
+    private fun initAppPreference() {
+        appPreference[getString(R.string.pref_key_app_version)] = BuildConfig.VERSION_NAME
     }
 
     private fun setupBottomNavigationBar() {

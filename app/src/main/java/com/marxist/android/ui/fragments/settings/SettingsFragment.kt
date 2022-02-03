@@ -26,8 +26,8 @@ class SettingsFragment : PreferenceFragmentCompat() {
         addPreferencesFromResource(R.xml.root_preferences)
     }
 
-    override fun onPreferenceTreeClick(preference: Preference?): Boolean {
-        return when (preference!!.key) {
+    override fun onPreferenceTreeClick(preference: Preference): Boolean {
+        return when (preference.key) {
             getString(R.string.about_us) -> {
                 startActivity(Intent(mContext, AboutActivity::class.java))
                 true

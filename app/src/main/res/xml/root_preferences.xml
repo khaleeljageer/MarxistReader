@@ -39,31 +39,31 @@
             app:title="@string/credits">
 
         <Preference
-                app:allowDividerBelow="true"
                 app:iconSpaceReserved="false"
                 app:key="@string/lottie_files_credit"
                 app:title="@string/lottie_files_credit" />
 
         <Preference
-                app:allowDividerBelow="true"
                 app:iconSpaceReserved="false"
                 app:key="@string/feed_back"
                 app:title="@string/feed_back" />
+    </PreferenceCategory>
 
+    <PreferenceCategory
+            app:allowDividerAbove="true"
+            app:iconSpaceReserved="false"
+            app:title="@string/app_name">
         <Preference
-                app:allowDividerBelow="true"
                 app:iconSpaceReserved="false"
                 app:key="@string/about_us"
                 app:title="@string/about_us" />
 
         <Preference
-                app:allowDividerBelow="true"
                 app:iconSpaceReserved="false"
                 app:key="@string/terms_of_use"
                 app:title="@string/terms_of_use" />
 
         <Preference
-                app:allowDividerBelow="true"
                 app:iconSpaceReserved="false"
                 app:key="@string/privacy_policy"
                 app:title="@string/privacy_policy" />

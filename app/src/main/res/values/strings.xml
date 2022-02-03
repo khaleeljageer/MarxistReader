@@ -2,6 +2,7 @@
     <string name="pref_key_dark_mode" translatable="false">dark_mode</string>
     <string name="pref_key_font_size" translatable="false">font_size</string>
     <string name="pref_key_reader_bg" translatable="false">reader_bg</string>
+    <string name="pref_key_app_version" translatable="false">app_version</string>
     <string name="pref_key_name" translatable="false">com.marxist.android.PREFERENCE</string>
     <string name="default_notification_channel_id" translatable="false">marxist_tamil</string>
     <string name="marxist_instant_news" translatable="false">marxist_instant_news</string>
@@ -117,5 +118,6 @@
     <string name="facebook_sahre">Facebook Share</string>
     <string name="share_to">Share with…</string>
     <string name="privacy_policy">Privacy policy</string>
-    <string name="terms_of_use">Terms of use</string>
+    <string name="terms_of_use">Terms of service</string>
+    <string name="version">Version</string>
 </resources>
