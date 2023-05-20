@@ -4,10 +4,12 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.session.MediaSessionManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,6 +20,7 @@ import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.view.View
 import android.widget.SeekBar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.marxist.android.R
 import com.marxist.android.data.model.WPPost
@@ -331,10 +334,20 @@ class AudioPlayerFragment : Fragment(R.layout.audio_player_control_fragment),
                 }
             }
         }
-        telephonyManager!!.listen(
-            phoneStateListener,
-            PhoneStateListener.LISTEN_CALL_STATE
-        )
+        if (Build.VERSION.SDK_INT >= 31) {
+            if (ContextCompat.checkSelfPermission(
+                this.requireContext(), android.Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED
+            )
+                telephonyManager!!.listen(
+                    phoneStateListener,
+                    PhoneStateListener.LISTEN_CALL_STATE
+                )
+        } else {
+            telephonyManager!!.listen(
+                phoneStateListener,
+                PhoneStateListener.LISTEN_CALL_STATE
+            )
+        }
     }
 
     override fun onCompletion(p0: MediaPlayer?) {
