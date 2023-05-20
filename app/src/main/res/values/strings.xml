@@ -119,4 +119,6 @@
     <string name="privacy_policy">Privacy policy</string>
     <string name="terms_of_use">Terms of service</string>
     <string name="version">Version</string>
+    <string name="facebook_app_id">1036120473784543</string>
+    <string name="facebook_client_token">66dd33360b46c2d8636574de166c23ad</string>
 </resources>

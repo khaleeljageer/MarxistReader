@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
-import androidx.room.OnConflictStrategy.REPLACE
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.marxist.android.database.entities.LocalBooks
 
@@ -16,7 +16,7 @@ interface LocalBooksDao {
     @Query("SELECT * from localBooks")
     fun getAllBooks(): MutableList<LocalBooks>
 
-    @Insert(onConflict = REPLACE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(localBooks: LocalBooks)
 
     @Delete

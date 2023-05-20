@@ -166,39 +166,16 @@ class FolioPageFragment : Fragment(),
 
     }
 
-    /**
-     * [EVENT BUS FUNCTION]
-     * Function triggered from [MediaControllerFragment.initListeners] when pause/play
-     * button is clicked
-     *
-     * @param event of type [MediaOverlayPlayPauseEvent] contains if paused/played
-     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun pauseButtonClicked(event: MediaOverlayPlayPauseEvent) {
 
     }
 
-    /**
-     * [EVENT BUS FUNCTION]
-     * Function triggered from [MediaControllerFragment.initListeners] when speed
-     * change buttons are clicked
-     *
-     * @param event of type [MediaOverlaySpeedEvent] contains selected speed
-     * type HALF,ONE,ONE_HALF and TWO.
-     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun speedChanged(event: MediaOverlaySpeedEvent) {
 
     }
 
-    /**
-     * [EVENT BUS FUNCTION]
-     * Function triggered from [MediaControllerFragment.initListeners] when new
-     * style is selected on button click.
-     *
-     * @param event of type [MediaOverlaySpeedEvent] contains selected style
-     * of type DEFAULT,UNDERLINE and BACKGROUND.
-     */
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun styleChanged(event: MediaOverlayHighlightStyleEvent) {
         if (isAdded) {

@@ -32,8 +32,7 @@
             app:lottie_autoPlay="true"
             app:lottie_colorFilter="@color/colorTextPrimary"
             app:lottie_loop="true"
-            app:lottie_rawRes="@raw/paper_loader"
-            app:lottie_scale="2.5" />
+            app:lottie_rawRes="@raw/paper_loader" />
 
     <com.marxist.android.utils.views.FadingTextView
             android:id="@+id/txtLoading"

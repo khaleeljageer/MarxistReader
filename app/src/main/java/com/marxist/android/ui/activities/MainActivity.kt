@@ -4,17 +4,14 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationBarView
-import com.marxist.android.BuildConfig
 import com.marxist.android.R
 import com.marxist.android.databinding.ActivityMainBinding
 import com.marxist.android.model.ShowSnackBar
 import com.marxist.android.ui.activities.details.DetailsViewModel
 import com.marxist.android.ui.base.BaseActivity
 import com.marxist.android.ui.base.FragmentsAdapter
-import com.marxist.android.utils.AppPreference.set
 import com.marxist.android.utils.EventBus
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -76,16 +73,19 @@ class MainActivity : BaseActivity() {
                 updateTitle(0)
                 return@OnItemSelectedListener true
             }
+
             R.id.nav_ebooks -> {
                 binding.viewPager.setCurrentItem(1, false)
                 updateTitle(1)
                 return@OnItemSelectedListener true
             }
+
             R.id.nav_quotes -> {
                 binding.viewPager.setCurrentItem(2, false)
                 updateTitle(2)
                 return@OnItemSelectedListener true
             }
+
             R.id.nav_settings -> {
                 binding.viewPager.setCurrentItem(3, false)
                 updateTitle(3)

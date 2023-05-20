@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import com.folioreader.Config
 import com.folioreader.Constants
 import com.folioreader.R
@@ -19,7 +18,6 @@ import com.folioreader.databinding.ViewConfigBinding
 import com.folioreader.model.event.ReloadDataEvent
 import com.folioreader.ui.activity.FolioActivity
 import com.folioreader.ui.activity.FolioActivityCallback
-import com.folioreader.ui.fragment.MediaControllerFragment
 import com.folioreader.util.AppUtil
 import com.folioreader.util.UiUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -94,7 +92,10 @@ class ConfigBottomSheetDialogFragment : BottomSheetDialogFragment() {
         if (isNightMode) {
             binding!!.viewConfigIbDayMode.isSelected = false
             binding!!.viewConfigIbNightMode.isSelected = true
-            UiUtil.setColorIntToDrawable(config.themeColor, binding!!.viewConfigIbNightMode.drawable)
+            UiUtil.setColorIntToDrawable(
+                config.themeColor,
+                binding!!.viewConfigIbNightMode.drawable
+            )
             UiUtil.setColorResToDrawable(R.color.app_gray, binding!!.viewConfigIbDayMode.drawable)
         } else {
             binding!!.viewConfigIbDayMode.isSelected = true
@@ -129,7 +130,10 @@ class ConfigBottomSheetDialogFragment : BottomSheetDialogFragment() {
             binding!!.viewConfigIbDayMode.isSelected = false
             binding!!.viewConfigIbNightMode.isSelected = true
             UiUtil.setColorResToDrawable(R.color.app_gray, binding!!.viewConfigIbDayMode.drawable)
-            UiUtil.setColorIntToDrawable(config.themeColor, binding!!.viewConfigIbNightMode.drawable)
+            UiUtil.setColorIntToDrawable(
+                config.themeColor,
+                binding!!.viewConfigIbNightMode.drawable
+            )
             setToolBarColor()
             setAudioPlayerBackground()
         }
@@ -172,10 +176,20 @@ class ConfigBottomSheetDialogFragment : BottomSheetDialogFragment() {
         binding!!.viewConfigFontLora.setTextColor(colorStateList)
         binding!!.viewConfigFontRaleway.setTextColor(colorStateList)
 
-        binding!!.viewConfigFontAndada.setOnClickListener { selectFont(Constants.FONT_ANDADA, true) }
+        binding!!.viewConfigFontAndada.setOnClickListener {
+            selectFont(
+                Constants.FONT_ANDADA,
+                true
+            )
+        }
         binding!!.viewConfigFontLato.setOnClickListener { selectFont(Constants.FONT_LATO, true) }
         binding!!.viewConfigFontLora.setOnClickListener { selectFont(Constants.FONT_LORA, true) }
-        binding!!.viewConfigFontRaleway.setOnClickListener { selectFont(Constants.FONT_RALEWAY, true) }
+        binding!!.viewConfigFontRaleway.setOnClickListener {
+            selectFont(
+                Constants.FONT_RALEWAY,
+                true
+            )
+        }
     }
 
     private fun selectFont(selectedFont: Int, isReloadNeeded: Boolean) {
@@ -293,14 +307,5 @@ class ConfigBottomSheetDialogFragment : BottomSheetDialogFragment() {
 
     private fun setAudioPlayerBackground() {
 
-        var mediaControllerFragment: Fragment? =
-            fragmentManager?.findFragmentByTag(MediaControllerFragment.LOG_TAG)
-                ?: return
-        mediaControllerFragment = mediaControllerFragment as MediaControllerFragment
-        if (isNightMode) {
-            mediaControllerFragment.setDayMode()
-        } else {
-            mediaControllerFragment.setNightMode()
-        }
     }
 }

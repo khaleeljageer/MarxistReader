@@ -4,6 +4,8 @@ plugins {
 }
 
 android {
+    namespace 'com.folioreader'
+
     useLibrary 'org.apache.http.legacy'
     compileSdkVersion versions.androidCompileSdk
 
@@ -46,6 +48,11 @@ android {
 
     buildFeatures {
         viewBinding true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
@@ -91,6 +98,6 @@ dependencies {
 }
 
 task androidSourcesJar(type: Jar) {
-//    classifier 'sources'
+    archiveClassifier.set('sources')
     from android.sourceSets.main.java.srcDirs
 }
