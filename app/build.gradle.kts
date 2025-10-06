@@ -62,7 +62,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.material3.window.size)
     implementation(libs.androidx.material3.icons.extended)
 
@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.converter.gson)
 
+    implementation(project(":navigation"))
     implementation(project(":network"))
 
     testImplementation(libs.junit)

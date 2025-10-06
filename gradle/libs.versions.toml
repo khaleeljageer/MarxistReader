@@ -37,7 +37,7 @@ androidx-material3-window-size = { group = "androidx.compose.material3", name = 
 androidx-material3-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-safe-args-gradle-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigationCompose" }
 
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
