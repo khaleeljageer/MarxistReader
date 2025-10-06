@@ -1,8 +1,6 @@
-package com.jskaleel.fte.core.downloader
+package org.cpimtn.marxist.android.core.downloader
 
 import android.content.Context
-import com.jskaleel.fte.core.getDownloadDir
-import com.jskaleel.fte.data.model.DownloadResult
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -13,8 +11,11 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.isActive
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.cpimtn.marxist.android.core.getDownloadDir
+import org.cpimtn.marxist.android.core.model.DownloadResult
 import java.io.File
 import java.io.IOException
+import java.net.URL
 import javax.inject.Inject
 
 interface FileDownloader {
@@ -88,7 +89,7 @@ class FileDownloaderImpl @Inject constructor(
 
     private fun isValidUrl(url: String): Boolean {
         return try {
-            val parsedUrl = java.net.URL(url)
+            val parsedUrl = URL(url)
             parsedUrl.protocol.equals("https", ignoreCase = true)
         } catch (_: Exception) {
             false

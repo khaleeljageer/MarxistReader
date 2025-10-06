@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
+import org.cpimtn.marxist.android.core.model.CustomColors
 
 @Suppress("detekt:MagicNumber")
 object AppColor {
@@ -43,7 +44,14 @@ object AppColor {
     }
 }
 
-val LocalCustomColors = compositionLocalOf { getCustomColor(darkTheme) }
+val LocalCustomColors = compositionLocalOf {
+    CustomColors(
+        accent = AppColor.Light.Accent,
+        textPrimary = AppColor.Light.TextPrimary,
+        textSecondary = AppColor.Light.TextSecondary,
+        readingBackground = AppColor.Light.Background
+    )
+}
 
 val MaterialTheme.customColors
     @Composable

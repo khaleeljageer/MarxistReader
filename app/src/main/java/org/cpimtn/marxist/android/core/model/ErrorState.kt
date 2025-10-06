@@ -1,6 +1,6 @@
 package org.cpimtn.marxist.android.core.model
 
-import com.jskaleel.fte.core.SmartDelayCancellationException
+import org.cpimtn.marxist.android.core.SmartDelayCancellationException
 
 sealed interface ErrorState {
     val message: String

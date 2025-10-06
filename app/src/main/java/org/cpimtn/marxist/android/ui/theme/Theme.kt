@@ -72,6 +72,7 @@ fun MarxistReaderTheme(
         LightColorScheme
     }
     val customColors = getCustomColor(darkTheme)
+    val typography = getTypography(isDarkTheme = darkTheme)
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
@@ -92,7 +93,7 @@ fun MarxistReaderTheme(
     CompositionLocalProvider(LocalCustomColors provides customColors) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = Typography,
+            typography = typography,
             content = content
         )
     }
