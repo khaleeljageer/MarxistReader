@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.core.model
+package org.cpimtn.marxist.android.network.model
 
 import java.io.File
 

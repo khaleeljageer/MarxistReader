@@ -1,7 +1,5 @@
-package org.cpimtn.marxist.android.core.downloader
+package org.cpimtn.marxist.android.network.downloader
 
-import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,8 +9,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.isActive
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.cpimtn.marxist.android.core.getDownloadDir
-import org.cpimtn.marxist.android.core.model.DownloadResult
+import org.cpimtn.marxist.android.network.model.DownloadResult
 import java.io.File
 import java.io.IOException
 import java.net.URL
@@ -23,12 +20,12 @@ interface FileDownloader {
         url: String,
         uniqueId: String,
         fileName: String,
+        destinationPath: String,
         coroutineScope: CoroutineScope
     ): Flow<DownloadResult>
 }
 
 class FileDownloaderImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val client: OkHttpClient
 ) : FileDownloader {
 
@@ -36,6 +33,7 @@ class FileDownloaderImpl @Inject constructor(
         url: String,
         uniqueId: String,
         fileName: String,
+        destinationPath: String,
         coroutineScope: CoroutineScope
     ): Flow<DownloadResult> = flow {
         if (!isValidUrl(url)) {
@@ -43,7 +41,7 @@ class FileDownloaderImpl @Inject constructor(
             return@flow
         }
         emit(DownloadResult.Queued(id = uniqueId))
-        val destinationFile = File(context.getDownloadDir(), "$uniqueId.epub")
+        val destinationFile = File(destinationPath)
 
         val request = Request.Builder().url(url).build()
         try {

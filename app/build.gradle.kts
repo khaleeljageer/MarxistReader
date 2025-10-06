@@ -67,15 +67,15 @@ dependencies {
     implementation(libs.androidx.material3.icons.extended)
 
     implementation(libs.bundles.hilt.core)
-    implementation(libs.bundles.room.core)
+    ksp(libs.hilt.compiler)
 
-    // Coil
+    implementation(libs.bundles.room.core)
+    ksp(libs.androidx.room.compiler)
+
     implementation(libs.coil.compose)
     implementation(libs.coil.network.okhttp)
 
-    // Retrofit
-    implementation(libs.retrofit)
-    implementation(libs.converter.gson)
+    implementation(project(":network"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
