@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             val windowSizeClass = calculateWindowSizeClass(this)
             MarxistReaderTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -38,15 +37,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
-        text = "Hello $name!",
+        text = "வணக்கம் $name!",
         modifier = modifier
     )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MarxistReaderTheme {
-        Greeting("Android")
-    }
 }

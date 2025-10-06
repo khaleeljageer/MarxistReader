@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.sp
 import org.cpimtn.marxist.android.R
 
 val fontFamily = FontFamily(
-    Font(R.font.arima_variable)
+    Font(R.font.tau_marutham)
 )
 
 @Composable
