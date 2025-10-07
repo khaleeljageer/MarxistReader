@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.converter.gson)
 
+    implementation(project(":ui-theme"))
     implementation(project(":navigation"))
     implementation(project(":network"))
 
