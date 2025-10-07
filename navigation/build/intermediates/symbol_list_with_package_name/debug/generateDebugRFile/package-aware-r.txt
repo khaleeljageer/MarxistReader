@@ -1,4 +1,0 @@
-org.cpimtn.marxist.android.navigation
-string books
-string feed
-string more

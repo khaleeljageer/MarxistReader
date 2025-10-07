@@ -1,3 +1,0 @@
-int string books 0x0
-int string feed 0x0
-int string more 0x0

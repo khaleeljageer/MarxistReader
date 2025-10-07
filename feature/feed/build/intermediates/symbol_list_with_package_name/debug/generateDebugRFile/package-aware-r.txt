@@ -1,1 +1,0 @@
-org.cpimtn.marxist.android.feature.feed

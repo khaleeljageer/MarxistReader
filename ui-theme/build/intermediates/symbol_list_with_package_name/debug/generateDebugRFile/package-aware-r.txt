@@ -1,2 +1,0 @@
-org.cpimtn.marxist.android.ui.theme
-font tau_marutham
