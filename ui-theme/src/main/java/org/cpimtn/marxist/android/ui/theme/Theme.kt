@@ -3,6 +3,7 @@ package org.cpimtn.marxist.android.ui.theme
 import android.app.Activity
 import android.os.Build
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
@@ -78,10 +79,12 @@ fun MarxistReaderTheme(
         SideEffect {
             val window = (view.context as Activity).window
 
-            window.decorView.importantForAutofill =
-                android.view.View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                window.decorView.importantForAutofill =
+                    View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
+            }
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 window.isNavigationBarContrastEnforced = false
             }
 
@@ -91,7 +94,7 @@ fun MarxistReaderTheme(
     }
 
     CompositionLocalProvider(LocalCustomColors provides customColors) {
-        androidx.compose.material3.MaterialTheme(
+        MaterialTheme(
             colorScheme = colorScheme,
             typography = typography,
             content = content
