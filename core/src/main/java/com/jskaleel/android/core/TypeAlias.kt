@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.core
+package com.jskaleel.android.core
 
 typealias CallBack = () -> Unit
 typealias StringCallBack = (String) -> Unit

@@ -9,11 +9,11 @@ plugins {
 }
 
 android {
-    namespace = "org.cpimtn.marxist.android.navigation"
-    compileSdk = 36
+    namespace = "com.jskaleel.android.navigation"
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 24
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -62,6 +62,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.material3.window.size)
     implementation(libs.androidx.material3.icons.extended)
+    implementation(libs.androidx.material3.adaptive.navigation)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)

@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.ui.theme
+package com.jskaleel.android.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable

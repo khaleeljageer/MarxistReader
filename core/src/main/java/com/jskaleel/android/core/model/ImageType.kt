@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.core.model
+package com.jskaleel.android.core.model
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable

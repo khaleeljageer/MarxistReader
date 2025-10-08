@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "org.cpimtn.marxist.android.network"
-    compileSdk = 36
+    namespace = "com.jskaleel.android.network"
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = 24
+        minSdk = libs.versions.minSdk.get().toInt()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")

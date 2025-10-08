@@ -1,9 +1,8 @@
-package org.cpimtn.marxist.android.ui.theme
+package com.jskaleel.android.ui.theme
 
 import android.app.Activity
 import android.os.Build
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
@@ -12,7 +11,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-import org.cpimtn.marxist.android.ui.theme.model.CustomColors
+import com.jskaleel.android.ui.theme.model.CustomColors
 
 private val LightColorScheme = lightColorScheme(
     primary = AppColor.Light.Primary,

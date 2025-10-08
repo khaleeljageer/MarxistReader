@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.core
+package com.jskaleel.android.core
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope

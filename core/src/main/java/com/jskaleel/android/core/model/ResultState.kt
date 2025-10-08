@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.core.model
+package com.jskaleel.android.core.model
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

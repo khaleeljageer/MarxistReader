@@ -1,11 +1,11 @@
-package org.cpimtn.marxist.android.ui.theme
+package com.jskaleel.android.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
-import org.cpimtn.marxist.android.ui.theme.model.CustomColors
+import com.jskaleel.android.ui.theme.model.CustomColors
 
 
 @Suppress("detekt:MagicNumber")

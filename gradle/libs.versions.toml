@@ -1,4 +1,6 @@
 [versions]
+minSdk = "26"
+compileSdk = "36"
 agp = "8.13.0"
 kotlin = "2.2.20"
 coreKtx = "1.17.0"
@@ -53,6 +55,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-material3-adaptive-navigation = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite" }
 
 
 [plugins]

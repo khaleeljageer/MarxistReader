@@ -1,9 +1,9 @@
-package org.cpimtn.marxist.android.ui.theme.model
+package com.jskaleel.android.ui.theme.model
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import org.cpimtn.marxist.android.ui.theme.LocalCustomColors
+import com.jskaleel.android.ui.theme.LocalCustomColors
 
 data class CustomColors(
     val accent: Color,

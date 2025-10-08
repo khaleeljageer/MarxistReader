@@ -1,6 +1,6 @@
-package org.cpimtn.marxist.android.core.model
+package com.jskaleel.android.core.model
 
-import org.cpimtn.marxist.android.core.SmartDelayCancellationException
+import com.jskaleel.android.core.SmartDelayCancellationException
 
 sealed interface ErrorState {
     val message: String
@@ -18,7 +18,7 @@ sealed interface ErrorState {
 
 fun String.toErrorState() = ErrorState.LocalError(
     message = this,
-    isDisplayed = this == SmartDelayCancellationException.MESSAGE_IGNORE,
+    isDisplayed = this == SmartDelayCancellationException.Companion.MESSAGE_IGNORE,
 )
 
 fun String.toLocalErrorState() = ErrorState.LocalError(

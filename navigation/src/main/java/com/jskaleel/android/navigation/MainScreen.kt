@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
+import com.jskaleel.android.ui.theme.MarxistReaderTheme
 
 @Composable
 fun MainScreen(windowSizeClass: WindowSizeClass) {

@@ -8,7 +8,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import dagger.hilt.android.AndroidEntryPoint
 import org.cpimtn.marxist.android.navigation.MainScreen
-import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
+import com.jskaleel.android.ui.theme.MarxistReaderTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint

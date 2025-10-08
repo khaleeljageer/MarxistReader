@@ -11,11 +11,11 @@ plugins {
 
 android {
     namespace = "org.cpimtn.marxist.android"
-    compileSdk = 36
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "org.cpimtn.marxist.android"
-        minSdk = 26
+        minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -72,9 +72,6 @@ dependencies {
     implementation(libs.bundles.room.core)
     ksp(libs.androidx.room.compiler)
 
-    implementation(libs.coil.compose)
-    implementation(libs.coil.network.okhttp)
-    implementation(libs.converter.gson)
 
     implementation(project(":ui-theme"))
     implementation(project(":navigation"))

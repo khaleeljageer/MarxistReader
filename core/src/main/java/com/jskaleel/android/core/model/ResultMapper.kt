@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.core.model
+package com.jskaleel.android.core.model
 
 interface IMapper<I, O> {
     fun map(input: I): O
