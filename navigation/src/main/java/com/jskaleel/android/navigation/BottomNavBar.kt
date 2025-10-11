@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.navigation
+package com.jskaleel.android.navigation
 
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar

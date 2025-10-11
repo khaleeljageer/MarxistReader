@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.navigation
+package com.jskaleel.android.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

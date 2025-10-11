@@ -1,104 +1,67 @@
 package com.jskaleel.android.ui.theme
 
 import androidx.compose.material3.Typography
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.PlatformTextStyle
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
-import com.jskaleel.android.ui.theme.R
 
-val fontFamily = FontFamily(
-    Font(R.font.tau_marutham)
+val quicksand = FontFamily(
+    Font(R.font.quicksand_light, FontWeight.Light),
+    Font(R.font.quicksand_regular, FontWeight.Normal),
+    Font(R.font.quicksand_medium, FontWeight.Medium),
+    Font(R.font.quicksand_semibold, FontWeight.SemiBold),
+    Font(R.font.quicksand_bold, FontWeight.Bold)
 )
 
-@Composable
-fun getTypography(isDarkTheme: Boolean): Typography {
-    val textPrimary = if (isDarkTheme) {
-        AppColor.Dark.TextPrimary
-    } else {
-        AppColor.Light.TextPrimary
-    }
-    val textSecondary = if (isDarkTheme) {
-        AppColor.Dark.TextSecondary
-    } else {
-        AppColor.Light.TextSecondary
-    }
-
-    return Typography(
-        bodyLarge = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Companion.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.5.sp,
-            color = textPrimary,
-            platformStyle = PlatformTextStyle(includeFontPadding = true)
+val CustomTypography = Typography().run {
+    copy(
+        displayLarge = displayLarge.copy(
+            fontFamily = quicksand
         ),
-        bodyMedium = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Companion.Normal,
-            fontSize = 14.sp,
-            lineHeight = 20.0.sp,
-            letterSpacing = 0.2.sp,
-            color = textPrimary,
-            platformStyle = PlatformTextStyle(includeFontPadding = true)
+        displayMedium = displayMedium.copy(
+            fontFamily = quicksand
         ),
-        bodySmall = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Companion.Normal,
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.4.sp,
-            color = textSecondary,
-            platformStyle = PlatformTextStyle(includeFontPadding = true)
+        displaySmall = displaySmall.copy(
+            fontFamily = quicksand
         ),
-        titleLarge = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Companion.Normal,
-            fontSize = 22.sp,
-            lineHeight = 28.sp,
-            letterSpacing = 0.sp,
-            color = textPrimary,
-            platformStyle = PlatformTextStyle(includeFontPadding = true)
+        headlineLarge = headlineLarge.copy(
+            fontFamily = quicksand
         ),
-        titleMedium = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Companion.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
-            letterSpacing = 0.2.sp,
-            color = textPrimary,
-            platformStyle = PlatformTextStyle(includeFontPadding = true)
+        headlineMedium = headlineMedium.copy(
+            fontFamily = quicksand
         ),
-        titleSmall = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Companion.Medium,
-            fontSize = 14.sp,
-            lineHeight = 20.sp,
-            letterSpacing = 0.1.sp,
-            color = textPrimary,
-            platformStyle = PlatformTextStyle(includeFontPadding = true)
+        headlineSmall = headlineSmall.copy(
+            fontFamily = quicksand
         ),
-        labelMedium = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Companion.Normal,
-            fontSize = 14.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.5.sp,
-            color = textSecondary,
-            platformStyle = PlatformTextStyle(includeFontPadding = true)
+        titleLarge = titleLarge.copy(
+            fontFamily = quicksand,
+            fontWeight = FontWeight.Bold
         ),
-        labelSmall = TextStyle(
-            fontFamily = fontFamily,
-            fontWeight = FontWeight.Companion.Medium,
-            fontSize = 11.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.5.sp,
-            color = textSecondary,
-            platformStyle = PlatformTextStyle(includeFontPadding = true)
-        )
+        titleMedium = titleMedium.copy(
+            fontFamily = quicksand,
+            fontWeight = FontWeight.Bold
+        ),
+        titleSmall = titleSmall.copy(
+            fontFamily = quicksand,
+            fontWeight = FontWeight.Bold
+        ),
+        bodyLarge = bodyLarge.copy(
+            fontFamily = quicksand
+        ),
+        bodyMedium = bodyMedium.copy(
+            fontFamily = quicksand
+        ),
+        bodySmall = bodySmall.copy(
+            fontFamily = quicksand
+        ),
+        labelLarge = labelLarge.copy(
+            fontFamily = quicksand
+        ),
+        labelMedium = labelMedium.copy(
+            fontFamily = quicksand
+        ),
+        labelSmall = labelSmall.copy(
+            fontFamily = quicksand
+        ),
     )
 }

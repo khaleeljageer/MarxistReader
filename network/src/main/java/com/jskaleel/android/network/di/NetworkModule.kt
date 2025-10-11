@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.network.di
+package com.jskaleel.android.network.di
 
 import dagger.Binds
 import dagger.Module
@@ -6,9 +6,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import org.cpimtn.marxist.android.network.api.WPApiService
-import org.cpimtn.marxist.android.network.downloader.FileDownloader
-import org.cpimtn.marxist.android.network.downloader.FileDownloaderImpl
+import com.jskaleel.android.network.api.WPApiService
+import com.jskaleel.android.network.downloader.FileDownloader
+import com.jskaleel.android.network.downloader.FileDownloaderImpl
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit

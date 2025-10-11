@@ -1,6 +1,6 @@
-package org.cpimtn.marxist.android.network.api
+package com.jskaleel.android.network.api
 
-import org.cpimtn.marxist.android.network.model.Post
+import com.jskaleel.android.network.model.Post
 import retrofit2.http.GET
 import retrofit2.http.Query
 

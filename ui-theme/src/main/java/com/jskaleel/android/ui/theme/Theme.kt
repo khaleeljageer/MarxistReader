@@ -72,17 +72,13 @@ fun MarxistReaderTheme(
         LightColorScheme
     }
     val customColors = getCustomColor(darkTheme)
-    val typography = getTypography(isDarkTheme = darkTheme)
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                window.decorView.importantForAutofill =
-                    View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
-            }
-
+            window.decorView.importantForAutofill =
+                View.IMPORTANT_FOR_AUTOFILL_NO_EXCLUDE_DESCENDANTS
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 window.isNavigationBarContrastEnforced = false
             }
@@ -95,7 +91,7 @@ fun MarxistReaderTheme(
     CompositionLocalProvider(LocalCustomColors provides customColors) {
         MaterialTheme(
             colorScheme = colorScheme,
-            typography = typography,
+            typography = CustomTypography,
             content = content
         )
     }

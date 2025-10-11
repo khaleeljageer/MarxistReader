@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.network.model
+package com.jskaleel.android.network.model
 
 import java.io.File
 

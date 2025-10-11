@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.navigation
+package com.jskaleel.android.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold

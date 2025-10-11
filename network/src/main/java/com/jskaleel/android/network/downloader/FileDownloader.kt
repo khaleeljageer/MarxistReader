@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.android.network.downloader
+package com.jskaleel.android.network.downloader
 
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.isActive
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import org.cpimtn.marxist.android.network.model.DownloadResult
+import com.jskaleel.android.network.model.DownloadResult
 import java.io.File
 import java.io.IOException
 import java.net.URL
