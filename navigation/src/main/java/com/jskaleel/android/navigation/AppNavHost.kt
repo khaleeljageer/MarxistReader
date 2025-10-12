@@ -11,9 +11,10 @@ import org.cpimtn.marxist.android.feature.more.MoreScreen
 
 @Composable
 fun MarxistReaderNavHost(
-    navController: NavHostController,
+    appState: MainAppState,
     modifier: Modifier = Modifier,
 ) {
+    val navController = appState.navController
     NavHost(
         navController = navController,
         startDestination = "feed",

@@ -1,6 +1,3 @@
 <resources>
     <string name="app_name">Marxist Reader</string>
-    <string name="feed">Feeds</string>
-    <string name="books">Books</string>
-    <string name="more">More</string>
 </resources>

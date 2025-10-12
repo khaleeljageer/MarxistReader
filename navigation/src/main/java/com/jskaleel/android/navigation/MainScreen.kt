@@ -1,34 +1,83 @@
 package com.jskaleel.android.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import com.jskaleel.android.ui.theme.MarxistReaderTheme
 
 @Composable
-fun MainScreen(windowSizeClass: WindowSizeClass) {
-    val navController = rememberNavController()
-    Scaffold(
-        bottomBar = {
-            if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
-                BottomNavigationBar(navController)
+fun MainScreen(
+    windowSizeClass: WindowSizeClass,
+    appState: MainAppState = rememberMainAppState(
+        widthSizeClass = windowSizeClass.widthSizeClass,
+    ),
+) {
+    val currentDestination = appState.currentDestination
+    val topLevelDestination = appState.currentTopLevelDestination
+
+    NavigationSuiteScaffold(
+        layoutType = appState.navigationSuiteType,
+        containerColor = MaterialTheme.colorScheme.primary,
+        navigationSuiteColors = NavigationSuiteDefaults.colors(),
+        navigationSuiteItems = {
+            if (topLevelDestination != null) {
+                appState.topLevelDestinations.forEach { destination ->
+                    val isSelected =
+                        currentDestination.isTopLevelDestinationInHierarchy(destination)
+                    item(
+                        selected = isSelected,
+                        icon = {
+                            Icon(
+                                imageVector = destination.icon,
+                                contentDescription = null,
+                            )
+                        },
+                        label = { Text(stringResource(destination.iconTextId)) },
+                        onClick = { appState.navigateToTopLevelDestination(destination) },
+                    )
+                }
             }
+        },
+    ) {
+        Scaffold { innerPadding ->
+            MarxistReaderNavHost(
+                appState = appState,
+                modifier = Modifier.padding(innerPadding)
+            )
         }
-    ) { innerPadding ->
-        MarxistReaderNavHost(
-            navController = navController,
-            modifier = Modifier.padding(innerPadding)
-        )
     }
+//    Scaffold(
+//        bottomBar = {
+//            if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Compact) {
+//                BottomNavigationBar(navController)
+//            }
+//        }
+//    ) { innerPadding ->
+//        MarxistReaderNavHost(
+//            navController = navController,
+//            modifier = Modifier.padding(innerPadding)
+//        )
+//    }
 }
+
+private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
+    this?.hierarchy?.any {
+        it.route?.contains(destination.name, true) ?: false
+    } ?: false
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Preview(name = "Compact Screen", showBackground = true)

@@ -1,6 +1,7 @@
 package com.jskaleel.android.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -16,52 +17,64 @@ val quicksand = FontFamily(
 val CustomTypography = Typography().run {
     copy(
         displayLarge = displayLarge.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         displayMedium = displayMedium.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         displaySmall = displaySmall.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         headlineLarge = headlineLarge.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         headlineMedium = headlineMedium.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         headlineSmall = headlineSmall.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         titleLarge = titleLarge.copy(
             fontFamily = quicksand,
-            fontWeight = FontWeight.Bold
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         titleMedium = titleMedium.copy(
             fontFamily = quicksand,
-            fontWeight = FontWeight.Bold
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         titleSmall = titleSmall.copy(
             fontFamily = quicksand,
-            fontWeight = FontWeight.Bold
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         bodyLarge = bodyLarge.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         bodyMedium = bodyMedium.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         bodySmall = bodySmall.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         labelLarge = labelLarge.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         labelMedium = labelMedium.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
         labelSmall = labelSmall.copy(
-            fontFamily = quicksand
+            fontFamily = quicksand,
+            platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
     )
 }

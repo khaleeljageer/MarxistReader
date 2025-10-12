@@ -1,5 +1,5 @@
 <resources>
-    <string name="feed">Feeds</string>
-    <string name="books">Books</string>
-    <string name="more">More</string>
+    <string name="feed">கட்டுரை</string>
+    <string name="books">மின்நூல்</string>
+    <string name="more">மேலும்</string>
 </resources>
