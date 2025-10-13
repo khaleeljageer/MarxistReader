@@ -2,78 +2,142 @@ package com.jskaleel.android.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.PlatformTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 
-val quicksand = FontFamily(
-    Font(R.font.quicksand_light, FontWeight.Light),
-    Font(R.font.quicksand_regular, FontWeight.Normal),
-    Font(R.font.quicksand_medium, FontWeight.Medium),
-    Font(R.font.quicksand_semibold, FontWeight.SemiBold),
-    Font(R.font.quicksand_bold, FontWeight.Bold)
+// -- Font Families --
+val mukta_malar = FontFamily(
+    Font(R.font.mukta_malar_regular, FontWeight.Normal),
+    Font(R.font.mukta_malar_medium, FontWeight.Medium),
+    Font(R.font.mukta_malar_semibold, FontWeight.SemiBold),
+    Font(R.font.mukta_malar_bold, FontWeight.Bold)
+)
+
+val noto_serif_tamil = FontFamily(
+    Font(R.font.noto_serif_tamil_regular, FontWeight.Normal),
+    Font(R.font.noto_serif_tamil_medium, FontWeight.Medium),
+    Font(R.font.noto_serif_tamil_semibold, FontWeight.SemiBold),
+    Font(R.font.noto_serif_tamil_bold, FontWeight.Bold)
 )
 
 val CustomTypography = Typography().run {
     copy(
-        displayLarge = displayLarge.copy(
-            fontFamily = quicksand,
+        displayLarge = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Bold,
+            fontSize = 30.sp,
+            lineHeight = 36.sp,
+            letterSpacing = 0.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        displayMedium = displayMedium.copy(
-            fontFamily = quicksand,
+        displayMedium = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 26.sp,
+            lineHeight = 32.sp,
+            letterSpacing = 0.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        displaySmall = displaySmall.copy(
-            fontFamily = quicksand,
+        displaySmall = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Medium,
+            fontSize = 22.sp,
+            lineHeight = 28.sp,
+            letterSpacing = 0.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        headlineLarge = headlineLarge.copy(
-            fontFamily = quicksand,
+
+        headlineLarge = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.SemiBold,
+            fontSize = 20.sp,
+            lineHeight = 26.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        headlineMedium = headlineMedium.copy(
-            fontFamily = quicksand,
+        headlineMedium = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Medium,
+            fontSize = 18.sp,
+            lineHeight = 24.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        headlineSmall = headlineSmall.copy(
-            fontFamily = quicksand,
+        headlineSmall = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            lineHeight = 22.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        titleLarge = titleLarge.copy(
-            fontFamily = quicksand,
+
+        titleLarge = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Medium,
+            fontSize = 18.sp,
+            lineHeight = 22.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        titleMedium = titleMedium.copy(
-            fontFamily = quicksand,
+        titleMedium = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Medium,
+            fontSize = 16.sp,
+            lineHeight = 20.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        titleSmall = titleSmall.copy(
-            fontFamily = quicksand,
+        titleSmall = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            lineHeight = 18.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        bodyLarge = bodyLarge.copy(
-            fontFamily = quicksand,
+
+        bodyLarge = TextStyle(
+            fontFamily = noto_serif_tamil,
+            fontWeight = FontWeight.Normal,
+            fontSize = 18.sp,
+            lineHeight = 28.sp,
+            letterSpacing = 0.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        bodyMedium = bodyMedium.copy(
-            fontFamily = quicksand,
+        bodyMedium = TextStyle(
+            fontFamily = noto_serif_tamil,
+            fontWeight = FontWeight.Normal,
+            fontSize = 16.sp,
+            lineHeight = 26.sp,
+            letterSpacing = 0.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        bodySmall = bodySmall.copy(
-            fontFamily = quicksand,
+        bodySmall = TextStyle(
+            fontFamily = noto_serif_tamil,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp,
+            lineHeight = 22.sp,
+            letterSpacing = 0.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        labelLarge = labelLarge.copy(
-            fontFamily = quicksand,
+
+        labelLarge = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Medium,
+            fontSize = 14.sp,
+            lineHeight = 18.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        labelMedium = labelMedium.copy(
-            fontFamily = quicksand,
+        labelMedium = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Normal,
+            fontSize = 12.sp,
+            lineHeight = 16.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
-        labelSmall = labelSmall.copy(
-            fontFamily = quicksand,
+        labelSmall = TextStyle(
+            fontFamily = mukta_malar,
+            fontWeight = FontWeight.Normal,
+            fontSize = 11.sp,
+            lineHeight = 14.sp,
             platformStyle = PlatformTextStyle(includeFontPadding = true)
         ),
     )
