@@ -11,6 +11,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
@@ -31,8 +32,12 @@ fun MainScreen(
 
     NavigationSuiteScaffold(
         layoutType = appState.navigationSuiteType,
-        containerColor = MaterialTheme.colorScheme.primary,
-        navigationSuiteColors = NavigationSuiteDefaults.colors(),
+        containerColor = Color.Transparent,
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = MaterialTheme.colorScheme.surface, // Warm surface for bottom nav
+            navigationRailContainerColor = MaterialTheme.colorScheme.surface, // Consistent for rail
+            navigationDrawerContainerColor = MaterialTheme.colorScheme.surface, // Consistent for drawer
+        ),
         navigationSuiteItems = {
             if (topLevelDestination != null) {
                 appState.topLevelDestinations.forEach { destination ->

@@ -5,44 +5,43 @@ import androidx.compose.ui.graphics.Color
 @Suppress("detekt:MagicNumber")
 object AppColor {
     object Light {
-        val Primary = Color(0xFFC62828) // Muted Red
-        val OnPrimary = Color(0xFFFFFFFF) // White (high contrast on Primary)
-        val PrimaryContainer = Color(0xFFFFCDD2) // Light Red-Pink
-        val OnPrimaryContainer = Color(0xFF212121) // Dark Gray (high contrast on PrimaryContainer)
-        val Secondary = Color(0xFF388E3C) // Forest Green
-        val OnSecondary = Color(0xFFFFFFFF) // White
-        val Tertiary = Color(0xFFF06292) // Soft Pink
-        val OnTertiary = Color(0xFFFFFFFF) // White
-        val Background = Color(0xFFFAFAFA) // Off-White
-        val OnBackground = Color(0xFF212121) // Dark Gray
-        val Surface = Color(0xFFFFFFFF) // White
-        val OnSurface = Color(0xFF212121) // Dark Gray
-        val SurfaceVariant = Color(0xFFE0E0E0) // Light Gray
-        val OnSurfaceVariant = Color(0xFF212121) // Dark Gray
-        val SecondaryContainer = Color(0xFFC8E6C9) // Light Green
-        val OnSecondaryContainer = Color(0xFF212121) // Dark Gray
-        val Error = Color(0xFFFF8989) // Soft Red
-        val OnError = Color(0xFF000000) // Black
+        val Primary = Color(0xFF4A90E2) // Deep sky blue for immersion
+        val OnPrimary = Color(0xFFFFFFFF) // White for contrast
+        val PrimaryContainer = Color(0xFFBBDEFB) // Light blue for containers
+        val OnPrimaryContainer = Color(0xFF0D47A1) // Dark blue text on container
+        val Secondary = Color(0xFF9C27B0) // Vibrant purple for highlights
+        val OnSecondary = Color(0xFFFFFFFF) // White for contrast
+        val Tertiary = Color(0xFF303F9F) // Deep indigo for accents
+        val OnTertiary = Color(0xFFFFFFFF) // White for contrast
+        val Background = Color(0xFFF8F9FA) // Soft off-white to reduce eye strain
+        val OnBackground = Color(0xFF212529) // Dark charcoal for text
+        val Surface = Color(0xFFFFFFFF) // Clean white for pages
+        val OnSurface = Color(0xFF212529) // Dark charcoal for text
+        val SurfaceVariant = Color(0xFFF1F3F4) // Subtle light gray variant
+        val OnSurfaceVariant = Color(0xFF5F6368) // Medium gray for secondary text
+        val SecondaryContainer = Color(0xFFE1BEE7) // Light purple for secondary UI
+        val OnSecondaryContainer = Color(0xFF4A148C) // Dark purple text
+        val Error = Color(0xFFE74C3C) // Coral red for errors
+        val OnError = Color(0xFFFFFFFF) // White for contrast
     }
-
     object Dark {
-        val Primary = Color(0xFFEF5350) // Light Red
-        val OnPrimary = Color(0xFFFFFFFF) // White (high contrast on Primary)
-        val PrimaryContainer = Color(0xFFB71C1C) // Darker Red
-        val OnPrimaryContainer = Color(0xFFFFFFFF) // White (high contrast on PrimaryContainer)
-        val Secondary = Color(0xFF81C784) // Light Green
-        val OnSecondary = Color(0xFF212121) // Dark Gray
-        val Tertiary = Color(0xFFFF8A80) // Soft Coral
-        val OnTertiary = Color(0xFF212121) // Dark Gray
-        val Background = Color(0xFF161616) // Near Black
-        val OnBackground = Color(0xFFE0E0E0) // Light Gray
-        val Surface = Color(0xFF212121) // Dark Gray
-        val OnSurface = Color(0xFFE0E0E0) // Light Gray
-        val SurfaceVariant = Color(0xFF2E2E2E) // Darker Gray
-        val OnSurfaceVariant = Color(0xFFE0E0E0) // Light Gray
-        val SecondaryContainer = Color(0xFF388E3C) // Forest Green
-        val OnSecondaryContainer = Color(0xFFE0E0E0) // Light Gray
-        val Error = Color(0xFFFF8989) // Soft Red
-        val OnError = Color(0xFF212121) // Dark Gray
+        val Primary = Color(0xFF1E40AF) // Darker blue for primary elements
+        val OnPrimary = Color(0xFFF0F9FF) // Light off-white for text
+        val PrimaryContainer = Color(0xFF5DADE2) // Medium blue for containers
+        val OnPrimaryContainer = Color(0xFF90D4FF) // Lighter blue text
+        val Secondary = Color(0xFF7B1FA2) // Muted purple for highlights
+        val OnSecondary = Color(0xFFF8F9FA) // Warm off-white
+        val Tertiary = Color(0xFF283593) // Dark indigo for accents
+        val OnTertiary = Color(0xFFF8F9FA) // Warm off-white
+        val Background = Color(0xFF121212) // Near-black background
+        val OnBackground = Color(0xFFEDEDED) // Light gray for text
+        val Surface = Color(0xFF1E1E1E) // Dark gray for surfaces
+        val OnSurface = Color(0xFFEDEDED) // Light gray for text
+        val SurfaceVariant = Color(0xFF2C2C2C) // Subtle dark variant
+        val OnSurfaceVariant = Color(0xFFBDBDBD) // Medium light gray
+        val SecondaryContainer = Color(0xFF4A148C) // Dark purple for secondary
+        val OnSecondaryContainer = Color(0xFFF8F9FA) // Warm off-white
+        val Error = Color(0xFFE57373) // Muted red for errors
+        val OnError = Color(0xFFF8F9FA) // Warm off-white for cohesion
     }
 }
