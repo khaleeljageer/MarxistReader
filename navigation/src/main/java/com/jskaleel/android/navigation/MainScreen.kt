@@ -11,10 +11,6 @@ import androidx.compose.material3.adaptive.navigationsuite.ExperimentalMaterial3
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
@@ -33,24 +29,20 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.jskaleel.android.navigation.model.Route
 import com.jskaleel.android.navigation.model.TopLevelDestination
-import com.jskaleel.android.ui.theme.MarxistReaderTheme
 
 @OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
 @Composable
 fun MainScreen(
-    windowSizeClass: WindowSizeClass
+    windowSize: DpSize,
+    appState: MainAppState = rememberMainAppState(
+        windowSize = windowSize,
+    ),
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-    val navigationSuiteType = when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Expanded -> NavigationSuiteType.NavigationDrawer
-        WindowWidthSizeClass.Medium -> NavigationSuiteType.NavigationRail
-        else -> NavigationSuiteType.NavigationBar
-    }
-
     NavigationSuiteScaffold(
-        layoutType = navigationSuiteType,
+        layoutType = appState.navigationSuiteType,
         containerColor = Color.Transparent,
         navigationSuiteColors = NavigationSuiteDefaults.colors(
             navigationBarContainerColor = MaterialTheme.colorScheme.surface, // Warm surface for bottom nav
@@ -129,39 +121,36 @@ private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLev
         it.route?.contains(destination.name, true) ?: false
     } ?: false
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(name = "Compact Screen", showBackground = true)
+
+@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
+@Preview
 @Composable
 fun MainScreenCompactPreview() {
-    MarxistReaderTheme {
+    MaterialTheme {
         MainScreen(
-            WindowSizeClass.calculateFromSize(
-                DpSize(411.dp, 891.dp)
-            )
+            windowSize = DpSize.Zero,
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(name = "Medium Screen", showBackground = true, widthDp = 600, heightDp = 800)
+@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
+@Preview(device = "spec:width=673dp,height=841dp")
 @Composable
-fun MainScreenMediumPreview() {
-    MarxistReaderTheme {
+fun MainScreenExtendedPreview() {
+    MaterialTheme {
         MainScreen(
-            WindowSizeClass.calculateFromSize(
-                DpSize(600.dp, 800.dp)
-            )
+            windowSize = DpSize(width = 673.dp, height = 841.dp),
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@Preview(name = "Expanded Screen", showBackground = true, widthDp = 840, heightDp = 900)
+@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
+@Preview(device = "spec:width=1280dp,height=800dp,dpi=240")
 @Composable
-fun MainScreenExpandedPreview() {
-    MarxistReaderTheme {
+fun MainScreenLargePreview() {
+    MaterialTheme {
         MainScreen(
-            WindowSizeClass.calculateFromSize(DpSize(840.dp, 900.dp))
+            windowSize = DpSize(width = 1280.dp, height = 800.dp),
         )
     }
 }

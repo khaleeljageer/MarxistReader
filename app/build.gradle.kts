@@ -68,6 +68,7 @@ dependencies {
 
     implementation(libs.bundles.hilt.core)
     ksp(libs.hilt.compiler)
+    implementation(libs.androidx.compose.adaptive)
 
     implementation(libs.bundles.room.core)
     ksp(libs.androidx.room.compiler)

@@ -34,7 +34,7 @@ fun NavGraphBuilder.mainNavGraph(
                 },
                 navigateToSearch = {
                     navController.navigate(
-                        route = Screen.Main.Search.route
+                        route = Screen.Search.route
                     )
                 }
             )
@@ -46,31 +46,31 @@ fun NavGraphBuilder.mainNavGraph(
             MoreScreen(
                 navigateToAbout = {
                     navController.navigate(
-                        route = Screen.Main.About.route
+                        route = Screen.About.route
                     )
                 },
                 navigateToDonate = {
                     navController.navigate(
-                        route = Screen.Main.Donate.route
+                        route = Screen.Donate.route
                     )
                 },
                 navigateToThemeSettings = {
                     navController.navigate(
-                        route = Screen.Main.ThemeSettings.route
+                        route = Screen.ThemeSettings.route
                     )
                 }
             )
         }
-        composable(route = Screen.Main.Search.route) {
+        composable(route = Screen.Search.route) {
             SearchScreen()
         }
-        composable(route = Screen.Main.About.route) {
+        composable(route = Screen.About.route) {
             AboutScreen()
         }
-        composable(route = Screen.Main.Donate.route) {
+        composable(route = Screen.Donate.route) {
             DonateScreen()
         }
-        composable(route = Screen.Main.ThemeSettings.route) {
+        composable(route = Screen.ThemeSettings.route) {
             ThemeSettingsScreen()
         }
         composable(route = Screen.FeedDetails.link) {
