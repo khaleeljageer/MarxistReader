@@ -7,10 +7,11 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 
 @Composable
 fun rememberMainAppState(
-    windowSize: DpSize
+    windowSize: DpSize,
 ): MainAppState {
     return remember(windowSize) {
         MainAppState(windowSize)

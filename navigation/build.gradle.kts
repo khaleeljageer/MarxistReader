@@ -62,7 +62,7 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.material3.window.size)
     implementation(libs.androidx.material3.icons.extended)
-    implementation(libs.androidx.material3.adaptive.navigation)
+    implementation(libs.androidx.material3.adaptive.navigation.suite)
 
     // Navigation
     implementation(libs.androidx.navigation.compose)

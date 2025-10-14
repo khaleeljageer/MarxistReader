@@ -19,13 +19,13 @@ fun FeedScreen(
     navigateToDetails: (String) -> Unit,
     navigateToSearch: () -> Unit
 ) {
-    Column {
-        Text("கட்டுரைகள்", style = MaterialTheme.typography.titleMedium)
+    Column(modifier = Modifier.verticalScroll(enabled = true, state = rememberScrollState())) {
+        Text("கட்டுரைகள்", style = MaterialTheme.typography.titleLarge)
         Spacer(modifier = Modifier.height(10.dp))
         Text(
-            modifier = Modifier.verticalScroll(enabled = true, state = rememberScrollState()),
             text = "நடுநிலையை உரசிப்பார்ப்பதற்கான உரைகற்களில் ஒன்றாக வர்க்க நிலைப்பாடு குறித்துப் பார்த்தோம். இப்போது இன்னொரு உரைகல்லான  பாலின அணுகுமுறையை விசாரிப்போம். பெரும்பாலான ஊடகங்களில் பெண்களைப் பற்றிய சித்தரிப்புகள் பாலின சமத்துவக் கண்ணோட்டத்தைப் புறக்கணிப்பதாக, சமுதாயத்தில் ஊறிப்போயிருக்கிற பெண் அவமதிப்புக் கலாச்சாரத்தை  வெளிப்படுத்துவதாக இருப்பதைக் கவனித்தால் அதிர்ச்சியே ஏற்படும். \n"
-                    + "\n",
+                    + "\n" +
+                    "நடுநிலையை உரசிப்பார்ப்பதற்கான உரைகற்களில் ஒன்றாக வர்க்க நிலைப்பாடு குறித்துப் பார்த்தோம். இப்போது இன்னொரு உரைகல்லான  பாலின அணுகுமுறையை விசாரிப்போம். பெரும்பாலான ஊடகங்களில் பெண்களைப் பற்றிய சித்தரிப்புகள் பாலின சமத்துவக் கண்ணோட்டத்தைப் புறக்கணிப்பதாக, சமுதாயத்தில் ஊறிப்போயிருக்கிற பெண் அவமதிப்புக் கலாச்சாரத்தை  வெளிப்படுத்துவதாக இருப்பதைக் கவனித்தால் அதிர்ச்சியே ஏற்படும். \n",
             style = MaterialTheme.typography.bodyMedium
         )
         Button(onClick = { navigateToDetails("123") }) {

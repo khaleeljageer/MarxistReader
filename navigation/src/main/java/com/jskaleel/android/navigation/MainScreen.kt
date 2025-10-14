@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
@@ -34,11 +35,11 @@ import com.jskaleel.android.navigation.model.TopLevelDestination
 @Composable
 fun MainScreen(
     windowSize: DpSize,
+    navController: NavHostController = rememberNavController(),
     appState: MainAppState = rememberMainAppState(
-        windowSize = windowSize,
-    ),
+        windowSize = windowSize
+    )
 ) {
-    val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
 
     NavigationSuiteScaffold(
@@ -66,17 +67,18 @@ fun MainScreen(
             )
         },
     ) {
-        Scaffold { innerPadding ->
-            Box(
-                modifier = Modifier
-                    .padding(paddingValues = innerPadding)
-                    .fillMaxSize()
-            ) {
-                NavigationHost(
-                    navController = navController,
-                )
-            }
-        }
+        MainAppContent(navController = navController)
+    }
+}
+
+@Composable
+private fun MainAppContent(navController: NavHostController) {
+    Scaffold { innerPadding ->
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+        ) { NavigationHost(navController = navController) }
     }
 }
 
