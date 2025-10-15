@@ -15,13 +15,23 @@ import org.cpimtn.marxist.android.feature.more.DonateScreen
 import org.cpimtn.marxist.android.feature.more.MoreScreen
 import org.cpimtn.marxist.android.feature.more.ThemeSettingsScreen
 
-
 fun NavGraphBuilder.mainNavGraph(
     navController: NavController
 ) {
     navigation(
-        startDestination = Screen.Main.Feed.route,
+        startDestination = Route.Feed.name,
         route = Route.Main.name
+    ) {
+        feedNavGraph(navController)
+        booksNavGraph(navController)
+        moreNavGraph(navController)
+    }
+}
+
+private fun NavGraphBuilder.feedNavGraph(navController: NavController) {
+    navigation(
+        startDestination = Screen.Main.Feed.route,
+        route = Route.Feed.name
     ) {
         composable(route = Screen.Main.Feed.route) {
             FeedScreen(
@@ -39,9 +49,32 @@ fun NavGraphBuilder.mainNavGraph(
                 }
             )
         }
+        composable(route = Screen.Search.route) {
+            SearchScreen()
+        }
+        composable(route = Screen.FeedDetails.link) {
+            val feedId = Screen.FeedDetails.get(it.arguments)
+            FeedDetailsScreen(feedId = feedId)
+        }
+    }
+}
+
+private fun NavGraphBuilder.booksNavGraph(navController: NavController) {
+    navigation(
+        startDestination = Screen.Main.Books.route,
+        route = Route.Books.name
+    ) {
         composable(route = Screen.Main.Books.route) {
             BooksScreen()
         }
+    }
+}
+
+private fun NavGraphBuilder.moreNavGraph(navController: NavController) {
+    navigation(
+        startDestination = Screen.Main.More.route,
+        route = Route.More.name
+    ) {
         composable(route = Screen.Main.More.route) {
             MoreScreen(
                 navigateToAbout = {
@@ -61,9 +94,6 @@ fun NavGraphBuilder.mainNavGraph(
                 }
             )
         }
-        composable(route = Screen.Search.route) {
-            SearchScreen()
-        }
         composable(route = Screen.About.route) {
             AboutScreen()
         }
@@ -73,10 +103,5 @@ fun NavGraphBuilder.mainNavGraph(
         composable(route = Screen.ThemeSettings.route) {
             ThemeSettingsScreen()
         }
-        composable(route = Screen.FeedDetails.link) {
-            val feedId = Screen.FeedDetails.get(it.arguments)
-            FeedDetailsScreen(feedId = feedId)
-        }
     }
 }
-

@@ -14,7 +14,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -42,12 +41,6 @@ fun MainScreen(
     )
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-//
-//    val currentDestination = navBackStackEntry?.destination
-//    val currentRoute: String = currentDestination?.route ?: ""
-//    val showNavigation: Boolean = remember(currentRoute) {
-//        TopLevelDestination.entries.any { it.route == currentRoute }
-//    }
 
     NavigationSuiteScaffold(
         layoutType = appState.navigationSuiteType,
@@ -58,22 +51,20 @@ fun MainScreen(
             navigationDrawerContainerColor = MaterialTheme.colorScheme.surface, // Consistent for drawer
         ),
         navigationSuiteItems = {
-//            if (showNavigation) {
-                customNavigationSuiteItems(
-                    navBackStackEntry = navBackStackEntry,
-                    onClick = { destination ->
-                        val topLevelNavOptions = navOptions {
-                            popUpTo(navController.graph.startDestinationId)
-                            launchSingleTop = true
-                            restoreState = true
-                            popUpTo(Route.Main.name) {
-                                saveState = true
-                            }
+            customNavigationSuiteItems(
+                navBackStackEntry = navBackStackEntry,
+                onClick = { destination ->
+                    val topLevelNavOptions = navOptions {
+                        popUpTo(navController.graph.startDestinationId)
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(Route.Main.name) {
+                            saveState = true
                         }
-                        navController.navigate(destination.route, topLevelNavOptions)
                     }
-                )
-//            }
+                    navController.navigate(destination.route, topLevelNavOptions)
+                }
+            )
         },
     ) {
         MainAppContent(navController = navController)
@@ -127,10 +118,11 @@ fun NavigationSuiteScope.customNavigationSuiteItems(
     }
 }
 
-private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
-    this?.hierarchy?.any {
-        it.route?.contains(destination.name, true) ?: false
+private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination): Boolean {
+    return this?.hierarchy?.any {
+        it.route == destination.route
     } ?: false
+}
 
 
 @OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)

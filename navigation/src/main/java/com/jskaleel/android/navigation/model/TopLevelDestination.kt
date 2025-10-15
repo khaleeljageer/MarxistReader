@@ -17,19 +17,19 @@ enum class TopLevelDestination(
     val iconTextId: Int,
 ) {
     FEED(
-        route = Screen.Main.Feed.route,
+        route = Route.Feed.name,
         selectedIcon = Icons.AutoMirrored.Filled.Feed,
         unSelectedIcon = Icons.AutoMirrored.Outlined.Feed,
         iconTextId = R.string.feed,
     ),
     BOOKS(
-        route = Screen.Main.Books.route,
+        route = Route.Books.name,
         selectedIcon = Icons.Filled.Book,
         unSelectedIcon = Icons.Outlined.Book,
         iconTextId = R.string.books
     ),
     MORE(
-        route = Screen.Main.More.route,
+        route = Route.More.name,
         selectedIcon = Icons.Filled.MoreHoriz,
         unSelectedIcon = Icons.Outlined.MoreHoriz,
         iconTextId = R.string.more,
