@@ -8,15 +8,15 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.cpimtn.marxist.android.domain.model.Post
-import org.cpimtn.marxist.android.domain.repository.PostRepository
+import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
-    postRepository: PostRepository
+    getPostsFlowUseCase: GetPostsFlowUseCase
 ) : ViewModel() {
     val feedUiState: StateFlow<FeedUiState> =
-        postRepository.getPosts()
+        getPostsFlowUseCase()
             .map { posts ->
                 when {
                     posts.isEmpty() -> FeedUiState.Empty

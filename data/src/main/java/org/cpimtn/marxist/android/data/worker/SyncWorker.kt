@@ -12,19 +12,19 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import org.cpimtn.marxist.android.domain.repository.PostRepository
+import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
 class SyncWorker @AssistedInject constructor(
     @Assisted private val appContext: Context,
     @Assisted workerParams: WorkerParameters,
-    private val postRepository: PostRepository,
+    private val syncPostsUseCase: SyncPostsUseCase,
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result = try {
-        val perPage = inputData.getInt(KEY_PER_PAGE, 50)
-        postRepository.fullSync(perPage)
+        val perPage = inputData.getInt(KEY_PER_PAGE, SyncPostsUseCase.DEFAULT_PER_PAGE)
+        syncPostsUseCase(perPage)
         Result.success()
     } catch (e: Exception) {
         Result.retry()
@@ -48,7 +48,7 @@ class SyncWorker @AssistedInject constructor(
          */
         fun startUpSyncWork(): OneTimeWorkRequest {
             return OneTimeWorkRequestBuilder<SyncWorker>()
-                .setInputData(workDataOf(KEY_PER_PAGE to 50))
+                .setInputData(workDataOf(KEY_PER_PAGE to SyncPostsUseCase.DEFAULT_PER_PAGE))
                 .setConstraints(SyncConstraints)
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,

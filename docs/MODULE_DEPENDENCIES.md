@@ -50,7 +50,8 @@ This document defines how modules may depend on each other. Respecting these rul
 |------------|-----------------------------------------|----------------------|
 | **app**    | navigation, data, ui-theme, feature:*   | —                    |
 | **domain** | (none; stdlib/coroutines only)          | app, data, network, navigation, feature, core, ui-theme |
-| **data**   | domain, network                         | app, navigation, feature, ui-theme |
+| **data**   | domain, use-cases, network              | app, navigation, feature, ui-theme |
+| **use-cases** | domain                               | app, data, network, navigation, feature, core, ui-theme |
 | **network**| (none or minimal; e.g. OkHttp/Retrofit)  | domain, data, app, feature |
 | **core**   | (none or stdlib)                        | app, data, domain, navigation, feature |
 | **navigation** | core, ui-theme, feature:*            | app, data, domain, network |
@@ -71,11 +72,12 @@ Keep `namespace` aligned with the package root for each module:
 - `feature:feed` → `org.cpimtn.marxist.android.feature.feed`
 - `feature:books` → `org.cpimtn.marxist.android.feature.books`
 - `feature:more` → `org.cpimtn.marxist.android.feature.more`
+- `use-cases` → `org.cpimtn.marxist.android.domain.usecase`
 
 ## Adding a new feature module
 
 1. Create `feature:<name>` with package `org.cpimtn.marxist.android.feature.<name>`.
-2. Add dependency on `:domain` (and optionally `:core`, `:ui-theme`). Do not add `:data` or `:network`.
+2. Add dependency on `:domain` and `:use-cases` (and optionally `:core`, `:ui-theme`). Do not add `:data` or `:network`.
 3. Add the feature to the app’s navigation (e.g. in `app` or wherever the NavHost is composed): new route and composable for the feature screen.
 4. If using Hilt, ensure the app component includes the feature (e.g. by depending on the feature module).
 

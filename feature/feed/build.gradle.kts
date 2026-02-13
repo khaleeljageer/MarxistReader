@@ -61,6 +61,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(project(":domain"))
+    implementation(project(":use-cases"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

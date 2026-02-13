@@ -62,5 +62,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(project(":domain"))
+    implementation(project(":use-cases"))
     implementation(project(":network"))
 }
