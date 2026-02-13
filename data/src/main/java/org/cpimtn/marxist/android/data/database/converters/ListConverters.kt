@@ -4,14 +4,15 @@ import androidx.room.TypeConverter
 
 /**
  * Room type converters for list persistence. Kept separate from entities (SRP).
+ * Supports List<Int> for post tags/categories IDs.
  */
 class ListConverters {
 
     @TypeConverter
-    fun fromString(value: String): List<String> =
-        if (value.isEmpty()) emptyList() else value.split(",")
+    fun fromIntListString(value: String): List<Int> =
+        if (value.isBlank()) emptyList() else value.split(",").map { it.toIntOrNull() ?: 0 }
 
     @TypeConverter
-    fun fromList(list: List<String>): String =
+    fun toIntListString(list: List<Int>): String =
         list.joinToString(",")
 }

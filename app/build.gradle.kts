@@ -66,6 +66,8 @@ dependencies {
     implementation(libs.androidx.material3.icons.extended)
 
     implementation(libs.hilt.android)
+    implementation(libs.androidx.hilt.work)
+    implementation(libs.androidx.work.runtime.ktx)
     ksp(libs.hilt.compiler)
 
     implementation(project(":ui-theme"))

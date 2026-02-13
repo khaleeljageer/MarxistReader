@@ -14,8 +14,10 @@ import kotlinx.coroutines.launch
 import org.cpimtn.marxist.android.domain.model.Post
 import org.cpimtn.marxist.android.domain.model.SyncResult
 import org.cpimtn.marxist.android.domain.model.SyncStatus
+import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
 import javax.inject.Inject
 
@@ -23,6 +25,8 @@ import javax.inject.Inject
 class FeedViewModel @Inject constructor(
     getPostsFlowUseCase: GetPostsFlowUseCase,
     getSyncStatusUseCase: GetSyncStatusUseCase,
+    getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
+    getTagsFlowUseCase: GetTagsFlowUseCase,
     private val syncPostsUseCase: SyncPostsUseCase,
 ) : ViewModel() {
 
@@ -35,6 +39,26 @@ class FeedViewModel @Inject constructor(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = SyncStatus()
+            )
+
+    /** Id → name for resolving post category IDs locally. */
+    val categoryNames: StateFlow<Map<Int, String>> =
+        getCategoriesFlowUseCase()
+            .map { list -> list.associate { it.id to it.name } }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptyMap()
+            )
+
+    /** Id → name for resolving post tag IDs locally. */
+    val tagNames: StateFlow<Map<Int, String>> =
+        getTagsFlowUseCase()
+            .map { list -> list.associate { it.id to it.name } }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptyMap()
             )
 
     init {

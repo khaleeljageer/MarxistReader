@@ -6,6 +6,6 @@ data class Post(
     val slug: String,
     val title: String,
     val excerpt: String,
-    val tags: List<String>,
-    val categories: List<String>
+    val tags: List<Int>,
+    val categories: List<Int>
 )

@@ -1,6 +1,5 @@
 package org.cpimtn.marxist.network.model
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 
@@ -11,10 +10,8 @@ data class PostDTO(
     val slug: String,
     val title: RenderedText,
     val excerpt: RenderedText,
-    @SerialName("tags_names")
-    val tags: List<String>? = null,
-    @SerialName("categories_names")
-    val categories: List<String>? = null
+    val tags: List<Int>? = null,
+    val categories: List<Int>? = null
 )
 
 @Serializable

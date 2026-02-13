@@ -32,6 +32,8 @@ fun FeedScreen(
 ) {
     val uiState by viewModel.feedUiState.collectAsState()
     val syncStatus by viewModel.syncStatus.collectAsState()
+    val categoryNames by viewModel.categoryNames.collectAsState()
+    val tagNames by viewModel.tagNames.collectAsState()
 
     when (val state = uiState) {
         is FeedUiState.Loading -> {
@@ -53,10 +55,13 @@ fun FeedScreen(
                 }
                 LazyColumn(modifier = Modifier.padding(horizontal = 16.dp)) {
                     items(state.posts) { post ->
-                        Text(
-                            text = post.title,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(vertical = 8.dp)
+                        FeedPostItem(
+                            title = post.title,
+                            categoryIds = post.categories,
+                            tagIds = post.tags,
+                            categoryNames = categoryNames,
+                            tagNames = tagNames,
+                            modifier = Modifier.padding(vertical = 8.dp),
                         )
                     }
                 }
@@ -152,6 +157,34 @@ private fun SyncStatusBanner(
                     Text("Retry")
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun FeedPostItem(
+    title: String,
+    categoryIds: List<Int>,
+    tagIds: List<Int>,
+    categoryNames: Map<Int, String>,
+    tagNames: Map<Int, String>,
+    modifier: Modifier = Modifier,
+) {
+    val categoryLabels = categoryIds.map { categoryNames[it] ?: "#$it" }
+    val tagLabels = tagIds.map { tagNames[it] ?: "#$it" }
+    val labels = (categoryLabels + tagLabels).filter { it.isNotBlank() }
+    Column(modifier = modifier) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        if (labels.isNotEmpty()) {
+            Text(
+                text = labels.joinToString(" · "),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 4.dp),
+            )
         }
     }
 }

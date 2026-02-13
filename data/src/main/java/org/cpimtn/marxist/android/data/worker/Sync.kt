@@ -13,11 +13,15 @@ object Sync {
      */
     fun initialize(context: Context) {
         WorkManager.getInstance(context).apply {
-            // Run sync on app startup and ensure only one sync worker runs at any time
             enqueueUniqueWork(
                 "sync_posts",
                 ExistingWorkPolicy.KEEP,
                 SyncWorker.startUpSyncWork(),
+            )
+            enqueueUniqueWork(
+                "sync_taxonomy",
+                ExistingWorkPolicy.KEEP,
+                TaxonomySyncWorker.taxonomySyncWork(),
             )
         }
     }
