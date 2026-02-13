@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import com.jskaleel.android.network.model.PostDTO
+import org.cpimtn.marxist.network.model.PostDTO
 import org.cpimtn.marxist.android.domain.model.Post
 
 @Entity(tableName = "posts")

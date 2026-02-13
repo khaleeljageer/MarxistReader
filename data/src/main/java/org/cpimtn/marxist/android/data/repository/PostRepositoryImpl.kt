@@ -1,6 +1,6 @@
 package org.cpimtn.marxist.android.data.repository
 
-import com.jskaleel.android.network.api.WPApiService
+import org.cpimtn.marxist.network.api.WPApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.cpimtn.marxist.android.data.database.dao.PostDao
