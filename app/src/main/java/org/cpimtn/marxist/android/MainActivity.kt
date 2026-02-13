@@ -6,10 +6,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import dagger.hilt.android.AndroidEntryPoint
 import com.jskaleel.android.navigation.App
-import com.jskaleel.android.navigation.MainScreen
-import com.jskaleel.android.ui.theme.MarxistReaderTheme
+import dagger.hilt.android.AndroidEntryPoint
+import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint

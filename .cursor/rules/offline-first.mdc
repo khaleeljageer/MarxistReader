@@ -1,0 +1,12 @@
+---
+description: Marxist Reader is Offline First — local DB is source of truth; network syncs in background.
+alwaysApply: true
+---
+
+# Offline First
+
+This app is **Offline First**.
+
+- **Local storage (Room, DataStore) is the source of truth.** UI reads from local DB/cache.
+- **Network is for sync.** Sync in the background (WorkManager); update local DB; UI observes local data.
+- **Design for no connectivity.** Features work without internet; show cached content; retry sync when back online.

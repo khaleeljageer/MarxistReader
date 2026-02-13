@@ -7,8 +7,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.cpimtn.marxist.android.data.repository.PostRepository
 import org.cpimtn.marxist.android.domain.model.Post
+import org.cpimtn.marxist.android.domain.repository.PostRepository
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,7 +17,12 @@ class FeedViewModel @Inject constructor(
 ) : ViewModel() {
     val feedUiState: StateFlow<FeedUiState> =
         postRepository.getPosts()
-            .map<List<Post>, FeedUiState>(FeedUiState::Success)
+            .map { posts ->
+                when {
+                    posts.isEmpty() -> FeedUiState.Empty
+                    else -> FeedUiState.Success(posts)
+                }
+            }
             .stateIn(
                 scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(5_000),
@@ -28,4 +33,6 @@ class FeedViewModel @Inject constructor(
 sealed interface FeedUiState {
     object Loading : FeedUiState
     data class Success(val posts: List<Post>) : FeedUiState
+    object Empty : FeedUiState
+    data class Error(val message: String) : FeedUiState
 }

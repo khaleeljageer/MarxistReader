@@ -27,7 +27,13 @@ fun MainScreensNavHost(
         composable(route = Screen.Books.route) {
             BooksScreen()
         }
-        composable(route = Screen.More.route) {
+        composable(route = Screen.Search.route) {
+            MoreScreen()
+        }
+        composable(route = Screen.Saved.route) {
+            MoreScreen()
+        }
+        composable(route = Screen.Settings.route) {
             MoreScreen()
         }
     }

@@ -3,6 +3,9 @@ package com.jskaleel.android.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationDrawerItemDefaults
+import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
@@ -13,12 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import com.jskaleel.android.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
 @Composable
 fun MainScreen(
@@ -29,6 +33,31 @@ fun MainScreen(
 ) {
     val currentDestination = appState.currentDestination
     val topLevelDestination = appState.currentTopLevelDestination
+
+    // ── Item colors for each navigation variant ──
+    val navItemColors = NavigationSuiteDefaults.itemColors(
+        navigationBarItemColors = NavigationBarItemDefaults.colors(
+            selectedIconColor = MarxistReaderTheme.colors.navActiveIcon,
+            selectedTextColor = MarxistReaderTheme.colors.navActiveLabel,
+            unselectedIconColor = MarxistReaderTheme.colors.navInactiveIcon,
+            unselectedTextColor = MarxistReaderTheme.colors.navInactiveLabel,
+            indicatorColor = Color.Transparent,
+        ),
+        navigationRailItemColors = NavigationRailItemDefaults.colors(
+            selectedIconColor = MarxistReaderTheme.colors.navActiveIcon,
+            selectedTextColor = MarxistReaderTheme.colors.navActiveLabel,
+            unselectedIconColor = MarxistReaderTheme.colors.navInactiveIcon,
+            unselectedTextColor = MarxistReaderTheme.colors.navInactiveLabel,
+            indicatorColor = Color.Transparent,
+        ),
+        navigationDrawerItemColors = NavigationDrawerItemDefaults.colors(
+            selectedIconColor = MarxistReaderTheme.colors.navActiveIcon,
+            selectedTextColor = MarxistReaderTheme.colors.navActiveLabel,
+            unselectedIconColor = MarxistReaderTheme.colors.navInactiveIcon,
+            unselectedTextColor = MarxistReaderTheme.colors.navInactiveLabel,
+        ),
+
+        )
 
     NavigationSuiteScaffold(
         layoutType = appState.navigationSuiteType,
@@ -47,12 +76,27 @@ fun MainScreen(
                         selected = isSelected,
                         icon = {
                             Icon(
-                                imageVector = destination.icon,
-                                contentDescription = null,
+                                imageVector = if (isSelected) {
+                                    destination.selectedIcon
+                                } else {
+                                    destination.unselectedIcon
+                                },
+                                contentDescription = stringResource(destination.labelResId),
                             )
                         },
-                        label = { Text(stringResource(destination.iconTextId)) },
+                        label = {
+                            Text(
+                                text = stringResource(destination.labelResId),
+                                style = MaterialTheme.typography.labelSmall,
+                                fontWeight = if (isSelected) {
+                                    FontWeight.Bold
+                                } else {
+                                    FontWeight.Normal
+                                }
+                            )
+                        },
                         onClick = { appState.navigateToTopLevelDestination(destination) },
+                        colors = navItemColors,
                     )
                 }
             }

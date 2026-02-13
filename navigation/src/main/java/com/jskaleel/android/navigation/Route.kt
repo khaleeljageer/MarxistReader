@@ -8,5 +8,7 @@ sealed class Route(val name: String) {
 sealed class Screen(val route: String) {
     object Feed : Screen(route = "feed")
     object Books : Screen(route = "books")
-    object More : Screen(route = "more")
+    object Search : Screen(route = "search")
+    object Saved : Screen(route = "saved")
+    object Settings : Screen(route = "settings")
 }

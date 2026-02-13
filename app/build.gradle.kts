@@ -68,12 +68,9 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    implementation(libs.bundles.room.core)
-    ksp(libs.androidx.room.compiler)
-
-
     implementation(project(":ui-theme"))
     implementation(project(":navigation"))
+    implementation(project(":data"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -36,7 +36,9 @@ class MainAppState(
         @Composable get() = when (currentDestination?.route) {
             Screen.Feed.route -> TopLevelDestination.FEED
             Screen.Books.route -> TopLevelDestination.BOOKS
-            Screen.More.route -> TopLevelDestination.MORE
+            Screen.Search.route -> TopLevelDestination.SEARCH
+            Screen.Saved.route -> TopLevelDestination.SAVED
+            Screen.Settings.route -> TopLevelDestination.SETTINGS
             else -> null
         }
 
@@ -91,12 +93,28 @@ class MainAppState(
                 navController.navigate(Screen.Books.route, navOptions)
             }
 
-            TopLevelDestination.MORE -> {
+            TopLevelDestination.SEARCH -> {
                 val navOptions = navOptions {
                     popUpTo(navController.graph.findStartDestination().id)
                     launchSingleTop = true
                 }
-                navController.navigate(Screen.More.route, navOptions)
+                navController.navigate(Screen.Search.route, navOptions)
+            }
+
+            TopLevelDestination.SAVED -> {
+                val navOptions = navOptions {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+                navController.navigate(Screen.Saved.route, navOptions)
+            }
+
+            TopLevelDestination.SETTINGS -> {
+                val navOptions = navOptions {
+                    popUpTo(navController.graph.findStartDestination().id)
+                    launchSingleTop = true
+                }
+                navController.navigate(Screen.Settings.route, navOptions)
             }
         }
     }

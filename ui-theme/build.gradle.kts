@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jskaleel.android.ui.theme"
+    namespace = "org.cpimtn.marxist.ui"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
