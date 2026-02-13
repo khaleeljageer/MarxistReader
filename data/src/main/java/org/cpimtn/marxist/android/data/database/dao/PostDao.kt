@@ -18,4 +18,13 @@ interface PostDao {
 
     @Query("DELETE FROM posts")
     suspend fun clearAll()
+
+    /**
+     * Replaces all posts in one transaction so sync never leaves DB empty on failure.
+     */
+    @androidx.room.Transaction
+    suspend fun replaceAll(entities: List<PostEntity>) {
+        clearAll()
+        if (entities.isNotEmpty()) insertAll(entities)
+    }
 }

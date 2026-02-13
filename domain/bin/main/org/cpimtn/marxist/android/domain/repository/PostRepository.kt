@@ -2,6 +2,7 @@ package org.cpimtn.marxist.android.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.cpimtn.marxist.android.domain.model.Post
+import org.cpimtn.marxist.android.domain.model.SyncResult
 
 /**
  * Domain contract for posts (Clean Architecture).
@@ -11,6 +12,6 @@ import org.cpimtn.marxist.android.domain.model.Post
 interface PostRepository {
     /** Stream of posts from local DB (source of truth). */
     fun getPosts(): Flow<List<Post>>
-    /** Triggers a full sync from server and writes to local DB. */
-    suspend fun fullSync(perPage: Int)
+    /** Runs a full sync from server and writes to local DB. Returns result for UI/retry. */
+    suspend fun fullSync(perPage: Int): SyncResult
 }

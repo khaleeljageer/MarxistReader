@@ -12,6 +12,7 @@ import androidx.work.WorkerParameters
 import androidx.work.workDataOf
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import org.cpimtn.marxist.android.domain.model.SyncResult
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
 import java.util.concurrent.TimeUnit
 
@@ -22,12 +23,12 @@ class SyncWorker @AssistedInject constructor(
     private val syncPostsUseCase: SyncPostsUseCase,
 ) : CoroutineWorker(appContext, workerParams) {
 
-    override suspend fun doWork(): Result = try {
+    override suspend fun doWork(): Result {
         val perPage = inputData.getInt(KEY_PER_PAGE, SyncPostsUseCase.DEFAULT_PER_PAGE)
-        syncPostsUseCase(perPage)
-        Result.success()
-    } catch (e: Exception) {
-        Result.retry()
+        return when (syncPostsUseCase(perPage)) {
+            is SyncResult.Success -> Result.success()
+            else -> Result.retry()
+        }
     }
 
     companion object {

@@ -1,5 +1,6 @@
 package org.cpimtn.marxist.android.domain.usecase
 
+import org.cpimtn.marxist.android.domain.model.SyncResult
 import org.cpimtn.marxist.android.domain.repository.PostRepository
 
 /**
@@ -9,9 +10,8 @@ import org.cpimtn.marxist.android.domain.repository.PostRepository
 class SyncPostsUseCase(
     private val postRepository: PostRepository,
 ) {
-    suspend operator fun invoke(perPage: Int = DEFAULT_PER_PAGE) {
+    suspend operator fun invoke(perPage: Int = DEFAULT_PER_PAGE): SyncResult =
         postRepository.fullSync(perPage)
-    }
 
     companion object {
         const val DEFAULT_PER_PAGE = 50
