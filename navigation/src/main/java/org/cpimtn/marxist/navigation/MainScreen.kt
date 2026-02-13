@@ -12,6 +12,7 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaul
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,10 +28,9 @@ import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 @Composable
 fun MainScreen(
     windowSizeClass: WindowSizeClass,
-    appState: MainAppState = rememberMainAppState(
-        widthSizeClass = windowSizeClass.widthSizeClass,
-    ),
+    content: @Composable (MainAppState, Modifier) -> Unit,
 ) {
+    val appState = rememberMainAppState(widthSizeClass = windowSizeClass.widthSizeClass)
     val currentDestination = appState.currentDestination
     val topLevelDestination = appState.currentTopLevelDestination
 
@@ -103,10 +103,7 @@ fun MainScreen(
         },
     ) {
         Scaffold { innerPadding ->
-            MainScreensNavHost(
-                appState = appState,
-                modifier = Modifier.padding(innerPadding)
-            )
+            content(appState, Modifier.padding(innerPadding))
         }
     }
 }
@@ -122,9 +119,8 @@ private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLev
 fun MainScreenCompactPreview() {
     MarxistReaderTheme {
         MainScreen(
-            WindowSizeClass.calculateFromSize(
-                DpSize(411.dp, 891.dp)
-            )
+            windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(411.dp, 891.dp)),
+            content = { _, modifier -> Box(modifier) {} }
         )
     }
 }
@@ -135,9 +131,8 @@ fun MainScreenCompactPreview() {
 fun MainScreenMediumPreview() {
     MarxistReaderTheme {
         MainScreen(
-            WindowSizeClass.calculateFromSize(
-                DpSize(600.dp, 800.dp)
-            )
+            windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(600.dp, 800.dp)),
+            content = { _, modifier -> Box(modifier) {} }
         )
     }
 }
@@ -148,7 +143,8 @@ fun MainScreenMediumPreview() {
 fun MainScreenExpandedPreview() {
     MarxistReaderTheme {
         MainScreen(
-            WindowSizeClass.calculateFromSize(DpSize(840.dp, 900.dp))
+            windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(840.dp, 900.dp)),
+            content = { _, modifier -> Box(modifier) {} }
         )
     }
 }

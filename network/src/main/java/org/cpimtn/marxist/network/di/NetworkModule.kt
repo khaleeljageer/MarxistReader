@@ -7,6 +7,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
+import org.cpimtn.marxist.core.config.AppConfig
 import org.cpimtn.marxist.network.api.WPApiService
 import org.cpimtn.marxist.network.downloader.FileDownloader
 import org.cpimtn.marxist.network.downloader.FileDownloaderImpl
@@ -28,8 +29,6 @@ abstract class NetworkModule {
     ): FileDownloader
 
     companion object {
-        const val BASE_URL = "https://marxist.cpimtn.org/wp-json/wp/v2/"
-
         @Provides
         @Singleton
         fun provideJson(): Json {
@@ -46,11 +45,11 @@ abstract class NetworkModule {
             val logging = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             }
-
+            val n = AppConfig.Network
             return OkHttpClient.Builder()
-                .connectTimeout(timeout = 60L, TimeUnit.SECONDS)
-                .readTimeout(timeout = 60L, TimeUnit.SECONDS)
-                .writeTimeout(timeout = 60L, TimeUnit.SECONDS)
+                .connectTimeout(n.CONNECT_TIMEOUT_SEC, TimeUnit.SECONDS)
+                .readTimeout(n.READ_TIMEOUT_SEC, TimeUnit.SECONDS)
+                .writeTimeout(n.WRITE_TIMEOUT_SEC, TimeUnit.SECONDS)
                 .followRedirects(true)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(logging)
@@ -62,7 +61,7 @@ abstract class NetworkModule {
         fun provideRetrofit(json: Json, client: OkHttpClient): Retrofit {
             val contentType = "application/json".toMediaType()
             return Retrofit.Builder()
-                .baseUrl(BASE_URL)
+                .baseUrl(AppConfig.Network.BASE_URL)
                 .client(client)
                 .addConverterFactory(json.asConverterFactory(contentType))
                 .build()

@@ -12,9 +12,9 @@ data class PostDTO(
     val title: RenderedText,
     val excerpt: RenderedText,
     @SerialName("tags_names")
-    val tags: List<String>,
+    val tags: List<String>? = null,
     @SerialName("categories_names")
-    val categories: List<String>
+    val categories: List<String>? = null
 )
 
 @Serializable

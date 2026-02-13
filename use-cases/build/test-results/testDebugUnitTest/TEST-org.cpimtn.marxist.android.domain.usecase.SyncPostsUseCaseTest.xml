@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCaseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-02-13T07:24:09.295Z" hostname="ZS-LT-PF4P2BCX" time="0.229">
+  <properties/>
+  <testcase name="invoke_on_network_error_records_sync_error" classname="org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCaseTest" time="0.186"/>
+  <testcase name="invoke_on_success_records_sync_success" classname="org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCaseTest" time="0.042"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

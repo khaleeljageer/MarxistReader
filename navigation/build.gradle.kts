@@ -50,9 +50,6 @@ android {
 dependencies {
     implementation(project(":core"))
     implementation(project(":ui-theme"))
-    implementation(project(":feature:feed"))
-    implementation(project(":feature:books"))
-    implementation(project(":feature:more"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

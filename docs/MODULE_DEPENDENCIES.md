@@ -14,9 +14,10 @@ This document defines how modules may depend on each other. Respecting these rul
 ### Allowed dependency direction
 
 - **Domain** must not depend on any other app module (only Kotlin stdlib / coroutines).
-- **Data** may depend on **domain** and **network** only.
+- **Data** may depend on **domain**, **network**, and **core** (e.g. for `AppConfig`).
 - **Feature** modules may depend on **domain**, and optionally **core**, **ui-theme**. They must not depend on **data** or **network**.
 - **Navigation** may depend on **core**, **ui-theme**, and **feature** modules (for composing screens). It must not depend on **data** or **domain**.
+- **Network** may depend on **core** (e.g. for `AppConfig.Network`). It must not depend on **domain**, **data**, **app**, or **feature**.
 - **App** may depend on **navigation**, **data**, **ui-theme**, and **feature** modules. It wires DI (e.g. Hilt) and composes the root UI.
 
 ### Diagram
@@ -49,12 +50,12 @@ This document defines how modules may depend on each other. Respecting these rul
 | Module      | May depend on                          | Must not depend on   |
 |------------|-----------------------------------------|----------------------|
 | **app**    | navigation, data, ui-theme, feature:*   | —                    |
+| **navigation** | core, ui-theme (no feature modules) | app, data, domain, network, feature:* |
 | **domain** | (none; stdlib/coroutines only)          | app, data, network, navigation, feature, core, ui-theme |
-| **data**   | domain, use-cases, network              | app, navigation, feature, ui-theme |
+| **data**   | domain, use-cases, network, core        | app, navigation, feature, ui-theme |
 | **use-cases** | domain                               | app, data, network, navigation, feature, core, ui-theme |
-| **network**| (none or minimal; e.g. OkHttp/Retrofit)  | domain, data, app, feature |
+| **network**| core (for AppConfig)                    | domain, data, app, feature |
 | **core**   | (none or stdlib)                        | app, data, domain, navigation, feature |
-| **navigation** | core, ui-theme, feature:*            | app, data, domain, network |
 | **feature:*** | domain, core, ui-theme               | app, data, network, navigation, other features |
 | **ui-theme**  | (none or Compose/Theme only)         | app, data, domain, feature, navigation |
 
@@ -78,7 +79,7 @@ Keep `namespace` aligned with the package root for each module:
 
 1. Create `feature:<name>` with package `org.cpimtn.marxist.android.feature.<name>`.
 2. Add dependency on `:domain` and `:use-cases` (and optionally `:core`, `:ui-theme`). Do not add `:data` or `:network`.
-3. Add the feature to the app’s navigation (e.g. in `app` or wherever the NavHost is composed): new route and composable for the feature screen.
+3. Register the feature in **app**: add a `composable(Screen.YourFeature.route) { YourFeatureScreen() }` (or new `Screen` + branch) in `MainScreensNavHost.kt`. The navigation module stays unchanged (Open/Closed).
 4. If using Hilt, ensure the app component includes the feature (e.g. by depending on the feature module).
 
 ## Adding a new data source or repository

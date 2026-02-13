@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
@@ -61,7 +63,10 @@ dependencies {
     implementation(libs.bundles.room.core)
     ksp(libs.androidx.room.compiler)
 
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(project(":domain"))
     implementation(project(":use-cases"))
     implementation(project(":network"))
+    implementation(project(":core"))
 }

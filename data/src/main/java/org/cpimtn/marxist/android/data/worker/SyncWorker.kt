@@ -14,6 +14,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import org.cpimtn.marxist.android.domain.model.SyncResult
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
+import org.cpimtn.marxist.core.config.AppConfig
 import java.util.concurrent.TimeUnit
 
 @HiltWorker
@@ -24,7 +25,7 @@ class SyncWorker @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
 
     override suspend fun doWork(): Result {
-        val perPage = inputData.getInt(KEY_PER_PAGE, SyncPostsUseCase.DEFAULT_PER_PAGE)
+        val perPage = inputData.getInt(KEY_PER_PAGE, AppConfig.Sync.DEFAULT_PER_PAGE)
         return when (syncPostsUseCase(perPage)) {
             is SyncResult.Success -> Result.success()
             else -> Result.retry()
@@ -49,7 +50,7 @@ class SyncWorker @AssistedInject constructor(
          */
         fun startUpSyncWork(): OneTimeWorkRequest {
             return OneTimeWorkRequestBuilder<SyncWorker>()
-                .setInputData(workDataOf(KEY_PER_PAGE to SyncPostsUseCase.DEFAULT_PER_PAGE))
+                .setInputData(workDataOf(KEY_PER_PAGE to AppConfig.Sync.DEFAULT_PER_PAGE))
                 .setConstraints(SyncConstraints)
                 .setBackoffCriteria(
                     BackoffPolicy.EXPONENTIAL,

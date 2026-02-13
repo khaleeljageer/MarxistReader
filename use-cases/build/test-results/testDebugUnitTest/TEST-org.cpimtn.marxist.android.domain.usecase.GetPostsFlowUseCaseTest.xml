@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCaseTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-02-13T07:24:07.259Z" hostname="ZS-LT-PF4P2BCX" time="2.034">
+  <properties/>
+  <testcase name="invoke_returns_empty_list_from_repository" classname="org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCaseTest" time="2.028"/>
+  <testcase name="invoke_returns_flow_from_repository" classname="org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCaseTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (/tmp/cursor-sandbox-cache/53bab8e754479c063b0813b42e98219b/gradle/caches/modules-2/files-2.1/net.bytebuddy/byte-buddy-agent/1.14.17/e3c251a39dc90badaf71c83427ba46840f219d8d/byte-buddy-agent-1.14.17.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

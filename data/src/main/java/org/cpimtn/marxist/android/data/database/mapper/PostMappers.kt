@@ -13,8 +13,8 @@ fun PostDTO.toEntity(): PostEntity = PostEntity(
     slug = slug,
     title = title.rendered,
     excerpt = excerpt.rendered,
-    tagsNames = tags,
-    categoriesNames = categories
+    tagsNames = tags ?: emptyList(),
+    categoriesNames = categories ?: emptyList()
 )
 
 /**

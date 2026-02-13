@@ -71,6 +71,9 @@ dependencies {
     implementation(project(":ui-theme"))
     implementation(project(":navigation"))
     implementation(project(":data"))
+    implementation(project(":feature:feed"))
+    implementation(project(":feature:books"))
+    implementation(project(":feature:more"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

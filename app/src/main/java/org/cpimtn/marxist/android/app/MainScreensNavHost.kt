@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.navigation
+package org.cpimtn.marxist.android.app
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -9,7 +9,12 @@ import androidx.navigation.compose.composable
 import org.cpimtn.marxist.android.feature.books.BooksScreen
 import org.cpimtn.marxist.android.feature.feed.FeedScreen
 import org.cpimtn.marxist.android.feature.more.MoreScreen
+import org.cpimtn.marxist.navigation.MainAppState
+import org.cpimtn.marxist.navigation.Screen
 
+/**
+ * NavHost for main tab content. Lives in app so navigation module stays free of feature deps.
+ */
 @Composable
 fun MainScreensNavHost(
     appState: MainAppState,

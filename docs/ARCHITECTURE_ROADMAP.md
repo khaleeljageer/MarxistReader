@@ -149,6 +149,8 @@ This roadmap aligns the project with **SOLID**, **MVVM**, and **Clean Architectu
 
 **Outcome:** Test coverage on domain and presentation; clear template for new features; one place for config.
 
+**Implemented:** Use-case tests (`GetPostsFlowUseCaseTest`, `SyncPostsUseCaseTest`) in `use-cases`; `FeedViewModelTest` in `feature:feed` with `MainCoroutineRule`; `PostRepositoryImplTest` (safe sync: no `replaceAll` when fetch returns null or empty); `docs/FEATURE_TEMPLATE.md`; centralized config in `core` (`AppConfig.Network`, `AppConfig.Sync`), used by `network` and `data` (SyncWorker, UseCaseModule). Mapper fix: `PostDTO.toEntity()` uses `tags ?: emptyList()` for nullable lists.
+
 ---
 
 ## Dependency Diagram (Target)
