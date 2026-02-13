@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jskaleel.android.network"
+    namespace = "org.cpimtn.marxist.network"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

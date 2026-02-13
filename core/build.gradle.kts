@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jskaleel.android.core"
+    namespace = "org.cpimtn.marxist.core"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

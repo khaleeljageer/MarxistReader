@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jskaleel.android.navigation"
+    namespace = "org.cpimtn.marxist.navigation"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {

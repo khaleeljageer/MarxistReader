@@ -13,7 +13,7 @@ import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.jskaleel.android.navigation.R
+import org.cpimtn.marxist.navigation.R
 
 /**
  * Top-level destinations accessible from the adaptive navigation suite
