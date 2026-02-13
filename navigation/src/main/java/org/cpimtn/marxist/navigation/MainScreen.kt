@@ -1,5 +1,6 @@
 package org.cpimtn.marxist.navigation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -12,8 +13,8 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaul
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -102,7 +103,14 @@ fun MainScreen(
             }
         },
     ) {
-        Scaffold { innerPadding ->
+        Scaffold(
+            topBar = {
+                MarxistTopAppBar(
+                    showSearchIcon = !currentDestination.isTopLevelDestinationInHierarchy(TopLevelDestination.SEARCH),
+                    onSearchClick = { appState.navigateToTopLevelDestination(TopLevelDestination.SEARCH) },
+                )
+            },
+        ) { innerPadding ->
             content(appState, Modifier.padding(innerPadding))
         }
     }
