@@ -14,7 +14,6 @@ import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffo
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -29,6 +28,7 @@ import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 @Composable
 fun MainScreen(
     windowSizeClass: WindowSizeClass,
+    darkTheme: Boolean,
     content: @Composable (MainAppState, Modifier) -> Unit,
 ) {
     val appState = rememberMainAppState(widthSizeClass = windowSizeClass.widthSizeClass)
@@ -106,8 +106,11 @@ fun MainScreen(
         Scaffold(
             topBar = {
                 MarxistTopAppBar(
-                    showSearchIcon = !currentDestination.isTopLevelDestinationInHierarchy(TopLevelDestination.SEARCH),
+                    showSearchIcon = !currentDestination.isTopLevelDestinationInHierarchy(
+                        TopLevelDestination.SEARCH
+                    ),
                     onSearchClick = { appState.navigateToTopLevelDestination(TopLevelDestination.SEARCH) },
+                    darkTheme = darkTheme
                 )
             },
         ) { innerPadding ->
@@ -128,7 +131,8 @@ fun MainScreenCompactPreview() {
     MarxistReaderTheme {
         MainScreen(
             windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(411.dp, 891.dp)),
-            content = { _, modifier -> Box(modifier) {} }
+            content = { _, modifier -> Box(modifier) {} },
+            darkTheme = false
         )
     }
 }
@@ -140,7 +144,8 @@ fun MainScreenMediumPreview() {
     MarxistReaderTheme {
         MainScreen(
             windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(600.dp, 800.dp)),
-            content = { _, modifier -> Box(modifier) {} }
+            content = { _, modifier -> Box(modifier) {} },
+            darkTheme = false
         )
     }
 }
@@ -152,7 +157,8 @@ fun MainScreenExpandedPreview() {
     MarxistReaderTheme {
         MainScreen(
             windowSizeClass = WindowSizeClass.calculateFromSize(DpSize(840.dp, 900.dp)),
-            content = { _, modifier -> Box(modifier) {} }
+            content = { _, modifier -> Box(modifier) {} },
+            darkTheme = true
         )
     }
 }

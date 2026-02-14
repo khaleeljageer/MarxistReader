@@ -17,7 +17,7 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = libs.versions.appVersion.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,6 +47,7 @@ android {
     }
 
     buildFeatures {
+        buildConfig = true
         compose = true
     }
 }
@@ -55,6 +56,7 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -71,11 +73,14 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(project(":ui-theme"))
+    implementation(project(":domain"))
+    implementation(project(":use-cases"))
     implementation(project(":navigation"))
     implementation(project(":data"))
     implementation(project(":feature:feed"))
     implementation(project(":feature:books"))
     implementation(project(":feature:more"))
+    implementation(project(":feature:settings"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

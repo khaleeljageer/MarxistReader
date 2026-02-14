@@ -13,7 +13,10 @@ import org.cpimtn.marxist.navigation.WelcomeScreen
  * Root composable: welcome vs main. Main content (feature screens) is composed here (Open/Closed).
  */
 @Composable
-fun App(windowSizeClass: WindowSizeClass) {
+fun App(
+    windowSizeClass: WindowSizeClass,
+    darkTheme: Boolean
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
@@ -27,7 +30,10 @@ fun App(windowSizeClass: WindowSizeClass) {
             })
         }
         composable(Route.Main.name) {
-            MainScreen(windowSizeClass = windowSizeClass) { appState, modifier ->
+            MainScreen(
+                windowSizeClass = windowSizeClass,
+                darkTheme = darkTheme
+            ) { appState, modifier ->
                 MainScreensNavHost(appState = appState, modifier = modifier)
             }
         }

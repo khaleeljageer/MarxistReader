@@ -6,9 +6,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.cpimtn.marxist.android.data.repository.CategoryRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.PostRepositoryImpl
+import org.cpimtn.marxist.android.data.datastore.UserSettingsRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.TagRepositoryImpl
 import org.cpimtn.marxist.android.domain.repository.CategoryRepository
 import org.cpimtn.marxist.android.domain.repository.PostRepository
+import org.cpimtn.marxist.android.domain.repository.SettingsRepository
 import org.cpimtn.marxist.android.domain.repository.TagRepository
 import javax.inject.Singleton
 
@@ -27,4 +29,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindTagRepository(impl: TagRepositoryImpl): TagRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindSettingsRepository(impl: UserSettingsRepositoryImpl): SettingsRepository
 }

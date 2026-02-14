@@ -2,7 +2,6 @@ package org.cpimtn.marxist.navigation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -42,7 +42,7 @@ fun MarxistTopAppBar(
     onSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
     showSearchIcon: Boolean = true,
-    isDarkMode: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean
 ) {
     val ext = MarxistReaderTheme.colors
 
@@ -59,15 +59,14 @@ fun MarxistTopAppBar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // ── Logo ──
+            val tint = if (darkTheme) ext.navInactiveIcon else null
+
             Image(
-                painter = if (isDarkMode) {
-                    painterResource(R.drawable.logo_marxist_dark)
-                } else {
-                    painterResource(R.drawable.logo_marxist_light)
-                },
+                painter = painterResource(R.drawable.logo_marxist),
                 contentDescription = stringResource(R.string.app_bar_title),
                 modifier = Modifier.height(36.dp),
                 contentScale = ContentScale.FillHeight,
+                colorFilter = tint?.let { ColorFilter.tint(it) }
             )
 
             Spacer(modifier = Modifier.weight(1f))
