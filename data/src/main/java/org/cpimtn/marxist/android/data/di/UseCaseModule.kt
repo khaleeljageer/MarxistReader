@@ -16,8 +16,10 @@ import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetLanguageUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetWelcomeCompletedUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetPushNotificationsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetThemeUseCase
+import org.cpimtn.marxist.android.domain.usecase.SetWelcomeCompletedUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncTaxonomyUseCase
 import org.cpimtn.marxist.core.config.AppConfig
@@ -89,4 +91,14 @@ object UseCaseModule {
     @Singleton
     fun provideSetPushNotificationsUseCase(settingsRepository: SettingsRepository): SetPushNotificationsUseCase =
         SetPushNotificationsUseCase(settingsRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetWelcomeCompletedUseCase(settingsRepository: SettingsRepository): GetWelcomeCompletedUseCase =
+        GetWelcomeCompletedUseCase(settingsRepository)
+
+    @Provides
+    @Singleton
+    fun provideSetWelcomeCompletedUseCase(settingsRepository: SettingsRepository): SetWelcomeCompletedUseCase =
+        SetWelcomeCompletedUseCase(settingsRepository)
 }

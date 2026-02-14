@@ -25,3 +25,4 @@ local.properties
 /feature/settings/build
 /feature/feed/build
 /feature/books/build
+/feature/welcome/build

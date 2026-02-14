@@ -8,8 +8,10 @@ import org.cpimtn.marxist.android.domain.model.UserSettings
 
 interface SettingsRepository {
     fun getSettings(): Flow<UserSettings>
+    fun getWelcomeCompleted(): Flow<Boolean>
     suspend fun setTheme(theme: Theme)
     suspend fun setFontSize(fontSize: FontSize)
     suspend fun setLanguage(language: AppLanguage)
     suspend fun setPushNotificationsEnabled(enabled: Boolean)
+    suspend fun setWelcomeCompleted(completed: Boolean)
 }

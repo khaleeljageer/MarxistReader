@@ -1,6 +1,7 @@
 package org.cpimtn.marxist.navigation
 
 sealed class Route(val name: String) {
+    data object Root : Route(name = "root")
     data object Welcome : Route(name = "welcome")
     data object Main : Route(name = "main")
 }

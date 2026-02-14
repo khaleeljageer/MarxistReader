@@ -25,12 +25,18 @@ private val KEY_THEME = stringPreferencesKey("theme")
 private val KEY_FONT_SIZE = stringPreferencesKey("font_size")
 private val KEY_LANGUAGE = stringPreferencesKey("language")
 private val KEY_PUSH_NOTIFICATIONS = booleanPreferencesKey("push_notifications_enabled")
+private val KEY_WELCOME_COMPLETED = booleanPreferencesKey("welcome_completed")
 
 @Singleton
 class UserSettingsRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val appVersionProvider: AppVersionProvider,
 ) : SettingsRepository {
+
+    override fun getWelcomeCompleted(): Flow<Boolean> =
+        context.userSettingsDataStore.data.map { prefs ->
+            prefs[KEY_WELCOME_COMPLETED] ?: false
+        }
 
     override fun getSettings(): Flow<UserSettings> =
         context.userSettingsDataStore.data.map { prefs ->
@@ -60,5 +66,9 @@ class UserSettingsRepositoryImpl @Inject constructor(
 
     override suspend fun setPushNotificationsEnabled(enabled: Boolean) {
         context.userSettingsDataStore.edit { it[KEY_PUSH_NOTIFICATIONS] = enabled }
+    }
+
+    override suspend fun setWelcomeCompleted(completed: Boolean) {
+        context.userSettingsDataStore.edit { it[KEY_WELCOME_COMPLETED] = completed }
     }
 }

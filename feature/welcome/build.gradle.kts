@@ -1,25 +1,21 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hiltAndroid)
-    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
-    namespace = "org.cpimtn.marxist.android"
+    namespace = "org.cpimtn.marxist.android.feature.welcome"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.cpimtn.marxist.android"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = 36
-        versionCode = 1
-        versionName = libs.versions.appVersion.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -31,7 +27,6 @@ android {
             )
         }
     }
-
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -40,20 +35,19 @@ android {
     kotlin {
         compilerOptions {
             jvmTarget = JvmTarget.fromTarget("17")
-            freeCompilerArgs = listOf(
-                "-XXLanguage:+PropertyParamAnnotationDefaultTargetMode"
-            )
         }
     }
 
     buildFeatures {
-        buildConfig = true
         compose = true
     }
 }
 
 dependencies {
-
+    implementation(project(":ui-theme"))
+    implementation(project(":core"))
+    implementation(project(":domain"))
+    implementation(project(":use-cases"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
@@ -61,28 +55,13 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.material3.window.size)
     implementation(libs.androidx.material3.icons.extended)
-
     implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.hilt.work)
-    implementation(libs.androidx.work.runtime.ktx)
     ksp(libs.hilt.compiler)
-
-    implementation(project(":ui-theme"))
-    implementation(project(":domain"))
-    implementation(project(":use-cases"))
-    implementation(project(":navigation"))
-    implementation(project(":data"))
-    implementation(project(":feature:feed"))
-    implementation(project(":feature:books"))
-    implementation(project(":feature:more"))
-    implementation(project(":feature:settings"))
-    implementation(project(":feature:welcome"))
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
