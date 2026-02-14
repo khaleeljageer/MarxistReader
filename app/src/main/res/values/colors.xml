@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="ic_launcher_background">#FFFFFFFF</color>
+    <!-- Splash / window background (light) — matches theme Warm97 -->
+    <color name="splash_background_light">#FFFAF7F2</color>
 </resources>

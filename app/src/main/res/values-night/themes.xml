@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- DayNight so system dark mode uses values-night/themes.xml (dark splash). -->
+    <!-- Dark theme so splash (window background) is dark when system is in dark mode. -->
     <style name="Theme.MarxistReader" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/splash_background_light</item>
     </style>

@@ -13,6 +13,6 @@ object AppConfig {
     }
 
     object Sync {
-        const val DEFAULT_PER_PAGE = 30
+        const val DEFAULT_PER_PAGE = 50
     }
 }

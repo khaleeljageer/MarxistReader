@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Override for night: splash / window background (dark) — matches theme Warm10 -->
+    <color name="splash_background_light">#FF1A1714</color>
+</resources>

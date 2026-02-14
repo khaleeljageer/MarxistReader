@@ -22,3 +22,6 @@ local.properties
 /ui-theme/build/
 /.cursor/
 /use-cases/build/
+/feature/settings/build
+/feature/feed/build
+/feature/books/build
