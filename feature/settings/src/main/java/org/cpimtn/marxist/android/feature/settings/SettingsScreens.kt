@@ -1,7 +1,9 @@
 package org.cpimtn.marxist.android.feature.settings
 
 import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,17 +14,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.TextFields
-import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
@@ -32,13 +37,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.cpimtn.marxist.android.domain.model.AppLanguage
 import org.cpimtn.marxist.android.domain.model.FontSize
 import org.cpimtn.marxist.android.domain.model.Theme
+import org.cpimtn.marxist.core.clickableIf
 import org.cpimtn.marxist.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
@@ -72,84 +81,49 @@ fun SettingsScreenContent(
             title = stringResource(R.string.settings_section_display),
             color = colors.settingsGroupTitle
         )
-        SettingsRow(
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.DarkMode,
-                    contentDescription = null,
-                    tint = colors.settingsIconTint,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
+        SettingsItemRow(
+            icon = Icons.Outlined.DarkMode,
+            iconBgColor = colors.settingsIconBg,
             title = stringResource(R.string.settings_theme_subtitle),
             subtitle = themeLabel(uiState.theme),
-            trailing = {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
+            showTrailingArrow = true,
             onClick = { themeDialogUpdate(true) },
         )
-        SettingsRow(
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.TextFields,
-                    contentDescription = null,
-                    tint = colors.settingsIconTint,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            title = "Font Size",
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+        SettingsItemRow(
+            icon = Icons.Outlined.TextFields,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_font_size),
             subtitle = fontSizeLabel(uiState.fontSize),
-            trailing = {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
+            showTrailingArrow = true,
             onClick = { fontSizeDialogUpdate(true) },
         )
-        SettingsRow(
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.Translate,
-                    contentDescription = null,
-                    tint = colors.settingsIconTint,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            title = "Language",
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+        SettingsItemRow(
+            icon = Icons.Outlined.Language,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_language),
             subtitle = languageLabel(uiState.language),
-            trailing = {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            },
+            showTrailingArrow = true,
             onClick = { languageDialogUpdate(true) },
         )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         // ── Notifications ──
         SectionHeader(
             title = stringResource(R.string.settings_section_notifications),
             color = colors.settingsGroupTitle
         )
-        SettingsRow(
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.Notifications,
-                    contentDescription = null,
-                    tint = colors.settingsIconTint,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            title = "Push Notifications",
-            subtitle = "New article notifications",
+
+
+        SettingsItemRow(
+            icon = Icons.Outlined.Notifications,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_push_notifications),
+            subtitle = stringResource(R.string.settings_push_notifications_subtitle),
             trailing = {
                 Switch(
                     checked = uiState.pushNotificationsEnabled,
@@ -164,30 +138,27 @@ fun SettingsScreenContent(
             },
         )
 
-        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+        Spacer(modifier = Modifier.height(24.dp))
         // ── About ──
         SectionHeader(
             title = stringResource(R.string.settings_section_about),
             color = colors.settingsGroupTitle
         )
-        SettingsRow(
-            icon = {
-                Icon(
-                    imageVector = Icons.Outlined.Info,
-                    contentDescription = null,
-                    tint = colors.settingsIconTint,
-                    modifier = Modifier.size(24.dp)
-                )
-            },
-            title = "Version",
+
+        SettingsItemRow(
+            icon = Icons.Outlined.Info,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_version),
             subtitle = "v${uiState.appVersion}",
         )
-        Spacer(modifier = Modifier.height(8.dp))
+
+        Spacer(modifier = Modifier.height(32.dp))
         Text(
             text = stringResource(R.string.settings_footer_license),
             style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(start = 40.dp),
+            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            textAlign = TextAlign.Center,
         )
     }
 }
@@ -208,39 +179,70 @@ private fun SectionHeader(
     )
 }
 
+
 @Composable
-private fun SettingsRow(
-    icon: @Composable () -> Unit,
+private fun SettingsItemRow(
+    icon: ImageVector,
+    iconBgColor: Color,
     title: String,
-    subtitle: String? = null,
+    subtitle: String,
+    modifier: Modifier = Modifier,
+    showTrailingArrow: Boolean = false,
     trailing: @Composable (() -> Unit)? = null,
     onClick: (() -> Unit)? = null,
 ) {
-    val modifier = if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        icon()
-        Spacer(modifier = Modifier.width(16.dp))
-        Column(modifier = Modifier.weight(1f)) {
+    ListItem(
+        modifier = modifier.then(Modifier.clickableIf(onClick != null) { onClick?.invoke() }),
+        leadingContent = {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(iconBgColor),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = icon,
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        },
+        headlineContent = {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
+        },
+        supportingContent = {
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        },
+        trailingContent = when {
+            trailing != null -> trailing
+            showTrailingArrow -> {
+                {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Outlined.KeyboardArrowRight,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
-        }
-        if (trailing != null) trailing()
-    }
+
+            else -> null
+        },
+        colors = ListItemDefaults.colors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            headlineColor = MaterialTheme.colorScheme.onSurface,
+            supportingColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        ),
+    )
 }
 
 private fun themeLabel(theme: Theme): String = when (theme) {

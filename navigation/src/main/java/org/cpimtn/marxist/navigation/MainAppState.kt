@@ -69,11 +69,22 @@ class MainAppState(
     /**
      * UI logic for navigating to a top level destination in the app. Top level destinations have
      * only one copy of the destination of the back stack, and save and restore state whenever you
-     * navigate to and from it.
+     * navigate to and from it. If the user taps the already-selected tab, we do nothing to avoid
+     * recreating the current screen.
      *
      * @param destination: The destination the app needs to navigate to.
      */
     fun navigateToTopLevelDestination(destination: TopLevelDestination) {
+        val currentRoute = navController.currentBackStackEntry?.destination?.route
+        val targetRoute = when (destination) {
+            TopLevelDestination.FEED -> Screen.Feed.route
+            TopLevelDestination.BOOKS -> Screen.Books.route
+            TopLevelDestination.SEARCH -> Screen.Search.route
+            TopLevelDestination.SAVED -> Screen.Saved.route
+            TopLevelDestination.SETTINGS -> Screen.Settings.route
+        }
+        if (currentRoute == targetRoute) return
+
         when (destination) {
             TopLevelDestination.FEED -> {
                 val topLevelNavOptions = navOptions {

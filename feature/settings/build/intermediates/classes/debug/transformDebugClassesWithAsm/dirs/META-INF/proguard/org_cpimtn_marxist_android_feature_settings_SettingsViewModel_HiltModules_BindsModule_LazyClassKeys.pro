@@ -1,1 +1,0 @@
--keep,allowobfuscation,allowshrinking class org.cpimtn.marxist.android.feature.settings.SettingsViewModel
