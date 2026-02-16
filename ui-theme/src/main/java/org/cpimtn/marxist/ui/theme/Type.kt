@@ -1,6 +1,7 @@
 package org.cpimtn.marxist.ui.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.ui.text.PlatformTextStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -48,6 +49,9 @@ val MarxistTypography = Typography(
         fontSize = 32.sp,
         lineHeight = 48.sp,
         letterSpacing = (-0.5).sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     displayMedium = TextStyle(
         fontFamily = NotoSansTamil,
@@ -55,12 +59,18 @@ val MarxistTypography = Typography(
         fontSize = 28.sp,
         lineHeight = 42.sp,
         letterSpacing = (-0.3).sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     displaySmall = TextStyle(
         fontFamily = NotoSansTamil,
         fontWeight = FontWeight.Bold,
         fontSize = 24.sp,
         lineHeight = 38.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
 
     // ── Headlines — Article detail title, section headers ──
@@ -69,18 +79,27 @@ val MarxistTypography = Typography(
         fontWeight = FontWeight.ExtraBold,
         fontSize = 22.sp,
         lineHeight = 36.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     headlineMedium = TextStyle(
         fontFamily = NotoSansTamil,
         fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
         lineHeight = 32.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     headlineSmall = TextStyle(
         fontFamily = NotoSansTamil,
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp,
         lineHeight = 28.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
 
     // ── Title — Card titles, featured card, book titles ──
@@ -89,6 +108,9 @@ val MarxistTypography = Typography(
         fontWeight = FontWeight.Bold,
         fontSize = 17.sp,
         lineHeight = 26.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     titleMedium = TextStyle(
         fontFamily = NotoSansTamil,
@@ -96,6 +118,9 @@ val MarxistTypography = Typography(
         fontSize = 15.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.1.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     titleSmall = TextStyle(
         fontFamily = NotoSansTamil,
@@ -103,6 +128,9 @@ val MarxistTypography = Typography(
         fontSize = 13.sp,
         lineHeight = 20.sp,
         letterSpacing = 0.1.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
 
     // ── Body — Article reading, excerpts ──
@@ -111,18 +139,27 @@ val MarxistTypography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 28.sp,  // Extra generous for Tamil
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     bodyMedium = TextStyle(
         fontFamily = NotoSansTamil,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
         lineHeight = 22.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     bodySmall = TextStyle(
         fontFamily = NotoSansTamil,
         fontWeight = FontWeight.Normal,
         fontSize = 12.sp,
         lineHeight = 18.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
 
     // ── Labels — Tags, categories, timestamps, nav ──
@@ -132,6 +169,9 @@ val MarxistTypography = Typography(
         fontSize = 12.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.5.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     labelMedium = TextStyle(
         fontFamily = NotoSansTamil,
@@ -139,6 +179,9 @@ val MarxistTypography = Typography(
         fontSize = 11.sp,
         lineHeight = 16.sp,
         letterSpacing = 0.3.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
     labelSmall = TextStyle(
         fontFamily = NotoSansTamil,
@@ -146,5 +189,8 @@ val MarxistTypography = Typography(
         fontSize = 10.sp,
         lineHeight = 14.sp,
         letterSpacing = 0.5.sp,
+        platformStyle = PlatformTextStyle(
+            includeFontPadding = true
+        )
     ),
 )

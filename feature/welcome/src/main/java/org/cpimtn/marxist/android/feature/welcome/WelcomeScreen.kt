@@ -153,9 +153,7 @@ fun WelcomeScreen(
                                         .size(8.dp)
                                         .clip(RoundedCornerShape(4.dp))
                                         .background(
-                                            MaterialTheme.colorScheme.outlineVariant.copy(
-                                                alpha = 0.6f
-                                            )
+                                            accent.copy(alpha = 0.2f)
                                         )
                                 )
                         )
@@ -353,6 +351,7 @@ private fun FeatureGuidePage(
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
                     )
+                    Spacer(modifier = Modifier.height(2.dp))
                     Text(
                         text = stringResource(titleEnRes),
                         style = MaterialTheme.typography.bodySmall,
@@ -366,6 +365,7 @@ private fun FeatureGuidePage(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface,
             )
+            Spacer(modifier = Modifier.height(2.dp))
             Text(
                 text = stringResource(descEnRes),
                 style = MaterialTheme.typography.bodySmall,

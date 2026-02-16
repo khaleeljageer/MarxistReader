@@ -34,6 +34,7 @@ android {
     }
 
     kotlin {
+        jvmToolchain(17)
         compilerOptions {
             jvmTarget = JvmTarget.fromTarget("17")
             freeCompilerArgs = listOf(
