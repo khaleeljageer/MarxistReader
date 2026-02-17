@@ -81,6 +81,7 @@ dependencies {
     implementation(project(":feature:feed"))
     implementation(project(":feature:books"))
     implementation(project(":feature:more"))
+    implementation(project(":feature:saved"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:welcome"))
 

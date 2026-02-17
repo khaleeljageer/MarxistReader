@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import org.cpimtn.marxist.android.feature.books.BooksScreen
 import org.cpimtn.marxist.android.feature.feed.FeedScreen
 import org.cpimtn.marxist.android.feature.more.MoreScreen
+import org.cpimtn.marxist.android.feature.saved.SavedScreen
 import org.cpimtn.marxist.android.feature.settings.SettingsScreenRoute
 import org.cpimtn.marxist.navigation.MainAppState
 import org.cpimtn.marxist.navigation.Screen
@@ -35,7 +36,7 @@ fun MainScreensNavHost(
             MoreScreen()
         }
         composable(route = Screen.Saved.route) {
-            MoreScreen()
+            SavedScreen()
         }
         composable(route = Screen.Settings.route) {
             SettingsScreenRoute()

@@ -13,6 +13,7 @@ import org.cpimtn.marxist.android.domain.repository.TagRepository
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSavedPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
@@ -78,6 +79,14 @@ object UseCaseModule {
     @Singleton
     fun provideUnsavePostUseCase(savedPostRepository: SavedPostRepository): UnsavePostUseCase =
         UnsavePostUseCase(savedPostRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSavedPostsFlowUseCase(
+        getPostsFlowUseCase: GetPostsFlowUseCase,
+        getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
+    ): GetSavedPostsFlowUseCase =
+        GetSavedPostsFlowUseCase(getPostsFlowUseCase, getSavedPostIdsFlowUseCase)
 
     @Provides
     @Singleton

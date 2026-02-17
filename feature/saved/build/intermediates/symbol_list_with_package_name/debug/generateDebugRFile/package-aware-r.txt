@@ -1,0 +1,3 @@
+org.cpimtn.marxist.android.feature.saved
+string saved_title
+string saved_unsave_content_desc

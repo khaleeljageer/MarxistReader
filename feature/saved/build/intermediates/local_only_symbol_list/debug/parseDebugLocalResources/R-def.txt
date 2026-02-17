@@ -1,0 +1,4 @@
+R_DEF: Internal format may change without notice
+local
+string saved_title
+string saved_unsave_content_desc

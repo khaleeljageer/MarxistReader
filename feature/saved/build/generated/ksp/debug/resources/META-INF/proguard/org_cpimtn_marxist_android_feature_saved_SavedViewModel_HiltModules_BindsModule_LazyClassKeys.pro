@@ -1,0 +1,1 @@
+-keep,allowobfuscation,allowshrinking class org.cpimtn.marxist.android.feature.saved.SavedViewModel

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Header (Tamil): Saved Articles -->
+    <string name="saved_title">சேமித்த கட்டுரைகள்</string>
+    <!-- Content descriptions -->
+    <string name="saved_unsave_content_desc">Remove from saved</string>
+</resources>
