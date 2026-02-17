@@ -26,7 +26,7 @@ fun MainScreensNavHost(
         modifier = modifier,
     ) {
         composable(route = Screen.Feed.route) {
-            FeedScreen()
+            FeedScreen(appState = appState)
         }
         composable(route = Screen.Books.route) {
             BooksScreen()

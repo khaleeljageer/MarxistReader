@@ -57,8 +57,7 @@ fun WelcomeScreen(
     modifier: Modifier = Modifier,
     viewModel: WelcomeViewModel = hiltViewModel(),
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val hasConnection by viewModel.hasConnection.collectAsState()
+    val canContinue by viewModel.canContinue.collectAsState()
     val colors = MarxistReaderTheme.colors
     val pagerState = rememberPagerState(pageCount = { FeatureCount })
     val cardBg = MaterialTheme.colorScheme.surfaceContainerLow
@@ -163,8 +162,8 @@ fun WelcomeScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Bottom card: fetching or no internet
-            if (isLoading) {
+            // Bottom card: show spinner until posts table has >= 50 records
+            if (!canContinue) {
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
@@ -189,7 +188,7 @@ fun WelcomeScreen(
                             Column {
                                 Text(
                                     text = stringResource(R.string.welcome_fetching),
-                                    style = MaterialTheme.typography.bodyLarge,
+                                    style = MaterialTheme.typography.bodyMedium,
                                     fontWeight = FontWeight.Medium,
                                     color = MaterialTheme.colorScheme.onSurface,
                                 )
@@ -202,80 +201,24 @@ fun WelcomeScreen(
                         }
                     }
                 }
-            } else if (!hasConnection) {
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(16.dp))
-                            .background(cardBg)
-                            .padding(20.dp),
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                        ) {
-                            Icon(
-                                imageVector = Icons.Outlined.WifiOff,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier.size(40.dp),
-                            )
-                            Spacer(modifier = Modifier.height(12.dp))
-                            Text(
-                                text = stringResource(R.string.welcome_internet_needed),
-                                style = MaterialTheme.typography.titleSmall,
-                                fontWeight = FontWeight.SemiBold,
-                                color = MaterialTheme.colorScheme.onSurface,
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = stringResource(R.string.welcome_internet_instruction),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Button(
-                                onClick = { viewModel.onRetry() },
-                                colors = ButtonDefaults.buttonColors(containerColor = accent),
-                                shape = RoundedCornerShape(12.dp),
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Refresh,
-                                    contentDescription = null,
-                                    modifier = Modifier.size(20.dp),
-                                    tint = MaterialTheme.colorScheme.onPrimary,
-                                )
-                                Spacer(modifier = Modifier.size(8.dp))
-                                Text(stringResource(R.string.welcome_retry))
-                            }
-                        }
-                    }
-                }
             }
 
-            if (!isLoading && hasConnection) {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
+            Spacer(modifier = Modifier.height(16.dp))
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+            ) {
+                Button(
+                    onClick = { viewModel.onContinueClicked(onContinueClicked) },
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = accent),
+                    enabled = canContinue,
                 ) {
-                    Button(
-                        onClick = { viewModel.onContinueClicked(onContinueClicked) },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(12.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = accent),
-                    ) {
-                        Text(stringResource(R.string.welcome_continue))
-                    }
+                    Text(stringResource(R.string.welcome_continue))
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
             }
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }

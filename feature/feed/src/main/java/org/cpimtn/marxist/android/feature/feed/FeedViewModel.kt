@@ -16,9 +16,12 @@ import org.cpimtn.marxist.android.domain.model.SyncResult
 import org.cpimtn.marxist.android.domain.model.SyncStatus
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
+import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,6 +30,9 @@ class FeedViewModel @Inject constructor(
     getSyncStatusUseCase: GetSyncStatusUseCase,
     getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
     getTagsFlowUseCase: GetTagsFlowUseCase,
+    getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
+    private val savePostUseCase: SavePostUseCase,
+    private val unsavePostUseCase: UnsavePostUseCase,
     private val syncPostsUseCase: SyncPostsUseCase,
 ) : ViewModel() {
 
@@ -61,6 +67,15 @@ class FeedViewModel @Inject constructor(
                 initialValue = emptyMap()
             )
 
+    /** Set of post IDs the user has saved (bookmarked). */
+    val savedPostIds: StateFlow<Set<Int>> =
+        getSavedPostIdsFlowUseCase()
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = emptySet()
+            )
+
     init {
         viewModelScope.launch {
             getPostsFlowUseCase()
@@ -79,6 +94,17 @@ class FeedViewModel @Inject constructor(
                         _feedUiState.value = newState
                     }
                 }
+        }
+    }
+
+    /** Toggle save state for a post: save if not saved, unsave if saved. */
+    fun toggleSave(postId: Int) {
+        viewModelScope.launch {
+            if (savedPostIds.value.contains(postId)) {
+                unsavePostUseCase(postId)
+            } else {
+                savePostUseCase(postId)
+            }
         }
     }
 

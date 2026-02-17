@@ -109,6 +109,8 @@ fun MainScreen(
                     showSearchIcon = !currentDestination.isTopLevelDestinationInHierarchy(
                         TopLevelDestination.SEARCH
                     ),
+                    showRefreshIcon = currentDestination?.route == Screen.Feed.route,
+                    onRefreshClick = { appState.feedRefreshCallback?.invoke() },
                     onSearchClick = { appState.navigateToTopLevelDestination(TopLevelDestination.SEARCH) },
                     darkTheme = darkTheme
                 )

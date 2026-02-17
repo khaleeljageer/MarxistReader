@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Section headers (Tamil per design) -->
+    <string name="feed_special_article">சிறப்புக் கட்டுரை</string>
+    <string name="feed_recent_articles">சமீபத்திய கட்டுரைகள்</string>
+    <!-- Save button -->
+    <string name="feed_save_content_desc">Save article</string>
+    <string name="feed_unsave_content_desc">Unsave article</string>
+    <!-- States -->
+    <string name="feed_empty_message">No posts yet. Sync when online.</string>
+    <string name="feed_retry">Retry</string>
+</resources>

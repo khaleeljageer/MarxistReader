@@ -29,6 +29,8 @@ class MainAppState(
     val navController: NavHostController,
     private val widthSizeClass: WindowWidthSizeClass,
 ) {
+    /** Set by FeedScreen when composed; cleared on dispose. Used for top bar refresh (feed only). */
+    var feedRefreshCallback: (() -> Unit)? = null
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 

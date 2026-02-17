@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -34,7 +35,7 @@ import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
  * an optional search icon on applicable pages.
  *
  * Layout:
- *   [Logo image]                          [Search 🔍]
+ *   [Logo image]                [Refresh] [Search 🔍]
  *   ─── accent gradient line ─────────────────────────
  */
 @Composable
@@ -42,6 +43,8 @@ fun MarxistTopAppBar(
     onSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
     showSearchIcon: Boolean = true,
+    showRefreshIcon: Boolean = false,
+    onRefreshClick: () -> Unit = {},
     darkTheme: Boolean
 ) {
     val ext = MarxistReaderTheme.colors
@@ -70,6 +73,17 @@ fun MarxistTopAppBar(
             )
 
             Spacer(modifier = Modifier.weight(1f))
+
+            // ── Refresh (feed only) ──
+            if (showRefreshIcon) {
+                IconButton(onClick = onRefreshClick) {
+                    Icon(
+                        imageVector = Icons.Rounded.Refresh,
+                        contentDescription = stringResource(R.string.feed_refresh_content_desc),
+                        tint = ext.navInactiveIcon,
+                    )
+                }
+            }
 
             // ── Search action (or same-size placeholder to keep bar height consistent) ──
             if (showSearchIcon) {

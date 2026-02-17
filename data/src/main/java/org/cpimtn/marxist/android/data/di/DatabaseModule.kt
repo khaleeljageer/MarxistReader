@@ -12,6 +12,7 @@ import dagger.hilt.components.SingletonComponent
 import org.cpimtn.marxist.android.data.database.AppDatabase
 import org.cpimtn.marxist.android.data.database.dao.CategoryDao
 import org.cpimtn.marxist.android.data.database.dao.PostDao
+import org.cpimtn.marxist.android.data.database.dao.SavedPostDao
 import org.cpimtn.marxist.android.data.database.dao.TagDao
 import javax.inject.Singleton
 
@@ -22,6 +23,14 @@ private val MIGRATION_1_2 = object : Migration(1, 2) {
         )
         db.execSQL(
             "CREATE TABLE IF NOT EXISTS tags (id INTEGER NOT NULL PRIMARY KEY, name TEXT NOT NULL)"
+        )
+    }
+}
+
+private val MIGRATION_2_3 = object : Migration(2, 3) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS saved_posts (postId INTEGER NOT NULL PRIMARY KEY)"
         )
     }
 }
@@ -37,7 +46,7 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "marxist-reader-db"
-        ).addMigrations(MIGRATION_1_2).build()
+        ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
     }
 
     @Provides
@@ -48,4 +57,7 @@ object DatabaseModule {
 
     @Provides
     fun provideTagDao(appDatabase: AppDatabase): TagDao = appDatabase.tagDao()
+
+    @Provides
+    fun provideSavedPostDao(appDatabase: AppDatabase): SavedPostDao = appDatabase.savedPostDao()
 }

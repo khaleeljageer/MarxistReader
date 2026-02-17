@@ -3,34 +3,34 @@ package org.cpimtn.marxist.android.feature.welcome
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetWelcomeCompletedUseCase
 import javax.inject.Inject
 
+private const val MIN_POSTS_TO_CONTINUE = 50
+
 @HiltViewModel
 class WelcomeViewModel @Inject constructor(
+    getPostsFlowUseCase: GetPostsFlowUseCase,
     private val setWelcomeCompletedUseCase: SetWelcomeCompletedUseCase,
 ) : ViewModel() {
 
-    private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _hasConnection = MutableStateFlow(true)
-    val hasConnection: StateFlow<Boolean> = _hasConnection.asStateFlow()
-
-    init {
-        checkConnectionAndFetch()
-    }
-
-    fun onRetry() {
-        _hasConnection.value = true
-        _isLoading.value = true
-        checkConnectionAndFetch()
-    }
+    /**
+     * True when the posts table has at least 50 records (from background sync).
+     * Continue button is enabled only when this is true.
+     */
+    val canContinue: StateFlow<Boolean> = getPostsFlowUseCase()
+        .map { posts -> posts.size >= MIN_POSTS_TO_CONTINUE }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = false,
+        )
 
     fun onContinueClicked(onNavigate: () -> Unit) {
         viewModelScope.launch {
@@ -38,17 +38,4 @@ class WelcomeViewModel @Inject constructor(
             onNavigate()
         }
     }
-
-    private fun checkConnectionAndFetch() {
-        viewModelScope.launch {
-            val connected = isNetworkAvailable()
-            _hasConnection.value = connected
-            if (connected) {
-                delay(1500)
-            }
-            _isLoading.value = false
-        }
-    }
-
-    private fun isNetworkAvailable() = true
 }
