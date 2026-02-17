@@ -26,11 +26,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
-    getPostsFlowUseCase: GetPostsFlowUseCase,
-    getSyncStatusUseCase: GetSyncStatusUseCase,
-    getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
-    getTagsFlowUseCase: GetTagsFlowUseCase,
-    getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
+    private val getPostsFlowUseCase: GetPostsFlowUseCase,
+    private val getSyncStatusUseCase: GetSyncStatusUseCase,
+    private val getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
+    private val getTagsFlowUseCase: GetTagsFlowUseCase,
+    private val getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
     private val savePostUseCase: SavePostUseCase,
     private val unsavePostUseCase: UnsavePostUseCase,
     private val syncPostsUseCase: SyncPostsUseCase,
@@ -118,9 +118,15 @@ class FeedViewModel @Inject constructor(
                 is SyncResult.Success -> {
                     // Flow (collected in init) will emit updated list from Room; leave state for it to update
                 }
-                is SyncResult.NetworkError -> _feedUiState.value = FeedUiState.Error(result.message ?: "Network error")
-                is SyncResult.ServerError -> _feedUiState.value = FeedUiState.Error(result.message ?: "Server error")
-                is SyncResult.UnknownError -> _feedUiState.value = FeedUiState.Error(result.cause?.message ?: "Something went wrong")
+
+                is SyncResult.NetworkError -> _feedUiState.value =
+                    FeedUiState.Error(result.message ?: "Network error")
+
+                is SyncResult.ServerError -> _feedUiState.value =
+                    FeedUiState.Error(result.message ?: "Server error")
+
+                is SyncResult.UnknownError -> _feedUiState.value =
+                    FeedUiState.Error(result.cause?.message ?: "Something went wrong")
             }
         }
     }
