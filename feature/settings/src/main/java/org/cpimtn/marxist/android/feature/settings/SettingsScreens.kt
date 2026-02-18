@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -274,15 +275,17 @@ fun ThemeDialog(
         onDismissRequest = onDismiss,
         title = { Text("Theme") },
         text = {
-            Column {
+            Column(
+               modifier = Modifier.wrapContentSize()
+            ) {
                 Theme.entries.forEach { theme ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { onSelect(theme) }) {
+                        modifier = Modifier.fillMaxWidth().clickable { onSelect(theme) }) {
                         RadioButton(selected = current == theme, onClick = { onSelect(theme) })
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            when (theme) {
+                            text = when (theme) {
                                 Theme.LIGHT -> "Light"; Theme.DARK -> "Dark"; Theme.DEFAULT -> "Default"
                             }
                         )

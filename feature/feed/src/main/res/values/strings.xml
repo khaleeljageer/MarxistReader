@@ -9,4 +9,6 @@
     <!-- States -->
     <string name="feed_empty_message">No posts yet. Sync when online.</string>
     <string name="feed_retry">Retry</string>
+    <string name="feed_empty_subtitle">Connect to the internet to fetch new articles</string>
+    <string name="feed_error_title">Something went wrong</string>
 </resources>

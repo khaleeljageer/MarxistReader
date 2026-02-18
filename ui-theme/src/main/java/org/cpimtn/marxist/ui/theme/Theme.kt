@@ -228,7 +228,7 @@ private val LightExtendedColors = MarxistExtendedColors(
     featuredCategoryText    = Warm100.copy(alpha = 0.70f),
     featuredDate            = Warm100.copy(alpha = 0.45f),
 
-    categoryBadgeBg         = Terra99,
+    categoryBadgeBg         = Terra90.copy(alpha = 0.10f),
     categoryBadgeText       = Terra40,
     tagChipBg               = Warm95,
     tagChipBorder           = Warm90,
