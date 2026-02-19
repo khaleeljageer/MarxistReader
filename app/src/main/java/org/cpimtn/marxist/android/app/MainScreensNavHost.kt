@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.cpimtn.marxist.android.feature.books.BooksScreen
-import org.cpimtn.marxist.android.feature.feed.FeedScreen
+import org.cpimtn.marxist.android.feature.feed.FeedScreenRoute
 import org.cpimtn.marxist.android.feature.more.MoreScreen
 import org.cpimtn.marxist.android.feature.saved.SavedScreen
 import org.cpimtn.marxist.android.feature.settings.SettingsScreenRoute
@@ -27,7 +27,10 @@ fun MainScreensNavHost(
         modifier = modifier,
     ) {
         composable(route = Screen.Feed.route) {
-            FeedScreen(appState = appState)
+            FeedScreenRoute(
+                appState = appState,
+                onArticleClick = {}
+            )
         }
         composable(route = Screen.Books.route) {
             BooksScreen()

@@ -4,12 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.android.domain.model.SyncResult
@@ -36,40 +34,43 @@ class FeedViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
-    val savedPostIds: StateFlow<Set<Int>> =
-        getSavedPostIdsFlowUseCase()
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptySet()
-            )
-
     init {
         viewModelScope.launch {
-            getFeedItemsFlowUseCase()
-                .map { feedItems ->
-                    when {
-                        feedItems.isEmpty() -> FeedUiState.Empty
-                        else -> FeedUiState.Success(feedItems)
-                    }
+            combine(
+                getFeedItemsFlowUseCase(),
+                getSavedPostIdsFlowUseCase(),
+            ) { feedItems, savedIds ->
+                when {
+                    feedItems.isEmpty() -> FeedUiState.Empty
+                    else -> FeedUiState.Success(
+                        feedItems = feedItems,
+                        savedPostIds = savedIds,
+                    )
                 }
-                .catch { e ->
-                    _feedUiState.value = FeedUiState.Error(e.message ?: "Unknown error")
+            }.catch { e ->
+                _feedUiState.value = FeedUiState.Error(e.message ?: "Unknown error")
+            }.collect { newState ->
+                if (_feedUiState.value !is FeedUiState.Error) {
+                    _feedUiState.value = newState
                 }
-                .collect { newState ->
-                    if (_feedUiState.value !is FeedUiState.Error) {
-                        _feedUiState.value = newState
-                    }
-                }
+            }
         }
     }
 
     fun toggleSave(postId: Int) {
-        viewModelScope.launch {
-            if (savedPostIds.value.contains(postId)) {
-                unsavePostUseCase(postId)
-            } else {
-                savePostUseCase(postId)
+        val current = _feedUiState.value
+        if (current is FeedUiState.Success) {
+            val isSaved = postId in current.savedPostIds
+            _feedUiState.value = current.copy(
+                savedPostIds = if (isSaved) {
+                    current.savedPostIds - postId
+                } else {
+                    current.savedPostIds + postId
+                }
+            )
+            viewModelScope.launch {
+                if (isSaved) unsavePostUseCase(postId)
+                else savePostUseCase(postId)
             }
         }
     }
@@ -90,8 +91,6 @@ class FeedViewModel @Inject constructor(
             try {
                 when (val result = syncPostsUseCase()) {
                     is SyncResult.Success -> {
-                        // Room Flow in init will emit updated list automatically.
-                        // If we were in Error state, clear it so the flow can update.
                         if (_feedUiState.value is FeedUiState.Error) {
                             _feedUiState.value = FeedUiState.Loading
                         }
@@ -116,7 +115,11 @@ class FeedViewModel @Inject constructor(
 
 sealed interface FeedUiState {
     data object Loading : FeedUiState
-    data class Success(val feedItems: List<FeedItem>) : FeedUiState
+    data class Success(
+        val feedItems: List<FeedItem>,
+        val savedPostIds: Set<Int>,
+    ) : FeedUiState
+
     data object Empty : FeedUiState
     data class Error(val message: String) : FeedUiState
 }

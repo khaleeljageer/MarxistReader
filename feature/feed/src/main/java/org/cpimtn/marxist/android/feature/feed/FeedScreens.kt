@@ -1,12 +1,8 @@
 package org.cpimtn.marxist.android.feature.feed
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,20 +29,15 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
-import androidx.compose.material.icons.outlined.CloudOff
-import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -57,71 +48,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.cpimtn.marxist.android.domain.model.FeedItem
-import org.cpimtn.marxist.navigation.MainAppState
 import org.cpimtn.marxist.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FeedScreen(
-    appState: MainAppState? = null,
-    onArticleClick: (postId: Int) -> Unit = {},
-    viewModel: FeedViewModel = hiltViewModel(),
-) {
-    val uiState by viewModel.feedUiState.collectAsStateWithLifecycle()
-    val savedPostIds by viewModel.savedPostIds.collectAsStateWithLifecycle()
-    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
-
-    DisposableEffect(appState) {
-        appState?.feedRefreshCallback = { viewModel.refresh() }
-        onDispose { appState?.feedRefreshCallback = null }
-    }
-
-    PullToRefreshBox(
-        isRefreshing = isRefreshing,
-        onRefresh = { viewModel.refresh() },
-        modifier = Modifier.fillMaxSize(),
-    ) {
-        AnimatedContent(
-            targetState = uiState,
-            transitionSpec = { fadeIn() togetherWith fadeOut() },
-            label = "feed_state",
-        ) { state ->
-            when (state) {
-                is FeedUiState.Loading -> FeedLoadingSkeleton()
-
-                is FeedUiState.Success -> FeedContent(
-                    feedItems = state.feedItems,
-                    savedPostIds = savedPostIds,
-                    onArticleClick = onArticleClick,
-                    onSaveClick = { viewModel.toggleSave(it) },
-                )
-
-                is FeedUiState.Empty -> FeedStatusMessage(
-                    icon = Icons.Outlined.Inbox,
-                    title = stringResource(R.string.feed_empty_message),
-                    subtitle = stringResource(R.string.feed_empty_subtitle),
-                    actionLabel = stringResource(R.string.feed_retry),
-                    onAction = { viewModel.refresh() },
-                )
-
-                is FeedUiState.Error -> FeedStatusMessage(
-                    icon = Icons.Outlined.CloudOff,
-                    title = stringResource(R.string.feed_error_title),
-                    subtitle = state.message,
-                    actionLabel = stringResource(R.string.feed_retry),
-                    onAction = { viewModel.refresh() },
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun FeedContent(
+fun FeedContent(
     feedItems: List<FeedItem>,
     savedPostIds: Set<Int>,
     onArticleClick: (Int) -> Unit,
@@ -451,7 +383,7 @@ private fun BookmarkButton(
 }
 
 @Composable
-private fun FeedStatusMessage(
+fun FeedStatusMessage(
     icon: ImageVector,
     title: String,
     subtitle: String,
@@ -522,7 +454,7 @@ private fun FeedStatusMessage(
 }
 
 @Composable
-private fun FeedLoadingSkeleton() {
+fun FeedLoadingSkeleton() {
     val ext = MarxistReaderTheme.colors
 
     Column(
