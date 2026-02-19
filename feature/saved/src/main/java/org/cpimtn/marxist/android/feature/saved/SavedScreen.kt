@@ -50,44 +50,45 @@ import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
-/** Compiled once; used for stripping HTML from excerpt. */
-private val HTML_TAG_REGEX = Regex("<[^>]+>")
-
 @Composable
 fun SavedScreen(
     viewModel: SavedViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.feedUiState.collectAsStateWithLifecycle()
 
-    AnimatedContent(
-        targetState = uiState,
-        transitionSpec = { fadeIn() togetherWith fadeOut() },
-        label = "feed_state",
-    ) { state ->
-        when (state) {
-            is SavedFeedUiState.Loading -> FeedLoadingSkeleton()
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        AnimatedContent(
+            targetState = uiState,
+            transitionSpec = { fadeIn() togetherWith fadeOut() },
+            label = "saved_feed_state",
+        ) { state ->
+            when (state) {
+                is SavedFeedUiState.Loading -> FeedLoadingSkeleton()
 
-            is SavedFeedUiState.Success -> FeedContent(
-                feedItems = state.feedItems,
-                onArticleClick = { },
-                onUnSaveClick = { viewModel.unsave(it) },
-            )
+                is SavedFeedUiState.Success -> FeedContent(
+                    feedItems = state.feedItems,
+                    onArticleClick = { },
+                    onUnSaveClick = { viewModel.unsave(it) },
+                )
 
-            is SavedFeedUiState.Empty -> FeedStatusMessage(
-                icon = Icons.Outlined.Inbox,
-                title = stringResource(R.string.feed_empty_message),
-                subtitle = stringResource(R.string.feed_empty_subtitle),
-                actionLabel = stringResource(R.string.feed_retry),
-                onAction = { },
-            )
+                is SavedFeedUiState.Empty -> FeedStatusMessage(
+                    icon = Icons.Outlined.Inbox,
+                    title = stringResource(R.string.saved_feed_empty_message),
+                    subtitle = stringResource(R.string.saved_feed_empty_subtitle),
+                    actionLabel = stringResource(R.string.saved_take_me),
+                    onAction = { },
+                )
 
-            is SavedFeedUiState.Error -> FeedStatusMessage(
-                icon = Icons.Outlined.CloudOff,
-                title = stringResource(R.string.feed_error_title),
-                subtitle = state.message,
-                actionLabel = stringResource(R.string.feed_retry),
-                onAction = { },
-            )
+                is SavedFeedUiState.Error -> FeedStatusMessage(
+                    icon = Icons.Outlined.CloudOff,
+                    title = stringResource(R.string.saved_feed_error_title),
+                    subtitle = state.message,
+                    actionLabel = stringResource(R.string.saved_take_me),
+                    onAction = { },
+                )
+            }
         }
     }
 }
@@ -101,22 +102,29 @@ fun FeedContent(
     val ext = MarxistReaderTheme.colors
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        // Header: சேமித்த கட்டுரைகள் (N)
-        Text(
-            text = "${stringResource(R.string.saved_title)} (${feedItems.size})",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
-        )
-        HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(),
-            color = ext.accentLineStart,
-            thickness = 2.dp
-        )
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
+            item {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = stringResource(R.string.saved_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp)
+                    )
+
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        color = ext.accentLineStart,
+                        thickness = 1.dp
+                    )
+                }
+            }
+
             itemsIndexed(
                 items = feedItems,
                 key = { _, item -> item.post.id }
@@ -192,20 +200,22 @@ private fun FeedStatusMessage(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Surface(
-                onClick = onAction,
-                shape = RoundedCornerShape(10.dp),
-                color = MaterialTheme.colorScheme.primary,
-            ) {
-                Text(
-                    text = actionLabel,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    modifier = Modifier.padding(
-                        horizontal = 24.dp,
-                        vertical = 10.dp,
-                    ),
-                )
+            if (actionLabel.isNotEmpty()) {
+                Surface(
+                    onClick = onAction,
+                    shape = RoundedCornerShape(10.dp),
+                    color = MaterialTheme.colorScheme.primary,
+                ) {
+                    Text(
+                        text = actionLabel,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        modifier = Modifier.padding(
+                            horizontal = 24.dp,
+                            vertical = 10.dp,
+                        ),
+                    )
+                }
             }
         }
     }
@@ -290,10 +300,6 @@ private fun SavedArticleItem(
     val categoryLabel = feedItem.categoryLabel
     val tagLabels = feedItem.tagLabels
 
-    val cleanExcerpt = remember(post.excerpt) {
-        post.excerpt.replace(HTML_TAG_REGEX, "").trim()
-    }
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -347,10 +353,10 @@ private fun SavedArticleItem(
         )
 
         // Row 3: Excerpt
-        if (cleanExcerpt.isNotBlank()) {
+        if (post.excerpt.isNotBlank()) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = cleanExcerpt,
+                text = post.excerpt,
                 style = MaterialTheme.typography.bodySmall,
                 color = ext.articleExcerpt,
                 maxLines = 2,

@@ -11,6 +11,10 @@ import org.cpimtn.marxist.network.model.PostDTO
 internal fun decodeHtmlEntities(html: String): String =
     Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString().trim()
 
+
+/** Compiled once; used for stripping HTML from excerpt. */
+private val HTML_TAG_REGEX = Regex("<[^>]+>")
+
 /**
  * Maps DTO → Entity (for persistence). Single responsibility: mapping from network shape to DB shape.
  * Title and excerpt are decoded so entities like &#8220; and &#8211; render as “ and –.
@@ -19,8 +23,8 @@ fun PostDTO.toEntity(): PostEntity = PostEntity(
     id = id,
     date = date,
     slug = slug,
-    title = decodeHtmlEntities(title.rendered),
-    excerpt = decodeHtmlEntities(excerpt.rendered),
+    title = decodeHtmlEntities(title.rendered.replace(HTML_TAG_REGEX, "").trim()),
+    excerpt = decodeHtmlEntities(excerpt.rendered.replace(HTML_TAG_REGEX, "").trim()),
     tagsId = tags ?: emptyList(),
     categoriesId = categories ?: emptyList()
 )

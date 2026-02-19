@@ -64,9 +64,6 @@ import org.cpimtn.marxist.navigation.MainAppState
 import org.cpimtn.marxist.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
-
-private val HtmlTagRegex = Regex("<[^>]+>")
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeedScreen(
@@ -307,11 +304,6 @@ private fun RecentArticleItem(
     val categoryLabel = feedItem.categoryLabel
     val tagLabels = feedItem.tagLabels
 
-    // Strip HTML once, remembered across recompositions
-    val cleanExcerpt = remember(post.excerpt) {
-        post.excerpt.replace(HtmlTagRegex, "").trim()
-    }
-
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -370,10 +362,10 @@ private fun RecentArticleItem(
         )
 
         // ── Row 3: Excerpt ──
-        if (cleanExcerpt.isNotBlank()) {
+        if (post.excerpt.isNotBlank()) {
             Spacer(modifier = Modifier.height(4.dp))
             Text(
-                text = cleanExcerpt,
+                text = post.excerpt,
                 style = MaterialTheme.typography.bodySmall,
                 color = ext.articleExcerpt,
                 maxLines = 2,
