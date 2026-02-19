@@ -1,5 +1,8 @@
 package org.cpimtn.marxist.android.app
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -19,17 +22,22 @@ import org.cpimtn.marxist.navigation.Screen
 fun MainScreensNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
+    goToArticleDetails: (postId: Int) -> Unit,
 ) {
     val navController = appState.navController
     NavHost(
         navController = navController,
         startDestination = Screen.Feed.route,
+        enterTransition = { fadeIn(animationSpec = tween(300)) },
+        exitTransition = { fadeOut(animationSpec = tween(300)) },
         modifier = modifier,
     ) {
         composable(route = Screen.Feed.route) {
             FeedScreenRoute(
                 appState = appState,
-                onArticleClick = {}
+                onArticleClick = { postId ->
+                    goToArticleDetails(postId)
+                }
             )
         }
         composable(route = Screen.Books.route) {

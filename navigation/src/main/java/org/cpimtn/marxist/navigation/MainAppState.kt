@@ -131,4 +131,14 @@ class MainAppState(
             }
         }
     }
+
+    fun navigateToArticle(postId: Int) {
+        navController.navigate(Route.ArticleDetail.createRoute(postId)) {
+            launchSingleTop = true
+        }
+    }
+
+    fun navigateBack() {
+        navController.popBackStack()
+    }
 }
