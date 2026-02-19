@@ -18,7 +18,6 @@ import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
 import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
-import org.junit.Rule
 import org.junit.Test
 import io.mockk.coEvery
 import io.mockk.every
@@ -39,7 +38,6 @@ class FeedViewModelTest {
 
     private fun createViewModel(): FeedViewModel = FeedViewModel(
         getFeedItemsFlowUseCase,
-        getSyncStatusUseCase,
         getSavedPostIdsFlowUseCase,
         savePostUseCase,
         unsavePostUseCase,

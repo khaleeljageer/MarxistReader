@@ -89,11 +89,7 @@ fun MainScreen(
                             Text(
                                 text = stringResource(destination.labelResId),
                                 style = MaterialTheme.typography.labelSmall,
-                                fontWeight = if (isSelected) {
-                                    FontWeight.Bold
-                                } else {
-                                    FontWeight.Normal
-                                }
+                                fontWeight = FontWeight.Normal
                             )
                         },
                         onClick = { appState.navigateToTopLevelDestination(destination) },

@@ -4,4 +4,9 @@
     <string name="saved_title">சேமித்த கட்டுரைகள்</string>
     <!-- Content descriptions -->
     <string name="saved_unsave_content_desc">Remove from saved</string>
+
+    <string name="feed_empty_message">No saved posts yet.</string>
+    <string name="feed_retry">Retry</string>
+    <string name="feed_empty_subtitle">Connect to the internet to fetch new articles</string>
+    <string name="feed_error_title">Something went wrong</string>
 </resources>

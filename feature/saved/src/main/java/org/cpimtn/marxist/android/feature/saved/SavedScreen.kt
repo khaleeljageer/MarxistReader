@@ -1,16 +1,32 @@
 package org.cpimtn.marxist.android.feature.saved
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.outlined.CloudOff
+import androidx.compose.material.icons.outlined.Inbox
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -19,32 +35,75 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import org.cpimtn.marxist.android.domain.model.Post
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.cpimtn.marxist.android.domain.model.FeedItem
+import org.cpimtn.marxist.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
-import java.text.SimpleDateFormat
-import java.util.Locale
+
+/** Compiled once; used for stripping HTML from excerpt. */
+private val HTML_TAG_REGEX = Regex("<[^>]+>")
 
 @Composable
 fun SavedScreen(
     viewModel: SavedViewModel = hiltViewModel()
 ) {
-    val savedPosts by viewModel.savedPosts.collectAsState()
-    val categoryNames by viewModel.categoryNames.collectAsState()
-    val tagNames by viewModel.tagNames.collectAsState()
+    val uiState by viewModel.feedUiState.collectAsStateWithLifecycle()
+
+    AnimatedContent(
+        targetState = uiState,
+        transitionSpec = { fadeIn() togetherWith fadeOut() },
+        label = "feed_state",
+    ) { state ->
+        when (state) {
+            is SavedFeedUiState.Loading -> FeedLoadingSkeleton()
+
+            is SavedFeedUiState.Success -> FeedContent(
+                feedItems = state.feedItems,
+                onArticleClick = { },
+                onUnSaveClick = { viewModel.unsave(it) },
+            )
+
+            is SavedFeedUiState.Empty -> FeedStatusMessage(
+                icon = Icons.Outlined.Inbox,
+                title = stringResource(R.string.feed_empty_message),
+                subtitle = stringResource(R.string.feed_empty_subtitle),
+                actionLabel = stringResource(R.string.feed_retry),
+                onAction = { },
+            )
+
+            is SavedFeedUiState.Error -> FeedStatusMessage(
+                icon = Icons.Outlined.CloudOff,
+                title = stringResource(R.string.feed_error_title),
+                subtitle = state.message,
+                actionLabel = stringResource(R.string.feed_retry),
+                onAction = { },
+            )
+        }
+    }
+}
+
+@Composable
+fun FeedContent(
+    feedItems: List<FeedItem>,
+    onArticleClick: (Int) -> Unit,
+    onUnSaveClick: (Int) -> Unit
+) {
     val ext = MarxistReaderTheme.colors
 
     Column(modifier = Modifier.fillMaxWidth()) {
         // Header: சேமித்த கட்டுரைகள் (N)
         Text(
-            text = "${stringResource(R.string.saved_title)} (${savedPosts.size})",
+            text = "${stringResource(R.string.saved_title)} (${feedItems.size})",
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface,
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
@@ -55,27 +114,24 @@ fun SavedScreen(
             thickness = 2.dp
         )
         LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(0.dp)
         ) {
             itemsIndexed(
-                items = savedPosts,
-                key = { _, post -> post.id }
+                items = feedItems,
+                key = { _, item -> item.post.id }
             ) { index, post ->
                 SavedArticleItem(
-                    post = post,
-                    categoryNames = categoryNames,
-                    tagNames = tagNames,
-                    onUnsaveClick = { viewModel.unsave(post.id) },
-                    modifier = Modifier.padding(vertical = 12.dp)
+                    feedItem = post,
+                    onUnsaveClick = { onUnSaveClick(post.post.id) },
+                    onArticleClick = { onArticleClick(post.post.id) },
+                    modifier = Modifier
                 )
-                if (index < savedPosts.size - 1) {
+                if (index < feedItems.size - 1) {
                     HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 4.dp),
-                        color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f),
-                        thickness = 1.dp
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        thickness = 0.5.dp,
+                        modifier = Modifier.fillMaxWidth(),
                     )
                 }
             }
@@ -83,113 +139,266 @@ fun SavedScreen(
     }
 }
 
+
 @Composable
-private fun SavedArticleItem(
-    post: Post,
-    categoryNames: Map<Int, String>,
-    tagNames: Map<Int, String>,
-    onUnsaveClick: () -> Unit,
-    modifier: Modifier = Modifier
+private fun FeedStatusMessage(
+    icon: ImageVector,
+    title: String,
+    subtitle: String,
+    actionLabel: String,
+    onAction: () -> Unit,
 ) {
     val ext = MarxistReaderTheme.colors
-    val categoryLabel = post.categories.firstOrNull()?.let { categoryNames[it] ?: "" } ?: ""
-    val tagLabels = post.tags.mapNotNull { tagNames[it] }.filter { it.isNotBlank() }
 
-    Column(modifier = modifier.fillMaxWidth()) {
-        // Category and date on same row
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(horizontal = 32.dp),
         ) {
-            if (categoryLabel.isNotEmpty()) {
-                Text(
-                    text = categoryLabel,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = ext.categoryBadgeText
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = Icons.Outlined.Schedule,
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = ext.articleTimestamp
-                )
-                Text(
-                    text = formatSavedDate(post.date),
-                    style = MaterialTheme.typography.labelSmall,
-                    color = ext.articleTimestamp,
-                    modifier = Modifier.padding(start = 4.dp)
-                )
-            }
-        }
-        Text(
-            text = post.title,
-            style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.onSurface,
-            modifier = Modifier.padding(top = 6.dp),
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis
-        )
-        if (post.excerpt.isNotBlank()) {
-            Text(
-                text = post.excerpt.replace(Regex("<[^>]+>"), "").trim(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = ext.articleExcerpt,
-                modifier = Modifier.padding(top = 4.dp),
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-        // Tags (bottom-left) and filled bookmark (bottom-right)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                modifier = Modifier.weight(1f)
+            // Icon container
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = ext.settingsIconBg,
+                modifier = Modifier.size(64.dp),
             ) {
-                tagLabels.take(3).forEach { tag ->
-                    Surface(
-                        shape = RoundedCornerShape(6.dp),
-                        color = ext.tagChipBg
-                    ) {
-                        Text(
-                            text = tag,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = ext.tagChipText,
-                            modifier = Modifier.padding(horizontal = 6.dp, vertical = 2.dp)
-                        )
-                    }
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(28.dp),
+                        tint = ext.settingsIconTint,
+                    )
                 }
             }
-            IconButton(
-                onClick = onUnsaveClick,
-                modifier = Modifier.size(40.dp)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Text(
+                text = subtitle,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            Surface(
+                onClick = onAction,
+                shape = RoundedCornerShape(10.dp),
+                color = MaterialTheme.colorScheme.primary,
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Bookmark,
-                    contentDescription = stringResource(R.string.saved_unsave_content_desc),
-                    tint = ext.bookmarkActive
+                Text(
+                    text = actionLabel,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    modifier = Modifier.padding(
+                        horizontal = 24.dp,
+                        vertical = 10.dp,
+                    ),
                 )
             }
         }
     }
 }
 
-private fun formatSavedDate(dateStr: String): String {
-    val raw = dateStr.trim().take(19)
-    return try {
-        val iso = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.ROOT)
-        val out = SimpleDateFormat("MMM d", Locale.getDefault())
-        val parsed = iso.parse(raw) ?: return dateStr.take(10)
-        out.format(parsed)
-    } catch (_: Exception) {
-        dateStr.take(10)
+
+@Composable
+private fun FeedLoadingSkeleton() {
+    val ext = MarxistReaderTheme.colors
+    repeat(5) {
+        ArticleSkeleton(ext)
+        if (it < 3) {
+            Spacer(modifier = Modifier.height(20.dp))
+        }
+    }
+}
+
+
+@Composable
+private fun ArticleSkeleton(ext: MarxistExtendedColors) {
+    Column {
+        // Category badge
+        Box(
+            modifier = Modifier
+                .width(80.dp)
+                .height(20.dp)
+                .clip(RoundedCornerShape(6.dp))
+                .background(ext.shimmerBase),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        // Title line 1
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(ext.shimmerBase),
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        // Title line 2
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.7f)
+                .height(16.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(ext.shimmerBase),
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        // Excerpt
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .height(12.dp)
+                .clip(RoundedCornerShape(4.dp))
+                .background(ext.shimmerBase),
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        // Tags row
+        Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            repeat(2) {
+                Box(
+                    modifier = Modifier
+                        .width(60.dp)
+                        .height(18.dp)
+                        .clip(RoundedCornerShape(6.dp))
+                        .background(ext.shimmerBase),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SavedArticleItem(
+    feedItem: FeedItem,
+    onArticleClick: () -> Unit,
+    onUnsaveClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val ext = MarxistReaderTheme.colors
+    val post = feedItem.post
+    val categoryLabel = feedItem.categoryLabel
+    val tagLabels = feedItem.tagLabels
+
+    val cleanExcerpt = remember(post.excerpt) {
+        post.excerpt.replace(HTML_TAG_REGEX, "").trim()
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onArticleClick)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+    ) {
+        // Row 1: Category pill (left) + timestamp (right) — same as feed
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (categoryLabel.isNotEmpty()) {
+                Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = ext.categoryBadgeBg,
+                ) {
+                    Text(
+                        text = categoryLabel,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = ext.categoryBadgeText,
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
+                    )
+                }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Outlined.Schedule,
+                    contentDescription = null,
+                    modifier = Modifier.size(13.dp),
+                    tint = ext.articleTimestamp,
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = post.formattedDate,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = ext.articleTimestamp,
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Row 2: Title
+        Text(
+            text = post.title,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        // Row 3: Excerpt
+        if (cleanExcerpt.isNotBlank()) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = cleanExcerpt,
+                style = MaterialTheme.typography.bodySmall,
+                color = ext.articleExcerpt,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+
+        // Row 4: Tags + Bookmark — same as feed (max 2 tags, chip with border)
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (tagLabels.isNotEmpty()) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.weight(1f, fill = false),
+                ) {
+                    items(items = tagLabels, key = { it }) { tagName ->
+                        Surface(
+                            shape = RoundedCornerShape(6.dp),
+                            color = ext.tagChipBg,
+                            border = BorderStroke(1.dp, ext.tagChipBorder),
+                        ) {
+                            Text(
+                                text = tagName,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = ext.tagChipText,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                            )
+                        }
+                    }
+                }
+            } else {
+                Spacer(modifier = Modifier.weight(1f))
+            }
+
+            IconButton(
+                onClick = onUnsaveClick,
+                modifier = Modifier.size(40.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Bookmark,
+                    contentDescription = stringResource(R.string.saved_unsave_content_desc),
+                    tint = ext.bookmarkActive,
+                )
+            }
+        }
     }
 }

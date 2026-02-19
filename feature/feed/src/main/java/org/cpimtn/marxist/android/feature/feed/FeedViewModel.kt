@@ -13,10 +13,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.android.domain.model.SyncResult
-import org.cpimtn.marxist.android.domain.model.SyncStatus
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
-import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
 import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
@@ -24,9 +22,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeedViewModel @Inject constructor(
+    getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
     private val getFeedItemsFlowUseCase: GetFeedItemsFlowUseCase,
-    private val getSyncStatusUseCase: GetSyncStatusUseCase,
-    private val getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
     private val savePostUseCase: SavePostUseCase,
     private val unsavePostUseCase: UnsavePostUseCase,
     private val syncPostsUseCase: SyncPostsUseCase,
@@ -38,14 +35,6 @@ class FeedViewModel @Inject constructor(
     // ── NEW: Drives PullToRefreshBox indicator ──
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
-
-    val syncStatus: StateFlow<SyncStatus> =
-        getSyncStatusUseCase()
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = SyncStatus()
-            )
 
     val savedPostIds: StateFlow<Set<Int>> =
         getSavedPostIdsFlowUseCase()
@@ -107,12 +96,16 @@ class FeedViewModel @Inject constructor(
                             _feedUiState.value = FeedUiState.Loading
                         }
                     }
+
                     is SyncResult.NetworkError ->
                         _feedUiState.value = FeedUiState.Error(result.message ?: "Network error")
+
                     is SyncResult.ServerError ->
                         _feedUiState.value = FeedUiState.Error(result.message ?: "Server error")
+
                     is SyncResult.UnknownError ->
-                        _feedUiState.value = FeedUiState.Error(result.cause?.message ?: "Something went wrong")
+                        _feedUiState.value =
+                            FeedUiState.Error(result.cause?.message ?: "Something went wrong")
                 }
             } finally {
                 _isRefreshing.value = false

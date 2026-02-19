@@ -7,27 +7,27 @@ import dagger.hilt.components.SingletonComponent
 import org.cpimtn.marxist.android.domain.repository.CategoryRepository
 import org.cpimtn.marxist.android.domain.repository.PostRepository
 import org.cpimtn.marxist.android.domain.repository.SavedPostRepository
-import org.cpimtn.marxist.android.domain.repository.SyncStatusRepository
 import org.cpimtn.marxist.android.domain.repository.SettingsRepository
+import org.cpimtn.marxist.android.domain.repository.SyncStatusRepository
 import org.cpimtn.marxist.android.domain.repository.TagRepository
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostsFlowUseCase
-import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetWelcomeCompletedUseCase
+import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetLanguageUseCase
-import org.cpimtn.marxist.android.domain.usecase.GetWelcomeCompletedUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetPushNotificationsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetThemeUseCase
-import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetWelcomeCompletedUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
-import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncTaxonomyUseCase
+import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
 import org.cpimtn.marxist.core.config.AppConfig
 import javax.inject.Singleton
 
@@ -95,8 +95,13 @@ object UseCaseModule {
     fun provideGetSavedPostsFlowUseCase(
         getPostsFlowUseCase: GetPostsFlowUseCase,
         getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
+        getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
+        getTagsFlowUseCase: GetTagsFlowUseCase,
     ): GetSavedPostsFlowUseCase =
-        GetSavedPostsFlowUseCase(getPostsFlowUseCase, getSavedPostIdsFlowUseCase)
+        GetSavedPostsFlowUseCase(
+            getPostsFlowUseCase, getSavedPostIdsFlowUseCase,
+            getCategoriesFlowUseCase, getTagsFlowUseCase
+        )
 
     @Provides
     @Singleton

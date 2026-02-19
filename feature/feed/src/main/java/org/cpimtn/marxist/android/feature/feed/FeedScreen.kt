@@ -61,6 +61,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.navigation.MainAppState
+import org.cpimtn.marxist.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
 
@@ -186,7 +187,7 @@ private fun FeedContent(
                 HorizontalDivider(
                     color = MaterialTheme.colorScheme.outlineVariant,
                     thickness = 0.5.dp,
-                    modifier = Modifier,
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
@@ -315,7 +316,7 @@ private fun RecentArticleItem(
         modifier = modifier
             .fillMaxWidth()
             .clickable(onClick = onArticleClick)
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
         // ── Row 1: Category + Timestamp ──
         Row(
@@ -570,7 +571,7 @@ private fun FeedLoadingSkeleton() {
 }
 
 @Composable
-private fun ArticleSkeleton(ext: org.cpimtn.marxist.ui.theme.MarxistExtendedColors) {
+private fun ArticleSkeleton(ext: MarxistExtendedColors) {
     Column {
         // Category badge
         Box(

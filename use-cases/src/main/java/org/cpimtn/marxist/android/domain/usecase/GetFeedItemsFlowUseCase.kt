@@ -24,10 +24,14 @@ class GetFeedItemsFlowUseCase(
             posts.map { post -> post.toFeedItem(categoryNames, tagNames) }
         }
 
-    private fun Post.toFeedItem(categoryNames: Map<Int, String>, tagNames: Map<Int, String>): FeedItem =
+    private fun Post.toFeedItem(
+        categoryNames: Map<Int, String>,
+        tagNames: Map<Int, String>
+    ): FeedItem =
         FeedItem(
             post = this,
-            categoryLabel = categories.firstOrNull()?.let { categoryNames[it] ?: "" }?.takeIf { it.isNotBlank() } ?: "",
-            tagLabels = tags.take(2).mapNotNull { tagNames[it] }.filter { it.isNotBlank() },
+            categoryLabel = categories.firstOrNull()?.let { categoryNames[it] ?: "" }
+                ?.takeIf { it.isNotBlank() } ?: "",
+            tagLabels = tags.take(3).mapNotNull { tagNames[it] }.filter { it.isNotBlank() },
         )
 }
