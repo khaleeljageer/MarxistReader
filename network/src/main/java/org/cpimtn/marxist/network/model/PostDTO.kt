@@ -10,6 +10,7 @@ data class PostDTO(
     val slug: String,
     val title: RenderedText,
     val excerpt: RenderedText,
+    val content: RenderedText,
     val tags: List<Int>? = null,
     val categories: List<Int>? = null
 )

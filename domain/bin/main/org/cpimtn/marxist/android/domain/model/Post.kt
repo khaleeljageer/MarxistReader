@@ -8,6 +8,7 @@ data class Post(
     val date: String,
     val slug: String,
     val title: String,
+    val content: String,
     val excerpt: String,
     val tags: List<Int>,
     val categories: List<Int>

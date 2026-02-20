@@ -11,7 +11,9 @@ import org.cpimtn.marxist.android.domain.repository.SettingsRepository
 import org.cpimtn.marxist.android.domain.repository.SyncStatusRepository
 import org.cpimtn.marxist.android.domain.repository.TagRepository
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetFeedItemByIdFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetPostByIdFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostsFlowUseCase
@@ -144,4 +146,22 @@ object UseCaseModule {
     @Singleton
     fun provideSetWelcomeCompletedUseCase(settingsRepository: SettingsRepository): SetWelcomeCompletedUseCase =
         SetWelcomeCompletedUseCase(settingsRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetPostByIdFlowUseCase(postRepository: PostRepository): GetPostByIdFlowUseCase =
+        GetPostByIdFlowUseCase(postRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetFeedItemByIdFlowUseCase(
+        getPostByIdFlowUseCase: GetPostByIdFlowUseCase,
+        getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
+        getTagsFlowUseCase: GetTagsFlowUseCase,
+    ): GetFeedItemByIdFlowUseCase =
+        GetFeedItemByIdFlowUseCase(
+            getPostByIdFlowUseCase,
+            getCategoriesFlowUseCase,
+            getTagsFlowUseCase
+        )
 }

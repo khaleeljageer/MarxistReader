@@ -2,6 +2,7 @@ package org.cpimtn.marxist.android.data.database.mapper
 
 import android.text.Html
 import org.cpimtn.marxist.android.data.database.entity.PostEntity
+import org.cpimtn.marxist.android.data.database.entity.PostListRow
 import org.cpimtn.marxist.android.domain.model.Post
 import org.cpimtn.marxist.network.model.PostDTO
 
@@ -25,8 +26,23 @@ fun PostDTO.toEntity(): PostEntity = PostEntity(
     slug = slug,
     title = decodeHtmlEntities(title.rendered.replace(HTML_TAG_REGEX, "").trim()),
     excerpt = decodeHtmlEntities(excerpt.rendered.replace(HTML_TAG_REGEX, "").trim()),
+    content = content.rendered.replace(HTML_TAG_REGEX, "").trim(),
     tagsId = tags ?: emptyList(),
     categoriesId = categories ?: emptyList()
+)
+
+/**
+ * Maps list row → Domain (for feed/saved). Content is empty; use getPostById for full content.
+ */
+fun PostListRow.toDomain(): Post = Post(
+    id = id,
+    date = date,
+    slug = slug,
+    title = title,
+    excerpt = excerpt,
+    content = "",
+    tags = tagsId,
+    categories = categoriesId,
 )
 
 /**
@@ -38,6 +54,7 @@ fun PostEntity.toDomain(): Post = Post(
     slug = slug,
     title = title,
     excerpt = excerpt,
+    content = content,
     tags = tagsId,
     categories = categoriesId
 )

@@ -14,6 +14,7 @@ data class PostEntity(
     val slug: String,
     val title: String,
     val excerpt: String,
+    val content: String,
     val tagsId: List<Int>,
     val categoriesId: List<Int>
 )

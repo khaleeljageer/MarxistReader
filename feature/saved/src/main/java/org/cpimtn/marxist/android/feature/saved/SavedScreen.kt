@@ -52,7 +52,8 @@ import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
 @Composable
 fun SavedScreen(
-    viewModel: SavedViewModel = hiltViewModel()
+    onArticleClick: (postId: Int) -> Unit = {},
+    viewModel: SavedViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.feedUiState.collectAsStateWithLifecycle()
 
@@ -69,7 +70,7 @@ fun SavedScreen(
 
                 is SavedFeedUiState.Success -> FeedContent(
                     feedItems = state.feedItems,
-                    onArticleClick = { },
+                    onArticleClick = onArticleClick,
                     onUnSaveClick = { viewModel.unsave(it) },
                 )
 

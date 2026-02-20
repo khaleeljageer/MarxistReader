@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "org.cpimtn.marxist.android.feature.feed"
+    namespace = "org.cpimtn.marxist.android.feature.feeddetails"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -62,14 +62,10 @@ dependencies {
     implementation(libs.bundles.hilt.core)
     ksp(libs.hilt.compiler)
 
-    implementation(project(":navigation"))
     implementation(project(":domain"))
     implementation(project(":use-cases"))
-    implementation(project(":feature:feeddetails"))
 
     testImplementation(libs.junit)
-    testImplementation(libs.mockk)
-    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

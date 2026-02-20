@@ -12,6 +12,8 @@ import org.cpimtn.marxist.android.domain.model.SyncResult
 interface PostRepository {
     /** Stream of posts from local DB (source of truth). */
     fun getPosts(): Flow<List<Post>>
+
     /** Runs a full sync from server and writes to local DB. Returns result for UI/retry. */
     suspend fun fullSync(perPage: Int): SyncResult
+    fun getPostById(postId: Int): Flow<Post?>
 }

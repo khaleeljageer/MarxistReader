@@ -13,6 +13,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import org.cpimtn.marxist.android.feature.feed.ArticleDetailDestination
 import org.cpimtn.marxist.android.feature.welcome.WelcomeScreen
 import org.cpimtn.marxist.navigation.MainScreen
 import org.cpimtn.marxist.navigation.Route
@@ -80,9 +81,9 @@ fun App(
             val postId = backStackEntry.arguments?.getInt("postId") ?: return@composable
             Log.d("Khaleel", "postid: $postId")
 
-//            ArticleDetailScreen(
-//                onBackClick = { rootNavController.popBackStack() },
-//            )
+            ArticleDetailDestination(
+                onBackClick = { navController.popBackStack() },
+            )
         }
     }
 }
