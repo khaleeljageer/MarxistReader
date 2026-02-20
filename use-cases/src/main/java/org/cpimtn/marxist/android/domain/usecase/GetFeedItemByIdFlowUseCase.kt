@@ -29,6 +29,6 @@ class GetFeedItemByIdFlowUseCase(
             post = this,
             categoryLabel = categories.firstOrNull()?.let { categoryNames[it] ?: "" }
                 ?.takeIf { it.isNotBlank() } ?: "",
-            tagLabels = tags.take(3).mapNotNull { tagNames[it] }.filter { it.isNotBlank() },
+            tagLabels = tags.mapNotNull { tagNames[it] }.filter { it.isNotBlank() },
         )
 }

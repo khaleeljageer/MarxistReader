@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":feature:saved"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:welcome"))
+    implementation(project(":feature:feeddetails"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

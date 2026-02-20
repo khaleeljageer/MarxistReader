@@ -1,6 +1,5 @@
 package org.cpimtn.marxist.android.app
 
-import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -13,7 +12,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import org.cpimtn.marxist.android.feature.feed.ArticleDetailDestination
+import org.cpimtn.marxist.android.feature.feeddetails.ArticleDetailRoute
 import org.cpimtn.marxist.android.feature.welcome.WelcomeScreen
 import org.cpimtn.marxist.navigation.MainScreen
 import org.cpimtn.marxist.navigation.Route
@@ -77,11 +76,8 @@ fun App(
         composable(
             route = Route.ArticleDetail.name,
             arguments = Route.ArticleDetail.arguments,
-        ) { backStackEntry ->
-            val postId = backStackEntry.arguments?.getInt("postId") ?: return@composable
-            Log.d("Khaleel", "postid: $postId")
-
-            ArticleDetailDestination(
+        ) {
+            ArticleDetailRoute(
                 onBackClick = { navController.popBackStack() },
             )
         }

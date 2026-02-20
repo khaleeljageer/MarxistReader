@@ -3,132 +3,49 @@ package org.cpimtn.marxist.android.feature.feeddetails
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Share
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ArticleDetailScreen(
-    onBackClick: () -> Unit,
-    onShareClick: (() -> Unit)? = null,
-    viewModel: ArticleDetailViewModel = hiltViewModel(),
-) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val ext = MarxistReaderTheme.colors
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        text = stringResource(R.string.feeddetails_title),
-                        style = MaterialTheme.typography.titleLarge,
-                        color = ext.appBarTitle,
-                        fontWeight = FontWeight.Medium,
-                    )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onBackClick) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.feeddetails_back),
-                            tint = ext.appBarActionIcon,
-                        )
-                    }
-                },
-                actions = {
-                    when (val state = uiState) {
-                        is ArticleDetailUiState.Success -> {
-                            ArticleDetailTopBarActions(
-                                isSaved = state.isSaved,
-                                onSaveClick = { viewModel.toggleSave() },
-                                onShareClick = onShareClick,
-                            )
-                        }
-
-                        else -> {}
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = ext.appBarBackground,
-                    titleContentColor = ext.appBarTitle,
-                    navigationIconContentColor = ext.appBarActionIcon,
-                    actionIconContentColor = ext.appBarActionIcon,
-                ),
-            )
-        },
-        modifier = Modifier
-            .fillMaxSize()
-            .imePadding()
-            .navigationBarsPadding(),
-    ) { paddingValues ->
-        when (val state = uiState) {
-            is ArticleDetailUiState.Loading -> ArticleDetailLoading(
-                modifier = Modifier.padding(paddingValues),
-            )
-
-            is ArticleDetailUiState.Success -> ArticleDetailContent(
-                feedItem = state.feedItem,
-                modifier = Modifier.padding(paddingValues),
-            )
-
-            is ArticleDetailUiState.NotFound -> ArticleDetailNotFound(
-                modifier = Modifier.padding(paddingValues),
-            )
-
-            is ArticleDetailUiState.Error -> ArticleDetailError(
-                message = state.message,
-                modifier = Modifier.padding(paddingValues),
-            )
-        }
-    }
-}
-
-@Composable
-private fun ArticleDetailTopBarActions(
+fun ArticleDetailTopBarActions(
     isSaved: Boolean,
     onSaveClick: () -> Unit,
     onShareClick: (() -> Unit)?,
@@ -161,7 +78,7 @@ private fun ArticleDetailTopBarActions(
 }
 
 @Composable
-private fun ArticleDetailLoading(modifier: Modifier = Modifier) {
+fun ArticleDetailLoading(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -175,7 +92,7 @@ private fun ArticleDetailLoading(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ArticleDetailNotFound(modifier: Modifier = Modifier) {
+fun ArticleDetailNotFound(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -189,7 +106,7 @@ private fun ArticleDetailNotFound(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ArticleDetailError(
+fun ArticleDetailError(
     message: String,
     modifier: Modifier = Modifier,
 ) {
@@ -206,7 +123,7 @@ private fun ArticleDetailError(
 }
 
 @Composable
-private fun ArticleDetailContent(
+fun ArticleDetailContent(
     feedItem: FeedItem,
     modifier: Modifier = Modifier,
 ) {
@@ -217,23 +134,23 @@ private fun ArticleDetailContent(
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 16.dp),
     ) {
         Spacer(modifier = Modifier.height(20.dp))
 
         // Category pill — red background, white text (match reference)
         if (feedItem.categoryLabel.isNotBlank()) {
             Surface(
-                shape = RoundedCornerShape(8.dp),
-                color = ext.partyRedAccent,
+                shape = RoundedCornerShape(6.dp),
+                color = ext.categoryBadgeBg,
             ) {
                 Text(
                     text = feedItem.categoryLabel,
-                    style = MaterialTheme.typography.labelLarge,
-                    color = Color.White,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = ext.categoryBadgeText,
                     modifier = Modifier.padding(
-                        horizontal = 12.dp,
-                        vertical = 6.dp,
+                        horizontal = 6.dp,
+                        vertical = 4.dp,
                     ),
                 )
             }
@@ -253,28 +170,67 @@ private fun ArticleDetailContent(
         // Publication date — clock icon + secondary text
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             Icon(
                 imageVector = Icons.Outlined.Schedule,
                 contentDescription = null,
-                modifier = Modifier.size(18.dp),
-                tint = ext.detailDate,
+                modifier = Modifier.size(13.dp),
+                tint = ext.articleTimestamp,
             )
+            Spacer(modifier = Modifier.width(3.dp))
             Text(
                 text = post.formattedDate,
-                style = MaterialTheme.typography.labelMedium,
-                color = ext.detailDate,
+                style = MaterialTheme.typography.labelSmall,
+                color = ext.articleTimestamp,
             )
         }
-
-        Spacer(modifier = Modifier.height(20.dp))
+        Spacer(modifier = Modifier.height(8.dp))
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.outlineVariant,
+            thickness = 0.5.dp,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
 
         // Article body (content) — paragraph style
         HtmlText(
             content = post.content,
             color = ext.detailBody
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+        HorizontalDivider(
+            color = MaterialTheme.colorScheme.outlineVariant,
+            thickness = 0.5.dp,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        FlowRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween, // Gap between tags horizontally
+            verticalArrangement = Arrangement.spacedBy(8.dp)    // Gap between rows
+        ) {
+            feedItem.tagLabels.forEach { tagName ->
+                Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = ext.tagChipBg,
+                    border = BorderStroke(1.dp, ext.tagChipBorder),
+                ) {
+                    Text(
+                        text = tagName,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = ext.tagChipText,
+                        modifier = Modifier.padding(
+                            horizontal = 8.dp,
+                            vertical = 3.dp,
+                        ),
+                    )
+                }
+            }
+        }
 
         Spacer(modifier = Modifier.height(40.dp))
     }
@@ -292,7 +248,7 @@ private fun HtmlText(content: String, color: Color) {
 
     Text(
         text = annotatedText,
-        style = MaterialTheme.typography.bodyLarge,
+        style = MaterialTheme.typography.bodyMedium,
         color = color,
     )
 }
