@@ -26,7 +26,7 @@ fun PostDTO.toEntity(): PostEntity = PostEntity(
     slug = slug,
     title = decodeHtmlEntities(title.rendered.replace(HTML_TAG_REGEX, "").trim()),
     excerpt = decodeHtmlEntities(excerpt.rendered.replace(HTML_TAG_REGEX, "").trim()),
-    content = content.rendered.replace(HTML_TAG_REGEX, "").trim(),
+    content = content.rendered.trim(),
     tagsId = tags ?: emptyList(),
     categoriesId = categories ?: emptyList()
 )

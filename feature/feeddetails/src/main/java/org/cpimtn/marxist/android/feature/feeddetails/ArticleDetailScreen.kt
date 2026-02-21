@@ -52,7 +52,7 @@ fun ArticleDetailTopBarActions(
 ) {
     val ext = MarxistReaderTheme.colors
     val bookmarkTint by animateColorAsState(
-        targetValue = if (isSaved) ext.bookmarkActive else ext.bookmarkInactive,
+        targetValue = if (isSaved) ext.bookmarkActive else ext.navInactiveIcon,
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
         label = "bookmark_tint",
     )
@@ -71,7 +71,7 @@ fun ArticleDetailTopBarActions(
             Icon(
                 imageVector = Icons.Outlined.Share,
                 contentDescription = stringResource(R.string.feeddetails_share_content_desc),
-                tint = ext.appBarActionIcon,
+                tint = ext.navInactiveIcon,
             )
         }
     }
@@ -198,19 +198,18 @@ fun ArticleDetailContent(
             color = ext.detailBody
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         HorizontalDivider(
             color = MaterialTheme.colorScheme.outlineVariant,
             thickness = 0.5.dp,
             modifier = Modifier.fillMaxWidth(),
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         FlowRow(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.Absolute.SpaceBetween, // Gap between tags horizontally
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(4.dp), // Gap between tags horizontally
             verticalArrangement = Arrangement.spacedBy(8.dp)    // Gap between rows
         ) {
             feedItem.tagLabels.forEach { tagName ->

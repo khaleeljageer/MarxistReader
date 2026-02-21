@@ -43,7 +43,7 @@ fun ArticleDetailRoute(
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.feeddetails_back),
-                            tint = ext.appBarActionIcon,
+                            tint = ext.navInactiveIcon,
                         )
                     }
                 },
