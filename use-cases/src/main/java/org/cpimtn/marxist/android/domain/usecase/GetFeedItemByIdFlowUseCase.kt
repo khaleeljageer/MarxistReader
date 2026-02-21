@@ -26,9 +26,19 @@ class GetFeedItemByIdFlowUseCase(
         tagNames: Map<Int, String>
     ): FeedItem =
         FeedItem(
-            post = this,
+            post = this.copy(
+                content = content.downgradeHeadings()
+            ),
             categoryLabel = categories.firstOrNull()?.let { categoryNames[it] ?: "" }
                 ?.takeIf { it.isNotBlank() } ?: "",
             tagLabels = tags.mapNotNull { tagNames[it] }.filter { it.isNotBlank() },
         )
+
+    private fun String.downgradeHeadings(): String {
+        return this
+            .replace(Regex("<h1(\\s[^>]*)?>", RegexOption.IGNORE_CASE), "<h5$1>")
+            .replace(Regex("</h1>", RegexOption.IGNORE_CASE), "</h5>")
+            .replace(Regex("<h2(\\s[^>]*)?>", RegexOption.IGNORE_CASE), "<h5$1>")
+            .replace(Regex("</h2>", RegexOption.IGNORE_CASE), "</h5>")
+    }
 }

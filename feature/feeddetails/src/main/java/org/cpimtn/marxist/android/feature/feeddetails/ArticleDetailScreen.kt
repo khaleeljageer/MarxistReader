@@ -1,5 +1,14 @@
 package org.cpimtn.marxist.android.feature.feeddetails
 
+import android.graphics.Typeface
+import android.text.Spanned
+import android.text.style.BackgroundColorSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
+import android.text.style.StrikethroughSpan
+import android.text.style.StyleSpan
+import android.text.style.URLSpan
+import android.text.style.UnderlineSpan
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -37,9 +46,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.em
 import androidx.core.text.HtmlCompat
 import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
@@ -239,10 +253,7 @@ fun ArticleDetailContent(
 private fun HtmlText(content: String, color: Color) {
     val annotatedText = remember(content) {
         val spanned = HtmlCompat.fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        val text = spanned.toString()
-        buildAnnotatedString {
-            append(text)
-        }
+        spanned.toAnnotatedString()
     }
 
     Text(
@@ -250,4 +261,52 @@ private fun HtmlText(content: String, color: Color) {
         style = MaterialTheme.typography.bodyMedium,
         color = color,
     )
+}
+
+fun Spanned.toAnnotatedString(): AnnotatedString = buildAnnotatedString {
+    val spanned = this@toAnnotatedString
+    append(spanned.toString())
+
+    getSpans(0, spanned.length, Any::class.java).forEach { span ->
+        val start = getSpanStart(span)
+        val end = getSpanEnd(span)
+
+        when (span) {
+            is StyleSpan -> when (span.style) {
+                Typeface.BOLD -> addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, end)
+                Typeface.ITALIC -> addStyle(SpanStyle(fontStyle = FontStyle.Italic), start, end)
+                Typeface.BOLD_ITALIC -> addStyle(
+                    SpanStyle(fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic),
+                    start, end
+                )
+            }
+            is UnderlineSpan -> addStyle(
+                SpanStyle(textDecoration = TextDecoration.Underline), start, end
+            )
+            is StrikethroughSpan -> addStyle(
+                SpanStyle(textDecoration = TextDecoration.LineThrough), start, end
+            )
+            is ForegroundColorSpan -> addStyle(
+                SpanStyle(color = Color(span.foregroundColor)), start, end
+            )
+            is BackgroundColorSpan -> addStyle(
+                SpanStyle(background = Color(span.backgroundColor)), start, end
+            )
+            is RelativeSizeSpan -> {
+                addStyle(
+                    SpanStyle(fontSize = span.sizeChange.em), start, end
+                )
+            }
+            is URLSpan -> {
+                addStringAnnotation("URL", span.url ?: "", start, end)
+                addStyle(
+                    SpanStyle(
+                        color = Color(0xFF1565C0),
+                        textDecoration = TextDecoration.Underline
+                    ),
+                    start, end
+                )
+            }
+        }
+    }
 }
