@@ -5,6 +5,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.cpimtn.marxist.android.feature.books.BooksScreen
@@ -50,7 +51,12 @@ fun MainScreensNavHost(
             SavedScreen(
                 onArticleClick = goToArticleDetails,
                 onTakeMeClick = {
-
+                    navController.navigate(Screen.Feed.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
                 }
             )
         }

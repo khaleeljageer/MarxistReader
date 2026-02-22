@@ -57,8 +57,7 @@ fun MainScreen(
             unselectedIconColor = MarxistReaderTheme.colors.navInactiveIcon,
             unselectedTextColor = MarxistReaderTheme.colors.navInactiveLabel,
         ),
-
-        )
+    )
 
     NavigationSuiteScaffold(
         layoutType = appState.navigationSuiteType,
