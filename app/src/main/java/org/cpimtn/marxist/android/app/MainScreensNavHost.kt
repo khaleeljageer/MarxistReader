@@ -47,7 +47,12 @@ fun MainScreensNavHost(
             MoreScreen()
         }
         composable(route = Screen.Saved.route) {
-            SavedScreen(onArticleClick = goToArticleDetails)
+            SavedScreen(
+                onArticleClick = goToArticleDetails,
+                onTakeMeClick = {
+
+                }
+            )
         }
         composable(route = Screen.Settings.route) {
             SettingsScreenRoute()

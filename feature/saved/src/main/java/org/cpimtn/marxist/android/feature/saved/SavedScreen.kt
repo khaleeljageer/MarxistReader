@@ -51,7 +51,8 @@ import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
 
 @Composable
 fun SavedScreen(
-    onArticleClick: (postId: Int) -> Unit = {},
+    onArticleClick: (postId: Int) -> Unit,
+    onTakeMeClick: () -> Unit,
     viewModel: SavedViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.feedUiState.collectAsStateWithLifecycle()
@@ -60,41 +61,48 @@ fun SavedScreen(
         modifier = Modifier.fillMaxSize()
     ) {
         AnimatedContent(
-            targetState = uiState,
+            targetState = uiState.stateKey,
             transitionSpec = { fadeIn() togetherWith fadeOut() },
             label = "saved_feed_state",
-        ) { state ->
-            when (state) {
-                is SavedFeedUiState.Loading -> FeedLoadingSkeleton()
+        ) { key ->
+            when (key) {
+                StateKey.Loading -> FeedLoadingSkeleton()
+                StateKey.Content -> {
+                    val state = uiState as? SavedFeedUiState.Success ?: return@AnimatedContent
+                    SavedFeedContent(
+                        feedItems = state.feedItems,
+                        onArticleClick = onArticleClick,
+                        onUnSaveClick = { viewModel.unsave(it) },
+                    )
+                }
 
-                is SavedFeedUiState.Success -> FeedContent(
-                    feedItems = state.feedItems,
-                    onArticleClick = onArticleClick,
-                    onUnSaveClick = { viewModel.unsave(it) },
-                )
+                StateKey.Empty -> {
+                    FeedStatusMessage(
+                        icon = Icons.Outlined.Inbox,
+                        title = stringResource(R.string.saved_feed_empty_message),
+                        subtitle = stringResource(R.string.saved_feed_empty_subtitle),
+                        actionLabel = stringResource(R.string.saved_take_me),
+                        onAction = onTakeMeClick,
+                    )
+                }
 
-                is SavedFeedUiState.Empty -> FeedStatusMessage(
-                    icon = Icons.Outlined.Inbox,
-                    title = stringResource(R.string.saved_feed_empty_message),
-                    subtitle = stringResource(R.string.saved_feed_empty_subtitle),
-                    actionLabel = stringResource(R.string.saved_take_me),
-                    onAction = { },
-                )
-
-                is SavedFeedUiState.Error -> FeedStatusMessage(
-                    icon = Icons.Outlined.CloudOff,
-                    title = stringResource(R.string.saved_feed_error_title),
-                    subtitle = state.message,
-                    actionLabel = stringResource(R.string.saved_take_me),
-                    onAction = { },
-                )
+                StateKey.Error -> {
+                    val message = (uiState as? SavedFeedUiState.Error)?.message ?: ""
+                    FeedStatusMessage(
+                        icon = Icons.Outlined.CloudOff,
+                        title = stringResource(R.string.saved_feed_error_title),
+                        subtitle = message,
+                        actionLabel = stringResource(R.string.saved_take_me),
+                        onAction = onTakeMeClick,
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun FeedContent(
+fun SavedFeedContent(
     feedItems: List<FeedItem>,
     onArticleClick: (Int) -> Unit,
     onUnSaveClick: (Int) -> Unit
@@ -122,9 +130,7 @@ fun FeedContent(
             }
         }
     }
-
 }
-
 
 @Composable
 private fun FeedStatusMessage(

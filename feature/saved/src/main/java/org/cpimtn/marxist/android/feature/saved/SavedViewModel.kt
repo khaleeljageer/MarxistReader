@@ -55,3 +55,13 @@ sealed interface SavedFeedUiState {
     data object Empty : SavedFeedUiState
     data class Error(val message: String) : SavedFeedUiState
 }
+
+enum class StateKey { Loading, Content, Empty, Error }
+
+val SavedFeedUiState.stateKey: StateKey
+    get() = when (this) {
+        is SavedFeedUiState.Loading -> StateKey.Loading
+        is SavedFeedUiState.Success -> StateKey.Content
+        is SavedFeedUiState.Empty -> StateKey.Empty
+        is SavedFeedUiState.Error -> StateKey.Error
+    }

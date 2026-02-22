@@ -123,3 +123,13 @@ sealed interface FeedUiState {
     data object Empty : FeedUiState
     data class Error(val message: String) : FeedUiState
 }
+
+enum class StateKey { Loading, Content, Empty, Error }
+
+val FeedUiState.stateKey: StateKey
+    get() = when (this) {
+        is FeedUiState.Loading -> StateKey.Loading
+        is FeedUiState.Success -> StateKey.Content
+        is FeedUiState.Empty -> StateKey.Empty
+        is FeedUiState.Error -> StateKey.Error
+    }
