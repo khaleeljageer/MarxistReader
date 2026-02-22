@@ -157,7 +157,9 @@ fun SettingsScreenContent(
         Text(
             text = stringResource(R.string.settings_footer_license),
             style = MaterialTheme.typography.bodySmall,
-            modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             textAlign = TextAlign.Center,
         )
@@ -276,12 +278,14 @@ fun ThemeDialog(
         title = { Text("Theme") },
         text = {
             Column(
-               modifier = Modifier.wrapContentSize()
+                modifier = Modifier.wrapContentSize()
             ) {
                 Theme.entries.forEach { theme ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth().clickable { onSelect(theme) }) {
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelect(theme) }) {
                         RadioButton(selected = current == theme, onClick = { onSelect(theme) })
                         Spacer(Modifier.width(8.dp))
                         Text(
@@ -307,11 +311,15 @@ fun FontSizeDialog(
         onDismissRequest = onDismiss,
         title = { Text("Font Size") },
         text = {
-            Column {
+            Column(
+                modifier = Modifier.wrapContentSize()
+            ) {
                 FontSize.entries.forEach { size ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { onSelect(size) }) {
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelect(size) }) {
                         RadioButton(selected = current == size, onClick = { onSelect(size) })
                         Spacer(Modifier.width(8.dp))
                         Text(fontSizeLabel(size))
@@ -333,11 +341,15 @@ fun LanguageDialog(
         onDismissRequest = onDismiss,
         title = { Text("Language") },
         text = {
-            Column {
+            Column(
+                modifier = Modifier.wrapContentSize()
+            ) {
                 AppLanguage.entries.forEach { lang ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.clickable { onSelect(lang) }) {
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelect(lang) }) {
                         RadioButton(selected = current == lang, onClick = { onSelect(lang) })
                         Spacer(Modifier.width(8.dp))
                         Text(languageLabel(lang))
