@@ -1,5 +1,6 @@
 package org.cpimtn.marxist.android.feature.feeddetails
 
+import android.content.Intent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -15,6 +16,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -29,6 +31,7 @@ fun ArticleDetailRoute(
     viewModel: ArticleDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Scaffold(
         modifier = Modifier
@@ -53,7 +56,15 @@ fun ArticleDetailRoute(
                             ArticleDetailTopBarActions(
                                 isSaved = state.isSaved,
                                 onSaveClick = { viewModel.toggleSave() },
-                                onShareClick = { },
+                                onShareClick = {
+                                    context.startActivity(
+                                        sharePost(
+                                            title = state.feedItem.post.title,
+                                            excerpt = state.feedItem.post.excerpt,
+                                            url = state.feedItem.post.slug,
+                                        )
+                                    )
+                                },
                             )
                         }
 
@@ -89,4 +100,14 @@ fun ArticleDetailRoute(
             )
         }
     }
+}
+
+private fun sharePost(title: String, excerpt: String, url: String): Intent? {
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_TEXT, "$title\n$excerpt\n$url")
+        type = "text/plain"
+    }
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    return shareIntent
 }
