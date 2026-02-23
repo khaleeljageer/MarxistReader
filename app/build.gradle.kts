@@ -73,7 +73,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     ksp(libs.hilt.compiler)
 
-    implementation(project(":ui-theme"))
+    implementation(project(":ui:theme"))
     implementation(project(":domain"))
     implementation(project(":use-cases"))
     implementation(project(":navigation"))
@@ -84,6 +84,7 @@ dependencies {
     implementation(project(":feature:saved"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:welcome"))
+    implementation(project(":feature:feeddetails"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

@@ -49,7 +49,7 @@ android {
 
 dependencies {
     implementation(project(":core"))
-    implementation(project(":ui-theme"))
+    implementation(project(":ui:theme"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

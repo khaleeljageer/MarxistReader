@@ -35,6 +35,7 @@ class PostRepositoryImpl @Inject constructor(
                     code = -1,
                     message = "Request failed or empty response"
                 )
+
                 pageData.isEmpty() -> break
                 else -> {
                     allEntities.addAll(pageData.map { it.toEntity() })
@@ -49,5 +50,11 @@ class PostRepositoryImpl @Inject constructor(
         SyncResult.NetworkError(e.message)
     } catch (e: Exception) {
         SyncResult.UnknownError(e)
+    }
+
+    override fun getPostById(postId: Int): Flow<Post?> {
+        return postDao.getPostById(postId).map {
+            it?.toDomain()
+        }
     }
 }

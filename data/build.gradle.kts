@@ -70,15 +70,3 @@ dependencies {
     implementation(project(":network"))
     implementation(project(":core"))
 }
-
-// Ensure domain and use-cases are compiled before KSP runs so Hilt can resolve types
-afterEvaluate {
-    tasks.named("kspDebugKotlin").configure {
-        dependsOn(project(":domain").tasks.named("compileKotlin"))
-        dependsOn(project(":use-cases").tasks.named("compileDebugKotlin"))
-    }
-    tasks.named("kspReleaseKotlin").configure {
-        dependsOn(project(":domain").tasks.named("compileKotlin"))
-        dependsOn(project(":use-cases").tasks.named("compileReleaseKotlin"))
-    }
-}

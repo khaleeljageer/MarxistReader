@@ -1,5 +1,8 @@
 package org.cpimtn.marxist.android.app
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -9,6 +12,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import org.cpimtn.marxist.android.feature.feeddetails.ArticleDetailRoute
 import org.cpimtn.marxist.android.feature.welcome.WelcomeScreen
 import org.cpimtn.marxist.navigation.MainScreen
 import org.cpimtn.marxist.navigation.Route
@@ -26,6 +30,8 @@ fun App(
     NavHost(
         navController = navController,
         startDestination = Route.Root.name,
+        enterTransition = { fadeIn(animationSpec = tween(300)) },
+        exitTransition = { fadeOut(animationSpec = tween(300)) },
     ) {
         composable(Route.Root.name) {
             val rootViewModel: RootViewModel = hiltViewModel()
@@ -55,8 +61,25 @@ fun App(
                 windowSizeClass = windowSizeClass,
                 darkTheme = darkTheme
             ) { appState, modifier ->
-                MainScreensNavHost(appState = appState, modifier = modifier)
+                MainScreensNavHost(
+                    appState = appState,
+                    modifier = modifier,
+                    goToArticleDetails = {
+                        navController.navigate(Route.ArticleDetail.createRoute(it)) {
+                            launchSingleTop = true
+                        }
+                    }
+                )
             }
+        }
+
+        composable(
+            route = Route.ArticleDetail.name,
+            arguments = Route.ArticleDetail.arguments,
+        ) {
+            ArticleDetailRoute(
+                onBackClick = { navController.popBackStack() },
+            )
         }
     }
 }

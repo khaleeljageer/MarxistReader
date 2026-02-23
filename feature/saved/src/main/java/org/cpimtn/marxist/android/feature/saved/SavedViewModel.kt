@@ -3,51 +3,44 @@ package org.cpimtn.marxist.android.feature.saved
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.cpimtn.marxist.android.domain.model.Post
-import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
+import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostsFlowUseCase
-import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class SavedViewModel @Inject constructor(
     getSavedPostsFlowUseCase: GetSavedPostsFlowUseCase,
-    getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
-    getTagsFlowUseCase: GetTagsFlowUseCase,
     private val unsavePostUseCase: UnsavePostUseCase,
 ) : ViewModel() {
+    private val _feedUiState = MutableStateFlow<SavedFeedUiState>(SavedFeedUiState.Loading)
+    val feedUiState: StateFlow<SavedFeedUiState> = _feedUiState.asStateFlow()
 
-    val savedPosts: StateFlow<List<Post>> =
-        getSavedPostsFlowUseCase()
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptyList()
-            )
-
-    val categoryNames: StateFlow<Map<Int, String>> =
-        getCategoriesFlowUseCase()
-            .map { list -> list.associate { it.id to it.name } }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptyMap()
-            )
-
-    val tagNames: StateFlow<Map<Int, String>> =
-        getTagsFlowUseCase()
-            .map { list -> list.associate { it.id to it.name } }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = emptyMap()
-            )
+    init {
+        viewModelScope.launch {
+            getSavedPostsFlowUseCase()
+                .map { feedItems ->
+                    when {
+                        feedItems.isEmpty() -> SavedFeedUiState.Empty
+                        else -> SavedFeedUiState.Success(feedItems)
+                    }
+                }
+                .catch { e ->
+                    _feedUiState.value = SavedFeedUiState.Error(e.message ?: "Unknown error")
+                }
+                .collect { newState ->
+                    if (_feedUiState.value !is SavedFeedUiState.Error) {
+                        _feedUiState.value = newState
+                    }
+                }
+        }
+    }
 
     fun unsave(postId: Int) {
         viewModelScope.launch {
@@ -55,3 +48,20 @@ class SavedViewModel @Inject constructor(
         }
     }
 }
+
+sealed interface SavedFeedUiState {
+    data object Loading : SavedFeedUiState
+    data class Success(val feedItems: List<FeedItem>) : SavedFeedUiState
+    data object Empty : SavedFeedUiState
+    data class Error(val message: String) : SavedFeedUiState
+}
+
+enum class StateKey { Loading, Content, Empty, Error }
+
+val SavedFeedUiState.stateKey: StateKey
+    get() = when (this) {
+        is SavedFeedUiState.Loading -> StateKey.Loading
+        is SavedFeedUiState.Success -> StateKey.Content
+        is SavedFeedUiState.Empty -> StateKey.Empty
+        is SavedFeedUiState.Error -> StateKey.Error
+    }

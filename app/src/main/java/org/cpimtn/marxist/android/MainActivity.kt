@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.cpimtn.marxist.android.app.App
 import org.cpimtn.marxist.android.app.AppViewModel
 import org.cpimtn.marxist.android.domain.model.Theme
-import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint

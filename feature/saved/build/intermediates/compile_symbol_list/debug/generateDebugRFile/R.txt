@@ -1,2 +1,0 @@
-int string saved_title 0x0
-int string saved_unsave_content_desc 0x0

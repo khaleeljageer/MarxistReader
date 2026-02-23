@@ -78,7 +78,7 @@ Keep `namespace` aligned with the package root for each module:
 ## Adding a new feature module
 
 1. Create `feature:<name>` with package `org.cpimtn.marxist.android.feature.<name>`.
-2. Add dependency on `:domain` and `:use-cases` (and optionally `:core`, `:ui-theme`). Do not add `:data` or `:network`.
+2. Add dependency on `:domain` and `:use-cases` (and optionally `:core`, `:ui:theme`). Do not add `:data` or `:network`.
 3. Register the feature in **app**: add a `composable(Screen.YourFeature.route) { YourFeatureScreen() }` (or new `Screen` + branch) in `MainScreensNavHost.kt`. The navigation module stays unchanged (Open/Closed).
 4. If using Hilt, ensure the app component includes the feature (e.g. by depending on the feature module).
 

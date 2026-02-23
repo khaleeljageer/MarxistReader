@@ -27,3 +27,6 @@ local.properties
 /feature/books/build
 /feature/welcome/build
 /feature/saved/build
+/feature/feeddetails/build
+/ui-common/build
+GEMINI.md

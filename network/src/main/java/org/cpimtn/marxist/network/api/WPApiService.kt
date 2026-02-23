@@ -10,7 +10,7 @@ import retrofit2.http.Query
 interface WPApiService {
     @GET(value = "posts")
     suspend fun getPosts(
-        @Query("_fields") fields: String = "id,date,slug,excerpt,title,tags,categories",
+        @Query("_fields") fields: String = "id,date,slug,excerpt,title,content,tags,categories",
         @Query("page") page: Int,
         @Query("per_page") perPage: Int
     ): Response<List<PostDTO>>

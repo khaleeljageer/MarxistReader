@@ -1,11 +1,15 @@
 package org.cpimtn.marxist.android.app
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import org.cpimtn.marxist.android.feature.books.BooksScreen
-import org.cpimtn.marxist.android.feature.feed.FeedScreen
+import org.cpimtn.marxist.android.feature.feed.FeedScreenRoute
 import org.cpimtn.marxist.android.feature.more.MoreScreen
 import org.cpimtn.marxist.android.feature.saved.SavedScreen
 import org.cpimtn.marxist.android.feature.settings.SettingsScreenRoute
@@ -19,15 +23,23 @@ import org.cpimtn.marxist.navigation.Screen
 fun MainScreensNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
+    goToArticleDetails: (postId: Int) -> Unit,
 ) {
     val navController = appState.navController
     NavHost(
         navController = navController,
         startDestination = Screen.Feed.route,
+        enterTransition = { fadeIn(animationSpec = tween(300)) },
+        exitTransition = { fadeOut(animationSpec = tween(300)) },
         modifier = modifier,
     ) {
         composable(route = Screen.Feed.route) {
-            FeedScreen(appState = appState)
+            FeedScreenRoute(
+                appState = appState,
+                onArticleClick = { postId ->
+                    goToArticleDetails(postId)
+                }
+            )
         }
         composable(route = Screen.Books.route) {
             BooksScreen()
@@ -36,7 +48,17 @@ fun MainScreensNavHost(
             MoreScreen()
         }
         composable(route = Screen.Saved.route) {
-            SavedScreen()
+            SavedScreen(
+                onArticleClick = goToArticleDetails,
+                onTakeMeClick = {
+                    navController.navigate(Screen.Feed.route) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
         composable(route = Screen.Settings.route) {
             SettingsScreenRoute()

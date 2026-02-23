@@ -30,7 +30,7 @@ hiltWorkCompiler = "1.3.0"
 datastore = "1.2.0"
 mockk = "1.14.9"
 coroutinesTest = "1.10.2"
-runtimeSaveable = "1.10.2"
+runtimeSaveable = "1.10.3"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

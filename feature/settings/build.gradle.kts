@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":ui-theme"))
+    implementation(project(":ui:theme"))
     implementation(project(":core"))
     implementation(project(":domain"))
     implementation(project(":use-cases"))

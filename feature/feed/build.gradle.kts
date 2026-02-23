@@ -44,7 +44,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":ui-theme"))
+    implementation(project(":ui:theme"))
+    implementation(project(":ui:common"))
     implementation(project(":core"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -65,6 +66,7 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":domain"))
     implementation(project(":use-cases"))
+    implementation(project(":feature:feeddetails"))
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
