@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.ui.theme
+package org.cpimtn.marxist.android.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -287,8 +287,8 @@ private val LightExtendedColors = MarxistExtendedColors(
     detailBody              = Warm40,
     detailDate              = Warm60,
 
-    shimmerBase             = Warm96,
-    shimmerHighlight        = Warm100,
+    shimmerBase             = Warm90,
+    shimmerHighlight        = Warm95,
 
     splashBackground        = Terra40,
     splashIcon              = Ochre80,

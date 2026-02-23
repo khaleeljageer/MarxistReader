@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.cpimtn.marxist.android.ui.common.StatusMessage
 import org.cpimtn.marxist.navigation.MainAppState
 
 @Composable
@@ -55,7 +56,7 @@ fun FeedScreenRoute(
                 }
 
                 StateKey.Empty -> {
-                    FeedStatusMessage(
+                    StatusMessage(
                         icon = Icons.Outlined.Inbox,
                         title = stringResource(R.string.feed_empty_message),
                         subtitle = stringResource(R.string.feed_empty_subtitle),
@@ -66,7 +67,7 @@ fun FeedScreenRoute(
 
                 StateKey.Error -> {
                     val message = (uiState as? FeedUiState.Error)?.message ?: ""
-                    FeedStatusMessage(
+                    StatusMessage(
                         icon = Icons.Outlined.CloudOff,
                         title = stringResource(R.string.feed_error_title),
                         subtitle = message,

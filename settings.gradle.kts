@@ -26,7 +26,8 @@ dependencyResolutionManagement {
 
 rootProject.name = "Marxist Reader"
 include(":app")
-include(":ui-theme")
+include(":ui:theme")
+include(":ui:common")
 include(":network")
 include(":navigation")
 include(":core")

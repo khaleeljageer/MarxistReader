@@ -49,8 +49,8 @@ import org.cpimtn.marxist.android.domain.model.AppLanguage
 import org.cpimtn.marxist.android.domain.model.FontSize
 import org.cpimtn.marxist.android.domain.model.Theme
 import org.cpimtn.marxist.core.clickableIf
-import org.cpimtn.marxist.ui.theme.MarxistExtendedColors
-import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
+import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 @Stable
 data class SettingsUiState(

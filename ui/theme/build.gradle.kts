@@ -3,12 +3,10 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hiltAndroid)
 }
 
 android {
-    namespace = "org.cpimtn.marxist.android.feature.feeddetails"
+    namespace = "org.cpimtn.marxist.android.ui.theme"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -44,26 +42,16 @@ android {
 }
 
 dependencies {
-    implementation(project(":ui:theme"))
-    implementation(project(":core"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.material3.window.size)
     implementation(libs.androidx.material3.icons.extended)
-
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.bundles.hilt.core)
-    ksp(libs.hilt.compiler)
-
-    implementation(project(":domain"))
-    implementation(project(":use-cases"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

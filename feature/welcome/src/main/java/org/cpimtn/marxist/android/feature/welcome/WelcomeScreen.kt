@@ -46,7 +46,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 private val FeatureCount = 3
 

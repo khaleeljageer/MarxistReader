@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 @Composable
 fun MainScreen(

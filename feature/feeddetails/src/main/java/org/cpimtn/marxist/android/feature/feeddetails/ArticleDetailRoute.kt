@@ -20,8 +20,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.cpimtn.marxist.ui.theme.MarxistExtendedColors
-import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
+import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

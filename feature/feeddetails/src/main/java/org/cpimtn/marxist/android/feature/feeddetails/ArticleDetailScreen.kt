@@ -56,7 +56,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.core.text.HtmlCompat
 import org.cpimtn.marxist.android.domain.model.FeedItem
-import org.cpimtn.marxist.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 @Composable
 fun ArticleDetailTopBarActions(

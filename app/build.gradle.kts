@@ -73,7 +73,7 @@ dependencies {
     implementation(libs.androidx.work.runtime.ktx)
     ksp(libs.hilt.compiler)
 
-    implementation(project(":ui-theme"))
+    implementation(project(":ui:theme"))
     implementation(project(":domain"))
     implementation(project(":use-cases"))
     implementation(project(":navigation"))

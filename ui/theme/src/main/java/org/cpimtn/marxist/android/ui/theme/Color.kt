@@ -1,4 +1,4 @@
-package org.cpimtn.marxist.ui.theme
+package org.cpimtn.marxist.android.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
