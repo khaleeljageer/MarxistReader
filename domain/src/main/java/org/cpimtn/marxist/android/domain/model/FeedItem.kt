@@ -12,5 +12,5 @@ data class FeedItem(
     val categoryLabel: String,
     /** Resolved names for up to the first two tags. */
     val tagLabels: List<String>,
-    val readTime: String = ReadTimeEstimator.formatTamil(post.excerpt)
+    val readTime: String = ReadTimeEstimator.formatTamil(post.content)
 )
