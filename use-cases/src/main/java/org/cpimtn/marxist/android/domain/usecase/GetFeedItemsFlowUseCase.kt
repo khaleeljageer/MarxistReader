@@ -8,7 +8,7 @@ import org.cpimtn.marxist.android.domain.model.Post
 
 /**
  * Use case: observe feed items (posts with resolved category and tag labels for display).
- * Resolves at most one category and up to two tags per post; logic lives here instead of UI.
+ * Resolves at most one category and up to three tags per post; logic lives here instead of UI.
  */
 class GetFeedItemsFlowUseCase(
     private val getPostsFlowUseCase: GetPostsFlowUseCase,

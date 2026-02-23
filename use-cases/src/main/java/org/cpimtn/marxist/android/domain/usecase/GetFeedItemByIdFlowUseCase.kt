@@ -6,6 +6,9 @@ import kotlinx.coroutines.flow.map
 import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.android.domain.model.Post
 
+/**
+ * Single feed item by ID (e.g. article detail). Resolves at most one category and all tags (no limit).
+ */
 class GetFeedItemByIdFlowUseCase(
     private val getPostByIdFlowUseCase: GetPostByIdFlowUseCase,
     private val getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
