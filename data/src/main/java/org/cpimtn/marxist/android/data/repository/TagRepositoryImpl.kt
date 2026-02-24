@@ -2,10 +2,10 @@ package org.cpimtn.marxist.android.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import org.cpimtn.marxist.android.data.database.dao.TagDao
-import org.cpimtn.marxist.android.data.database.entity.TagEntity
-import org.cpimtn.marxist.android.data.database.mapper.toDomain
-import org.cpimtn.marxist.android.data.database.mapper.toEntity
+import org.cpimtn.marxist.android.data.source.local.database.dao.TagDao
+import org.cpimtn.marxist.android.data.source.local.database.entity.TagEntity
+import org.cpimtn.marxist.android.data.source.local.database.mapper.toDomain
+import org.cpimtn.marxist.android.data.source.local.database.mapper.toEntity
 import org.cpimtn.marxist.android.data.source.remote.TagRemoteDataSource
 import org.cpimtn.marxist.android.domain.model.Tag
 import org.cpimtn.marxist.android.domain.repository.TagRepository

@@ -1,7 +1,7 @@
 package org.cpimtn.marxist.android.data.repository
 
 import kotlinx.coroutines.test.runTest
-import org.cpimtn.marxist.android.data.database.dao.PostDao
+import org.cpimtn.marxist.android.data.source.local.database.dao.PostDao
 import org.cpimtn.marxist.android.data.source.remote.PostRemoteDataSource
 import org.cpimtn.marxist.android.domain.model.SyncResult
 import org.cpimtn.marxist.network.model.PostDTO

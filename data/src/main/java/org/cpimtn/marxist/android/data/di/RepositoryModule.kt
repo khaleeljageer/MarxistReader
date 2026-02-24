@@ -4,13 +4,15 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.cpimtn.marxist.android.data.source.local.datastore.RecentSearchRepositoryImpl
+import org.cpimtn.marxist.android.data.source.local.datastore.UserSettingsRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.CategoryRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.PostRepositoryImpl
-import org.cpimtn.marxist.android.data.datastore.UserSettingsRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.SavedPostRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.TagRepositoryImpl
 import org.cpimtn.marxist.android.domain.repository.CategoryRepository
 import org.cpimtn.marxist.android.domain.repository.PostRepository
+import org.cpimtn.marxist.android.domain.repository.RecentSearchRepository
 import org.cpimtn.marxist.android.domain.repository.SavedPostRepository
 import org.cpimtn.marxist.android.domain.repository.SettingsRepository
 import org.cpimtn.marxist.android.domain.repository.TagRepository
@@ -39,4 +41,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindSettingsRepository(impl: UserSettingsRepositoryImpl): SettingsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindRecentSearchRepository(impl: RecentSearchRepositoryImpl): RecentSearchRepository
 }

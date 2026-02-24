@@ -100,15 +100,15 @@ fun MainScreen(
     ) {
         Scaffold(
             topBar = {
-                MarxistTopAppBar(
-                    showSearchIcon = !currentDestination.isTopLevelDestinationInHierarchy(
-                        TopLevelDestination.SEARCH
-                    ),
-                    showRefreshIcon = currentDestination?.route == Screen.Feed.route,
-                    onRefreshClick = { appState.feedRefreshCallback?.invoke() },
-                    onSearchClick = { appState.navigateToTopLevelDestination(TopLevelDestination.SEARCH) },
-                    darkTheme = darkTheme
-                )
+                if (!currentDestination.isTopLevelDestinationInHierarchy(TopLevelDestination.SEARCH)) {
+                    MarxistTopAppBar(
+                        showSearchIcon = true,
+                        showRefreshIcon = currentDestination?.route == Screen.Feed.route,
+                        onRefreshClick = { appState.feedRefreshCallback?.invoke() },
+                        onSearchClick = { appState.navigateToTopLevelDestination(TopLevelDestination.SEARCH) },
+                        darkTheme = darkTheme
+                    )
+                }
             },
         ) { innerPadding ->
             content(appState, Modifier.padding(innerPadding))

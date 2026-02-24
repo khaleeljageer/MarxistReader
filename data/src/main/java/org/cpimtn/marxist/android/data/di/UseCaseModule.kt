@@ -6,20 +6,26 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.cpimtn.marxist.android.domain.repository.CategoryRepository
 import org.cpimtn.marxist.android.domain.repository.PostRepository
+import org.cpimtn.marxist.android.domain.repository.RecentSearchRepository
 import org.cpimtn.marxist.android.domain.repository.SavedPostRepository
 import org.cpimtn.marxist.android.domain.repository.SettingsRepository
 import org.cpimtn.marxist.android.domain.repository.SyncStatusRepository
 import org.cpimtn.marxist.android.domain.repository.TagRepository
+import org.cpimtn.marxist.android.domain.usecase.AddRecentSearchUseCase
+import org.cpimtn.marxist.android.domain.usecase.ClearRecentSearchesUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetCategoriesWithCountFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemByIdFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostByIdFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetRecentSearchesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetTimelineMonthsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetWelcomeCompletedUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
@@ -164,4 +170,32 @@ object UseCaseModule {
             getCategoriesFlowUseCase,
             getTagsFlowUseCase
         )
+
+    @Provides
+    @Singleton
+    fun provideGetCategoriesWithCountFlowUseCase(
+        getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
+        getPostsFlowUseCase: GetPostsFlowUseCase,
+    ): GetCategoriesWithCountFlowUseCase =
+        GetCategoriesWithCountFlowUseCase(getCategoriesFlowUseCase, getPostsFlowUseCase)
+
+    @Provides
+    @Singleton
+    fun provideGetTimelineMonthsFlowUseCase(getPostsFlowUseCase: GetPostsFlowUseCase): GetTimelineMonthsFlowUseCase =
+        GetTimelineMonthsFlowUseCase(getPostsFlowUseCase)
+
+    @Provides
+    @Singleton
+    fun provideGetRecentSearchesFlowUseCase(recentSearchRepository: RecentSearchRepository): GetRecentSearchesFlowUseCase =
+        GetRecentSearchesFlowUseCase(recentSearchRepository)
+
+    @Provides
+    @Singleton
+    fun provideAddRecentSearchUseCase(recentSearchRepository: RecentSearchRepository): AddRecentSearchUseCase =
+        AddRecentSearchUseCase(recentSearchRepository)
+
+    @Provides
+    @Singleton
+    fun provideClearRecentSearchesUseCase(recentSearchRepository: RecentSearchRepository): ClearRecentSearchesUseCase =
+        ClearRecentSearchesUseCase(recentSearchRepository)
 }

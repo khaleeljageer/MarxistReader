@@ -9,11 +9,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.cpimtn.marxist.android.data.database.AppDatabase
-import org.cpimtn.marxist.android.data.database.dao.CategoryDao
-import org.cpimtn.marxist.android.data.database.dao.PostDao
-import org.cpimtn.marxist.android.data.database.dao.SavedPostDao
-import org.cpimtn.marxist.android.data.database.dao.TagDao
+import org.cpimtn.marxist.android.data.source.local.database.AppDatabase
+import org.cpimtn.marxist.android.data.source.local.database.dao.CategoryDao
+import org.cpimtn.marxist.android.data.source.local.database.dao.PostDao
+import org.cpimtn.marxist.android.data.source.local.database.dao.SavedPostDao
+import org.cpimtn.marxist.android.data.source.local.database.dao.TagDao
 import javax.inject.Singleton
 
 private val MIGRATION_1_2 = object : Migration(1, 2) {

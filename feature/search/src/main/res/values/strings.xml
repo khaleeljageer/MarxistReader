@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search_placeholder">கட்டுரைகளைத் தேடுங்கள்…</string>
+    <string name="search_hint">Search results will appear here.</string>
+    <string name="search_recent_title">சமீபத்திய தேடல்கள்</string>
+    <string name="search_recent_clear">அழி</string>
+    <string name="search_categories_title">வகைகள் வாரியாக உலாவுக</string>
+    <string name="search_articles_count">%d கட்டுரைகள்</string>
+    <string name="search_timeline_title">காலவரிசை</string>
+    <string name="search_recent_content_desc">Recent search</string>
+    <string name="search_clear_content_desc">Clear recent searches</string>
+</resources>
