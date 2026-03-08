@@ -13,11 +13,13 @@ class GetTimelineMonthsFlowUseCase(
     operator fun invoke(maxEntries: Int = 12): Flow<List<TimelineMonth>> =
         getPostsFlowUseCase().map { posts ->
             posts
+                .asSequence()
                 .mapNotNull { post -> parseYearMonth(post.date) }
                 .distinct()
                 .sortedWith(compareByDescending<Pair<Int, Int>> { it.first }.thenByDescending { it.second })
                 .take(maxEntries)
                 .map { (year, month) -> TimelineMonth(label = formatTamilMonthYear(month, year), key = "$year-${month.toString().padStart(2, '0')}") }
+                .toList()
         }
 
     private fun parseYearMonth(dateStr: String): Pair<Int, Int>? {
@@ -41,18 +43,18 @@ class GetTimelineMonthsFlowUseCase(
 
     companion object {
         private val TAMIL_MONTH_ABBREV = mapOf(
-            1 to "ஜன",
-            2 to "பிப்",
-            3 to "மார்",
-            4 to "ஏப்",
+            1 to "ஜனவரி",
+            2 to "பிப்ரவரி",
+            3 to "மார்ச்",
+            4 to "ஏப்ரல்",
             5 to "மே",
             6 to "ஜூன்",
             7 to "ஜூலை",
-            8 to "ஆக",
-            9 to "செப்",
-            10 to "அக்",
-            11 to "நவ",
-            12 to "டிச",
+            8 to "ஆகஸ்ட்",
+            9 to "செப்டம்பர்",
+            10 to "அக்டோபர்",
+            11 to "நவம்பர்",
+            12 to "டிசம்பர்",
         )
     }
 }

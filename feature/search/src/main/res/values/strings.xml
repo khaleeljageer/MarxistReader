@@ -9,4 +9,9 @@
     <string name="search_timeline_title">காலவரிசை</string>
     <string name="search_recent_content_desc">Recent search</string>
     <string name="search_clear_content_desc">Clear recent searches</string>
+    <string name="search_no_results">முடிவுகள் இல்லை</string>
+    <string name="search_no_results_for">"%s" க்கான முடிவுகள் கிடைக்கவில்லை</string>
+    <string name="search_no_results_hint">வேறு சொற்களில் தேடவும்</string>
+    <string name="search_error_title">தேடலில் பிழை</string>
+    <string name="search_retry">மீண்டும் முயற்சி</string>
 </resources>

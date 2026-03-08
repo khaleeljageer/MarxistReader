@@ -13,6 +13,7 @@ import org.cpimtn.marxist.android.data.source.local.database.AppDatabase
 import org.cpimtn.marxist.android.data.source.local.database.dao.CategoryDao
 import org.cpimtn.marxist.android.data.source.local.database.dao.PostDao
 import org.cpimtn.marxist.android.data.source.local.database.dao.SavedPostDao
+import org.cpimtn.marxist.android.data.source.local.database.dao.SearchDao
 import org.cpimtn.marxist.android.data.source.local.database.dao.TagDao
 import javax.inject.Singleton
 
@@ -60,4 +61,7 @@ object DatabaseModule {
 
     @Provides
     fun provideSavedPostDao(appDatabase: AppDatabase): SavedPostDao = appDatabase.savedPostDao()
+
+    @Provides
+    fun provideSearchDao(appDatabase: AppDatabase): SearchDao = appDatabase.searchDao()
 }
