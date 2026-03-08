@@ -39,7 +39,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,6 +59,10 @@ import org.cpimtn.marxist.android.domain.model.CategoryWithCount
 import org.cpimtn.marxist.android.domain.model.TimelineMonth
 import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 
 
 //@Composable
@@ -194,8 +201,119 @@ import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 
 @Composable
-fun SearchDiscovery() {
+fun SearchDiscovery(
+    state: SearchUiState.Discovery,
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSubmit: () -> Unit,
+    onClearSearch: () -> Unit,
+    onRecentSearchClick: (String) -> Unit,
+    onClearRecentSearches: () -> Unit,
+    onTimelineMonthClick: (String) -> Unit,
+    onCategoryClick: (Int) -> Unit,
+    onArticleClick: (postId: Int) -> Unit,
+) {
+    var isFocused by androidx.compose.runtime.mutableStateOf(false)
+    val ext = MarxistReaderTheme.colors
 
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+    ) {
+        item(key = "search_bar") {
+            Spacer(modifier = Modifier.height(12.dp))
+            SearchBar(
+                query = query,
+                onQueryChange = onQueryChange,
+                isFocused = isFocused,
+                onFocusChange = { isFocused = it },
+                onSubmit = onSubmit,
+                onClear = { onQueryChange("") },
+                onBack = onClearSearch,
+                colors = ext,
+            )
+        }
+
+        if (state.recentSearches.isNotEmpty() && query.isBlank()) {
+            item(key = "recent_header") {
+                Spacer(modifier = Modifier.height(24.dp))
+                SectionHeader(
+                    title = stringResource(R.string.search_recent_title),
+                    action = stringResource(R.string.search_recent_clear),
+                    onActionClick = onClearRecentSearches,
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+            }
+            items(
+                items = state.recentSearches,
+                key = { "recent_$it" },
+            ) { term ->
+                RecentSearchItem(
+                    term = term,
+                    onClick = { onRecentSearchClick(term) },
+                    onFillClick = { onQueryChange(term) },
+                    colors = ext,
+                )
+            }
+        }
+
+        if (state.categories.isNotEmpty() && query.isBlank()) {
+            item(key = "cat_header") {
+                Spacer(modifier = Modifier.height(24.dp))
+                SectionHeader(
+                    title = stringResource(R.string.search_categories_title),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+            item(key = "cat_grid") {
+                CategoryGridUi(
+                    categories = state.categories,
+                    onCategoryClick = onCategoryClick,
+                    colors = ext,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+        }
+
+        if (state.timelineMonths.isNotEmpty() && query.isBlank()) {
+            item(key = "timeline_header") {
+                Spacer(modifier = Modifier.height(24.dp))
+                SectionHeader(
+                    title = stringResource(R.string.search_timeline_title),
+                )
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+            item(key = "timeline_chips") {
+                TimelineRowUi(
+                    months = state.timelineMonths,
+                    selectedMonth = state.selectedMonth,
+                    onMonthClick = onTimelineMonthClick,
+                    colors = ext,
+                )
+                Spacer(modifier = Modifier.height(32.dp))
+            }
+        }
+
+        if (state.suggestions.isNotEmpty()) {
+            item(key = "suggestions_header") {
+                Spacer(modifier = Modifier.height(16.dp))
+                SectionHeader(title = stringResource(R.string.search_hint))
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+            items(
+                items = state.suggestions,
+                key = { "sug_${it.postId}" },
+            ) { item ->
+                SearchResultRow(
+                    item = item,
+                    isSaved = false,
+                    onArticleClick = { onArticleClick(item.postId) },
+                    modifier = Modifier.padding(vertical = 6.dp),
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -305,6 +423,297 @@ private fun SearchBar(
                         contentDescription = stringResource(R.string.search_clear_content_desc),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(18.dp),
+                    )
+                }
+            }
+        }
+    }
+}
+
+/** Search bar with back button always visible (e.g. on results screen). */
+@Composable
+fun SearchBarWithBack(
+    query: String,
+    onBack: () -> Unit,
+    onQueryChange: (String) -> Unit,
+    onSubmit: () -> Unit,
+    onClear: () -> Unit,
+    colors: MarxistExtendedColors,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        IconButton(onClick = onBack, modifier = Modifier.size(40.dp)) {
+            Icon(
+                imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Row(
+            modifier = Modifier
+                .weight(1f)
+                .background(
+                    color = colors.searchFieldBg,
+                    shape = RoundedCornerShape(12.dp),
+                )
+                .border(
+                    width = 1.dp,
+                    color = colors.searchFieldBorder,
+                    shape = RoundedCornerShape(12.dp),
+                )
+                .padding(start = 14.dp, end = 6.dp, top = 4.dp, bottom = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Rounded.Search,
+                contentDescription = null,
+                tint = colors.searchPlaceholder,
+                modifier = Modifier.size(22.dp),
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            BasicTextField(
+                value = query,
+                onValueChange = onQueryChange,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
+                cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = { onSubmit() }),
+                modifier = Modifier.weight(1f),
+                decorationBox = { innerTextField ->
+                    Box(modifier = Modifier.padding(vertical = 10.dp)) {
+                        if (query.isEmpty()) {
+                            Text(
+                                text = stringResource(R.string.search_placeholder),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = colors.searchPlaceholder,
+                            )
+                        }
+                        innerTextField()
+                    }
+                },
+            )
+            AnimatedVisibility(
+                visible = query.isNotEmpty(),
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                IconButton(onClick = onClear, modifier = Modifier.size(36.dp)) {
+                    Icon(
+                        imageVector = Icons.Rounded.Close,
+                        contentDescription = stringResource(R.string.search_clear_content_desc),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.size(18.dp),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SearchResultRow(
+    item: SearchItemUi,
+    isSaved: Boolean,
+    onArticleClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val ext = MarxistReaderTheme.colors
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable(onClick = onArticleClick)
+            .padding(horizontal = 0.dp, vertical = 12.dp),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (item.categoryLabel.isNotEmpty()) {
+                Surface(
+                    shape = RoundedCornerShape(6.dp),
+                    color = ext.categoryBadgeBg,
+                ) {
+                    Text(
+                        text = item.categoryLabel,
+                        style = MaterialTheme.typography.labelMedium,
+                        color = ext.categoryBadgeText,
+                        modifier = Modifier.padding(horizontal = 6.dp, vertical = 4.dp),
+                    )
+                }
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(
+                    imageVector = Icons.Outlined.Schedule,
+                    contentDescription = null,
+                    modifier = Modifier.size(13.dp),
+                    tint = ext.articleTimestamp,
+                )
+                Spacer(modifier = Modifier.width(3.dp))
+                Text(
+                    text = item.formattedDate,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = ext.articleTimestamp,
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = item.title,
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+        )
+        if (item.excerpt.isNotBlank()) {
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = item.excerpt,
+                style = MaterialTheme.typography.bodySmall,
+                color = ext.articleExcerpt,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+        Spacer(modifier = Modifier.height(4.dp))
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            if (item.tagLabels.isNotEmpty()) {
+                LazyRow(
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.weight(1f, fill = false),
+                ) {
+                    items(items = item.tagLabels.take(3), key = { it }) { tagName ->
+                        Surface(
+                            shape = RoundedCornerShape(6.dp),
+                            color = ext.tagChipBg,
+                            border = BorderStroke(1.dp, ext.tagChipBorder),
+                        ) {
+                            Text(
+                                text = tagName,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = ext.tagChipText,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                            )
+                        }
+                    }
+                }
+            } else {
+                Spacer(modifier = Modifier.weight(1f))
+            }
+            Text(
+                text = item.readTime,
+                style = MaterialTheme.typography.labelSmall,
+                color = ext.articleTimestamp,
+            )
+        }
+    }
+}
+
+@Composable
+private fun CategoryGridUi(
+    categories: List<CategoryUi>,
+    onCategoryClick: (Int) -> Unit,
+    colors: MarxistExtendedColors,
+) {
+    val columns = remember(categories) { categories.chunked(3) }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        for (columnItems in columns) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(10.dp),
+                modifier = Modifier.width(152.dp),
+            ) {
+                for (cat in columnItems) {
+                    CategoryUiCard(
+                        category = cat,
+                        onClick = { onCategoryClick(cat.id) },
+                        colors = colors,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CategoryUiCard(
+    category: CategoryUi,
+    onClick: () -> Unit,
+    colors: MarxistExtendedColors,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                color = colors.searchFieldBg,
+                shape = RoundedCornerShape(12.dp),
+            )
+            .border(
+                width = 1.dp,
+                color = colors.searchFieldBorder,
+                shape = RoundedCornerShape(12.dp),
+            )
+            .clip(shape = RoundedCornerShape(12.dp))
+            .clickable(onClick = onClick)
+            .padding(12.dp),
+    ) {
+        Text(
+            modifier = Modifier.basicMarquee(),
+            text = category.name,
+            style = MaterialTheme.typography.titleSmall,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = stringResource(R.string.search_articles_count, category.articleCount),
+            style = MaterialTheme.typography.bodySmall,
+            color = colors.searchSuggestionText,
+        )
+    }
+}
+
+@Composable
+private fun TimelineRowUi(
+    months: List<TimelineMonthUi>,
+    selectedMonth: String?,
+    onMonthClick: (String) -> Unit,
+    colors: MarxistExtendedColors,
+) {
+    val columns = remember(months) { months.chunked(3) }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .horizontalScroll(rememberScrollState()),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        for (columnItems in columns) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                for (month in columnItems) {
+                    TimelineChip(
+                        label = month.label,
+                        selected = month.label == selectedMonth,
+                        onClick = { onMonthClick(month.label) },
+                        colors = colors,
                     )
                 }
             }

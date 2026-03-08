@@ -8,6 +8,7 @@ import org.cpimtn.marxist.android.domain.repository.CategoryRepository
 import org.cpimtn.marxist.android.domain.repository.PostRepository
 import org.cpimtn.marxist.android.domain.repository.RecentSearchRepository
 import org.cpimtn.marxist.android.domain.repository.SavedPostRepository
+import org.cpimtn.marxist.android.domain.repository.SearchRepository
 import org.cpimtn.marxist.android.domain.repository.SettingsRepository
 import org.cpimtn.marxist.android.domain.repository.SyncStatusRepository
 import org.cpimtn.marxist.android.domain.repository.TagRepository
@@ -22,6 +23,8 @@ import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetRecentSearchesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSearchResultsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSearchSuggestionsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
@@ -198,4 +201,22 @@ object UseCaseModule {
     @Singleton
     fun provideClearRecentSearchesUseCase(recentSearchRepository: RecentSearchRepository): ClearRecentSearchesUseCase =
         ClearRecentSearchesUseCase(recentSearchRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSearchResultsFlowUseCase(
+        searchRepository: SearchRepository,
+        categoryRepository: CategoryRepository,
+        tagRepository: TagRepository,
+    ): GetSearchResultsFlowUseCase =
+        GetSearchResultsFlowUseCase(searchRepository, categoryRepository, tagRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSearchSuggestionsFlowUseCase(
+        searchRepository: SearchRepository,
+        categoryRepository: CategoryRepository,
+        tagRepository: TagRepository,
+    ): GetSearchSuggestionsFlowUseCase =
+        GetSearchSuggestionsFlowUseCase(searchRepository, categoryRepository, tagRepository)
 }

@@ -45,7 +45,7 @@ fun MainScreensNavHost(
             BooksScreen()
         }
         composable(route = Screen.Search.route) {
-            SearchScreenRoute()
+            SearchScreenRoute(onArticleClick = goToArticleDetails)
         }
         composable(route = Screen.Saved.route) {
             SavedScreen(

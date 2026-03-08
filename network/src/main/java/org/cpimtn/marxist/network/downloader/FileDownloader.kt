@@ -56,7 +56,7 @@ class FileDownloaderImpl @Inject constructor(
                 return@flow
             }
 
-            val body = response.body ?: throw IOException("Response body is null")
+            val body = response.body
 
             val input = body.byteStream()
             val output = destinationFile.outputStream()

@@ -14,17 +14,15 @@ interface SearchDao {
      * MATCH query uses prefix matching (query*) so "முதலா" matches
      * "முதலாளித்துவம்", "முதலாளி", etc.
      *
-     * Results ordered by FTS rank (relevance).
-     * rank = bm25(posts_fts) — built-in FTS4 ranking function.
-     *
      * JOIN on rowid is how Room connects FTS to content table.
+     * Results ordered by post id (FTS4 does not expose a built-in rank column).
      */
     @Query(
         """
         SELECT p.* FROM posts p
         INNER JOIN posts_fts f ON p.rowid = f.rowid
         WHERE posts_fts MATCH :query
-        ORDER BY rank
+        ORDER BY p.id
         LIMIT :limit
         """
     )
@@ -39,7 +37,7 @@ interface SearchDao {
         SELECT p.* FROM posts p
         INNER JOIN posts_fts f ON p.rowid = f.rowid
         WHERE posts_fts MATCH 'title:' || :query
-        ORDER BY rank
+        ORDER BY p.id
         LIMIT :limit
         """
     )
