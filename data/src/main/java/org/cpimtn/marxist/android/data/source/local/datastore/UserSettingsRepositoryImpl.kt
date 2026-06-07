@@ -29,7 +29,7 @@ private val KEY_WELCOME_COMPLETED = booleanPreferencesKey("welcome_completed")
 
 @Singleton
 class UserSettingsRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val appVersionProvider: AppVersionProvider,
 ) : SettingsRepository {
 

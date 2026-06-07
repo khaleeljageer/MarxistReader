@@ -24,7 +24,7 @@ private val KEY_LAST_ERROR = stringPreferencesKey("last_error")
 
 @Singleton
 class SyncStatusRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ) : SyncStatusRepository {
 
     private val _isSyncing = MutableStateFlow(false)

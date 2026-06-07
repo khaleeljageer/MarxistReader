@@ -20,7 +20,7 @@ private const val DELIMITER = "|"
 
 @Singleton
 class RecentSearchRepositoryImpl @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ) : RecentSearchRepository {
 
     override fun getRecentSearches(maxSize: Int): Flow<List<String>> =
