@@ -1,0 +1,19 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="ReaderTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">#FFDBC3</item>
+        <item name="android:colorPrimary">#FFDBC3</item>
+        <item name="colorPrimaryDark">#FFDBC3</item>
+        <item name="android:colorPrimaryDark">#FFDBC3</item>
+        <item name="android:navigationBarColor">#FFDBC3</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
+        <item name="colorPrimarySurface">#FFF5E0</item>
+        <item name="colorOnPrimarySurface">#190933</item>
+
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat</item>
+        <item name="android:buttonStyle">@style/Widget.AppCompat.Button</item>
+        <item name="android:editTextStyle">@style/Widget.AppCompat.EditText</item>
+    </style>
+
+</resources>
