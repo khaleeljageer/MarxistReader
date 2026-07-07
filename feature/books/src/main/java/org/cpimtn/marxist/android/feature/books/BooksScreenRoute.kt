@@ -19,7 +19,7 @@ import org.cpimtn.marxist.android.ui.common.StatusMessage
 
 @Composable
 fun BooksScreenRoute(
-    onBookClick: (postId: Int) -> Unit,
+    onBookClick: (bookId: Int) -> Unit,
     viewModel: BooksViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.booksUiState.collectAsStateWithLifecycle()

@@ -41,8 +41,10 @@ readium = "3.1.2"
 androidx-media3 = "1.8.0"
 joda-time = "2.14.0"
 timber = "5.0.1"
+desugar_jdk_libs = "2.1.5"
 
 [libraries]
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
@@ -133,6 +135,7 @@ readium-core = [
     "readium-streamer",
     "readium-navigator",
     "readium-navigator-media-tts",
-    "readium-lcp"
+    "readium-lcp",
+    "androidx-media3-session",
+    "androidx-media3-common"
 ]
-media3 = ["androidx-media3-session", "androidx-media3-common"]

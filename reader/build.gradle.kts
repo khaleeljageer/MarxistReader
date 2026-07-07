@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.marxist.reader"
+    namespace = "com.jskaleel.epub"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
@@ -86,7 +86,6 @@ dependencies {
 
     implementation(libs.joda.time)
     implementation(libs.timber)
-    implementation(libs.bundles.media3)
     implementation(libs.androidx.browser)
 
     testImplementation(libs.junit)

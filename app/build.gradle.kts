@@ -35,6 +35,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlin {
@@ -53,6 +54,7 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -86,6 +88,7 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":feature:welcome"))
     implementation(project(":feature:feeddetails"))
+    implementation(project(":reader"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

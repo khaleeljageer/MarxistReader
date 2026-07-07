@@ -24,6 +24,7 @@ fun MainScreensNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
     goToArticleDetails: (postId: Int) -> Unit,
+    openBook:(bookId: Int) -> Unit,
 ) {
     val navController = appState.navController
     NavHost(
@@ -43,7 +44,9 @@ fun MainScreensNavHost(
         }
         composable(route = Screen.Books.route) {
             BooksScreenRoute(
-                onBookClick = {},
+                onBookClick = {
+                    openBook(it)
+                },
             )
         }
         composable(route = Screen.Search.route) {
