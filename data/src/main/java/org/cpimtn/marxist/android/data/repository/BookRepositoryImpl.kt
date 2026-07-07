@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.cpimtn.marxist.android.data.source.local.database.dao.BookDao
+import org.cpimtn.marxist.android.data.source.local.database.dao.BookReaderLinkDao
 import org.cpimtn.marxist.android.data.source.local.database.entity.BookEntity
+import org.cpimtn.marxist.android.data.source.local.database.entity.BookReaderLinkEntity
 import org.cpimtn.marxist.android.data.source.local.database.mapper.toDomain
 import org.cpimtn.marxist.android.data.source.local.database.mapper.toEntity
 import org.cpimtn.marxist.android.data.source.remote.BookRemoteDataSource
@@ -32,6 +34,7 @@ import javax.inject.Inject
  */
 class BookRepositoryImpl @Inject constructor(
     private val bookDao: BookDao,
+    private val bookReaderLinkDao: BookReaderLinkDao,
     private val remoteDataSource: BookRemoteDataSource,
     private val fileDownloader: FileDownloader,
     @ApplicationContext private val context: Context,
@@ -90,6 +93,16 @@ class BookRepositoryImpl @Inject constructor(
             ?.map { it.nameWithoutExtension }
             ?.toSet()
             ?: emptySet()
+    }
+
+    override suspend fun getDownloadedFilePath(bookId: String): String? = withContext(Dispatchers.IO) {
+        File(context.getDownloadDir(), fileNameFor(bookId)).takeIf { it.exists() }?.absolutePath
+    }
+
+    override suspend fun getReaderId(bookId: String): Long? = bookReaderLinkDao.getReaderId(bookId)
+
+    override suspend fun saveReaderId(bookId: String, readerId: Long) {
+        bookReaderLinkDao.upsert(BookReaderLinkEntity(bookId, readerId))
     }
 
     companion object {

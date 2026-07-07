@@ -23,4 +23,13 @@ interface BookRepository {
 
     /** IDs of books whose epub file already exists in local storage. */
     suspend fun getDownloadedBookIds(): Set<String>
+
+    /** Absolute path of [bookId]'s downloaded epub file, or null if it hasn't been downloaded. */
+    suspend fun getDownloadedFilePath(bookId: String): String?
+
+    /** Reader-assigned id for [bookId], cached from a previous import into the reader, or null. */
+    suspend fun getReaderId(bookId: String): Long?
+
+    /** Caches the reader-assigned id for [bookId] after it has been imported into the reader. */
+    suspend fun saveReaderId(bookId: String, readerId: Long)
 }

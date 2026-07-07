@@ -16,6 +16,8 @@ import org.cpimtn.marxist.android.domain.repository.TagRepository
 import org.cpimtn.marxist.android.domain.usecase.AddRecentSearchUseCase
 import org.cpimtn.marxist.android.domain.usecase.ClearRecentSearchesUseCase
 import org.cpimtn.marxist.android.domain.usecase.DownloadBookUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetBookFilePathUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetBookReaderIdUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetBooksFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesWithCountFlowUseCase
@@ -34,6 +36,7 @@ import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTimelineMonthsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetWelcomeCompletedUseCase
+import org.cpimtn.marxist.android.domain.usecase.SaveBookReaderIdUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetLanguageUseCase
@@ -244,4 +247,19 @@ object UseCaseModule {
     @Singleton
     fun provideGetDownloadedBookIdsUseCase(bookRepository: BookRepository): GetDownloadedBookIdsUseCase =
         GetDownloadedBookIdsUseCase(bookRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetBookFilePathUseCase(bookRepository: BookRepository): GetBookFilePathUseCase =
+        GetBookFilePathUseCase(bookRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetBookReaderIdUseCase(bookRepository: BookRepository): GetBookReaderIdUseCase =
+        GetBookReaderIdUseCase(bookRepository)
+
+    @Provides
+    @Singleton
+    fun provideSaveBookReaderIdUseCase(bookRepository: BookRepository): SaveBookReaderIdUseCase =
+        SaveBookReaderIdUseCase(bookRepository)
 }

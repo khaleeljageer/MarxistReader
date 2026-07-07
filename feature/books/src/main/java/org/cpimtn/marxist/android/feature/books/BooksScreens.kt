@@ -1,6 +1,7 @@
 package org.cpimtn.marxist.android.feature.books
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -49,6 +50,7 @@ fun BooksContent(
     books: List<Book>,
     downloadStates: Map<String, BookDownloadUiState>,
     onDownloadClick: (Book) -> Unit,
+    onOpenClick: (Book) -> Unit,
 ) {
     val bottomPadding = WindowInsets.navigationBars.asPaddingValues()
 
@@ -69,6 +71,7 @@ fun BooksContent(
                 book = book,
                 downloadState = downloadStates[book.id] ?: BookDownloadUiState.NotDownloaded,
                 onDownloadClick = { onDownloadClick(book) },
+                onOpenClick = { onOpenClick(book) },
             )
         }
     }
@@ -79,6 +82,7 @@ fun BookCard(
     book: Book,
     downloadState: BookDownloadUiState,
     onDownloadClick: () -> Unit,
+    onOpenClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val ext = MarxistReaderTheme.colors
@@ -87,7 +91,11 @@ fun BookCard(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(16.dp))
-            .background(MaterialTheme.colorScheme.surfaceContainerLow),
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
+            .clickable(
+                enabled = downloadState == BookDownloadUiState.Downloaded,
+                onClick = onOpenClick,
+            ),
     ) {
         Box(
             modifier = Modifier

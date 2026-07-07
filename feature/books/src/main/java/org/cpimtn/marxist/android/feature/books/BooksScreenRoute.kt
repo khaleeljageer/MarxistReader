@@ -19,7 +19,7 @@ import org.cpimtn.marxist.android.ui.common.StatusMessage
 
 @Composable
 fun BooksScreenRoute(
-    onBookClick: (bookId: Int) -> Unit,
+    onBookClick: (bookId: String) -> Unit,
     viewModel: BooksViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.booksUiState.collectAsStateWithLifecycle()
@@ -43,6 +43,7 @@ fun BooksScreenRoute(
                         books = state.books,
                         downloadStates = state.downloadStates,
                         onDownloadClick = { viewModel.downloadBook(it) },
+                        onOpenClick = { onBookClick(it.id) },
                     )
                 }
 

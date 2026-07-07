@@ -24,7 +24,7 @@ fun MainScreensNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
     goToArticleDetails: (postId: Int) -> Unit,
-    openBook:(bookId: Int) -> Unit,
+    openBook: (bookId: String) -> Unit,
 ) {
     val navController = appState.navController
     NavHost(

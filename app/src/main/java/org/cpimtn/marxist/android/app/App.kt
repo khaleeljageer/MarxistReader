@@ -62,6 +62,13 @@ fun App(
         }
 
         composable(Route.Main.name) {
+            val openBookViewModel: OpenBookViewModel = hiltViewModel()
+            LaunchedEffect(Unit) {
+                openBookViewModel.readerReady.collect { readerId ->
+                    context.launchReaderActivity(readerId)
+                }
+            }
+
             MainScreen(
                 windowSizeClass = windowSizeClass,
                 darkTheme = darkTheme
@@ -74,8 +81,8 @@ fun App(
                             launchSingleTop = true
                         }
                     },
-                    openBook = {
-                        context.launchReaderActivity(it.toLong())
+                    openBook = { bookId ->
+                        openBookViewModel.openBook(bookId)
                     }
                 )
             }
