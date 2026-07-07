@@ -120,10 +120,16 @@ fun SavedFeedContent(
 
 @Composable
 private fun FeedLoadingSkeleton() {
-    repeat(5) {
-        ArticleSkeleton()
-        if (it < 3) {
-            Spacer(modifier = Modifier.height(20.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+    ) {
+        repeat(5) {
+            ArticleSkeleton()
+            if (it < 4) {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }

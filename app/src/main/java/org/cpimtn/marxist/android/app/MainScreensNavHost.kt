@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.cpimtn.marxist.android.feature.books.BooksScreen
+import org.cpimtn.marxist.android.feature.books.BooksScreenRoute
 import org.cpimtn.marxist.android.feature.feed.FeedScreenRoute
 import org.cpimtn.marxist.android.feature.saved.SavedScreen
 import org.cpimtn.marxist.android.feature.search.SearchScreenRoute
@@ -42,7 +42,9 @@ fun MainScreensNavHost(
             )
         }
         composable(route = Screen.Books.route) {
-            BooksScreen()
+            BooksScreenRoute(
+                onBookClick = {},
+            )
         }
         composable(route = Screen.Search.route) {
             SearchScreenRoute(onArticleClick = goToArticleDetails)
