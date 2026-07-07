@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import org.cpimtn.marxist.android.domain.repository.BookRepository
 import org.cpimtn.marxist.android.domain.repository.CategoryRepository
 import org.cpimtn.marxist.android.domain.repository.PostRepository
 import org.cpimtn.marxist.android.domain.repository.RecentSearchRepository
@@ -14,8 +15,11 @@ import org.cpimtn.marxist.android.domain.repository.SyncStatusRepository
 import org.cpimtn.marxist.android.domain.repository.TagRepository
 import org.cpimtn.marxist.android.domain.usecase.AddRecentSearchUseCase
 import org.cpimtn.marxist.android.domain.usecase.ClearRecentSearchesUseCase
+import org.cpimtn.marxist.android.domain.usecase.DownloadBookUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetBooksFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetCategoriesWithCountFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetDownloadedBookIdsUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemByIdFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostByIdFlowUseCase
@@ -36,6 +40,7 @@ import org.cpimtn.marxist.android.domain.usecase.SetLanguageUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetPushNotificationsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetThemeUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetWelcomeCompletedUseCase
+import org.cpimtn.marxist.android.domain.usecase.SyncBooksUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncTaxonomyUseCase
 import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
@@ -219,4 +224,24 @@ object UseCaseModule {
         tagRepository: TagRepository,
     ): GetSearchSuggestionsFlowUseCase =
         GetSearchSuggestionsFlowUseCase(searchRepository, categoryRepository, tagRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetBooksFlowUseCase(bookRepository: BookRepository): GetBooksFlowUseCase =
+        GetBooksFlowUseCase(bookRepository)
+
+    @Provides
+    @Singleton
+    fun provideSyncBooksUseCase(bookRepository: BookRepository): SyncBooksUseCase =
+        SyncBooksUseCase(bookRepository)
+
+    @Provides
+    @Singleton
+    fun provideDownloadBookUseCase(bookRepository: BookRepository): DownloadBookUseCase =
+        DownloadBookUseCase(bookRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetDownloadedBookIdsUseCase(bookRepository: BookRepository): GetDownloadedBookIdsUseCase =
+        GetDownloadedBookIdsUseCase(bookRepository)
 }

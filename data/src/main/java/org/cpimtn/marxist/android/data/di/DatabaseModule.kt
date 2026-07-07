@@ -10,6 +10,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import org.cpimtn.marxist.android.data.source.local.database.AppDatabase
+import org.cpimtn.marxist.android.data.source.local.database.dao.BookDao
 import org.cpimtn.marxist.android.data.source.local.database.dao.CategoryDao
 import org.cpimtn.marxist.android.data.source.local.database.dao.PostDao
 import org.cpimtn.marxist.android.data.source.local.database.dao.SavedPostDao
@@ -36,6 +37,20 @@ private val MIGRATION_2_3 = object : Migration(2, 3) {
     }
 }
 
+private val MIGRATION_4_5 = object : Migration(4, 5) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL(
+            "CREATE TABLE IF NOT EXISTS books (" +
+                "id TEXT NOT NULL PRIMARY KEY, " +
+                "title TEXT NOT NULL, " +
+                "date TEXT NOT NULL, " +
+                "imageUrl TEXT NOT NULL, " +
+                "epubUrl TEXT NOT NULL, " +
+                "position INTEGER NOT NULL)"
+        )
+    }
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
@@ -47,7 +62,7 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "marxist-reader-db"
-        ).addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
+        ).addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_4_5).build()
     }
 
     @Provides
@@ -64,4 +79,7 @@ object DatabaseModule {
 
     @Provides
     fun provideSearchDao(appDatabase: AppDatabase): SearchDao = appDatabase.searchDao()
+
+    @Provides
+    fun provideBookDao(appDatabase: AppDatabase): BookDao = appDatabase.bookDao()
 }

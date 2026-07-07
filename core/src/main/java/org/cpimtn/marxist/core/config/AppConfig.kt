@@ -15,4 +15,9 @@ object AppConfig {
     object Sync {
         const val DEFAULT_PER_PAGE = 50
     }
+
+    object Books {
+        const val CATALOG_URL =
+            "https://raw.githubusercontent.com/tamilmarxist/MarxistTamilEbooks/refs/heads/master/booksdb.json"
+    }
 }

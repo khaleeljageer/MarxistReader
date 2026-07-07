@@ -6,11 +6,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.cpimtn.marxist.android.data.source.local.datastore.RecentSearchRepositoryImpl
 import org.cpimtn.marxist.android.data.source.local.datastore.UserSettingsRepositoryImpl
+import org.cpimtn.marxist.android.data.repository.BookRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.CategoryRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.PostRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.SavedPostRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.SearchRepositoryImpl
 import org.cpimtn.marxist.android.data.repository.TagRepositoryImpl
+import org.cpimtn.marxist.android.domain.repository.BookRepository
 import org.cpimtn.marxist.android.domain.repository.CategoryRepository
 import org.cpimtn.marxist.android.domain.repository.PostRepository
 import org.cpimtn.marxist.android.domain.repository.RecentSearchRepository
@@ -27,6 +29,10 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindPostRepository(impl: PostRepositoryImpl): PostRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBookRepository(impl: BookRepositoryImpl): BookRepository
 
     @Binds
     @Singleton
