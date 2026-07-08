@@ -6,33 +6,35 @@
 
 package com.jskaleel.epub.utils.compose
 
-import android.os.Build
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.graphics.Color
+
+private val ReaderPrimary = Color(0xFFFFDBC3)
+private val ReaderPrimarySurface = Color(0xFFFFF5E0)
+private val ReaderOnPrimarySurface = Color(0xFF190933)
+
+// Mirrors ReaderTheme in reader/src/main/res/values/styles.xml so Compose
+// bottom sheets (user settings, TTS controls) match the rest of the reader UI.
+private val ReaderColorScheme = lightColorScheme(
+    primary = ReaderPrimary,
+    onPrimary = ReaderOnPrimarySurface,
+    secondary = ReaderPrimary,
+    onSecondary = ReaderOnPrimarySurface,
+    background = ReaderPrimarySurface,
+    onBackground = ReaderOnPrimarySurface,
+    surface = ReaderPrimarySurface,
+    onSurface = ReaderOnPrimarySurface,
+)
 
 /**
  * Setup the Compose app-wide theme.
  */
 @Composable
-fun AppTheme(useDarkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            when {
-                useDarkTheme -> dynamicDarkColorScheme(LocalContext.current)
-                else -> dynamicLightColorScheme(LocalContext.current)
-            }
-        }
-        useDarkTheme -> lightColorScheme()
-        else -> darkColorScheme()
-    }
+fun AppTheme(content: @Composable () -> Unit) {
     MaterialTheme(
-        colorScheme = colors,
+        colorScheme = ReaderColorScheme,
         content = content
     )
 }
