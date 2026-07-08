@@ -15,6 +15,8 @@ Marxist Reader — an offline-first Android app (Kotlin, Jetpack Compose, Materi
 
 Or run the **app** configuration in Android Studio. Requires JDK 17, min SDK 26, target/compile SDK 36/37.
 
+Each module's `build.gradle.kts` should read `compileSdk` via `libs.versions.compileSdk.get().toInt()` rather than hardcoding a number — a module left on a stale hardcoded value will fail `checkDebugAarMetadata` once another module it depends on (or an AndroidX library) requires a newer one.
+
 ## Testing
 
 ```bash
@@ -66,6 +68,13 @@ Everything except `reader` lives under the `org.cpimtn.marxist` root: `org.cpimt
 - `PostRepositoryImpl.fullSync()` (`data/.../repository/PostRepositoryImpl.kt`) paginates through the WordPress API and only calls `postDao.replaceAll()` once the full fetch succeeds — a failed or partial sync never wipes existing local data. Follow this "fetch fully, then replace in one transaction" pattern for any new syncable entity.
 - Background sync runs via Hilt-injected `SyncWorker` (WorkManager, `NetworkType.CONNECTED` constraint, exponential backoff), triggered from `MarxistReaderApp.onCreate()` through `Sync.initialize()`.
 - Errors surface as a `SyncResult` sealed type (`Success` / `NetworkError` / `ServerError` / `UnknownError`); UI-facing `*UiState` types should map these rather than swallowing them.
+
+## Localization (Tamil default, English secondary)
+
+- Every module with UI strings ships two resource sets: default `values/strings.xml` (Tamil — the app's default language) and `values-en/strings.xml` (English). There is no `values-ta/` folder; Tamil lives in the default `values/` since it doubles as the fallback.
+- Strings not yet translated are marked `TODO_TA: <english text>` (Tamil file missing a translation) or `TODO_EN: <tamil text>` (English file missing one) — grep for these before shipping.
+- `feature/welcome`'s onboarding carousel intentionally shows Tamil + English text side by side on every card (`*_title_en` / `*_desc_en` keys) regardless of the active app locale — that's a deliberate design choice, not part of the values/values-en split, so don't fold those keys into it.
+- The active language (`AppLanguage`, `domain/.../model/AppLanguage.kt`) is persisted via `SettingsRepository`/DataStore (`UserSettingsRepositoryImpl`) and changed from Settings → Language (`feature/settings`). Actually applying it goes through `LocaleController` (`app/.../app/LocaleController.kt`), a thin wrapper around `AppCompatDelegate.setApplicationLocales()`: called once at cold start in `MarxistReaderApp.onCreate()` (blocking read of the persisted preference before the first UI frame) and reactively in `MainActivity`'s `LaunchedEffect(settings.language)` whenever the user changes it. `feature/settings` never calls `AppCompatDelegate` directly — that would violate the feature → app dependency rule.
 
 ## Adding a new feature module
 
