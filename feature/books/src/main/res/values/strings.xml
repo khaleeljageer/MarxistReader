@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Download button states -->
-    <string name="books_download">Download</string>
-    <string name="books_downloading">Downloading…</string>
-    <string name="books_downloaded">Downloaded</string>
-    <string name="books_retry">Retry</string>
+    <string name="books_download">TODO_TA: Download</string>
+    <string name="books_downloading">TODO_TA: Downloading…</string>
+    <string name="books_downloaded">TODO_TA: Downloaded</string>
+    <string name="books_retry">TODO_TA: Retry</string>
     <!-- States -->
-    <string name="books_empty_message">No books yet. Sync when online.</string>
-    <string name="books_empty_subtitle">Connect to the internet to fetch the book catalog</string>
-    <string name="books_error_title">Something went wrong</string>
+    <string name="books_empty_message">TODO_TA: No books yet. Sync when online.</string>
+    <string name="books_empty_subtitle">TODO_TA: Connect to the internet to fetch the book catalog</string>
+    <string name="books_error_title">TODO_TA: Something went wrong</string>
 </resources>

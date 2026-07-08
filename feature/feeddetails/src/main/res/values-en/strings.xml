@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feeddetails_back">Back</string>
+    <string name="feeddetails_title">TODO_EN: கட்டுரை</string>
+    <string name="feeddetails_loading">Loading…</string>
+    <string name="feeddetails_not_found">Article not found.</string>
+    <string name="feeddetails_save_content_desc">Save article</string>
+    <string name="feeddetails_unsave_content_desc">Unsave article</string>
+    <string name="feeddetails_share_content_desc">Share article</string>
+</resources>

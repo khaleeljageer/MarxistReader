@@ -46,7 +46,7 @@ class UserSettingsRepositoryImpl @Inject constructor(
                 fontSize = prefs[KEY_FONT_SIZE]?.let { FontSize.valueOf(it) }
                     ?: FontSize.NORMAL,
                 language = prefs[KEY_LANGUAGE]?.let { AppLanguage.valueOf(it) }
-                    ?: AppLanguage.ENGLISH,
+                    ?: AppLanguage.TAMIL,
                 pushNotificationsEnabled = prefs[KEY_PUSH_NOTIFICATIONS] ?: true,
                 appVersion = appVersionProvider.getVersion(),
             )

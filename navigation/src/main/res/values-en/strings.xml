@@ -1,0 +1,22 @@
+<resources>
+    <!-- Bottom navigation labels -->
+    <string name="nav_feed">Feed</string>
+    <string name="nav_books">Books</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_saved">Saved</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Top app bar -->
+    <string name="app_bar_title">Marxist</string>
+    <string name="app_bar_subtitle">CPIM TAMIL NADU</string>
+    <string name="search_content_desc">Search</string>
+    <string name="feed_refresh_content_desc">Refresh feed</string>
+
+    <!-- Placeholder screens -->
+    <string name="placeholder_feed">Articles will appear here</string>
+    <string name="placeholder_books">Library — EPUB Books</string>
+    <string name="placeholder_search">Search articles…</string>
+    <string name="placeholder_saved">Saved</string>
+    <string name="placeholder_saved_desc">Save articles to read later.\nTap the bookmark icon.</string>
+    <string name="placeholder_settings">Settings</string>
+</resources>

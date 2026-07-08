@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "org.cpimtn.marxist.android.data"
-    compileSdk = 36
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         minSdk = 26

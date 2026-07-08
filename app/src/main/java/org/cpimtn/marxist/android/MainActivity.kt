@@ -8,11 +8,13 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
 import org.cpimtn.marxist.android.app.App
 import org.cpimtn.marxist.android.app.AppViewModel
+import org.cpimtn.marxist.android.app.LocaleController
 import org.cpimtn.marxist.android.domain.model.Theme
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
@@ -26,6 +28,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val settings by appViewModel.settings.collectAsStateWithLifecycle()
+            LaunchedEffect(settings.language) {
+                LocaleController.apply(settings.language)
+            }
             val systemDark = isSystemInDarkTheme()
             val darkTheme = when (settings.theme) {
                 Theme.LIGHT -> false

@@ -248,23 +248,26 @@ private fun SettingsItemRow(
     )
 }
 
+@Composable
 private fun themeLabel(theme: Theme): String = when (theme) {
-    Theme.LIGHT -> "Light"
-    Theme.DARK -> "Dark"
-    Theme.DEFAULT -> "Default"
+    Theme.LIGHT -> stringResource(R.string.theme_light)
+    Theme.DARK -> stringResource(R.string.theme_dark)
+    Theme.DEFAULT -> stringResource(R.string.theme_default)
 }
 
+@Composable
 private fun fontSizeLabel(fontSize: FontSize): String = when (fontSize) {
-    FontSize.SMALL -> "Small"
-    FontSize.MEDIUM -> "Medium"
-    FontSize.NORMAL -> "Normal"
-    FontSize.LARGE -> "Large"
-    FontSize.EXTRA_LARGE -> "Extra Large"
+    FontSize.SMALL -> stringResource(R.string.font_size_small)
+    FontSize.MEDIUM -> stringResource(R.string.font_size_medium)
+    FontSize.NORMAL -> stringResource(R.string.font_size_normal)
+    FontSize.LARGE -> stringResource(R.string.font_size_large)
+    FontSize.EXTRA_LARGE -> stringResource(R.string.font_size_extra_large)
 }
 
+@Composable
 private fun languageLabel(lang: AppLanguage): String = when (lang) {
-    AppLanguage.TAMIL -> "Tamil"
-    AppLanguage.ENGLISH -> "English"
+    AppLanguage.TAMIL -> stringResource(R.string.language_tamil)
+    AppLanguage.ENGLISH -> stringResource(R.string.language_english)
 }
 
 @Composable
@@ -275,7 +278,7 @@ fun ThemeDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Theme") },
+        title = { Text(stringResource(R.string.settings_theme_subtitle)) },
         text = {
             Column(
                 modifier = Modifier.wrapContentSize()
@@ -288,11 +291,7 @@ fun ThemeDialog(
                             .clickable { onSelect(theme) }) {
                         RadioButton(selected = current == theme, onClick = { onSelect(theme) })
                         Spacer(Modifier.width(8.dp))
-                        Text(
-                            text = when (theme) {
-                                Theme.LIGHT -> "Light"; Theme.DARK -> "Dark"; Theme.DEFAULT -> "Default"
-                            }
-                        )
+                        Text(text = themeLabel(theme))
                     }
                 }
             }
@@ -309,7 +308,7 @@ fun FontSizeDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Font Size") },
+        title = { Text(stringResource(R.string.settings_font_size)) },
         text = {
             Column(
                 modifier = Modifier.wrapContentSize()
@@ -339,7 +338,7 @@ fun LanguageDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Language") },
+        title = { Text(stringResource(R.string.settings_language)) },
         text = {
             Column(
                 modifier = Modifier.wrapContentSize()

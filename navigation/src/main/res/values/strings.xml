@@ -1,22 +1,22 @@
 <resources>
     <!-- Bottom navigation labels -->
-    <string name="nav_feed">Feed</string>
-    <string name="nav_books">Books</string>
-    <string name="nav_search">Search</string>
-    <string name="nav_saved">Saved</string>
-    <string name="nav_settings">Settings</string>
+    <string name="nav_feed">TODO_TA: Feed</string>
+    <string name="nav_books">TODO_TA: Books</string>
+    <string name="nav_search">TODO_TA: Search</string>
+    <string name="nav_saved">TODO_TA: Saved</string>
+    <string name="nav_settings">TODO_TA: Settings</string>
 
     <!-- Top app bar -->
     <string name="app_bar_title">Marxist</string>
     <string name="app_bar_subtitle">CPIM TAMIL NADU</string>
-    <string name="search_content_desc">Search</string>
-    <string name="feed_refresh_content_desc">Refresh feed</string>
+    <string name="search_content_desc">TODO_TA: Search</string>
+    <string name="feed_refresh_content_desc">TODO_TA: Refresh feed</string>
 
     <!-- Placeholder screens -->
-    <string name="placeholder_feed">Articles will appear here</string>
-    <string name="placeholder_books">Library — EPUB Books</string>
-    <string name="placeholder_search">Search articles…</string>
-    <string name="placeholder_saved">Saved</string>
-    <string name="placeholder_saved_desc">Save articles to read later.\nTap the bookmark icon.</string>
-    <string name="placeholder_settings">Settings</string>
+    <string name="placeholder_feed">TODO_TA: Articles will appear here</string>
+    <string name="placeholder_books">TODO_TA: Library — EPUB Books</string>
+    <string name="placeholder_search">TODO_TA: Search articles…</string>
+    <string name="placeholder_saved">TODO_TA: Saved</string>
+    <string name="placeholder_saved_desc">TODO_TA: Save articles to read later.\nTap the bookmark icon.</string>
+    <string name="placeholder_settings">TODO_TA: Settings</string>
 </resources>
