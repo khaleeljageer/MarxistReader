@@ -1,0 +1,42 @@
+<resources>
+    <!-- Section headers -->
+    <string name="settings_section_display">TODO_TA: Display</string>
+    <string name="settings_section_notifications">TODO_TA: Notifications</string>
+    <string name="settings_section_about">TODO_TA: About</string>
+
+    <!-- Display -->
+    <string name="settings_dark_mode">TODO_TA: Dark Mode</string>
+    <string name="settings_dark_mode_subtitle">TODO_TA: Comfortable look for eyes</string>
+    <string name="settings_font_size">TODO_TA: Font Size</string>
+    <string name="settings_font_size_subtitle">TODO_TA: Normal</string>
+    <string name="settings_language">TODO_TA: Language</string>
+    <string name="settings_language_subtitle">TODO_TA: Tamil</string>
+    <string name="settings_theme_subtitle">TODO_TA: Theme</string>
+
+    <!-- Notifications -->
+    <string name="settings_push_notifications">TODO_TA: Push Notifications</string>
+    <string name="settings_push_notifications_subtitle">TODO_TA: New article notifications</string>
+
+    <!-- About -->
+    <string name="settings_version">TODO_TA: Version</string>
+    <string name="settings_version_subtitle">6.0.0</string>
+
+    <!-- Footer -->
+    <string name="settings_footer_license">CC BY-SA 4.0 — marxist.cpimtn.org</string>
+
+    <!-- Theme dialog -->
+    <string name="theme_light">TODO_TA: Light</string>
+    <string name="theme_dark">TODO_TA: Dark</string>
+    <string name="theme_default">TODO_TA: Default</string>
+
+    <!-- Font size dialog -->
+    <string name="font_size_small">TODO_TA: Small</string>
+    <string name="font_size_medium">TODO_TA: Medium</string>
+    <string name="font_size_normal">TODO_TA: Normal</string>
+    <string name="font_size_large">TODO_TA: Large</string>
+    <string name="font_size_extra_large">TODO_TA: Extra Large</string>
+
+    <!-- Language dialog -->
+    <string name="language_tamil">TODO_TA: Tamil</string>
+    <string name="language_english">TODO_TA: English</string>
+</resources>

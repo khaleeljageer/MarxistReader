@@ -1,0 +1,22 @@
+<resources>
+    <!-- Bottom navigation labels -->
+    <string name="nav_feed">கட்டுரை</string>
+    <string name="nav_books">மின்நூல்</string>
+    <string name="nav_search">தேடு</string>
+    <string name="nav_saved">சேமி</string>
+    <string name="nav_settings">அமைவுகள்</string>
+
+    <!-- Top app bar -->
+    <string name="app_bar_title">மார்க்சிஸ்ட்</string>
+    <string name="app_bar_subtitle">சிபிஐ(எம்)-தமிழ்நாடு</string>
+    <string name="search_content_desc">தேடு</string>
+    <string name="feed_refresh_content_desc">புதுப்பி</string>
+
+    <!-- Placeholder screens -->
+    <string name="placeholder_feed">கட்டுரைகள்</string>
+    <string name="placeholder_books">மின்நூல்கள்</string>
+    <string name="placeholder_search">கட்டுரைகளை தேட</string>
+    <string name="placeholder_saved">சேமித்தவை</string>
+    <string name="placeholder_saved_desc">சேமித்த கட்டுரைகளை இங்கிருந்து படிக்கலாம்.</string>
+    <string name="placeholder_settings">அமைவுகள்</string>
+</resources>
