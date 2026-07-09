@@ -8,20 +8,15 @@
 
 package com.jskaleel.epub.reader.preferences
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -38,7 +33,6 @@ import com.jskaleel.epub.shared.views.LanguageItem
 import com.jskaleel.epub.shared.views.MenuItem
 import com.jskaleel.epub.shared.views.StepperItem
 import com.jskaleel.epub.shared.views.SwitchItem
-import com.jskaleel.epub.utils.compose.DropdownMenuButton
 import org.readium.navigator.media.tts.android.AndroidTtsEngine
 import org.readium.r2.navigator.epub.EpubPreferencesEditor
 import org.readium.r2.navigator.preferences.Axis
@@ -52,7 +46,6 @@ import org.readium.r2.navigator.preferences.ImageFilter
 import org.readium.r2.navigator.preferences.Preference
 import org.readium.r2.navigator.preferences.PreferencesEditor
 import org.readium.r2.navigator.preferences.RangePreference
-import org.readium.r2.navigator.preferences.ReadingProgression
 import org.readium.r2.navigator.preferences.Spread
 import org.readium.r2.navigator.preferences.Theme
 import org.readium.r2.navigator.preferences.withSupportedValues
@@ -96,24 +89,6 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
                 .fillMaxWidth()
         )
 
-        Row(
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.End),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            PresetsMenuButton(presets = editor.presets, commit = commit, clear = editor::clear)
-
-            Button(
-                onClick = {
-                    editor.clear()
-                    commit()
-                }
-            ) {
-                Text("Reset")
-            }
-        }
-
         Divider()
 
         when (editor) {
@@ -129,7 +104,6 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
                             fontWeight = editor.fontWeight,
                             hyphens = editor.hyphens,
                             imageFilter = editor.imageFilter,
-                            language = editor.language,
                             letterSpacing = editor.letterSpacing,
                             ligatures = editor.ligatures,
                             lineHeight = editor.lineHeight,
@@ -137,14 +111,12 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
                             paragraphIndent = editor.paragraphIndent,
                             paragraphSpacing = editor.paragraphSpacing,
                             publisherStyles = editor.publisherStyles,
-                            readingProgression = editor.readingProgression,
                             scroll = editor.scroll,
                             textAlign = editor.textAlign,
                             textColor = editor.textColor,
                             textNormalization = editor.textNormalization,
                             theme = editor.theme,
                             typeScale = editor.typeScale,
-                            verticalText = editor.verticalText,
                             wordSpacing = editor.wordSpacing
                         )
 
@@ -152,8 +124,6 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
                         FixedLayoutUserPreferences(
                             commit = commit,
                             backgroundColor = editor.backgroundColor,
-                            language = editor.language,
-                            readingProgression = editor.readingProgression,
                             spread = editor.spread
                         )
                 }
@@ -218,8 +188,6 @@ private fun MediaUserPreferences(
 @Composable
 private fun FixedLayoutUserPreferences(
     commit: () -> Unit,
-    language: Preference<Language?>? = null,
-    readingProgression: EnumPreference<ReadingProgression>? = null,
     backgroundColor: Preference<Color>? = null,
     scroll: Preference<Boolean>? = null,
     scrollAxis: EnumPreference<Axis>? = null,
@@ -228,26 +196,6 @@ private fun FixedLayoutUserPreferences(
     offsetFirstPage: Preference<Boolean>? = null,
     pageSpacing: RangePreference<Double>? = null,
 ) {
-    if (language != null || readingProgression != null) {
-        if (language != null) {
-            LanguageItem(
-                preference = language,
-                commit = commit
-            )
-        }
-
-        if (readingProgression != null) {
-            ButtonGroupItem(
-                title = "Reading progression",
-                preference = readingProgression,
-                commit = commit,
-                formatValue = { it.name }
-            )
-        }
-
-        Divider()
-    }
-
     if (backgroundColor != null) {
         ColorItem(
             title = "Background color",
@@ -339,7 +287,6 @@ private fun ReflowableUserPreferences(
     fontWeight: RangePreference<Double>? = null,
     hyphens: Preference<Boolean>? = null,
     imageFilter: EnumPreference<ImageFilter?>? = null,
-    language: Preference<Language?>? = null,
     letterSpacing: RangePreference<Double>? = null,
     ligatures: Preference<Boolean>? = null,
     lineHeight: RangePreference<Double>? = null,
@@ -347,44 +294,14 @@ private fun ReflowableUserPreferences(
     paragraphIndent: RangePreference<Double>? = null,
     paragraphSpacing: RangePreference<Double>? = null,
     publisherStyles: Preference<Boolean>? = null,
-    readingProgression: EnumPreference<ReadingProgression>? = null,
     scroll: Preference<Boolean>? = null,
     textAlign: EnumPreference<ReadiumTextAlign?>? = null,
     textColor: Preference<Color>? = null,
     textNormalization: Preference<Boolean>? = null,
     theme: EnumPreference<Theme>? = null,
     typeScale: RangePreference<Double>? = null,
-    verticalText: Preference<Boolean>? = null,
     wordSpacing: RangePreference<Double>? = null,
 ) {
-    if (language != null || readingProgression != null || verticalText != null) {
-        if (language != null) {
-            LanguageItem(
-                preference = language,
-                commit = commit
-            )
-        }
-
-        if (readingProgression != null) {
-            ButtonGroupItem(
-                title = "Reading progression",
-                preference = readingProgression,
-                commit = commit,
-                formatValue = { it.name }
-            )
-        }
-
-        if (verticalText != null) {
-            SwitchItem(
-                title = "Vertical text",
-                preference = verticalText,
-                commit = commit
-            )
-        }
-
-        Divider()
-    }
-
     if (scroll != null || columnCount != null || pageMargins != null) {
         if (scroll != null) {
             SwitchItem(
@@ -612,73 +529,3 @@ private fun ReflowableUserPreferences(
 private fun Divider() {
     HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
 }
-
-@Composable
-private fun PresetsMenuButton(
-    presets: List<Preset>,
-    clear: () -> Unit,
-    commit: () -> Unit,
-) {
-    if (presets.isEmpty()) return
-
-    DropdownMenuButton(
-        text = { Text("Presets") }
-    ) { dismiss ->
-
-        for (preset in presets) {
-            DropdownMenuItem(
-                text = { Text(preset.title) },
-                onClick = {
-                    dismiss()
-                    clear()
-                    preset.apply()
-                    commit()
-                }
-            )
-        }
-    }
-}
-
-/**
- * A preset is a named group of settings applied together.
- */
-
-/**
- * A preset is a named group of settings applied together.
- */
-class Preset(
-    val title: String,
-    val apply: () -> Unit,
-)
-
-/**
- * Returns the presets associated with the [Configurable.Settings] receiver.
- */
-val <P : Configurable.Preferences<P>> PreferencesEditor<P>.presets: List<Preset>
-    get() =
-        when (this) {
-            is EpubPreferencesEditor ->
-                when (layout) {
-                    EpubLayout.FIXED -> emptyList()
-                    EpubLayout.REFLOWABLE -> listOf(
-                        Preset("Increase legibility") {
-                            wordSpacing.set(0.6)
-                            fontSize.set(1.4)
-                            fontWeight.set(2.0)
-                        },
-                        Preset("Document") {
-                            scroll.set(true)
-                        },
-                        Preset("Ebook") {
-                            scroll.set(false)
-                        },
-                        Preset("Manga") {
-                            scroll.set(false)
-                            readingProgression.set(ReadingProgression.RTL)
-                        }
-                    )
-                }
-
-            else ->
-                emptyList()
-        }

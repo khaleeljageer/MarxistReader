@@ -33,6 +33,7 @@ import org.readium.r2.navigator.preferences.Configurable
 import org.readium.r2.navigator.preferences.FontFamily
 import org.readium.r2.navigator.preferences.PreferencesFilter
 import org.readium.r2.navigator.preferences.PreferencesSerializer
+import org.readium.r2.navigator.preferences.ReadingProgression
 import org.readium.r2.navigator.preferences.Theme
 import org.readium.r2.shared.ExperimentalReadiumApi
 import org.readium.r2.shared.util.Language
@@ -124,7 +125,9 @@ class EpubPreferencesManagerFactory(
     emptyPreferences = EpubPreferences(
         theme = Theme.SEPIA,
         language = Language("ta"),
-        fontFamily = FontFamily.HIND_MADURAI
+        fontFamily = FontFamily.HIND_MADURAI,
+        readingProgression = ReadingProgression.LTR,
+        verticalText = false
     )
 )
 
