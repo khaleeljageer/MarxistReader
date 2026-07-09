@@ -12,7 +12,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.jskaleel.epub.reader.LITERATA
+import com.jskaleel.epub.reader.HIND_MADURAI
 import com.jskaleel.epub.utils.extensions.stateInFirst
 import com.jskaleel.epub.utils.tryOrNull
 import kotlinx.coroutines.CoroutineScope
@@ -124,7 +124,7 @@ class EpubPreferencesManagerFactory(
     emptyPreferences = EpubPreferences(
         theme = Theme.SEPIA,
         language = Language("ta"),
-        fontFamily = FontFamily.LITERATA
+        fontFamily = FontFamily.HIND_MADURAI
     )
 )
 

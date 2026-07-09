@@ -1,0 +1,9 @@
+org.cpimtn.marxist.android.feature.more-pngs-0 /home/khaleel/AndroidStudioProjects/Reader/feature/more/build/generated/res/pngs/debug
+org.cpimtn.marxist.android.feature.more-updated_navigation_xml-1 /home/khaleel/AndroidStudioProjects/Reader/feature/more/build/generated/updated_navigation_xml/debug
+org.cpimtn.marxist.android.feature.more-mergeDebugResources-2 /home/khaleel/AndroidStudioProjects/Reader/feature/more/build/intermediates/incremental/debug/mergeDebugResources/merged.dir
+org.cpimtn.marxist.android.feature.more-mergeDebugResources-3 /home/khaleel/AndroidStudioProjects/Reader/feature/more/build/intermediates/incremental/debug/mergeDebugResources/stripped.dir
+org.cpimtn.marxist.android.feature.more-debug-4 /home/khaleel/AndroidStudioProjects/Reader/feature/more/build/intermediates/merged_res/debug/mergeDebugResources
+org.cpimtn.marxist.android.feature.more-debug-5 /home/khaleel/AndroidStudioProjects/Reader/feature/more/build/intermediates/packaged_res/debug/packageDebugResources
+org.cpimtn.marxist.android.feature.more-debug-6 /home/khaleel/AndroidStudioProjects/Reader/feature/more/src/debug/res
+org.cpimtn.marxist.android.feature.more-main-7 /home/khaleel/AndroidStudioProjects/Reader/feature/more/src/main/res
+gradleHome-0 /home/khaleel/.gradle

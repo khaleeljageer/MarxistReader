@@ -68,4 +68,13 @@ class Readium(context: Context) {
 }
 
 @OptIn(ExperimentalReadiumApi::class)
-val FontFamily.Companion.LITERATA: FontFamily get() = FontFamily("Literata")
+val FontFamily.Companion.ARIMA_MADURAI: FontFamily get() = FontFamily("Arima Madurai")
+
+@OptIn(ExperimentalReadiumApi::class)
+val FontFamily.Companion.HIND_MADURAI: FontFamily get() = FontFamily("Hind Madurai")
+
+@OptIn(ExperimentalReadiumApi::class)
+val FontFamily.Companion.LOHIT_TAMIL: FontFamily get() = FontFamily("Lohit Tamil")
+
+@OptIn(ExperimentalReadiumApi::class)
+val FontFamily.Companion.MUKTA_MALAR: FontFamily get() = FontFamily("Mukta Malar")

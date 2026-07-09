@@ -37,6 +37,7 @@ import org.readium.r2.navigator.epub.EpubNavigatorFragment
 import org.readium.r2.navigator.epub.EpubPreferences
 import org.readium.r2.navigator.epub.EpubSettings
 import org.readium.r2.navigator.epub.css.FontStyle
+import org.readium.r2.navigator.epub.css.FontWeight
 import org.readium.r2.navigator.html.HtmlDecorationTemplate
 import org.readium.r2.navigator.html.toCss
 import org.readium.r2.navigator.preferences.FontFamily
@@ -83,7 +84,7 @@ class EpubReaderFragment : VisualReaderFragment() {
                     // You can use simple glob patterns, such as "images/.*" to allow several
                     // assets in one go.
                     servedAssets = listOf(
-                        // For the custom font Literata.
+                        // For the custom Tamil fonts.
                         "fonts/.*",
                         // Icon for the annotation side mark, see [annotationMarkTemplate].
                         "annotation-icon.svg"
@@ -94,12 +95,33 @@ class EpubReaderFragment : VisualReaderFragment() {
                         annotationMarkTemplate()
                     decorationTemplates[DecorationStylePageNumber::class] = pageNumberTemplate()
 
-                    // Declare a custom font family for reflowable EPUBs.
-                    addFontFamilyDeclaration(FontFamily.LITERATA) {
+                    // Declare the custom Tamil font families for reflowable EPUBs.
+                    addFontFamilyDeclaration(FontFamily.ARIMA_MADURAI) {
                         addFontFace {
-                            addSource("fonts/noto_sans_variable.ttf")
+                            addSource("fonts/arima_madurai.ttf")
                             setFontStyle(FontStyle.NORMAL)
-                            setFontWeight(200..900)
+                            setFontWeight(FontWeight.NORMAL)
+                        }
+                    }
+                    addFontFamilyDeclaration(FontFamily.HIND_MADURAI) {
+                        addFontFace {
+                            addSource("fonts/hind_madurai.ttf")
+                            setFontStyle(FontStyle.NORMAL)
+                            setFontWeight(FontWeight.NORMAL)
+                        }
+                    }
+                    addFontFamilyDeclaration(FontFamily.LOHIT_TAMIL) {
+                        addFontFace {
+                            addSource("fonts/lohit_tamil.ttf")
+                            setFontStyle(FontStyle.NORMAL)
+                            setFontWeight(FontWeight.NORMAL)
+                        }
+                    }
+                    addFontFamilyDeclaration(FontFamily.MUKTA_MALAR) {
+                        addFontFace {
+                            addSource("fonts/mukta_malar.ttf")
+                            setFontStyle(FontStyle.NORMAL)
+                            setFontWeight(FontWeight.NORMAL)
                         }
                     }
                 }

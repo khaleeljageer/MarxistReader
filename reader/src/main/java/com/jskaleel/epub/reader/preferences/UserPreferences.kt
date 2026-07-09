@@ -27,7 +27,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jskaleel.epub.R
-import com.jskaleel.epub.reader.LITERATA
+import com.jskaleel.epub.reader.ARIMA_MADURAI
+import com.jskaleel.epub.reader.HIND_MADURAI
+import com.jskaleel.epub.reader.LOHIT_TAMIL
+import com.jskaleel.epub.reader.MUKTA_MALAR
 import com.jskaleel.epub.reader.tts.TtsPreferencesEditor
 import com.jskaleel.epub.shared.views.ButtonGroupItem
 import com.jskaleel.epub.shared.views.ColorItem
@@ -471,17 +474,15 @@ private fun ReflowableUserPreferences(
                 preference = fontFamily
                     .withSupportedValues(
                         null,
-                        FontFamily.LITERATA,
-                        FontFamily.SANS_SERIF,
-                        FontFamily.IA_WRITER_DUOSPACE,
-                        FontFamily.ACCESSIBLE_DFA,
-                        FontFamily.OPEN_DYSLEXIC
+                        FontFamily.ARIMA_MADURAI,
+                        FontFamily.HIND_MADURAI,
+                        FontFamily.LOHIT_TAMIL,
+                        FontFamily.MUKTA_MALAR
                     ),
                 commit = commit
             ) { value ->
                 when (value) {
                     null -> "Original"
-                    FontFamily.SANS_SERIF -> "Sans Serif"
                     else -> value.name
                 }
             }

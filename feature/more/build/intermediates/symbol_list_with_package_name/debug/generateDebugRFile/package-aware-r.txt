@@ -1,0 +1,2 @@
+org.cpimtn.marxist.android.feature.more
+string more_screen_title

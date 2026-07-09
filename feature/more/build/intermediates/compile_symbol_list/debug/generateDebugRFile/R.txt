@@ -1,0 +1,1 @@
+int string more_screen_title 0x0
