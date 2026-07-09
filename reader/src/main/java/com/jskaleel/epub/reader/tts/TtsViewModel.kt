@@ -126,6 +126,12 @@ class TtsViewModel private constructor(
             it != null
         }
 
+    private val _isLoading: MutableStateFlow<Boolean> =
+        MutableStateFlow(false)
+
+    val isLoading: StateFlow<Boolean> =
+        _isLoading
+
     val isPlaying: StateFlow<Boolean> =
         mediaServiceFacade.session.flatMapLatest { session ->
             session?.navigator?.playback?.map { playback -> playback.playWhenReady }
@@ -176,6 +182,7 @@ class TtsViewModel private constructor(
             return
         }
 
+        _isLoading.value = true
         launchJob = viewModelScope.launch {
             openSession(navigator)
         }
@@ -191,6 +198,8 @@ class TtsViewModel private constructor(
         ).getOrElse {
             val error = TtsError.Initialization(it)
             _events.send(Event.OnError(error))
+            _isLoading.value = false
+            launchJob = null
             return
         }
 
@@ -200,15 +209,18 @@ class TtsViewModel private constructor(
             ttsNavigator.close()
             val error = TtsError.ServiceError(e)
             _events.trySend(Event.OnError(error))
+            _isLoading.value = false
             launchJob = null
             return
         }
 
         ttsNavigator.play()
+        _isLoading.value = false
     }
 
     fun stop() {
         launchJob = null
+        _isLoading.value = false
         mediaServiceFacade.closeSession()
     }
 

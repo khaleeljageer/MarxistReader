@@ -9,6 +9,7 @@ package com.jskaleel.epub.reader.tts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
@@ -18,6 +19,7 @@ import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -39,6 +41,7 @@ fun TtsControls(
     modifier: Modifier = Modifier,
 ) {
     val showControls by model.showControls.asStateWhenStarted()
+    val isLoading by model.isLoading.asStateWhenStarted()
     val isPlaying by model.isPlaying.asStateWhenStarted()
 
     if (showControls) {
@@ -51,6 +54,10 @@ fun TtsControls(
             onPreferences = onPreferences,
             modifier = modifier
         )
+    } else if (isLoading) {
+        Card(modifier = modifier) {
+            CircularProgressIndicator(modifier = Modifier.padding(12.dp).size(24.dp), strokeWidth = 2.dp)
+        }
     }
 }
 

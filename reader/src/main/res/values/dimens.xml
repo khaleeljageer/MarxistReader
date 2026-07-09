@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <dimen name="reader_top_bar_height">56dp</dimen>
+    <dimen name="reader_bottom_bar_height">72dp</dimen>
+</resources>
