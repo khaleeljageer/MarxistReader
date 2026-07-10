@@ -18,14 +18,18 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.SkipNext
 import androidx.compose.material.icons.filled.SkipPrevious
 import androidx.compose.material.icons.filled.Stop
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.jskaleel.epub.R
@@ -55,11 +59,19 @@ fun TtsControls(
             modifier = modifier
         )
     } else if (isLoading) {
-        Card(modifier = modifier) {
+        Card(colors = ttsControlsCardColors(), shape = ttsControlsShape, modifier = modifier) {
             CircularProgressIndicator(modifier = Modifier.padding(12.dp).size(24.dp), strokeWidth = 2.dp)
         }
     }
 }
+
+@Composable
+private fun ttsControlsCardColors() = CardDefaults.cardColors(
+    containerColor = MaterialTheme.colorScheme.surfaceVariant,
+    contentColor = MaterialTheme.colorScheme.onSurfaceVariant
+)
+
+private val ttsControlsShape = RoundedCornerShape(18.dp)
 
 @Composable
 fun TtsControls(
@@ -72,8 +84,12 @@ fun TtsControls(
     modifier: Modifier = Modifier,
 ) {
     Card(
+        colors = ttsControlsCardColors(),
+        shape = ttsControlsShape,
         modifier = modifier
     ) {
+        val iconTint = Color(0xFF4A1200)
+
         Row(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
@@ -83,7 +99,8 @@ fun TtsControls(
             IconButton(onClick = onPrevious) {
                 Icon(
                     imageVector = Icons.Default.SkipPrevious,
-                    contentDescription = stringResource(R.string.tts_previous)
+                    contentDescription = stringResource(R.string.tts_previous),
+                    tint = iconTint
                 )
             }
 
@@ -103,6 +120,7 @@ fun TtsControls(
                             R.string.tts_play
                         }
                     ),
+                    tint = iconTint,
                     modifier = Modifier.then(largeButtonModifier)
                 )
             }
@@ -112,13 +130,15 @@ fun TtsControls(
                 Icon(
                     imageVector = Icons.Default.Stop,
                     contentDescription = stringResource(R.string.tts_stop),
+                    tint = iconTint,
                     modifier = Modifier.then(largeButtonModifier)
                 )
             }
             IconButton(onClick = onNext) {
                 Icon(
                     imageVector = Icons.Default.SkipNext,
-                    contentDescription = stringResource(R.string.tts_next)
+                    contentDescription = stringResource(R.string.tts_next),
+                    tint = iconTint
                 )
             }
 
@@ -127,7 +147,8 @@ fun TtsControls(
             IconButton(onClick = onPreferences) {
                 Icon(
                     imageVector = Icons.Default.Settings,
-                    contentDescription = stringResource(R.string.tts_settings)
+                    contentDescription = stringResource(R.string.tts_settings),
+                    tint = iconTint
                 )
             }
         }

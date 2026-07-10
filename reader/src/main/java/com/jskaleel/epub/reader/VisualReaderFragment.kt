@@ -56,6 +56,7 @@ import com.jskaleel.epub.reader.tts.TtsControls
 import com.jskaleel.epub.reader.tts.TtsPreferencesBottomSheetDialogFragment
 import com.jskaleel.epub.reader.tts.TtsViewModel
 import com.jskaleel.epub.utils.clearPadding
+import com.jskaleel.epub.utils.compose.AppTheme
 import com.jskaleel.epub.utils.extensions.confirmDialog
 import com.jskaleel.epub.utils.extensions.throttleLatest
 import com.jskaleel.epub.utils.hideSystemUi
@@ -141,25 +142,27 @@ abstract class VisualReaderFragment : BaseReaderFragment() {
         }
 
         binding.overlay.setContent {
-            if (disableTouches) {
-                // Add an invisible box on top of the navigator to intercept touch gestures.
+            AppTheme {
+                if (disableTouches) {
+                    // Add an invisible box on top of the navigator to intercept touch gestures.
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) {
+                                detectTapGestures {
+                                    requireActivity().toggleSystemUi()
+                                }
+                            }
+                    )
+                }
+
                 Box(
                     modifier = Modifier
                         .fillMaxSize()
-                        .pointerInput(Unit) {
-                            detectTapGestures {
-                                requireActivity().toggleSystemUi()
-                            }
-                        }
+                        .systemBarsPadding(),
+                    content = { Overlay() }
                 )
             }
-
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .systemBarsPadding(),
-                content = { Overlay() }
-            )
         }
 
         val menuHost: MenuHost = requireActivity()
