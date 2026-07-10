@@ -15,7 +15,7 @@ import kotlin.getValue
 
 @OptIn(ExperimentalReadiumApi::class)
 class TtsPreferencesBottomSheetDialogFragment : UserPreferencesBottomSheetDialogFragment(
-    "TTS Settings"
+    "பேச்சு அமைப்பு"
 ) {
 
     private val viewModel: ReaderViewModel by activityViewModels()

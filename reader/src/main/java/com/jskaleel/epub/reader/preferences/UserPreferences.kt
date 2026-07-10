@@ -8,19 +8,52 @@
 
 package com.jskaleel.epub.reader.preferences
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
+import androidx.compose.material.icons.automirrored.filled.FormatAlignRight
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.FormatAlignCenter
+import androidx.compose.material.icons.filled.FormatAlignJustify
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.jskaleel.epub.R
 import com.jskaleel.epub.reader.ARIMA_MADURAI
 import com.jskaleel.epub.reader.HIND_MADURAI
@@ -29,28 +62,31 @@ import com.jskaleel.epub.reader.MUKTA_MALAR
 import com.jskaleel.epub.reader.tts.TtsPreferencesEditor
 import com.jskaleel.epub.shared.views.ButtonGroupItem
 import com.jskaleel.epub.shared.views.ColorItem
+import com.jskaleel.epub.shared.views.InlineStepperRow
 import com.jskaleel.epub.shared.views.LanguageItem
 import com.jskaleel.epub.shared.views.MenuItem
+import com.jskaleel.epub.shared.views.SettingsSection
 import com.jskaleel.epub.shared.views.StepperItem
 import com.jskaleel.epub.shared.views.SwitchItem
 import org.readium.navigator.media.tts.android.AndroidTtsEngine
 import org.readium.r2.navigator.epub.EpubPreferencesEditor
 import org.readium.r2.navigator.preferences.Axis
-import org.readium.r2.navigator.preferences.Color
 import org.readium.r2.navigator.preferences.Configurable
+import org.readium.r2.navigator.preferences.clear
 import org.readium.r2.navigator.preferences.EnumPreference
 import org.readium.r2.navigator.preferences.Fit
-import org.readium.r2.navigator.preferences.FontFamily
 import org.readium.r2.navigator.preferences.Preference
 import org.readium.r2.navigator.preferences.PreferencesEditor
 import org.readium.r2.navigator.preferences.RangePreference
 import org.readium.r2.navigator.preferences.Spread
 import org.readium.r2.navigator.preferences.Theme
-import org.readium.r2.navigator.preferences.withSupportedValues
 import org.readium.r2.shared.ExperimentalReadiumApi
 import org.readium.r2.shared.publication.epub.EpubLayout
 import org.readium.r2.shared.util.Language
+import org.readium.r2.navigator.preferences.Color as ReadiumColor
+import org.readium.r2.navigator.preferences.FontFamily as ReadiumFontFamily
 import org.readium.r2.navigator.preferences.TextAlign as ReadiumTextAlign
+import androidx.compose.ui.text.font.FontFamily as ComposeFontFamily
 
 /**
  * Stateful user settings component paired with a [ReaderViewModel].
@@ -59,13 +95,19 @@ import org.readium.r2.navigator.preferences.TextAlign as ReadiumTextAlign
 fun UserPreferences(
     model: UserPreferencesViewModel<*, *>,
     title: String,
+    onDismiss: () -> Unit = {},
 ) {
     val editor by model.editor.collectAsState()
 
     UserPreferences(
         editor = editor,
         commit = model::commit,
-        title = title
+        title = title,
+        onReset = {
+            editor.clear()
+            model.commit()
+        },
+        onDismiss = onDismiss
     )
 }
 
@@ -74,53 +116,106 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
     editor: E,
     commit: () -> Unit,
     title: String,
+    onReset: () -> Unit,
+    onDismiss: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier.padding(vertical = 24.dp)
-    ) {
-        Text(
-            text = title,
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineSmall,
-            color = MaterialTheme.colorScheme.onSurface,
+    Column(modifier = Modifier.padding(bottom = 24.dp)) {
+        SettingsSheetHeader(title = title, onReset = onReset, onDismiss = onDismiss)
+
+        Column(
+            modifier = Modifier.padding(top = 14.dp, start = 14.dp, end = 14.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            when (editor) {
+                is EpubPreferencesEditor ->
+                    when (editor.layout) {
+                        EpubLayout.REFLOWABLE ->
+                            ReflowableUserPreferences(
+                                commit = commit,
+                                fontFamily = editor.fontFamily,
+                                fontSize = editor.fontSize,
+                                letterSpacing = editor.letterSpacing,
+                                lineHeight = editor.lineHeight,
+                                pageMargins = editor.pageMargins,
+                                textAlign = editor.textAlign,
+                                theme = editor.theme
+                            )
+
+                        EpubLayout.FIXED ->
+                            FixedLayoutUserPreferences(
+                                commit = commit,
+                                backgroundColor = editor.backgroundColor,
+                                spread = editor.spread
+                            )
+                    }
+
+                is TtsPreferencesEditor ->
+                    MediaUserPreferences(
+                        commit = commit,
+                        language = editor.language,
+                        voice = editor.voice,
+                        speed = editor.speed,
+                        pitch = editor.pitch
+                    )
+            }
+        }
+    }
+}
+
+/**
+ * Drag handle + centered title + reset/close actions, matching the Material3 bottom-sheet
+ * convention instead of a bare heading.
+ */
+@Composable
+private fun SettingsSheetHeader(
+    title: String,
+    onReset: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
+                .padding(top = 10.dp)
+                .align(Alignment.CenterHorizontally)
+                .size(width = 36.dp, height = 4.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))
         )
 
-        Divider()
-
-        when (editor) {
-            is EpubPreferencesEditor ->
-                when (editor.layout) {
-                    EpubLayout.REFLOWABLE ->
-                        ReflowableUserPreferences(
-                            commit = commit,
-                            fontFamily = editor.fontFamily,
-                            fontSize = editor.fontSize,
-                            letterSpacing = editor.letterSpacing,
-                            lineHeight = editor.lineHeight,
-                            pageMargins = editor.pageMargins,
-                            textAlign = editor.textAlign,
-                            theme = editor.theme
-                        )
-
-                    EpubLayout.FIXED ->
-                        FixedLayoutUserPreferences(
-                            commit = commit,
-                            backgroundColor = editor.backgroundColor,
-                            spread = editor.spread
-                        )
-                }
-
-            is TtsPreferencesEditor ->
-                MediaUserPreferences(
-                    commit = commit,
-                    language = editor.language,
-                    voice = editor.voice,
-                    speed = editor.speed,
-                    pitch = editor.pitch
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 4.dp, end = 4.dp, top = 2.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onReset) {
+                Icon(
+                    imageVector = Icons.Default.Refresh,
+                    contentDescription = stringResource(R.string.settings_reset)
                 )
+            }
+
+            Text(
+                text = title,
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.weight(1f)
+            )
+
+            IconButton(onClick = onDismiss) {
+                Icon(
+                    imageVector = Icons.Default.Close,
+                    contentDescription = stringResource(R.string.settings_close)
+                )
+            }
         }
+
+        HorizontalDivider(
+            modifier = Modifier.padding(top = 8.dp),
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)
+        )
     }
 }
 
@@ -132,37 +227,36 @@ private fun MediaUserPreferences(
     speed: RangePreference<Double>? = null,
     pitch: RangePreference<Double>? = null,
 ) {
-    Column {
-        if (speed != null) {
-            StepperItem(
-                title = stringResource(R.string.speed_rate),
-                preference = speed,
-                commit = commit
-            )
-        }
+    if (speed != null) {
+        StepperItem(
+            title = stringResource(R.string.speed_rate),
+            preference = speed,
+            commit = commit
+        )
+    }
 
-        if (pitch != null) {
-            StepperItem(
-                title = stringResource(R.string.pitch_rate),
-                preference = pitch,
-                commit = commit
-            )
-        }
-        if (language != null) {
-            LanguageItem(
-                preference = language,
-                commit = commit
-            )
-        }
+    if (pitch != null) {
+        StepperItem(
+            title = stringResource(R.string.pitch_rate),
+            preference = pitch,
+            commit = commit
+        )
+    }
 
-        if (voice != null) {
-            MenuItem(
-                title = stringResource(R.string.tts_voice),
-                preference = voice,
-                formatValue = { it?.value ?: "Default" },
-                commit = commit
-            )
-        }
+    if (language != null) {
+        LanguageItem(
+            preference = language,
+            commit = commit
+        )
+    }
+
+    if (voice != null) {
+        MenuItem(
+            title = stringResource(R.string.tts_voice),
+            preference = voice,
+            formatValue = { it?.value ?: "Default" },
+            commit = commit
+        )
     }
 }
 
@@ -172,7 +266,7 @@ private fun MediaUserPreferences(
 @Composable
 private fun FixedLayoutUserPreferences(
     commit: () -> Unit,
-    backgroundColor: Preference<Color>? = null,
+    backgroundColor: Preference<ReadiumColor>? = null,
     scroll: Preference<Boolean>? = null,
     scrollAxis: EnumPreference<Axis>? = null,
     fit: EnumPreference<Fit>? = null,
@@ -186,8 +280,6 @@ private fun FixedLayoutUserPreferences(
             preference = backgroundColor,
             commit = commit
         )
-
-        Divider()
     }
 
     if (scroll != null) {
@@ -264,7 +356,7 @@ private fun FixedLayoutUserPreferences(
 @Composable
 private fun ReflowableUserPreferences(
     commit: () -> Unit,
-    fontFamily: Preference<FontFamily?>? = null,
+    fontFamily: Preference<ReadiumFontFamily?>? = null,
     fontSize: RangePreference<Double>? = null,
     letterSpacing: RangePreference<Double>? = null,
     lineHeight: RangePreference<Double>? = null,
@@ -272,102 +364,259 @@ private fun ReflowableUserPreferences(
     textAlign: EnumPreference<ReadiumTextAlign?>? = null,
     theme: EnumPreference<Theme>? = null,
 ) {
+    if (theme != null) {
+        ThemeItem(preference = theme, commit = commit)
+    }
+
+    if (fontSize != null) {
+        StepperItem(
+            title = stringResource(R.string.settings_font_size),
+            preference = fontSize,
+            commit = commit
+        )
+    }
+
+    if (fontFamily != null) {
+        TypefaceItem(preference = fontFamily, commit = commit)
+    }
+
+    if (lineHeight != null || letterSpacing != null) {
+        SettingsSection(label = stringResource(R.string.settings_spacing)) {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                if (lineHeight != null) {
+                    InlineStepperRow(
+                        title = stringResource(R.string.settings_line_height),
+                        preference = lineHeight,
+                        commit = commit
+                    )
+                }
+
+                if (letterSpacing != null) {
+                    InlineStepperRow(
+                        title = stringResource(R.string.settings_letter_spacing),
+                        preference = letterSpacing,
+                        commit = commit
+                    )
+                }
+            }
+        }
+    }
+
+    if (textAlign != null) {
+        ButtonGroupItem(
+            title = stringResource(R.string.settings_alignment),
+            preference = textAlign,
+            commit = commit,
+            icon = { value ->
+                when (value) {
+                    ReadiumTextAlign.CENTER -> Icons.Default.FormatAlignCenter
+                    ReadiumTextAlign.JUSTIFY -> Icons.Default.FormatAlignJustify
+                    ReadiumTextAlign.END, ReadiumTextAlign.RIGHT -> Icons.AutoMirrored.Filled.FormatAlignRight
+                    ReadiumTextAlign.START, ReadiumTextAlign.LEFT, null -> Icons.AutoMirrored.Filled.FormatAlignLeft
+                }
+            }
+        ) { value ->
+            when (value) {
+                ReadiumTextAlign.CENTER -> "Center"
+                ReadiumTextAlign.JUSTIFY -> "Justify"
+                ReadiumTextAlign.START -> "Start"
+                ReadiumTextAlign.END -> "End"
+                ReadiumTextAlign.LEFT -> "Left"
+                ReadiumTextAlign.RIGHT -> "Right"
+                null -> "Default"
+            }
+        }
+    }
+
     if (pageMargins != null) {
         StepperItem(
-            title = "Page margins",
+            title = stringResource(R.string.settings_page_margins),
             preference = pageMargins,
             commit = commit
         )
-
-        Divider()
     }
+}
 
-    if (theme != null) {
-        ButtonGroupItem(
-            title = "Theme",
-            preference = theme,
-            commit = commit
-        ) { value ->
-            when (value) {
-                Theme.LIGHT -> "Light"
-                Theme.DARK -> "Dark"
-                Theme.SEPIA -> "Sepia"
+/**
+ * Theme choice shown as color swatches (rather than text pills) so the effect of each option
+ * is visible at a glance.
+ */
+@Composable
+private fun ThemeItem(
+    preference: EnumPreference<Theme>,
+    commit: () -> Unit,
+) {
+    val selected = preference.value ?: preference.effectiveValue
+
+    SettingsSection(label = stringResource(R.string.settings_theme)) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(18.dp)
+        ) {
+            for (option in preference.supportedValues) {
+                ThemeSwatch(
+                    label = themeLabel(option),
+                    swatchColor = themeSwatchColor(option),
+                    isSelected = selected == option,
+                    enabled = preference.isEffective,
+                    onClick = {
+                        if (option == preference.value) {
+                            preference.clear()
+                        } else {
+                            preference.set(option)
+                        }
+                        commit()
+                    }
+                )
             }
-        }
-
-        Divider()
-    }
-
-    if (fontFamily != null || fontSize != null) {
-        if (fontFamily != null) {
-            MenuItem(
-                title = "Typeface",
-                preference = fontFamily
-                    .withSupportedValues(
-                        null,
-                        FontFamily.ARIMA_MADURAI,
-                        FontFamily.HIND_MADURAI,
-                        FontFamily.LOHIT_TAMIL,
-                        FontFamily.MUKTA_MALAR
-                    ),
-                commit = commit
-            ) { value ->
-                when (value) {
-                    null -> "Original"
-                    else -> value.name
-                }
-            }
-        }
-
-        if (fontSize != null) {
-            StepperItem(
-                title = "Font size",
-                preference = fontSize,
-                commit = commit
-            )
-        }
-
-        Divider()
-    }
-
-    if (textAlign != null || lineHeight != null || letterSpacing != null) {
-        if (textAlign != null) {
-            ButtonGroupItem(
-                title = "Alignment",
-                preference = textAlign,
-                commit = commit
-            ) { value ->
-                when (value) {
-                    ReadiumTextAlign.CENTER -> "Center"
-                    ReadiumTextAlign.JUSTIFY -> "Justify"
-                    ReadiumTextAlign.START -> "Start"
-                    ReadiumTextAlign.END -> "End"
-                    ReadiumTextAlign.LEFT -> "Left"
-                    ReadiumTextAlign.RIGHT -> "Right"
-                    null -> "Default"
-                }
-            }
-        }
-
-        if (lineHeight != null) {
-            StepperItem(
-                title = "Line height",
-                preference = lineHeight,
-                commit = commit
-            )
-        }
-
-        if (letterSpacing != null) {
-            StepperItem(
-                title = "Letter spacing",
-                preference = letterSpacing,
-                commit = commit
-            )
         }
     }
 }
 
 @Composable
-private fun Divider() {
-    HorizontalDivider(modifier = Modifier.padding(vertical = 16.dp))
+private fun themeLabel(theme: Theme): String = when (theme) {
+    Theme.LIGHT -> stringResource(R.string.theme_light)
+    Theme.DARK -> stringResource(R.string.theme_dark)
+    Theme.SEPIA -> stringResource(R.string.theme_sepia)
+}
+
+private fun themeSwatchColor(theme: Theme): Color = when (theme) {
+    Theme.LIGHT -> Color(0xFFFCFBF7)
+    Theme.DARK -> Color(0xFF1B1B1D)
+    Theme.SEPIA -> Color(0xFFF2E6CD)
+}
+
+@Composable
+private fun RowScope.ThemeSwatch(
+    label: String,
+    swatchColor: Color,
+    isSelected: Boolean,
+    enabled: Boolean,
+    onClick: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .weight(1f)
+            .clickable(enabled = enabled, onClick = onClick),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Box(
+            modifier = Modifier
+                .size(44.dp)
+                .clip(CircleShape)
+                .background(swatchColor)
+                .border(
+                    width = if (isSelected) 3.dp else 1.dp,
+                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline,
+                    shape = CircleShape
+                )
+        )
+
+        Spacer(modifier = Modifier.height(6.dp))
+
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelSmall,
+            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+            color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
+
+/**
+ * Typeface choice shown as a scrollable row of tiles that preview the actual glyphs of each
+ * font, rather than a text-only dropdown menu.
+ */
+@Composable
+private fun TypefaceItem(
+    preference: Preference<ReadiumFontFamily?>,
+    commit: () -> Unit,
+) {
+    val context = LocalContext.current
+    val previewFamilies = remember(context) {
+        mapOf(
+            ReadiumFontFamily.ARIMA_MADURAI to ComposeFontFamily(Font("fonts/arima_madurai.ttf", context.assets)),
+            ReadiumFontFamily.HIND_MADURAI to ComposeFontFamily(Font("fonts/hind_madurai.ttf", context.assets)),
+            ReadiumFontFamily.LOHIT_TAMIL to ComposeFontFamily(Font("fonts/lohit_tamil.ttf", context.assets)),
+            ReadiumFontFamily.MUKTA_MALAR to ComposeFontFamily(Font("fonts/mukta_malar.ttf", context.assets))
+        )
+    }
+    val options = remember {
+        listOf(
+            null,
+            ReadiumFontFamily.ARIMA_MADURAI,
+            ReadiumFontFamily.HIND_MADURAI,
+            ReadiumFontFamily.LOHIT_TAMIL,
+            ReadiumFontFamily.MUKTA_MALAR
+        )
+    }
+    val originalLabel = stringResource(R.string.settings_typeface_original)
+    val selected = preference.value ?: preference.effectiveValue
+
+    SettingsSection(label = stringResource(R.string.settings_typeface)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            for (option in options) {
+                TypefaceTile(
+                    label = option?.name ?: originalLabel,
+                    previewFontFamily = previewFamilies[option] ?: ComposeFontFamily.Default,
+                    isSelected = selected == option,
+                    onClick = {
+                        if (option == preference.value) {
+                            preference.clear()
+                        } else {
+                            preference.set(option)
+                        }
+                        commit()
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun TypefaceTile(
+    label: String,
+    previewFontFamily: ComposeFontFamily,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    Surface(
+        onClick = onClick,
+        shape = RoundedCornerShape(13.dp),
+        color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
+        contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+        modifier = Modifier
+            .width(84.dp)
+            .border(
+                width = 1.dp,
+                color = if (isSelected) Color.Transparent else MaterialTheme.colorScheme.outline,
+                shape = RoundedCornerShape(13.dp)
+            )
+    ) {
+        Column(
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "அஆஇ",
+                fontFamily = previewFontFamily,
+                fontSize = 19.sp
+            )
+
+            Spacer(modifier = Modifier.height(6.dp))
+
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelSmall,
+                textAlign = TextAlign.Center,
+                maxLines = 2
+            )
+        }
+    }
 }

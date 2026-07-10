@@ -34,12 +34,12 @@ abstract class UserPreferencesBottomSheetDialogFragment(
 
     @Composable
     override fun Content() {
-        UserPreferences(preferencesModel, title)
+        UserPreferences(preferencesModel, title, onDismiss = { dismiss() })
     }
 }
 
 class MainPreferencesBottomSheetDialogFragment : UserPreferencesBottomSheetDialogFragment(
-    "User Settings"
+    "காட்சி அமைப்பு"
 ) {
 
     private val viewModel: ReaderViewModel by activityViewModels()

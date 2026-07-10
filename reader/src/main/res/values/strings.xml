@@ -12,6 +12,22 @@
     <string name="epubactivity_read_aloud_start">Read Aloud</string>
     <string name="epubactivity_search">Search</string>
 
+    <!-- Settings sheet (reading display + TTS) -->
+    <string name="settings_reset">மீட்டமை</string>
+    <string name="settings_close">மூடு</string>
+    <string name="settings_theme">தோற்றம்</string>
+    <string name="settings_typeface">எழுத்துரு</string>
+    <string name="settings_typeface_original">மூலம்</string>
+    <string name="settings_font_size">எழுத்து அளவு</string>
+    <string name="settings_spacing">இடைவெளி</string>
+    <string name="settings_line_height">வரி இடைவெளி</string>
+    <string name="settings_letter_spacing">எழுத்து இடைவெளி</string>
+    <string name="settings_alignment">சீரமைப்பு</string>
+    <string name="settings_page_margins">ஓரம்</string>
+    <string name="theme_light">வெள்ளை</string>
+    <string name="theme_dark">இருள்</string>
+    <string name="theme_sepia">பழுப்பு</string>
+
     <string name="title_fragment_drm_management">DRM Management</string>
     <string name="more_options">More Options</string>
     <string name="popup_delete_button">DELETE</string>
