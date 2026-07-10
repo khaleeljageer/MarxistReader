@@ -8,13 +8,14 @@
 
 package com.jskaleel.epub.reader.preferences
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -22,8 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -47,13 +46,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jskaleel.epub.R
 import com.jskaleel.epub.reader.ARIMA_MADURAI
 import com.jskaleel.epub.reader.HIND_MADURAI
@@ -63,8 +59,6 @@ import com.jskaleel.epub.reader.tts.TtsPreferencesEditor
 import com.jskaleel.epub.shared.views.ButtonGroupItem
 import com.jskaleel.epub.shared.views.ColorItem
 import com.jskaleel.epub.shared.views.InlineStepperRow
-import com.jskaleel.epub.shared.views.LanguageItem
-import com.jskaleel.epub.shared.views.MenuItem
 import com.jskaleel.epub.shared.views.SettingsSection
 import com.jskaleel.epub.shared.views.StepperItem
 import com.jskaleel.epub.shared.views.SwitchItem
@@ -82,8 +76,6 @@ import org.readium.r2.navigator.preferences.Theme
 import org.readium.r2.navigator.preferences.clear
 import org.readium.r2.shared.ExperimentalReadiumApi
 import org.readium.r2.shared.publication.Layout
-import org.readium.r2.shared.util.Language
-import androidx.compose.ui.text.font.FontFamily as ComposeFontFamily
 import org.readium.r2.navigator.preferences.Color as ReadiumColor
 import org.readium.r2.navigator.preferences.FontFamily as ReadiumFontFamily
 import org.readium.r2.navigator.preferences.TextAlign as ReadiumTextAlign
@@ -154,8 +146,8 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
                 is TtsPreferencesEditor ->
                     MediaUserPreferences(
                         commit = commit,
-                        language = editor.language,
                         voice = editor.voice,
+                        voiceLabel = editor::voiceLabel,
                         speed = editor.speed,
                         pitch = editor.pitch
                     )
@@ -224,8 +216,8 @@ private fun SettingsSheetHeader(
 @Composable
 private fun MediaUserPreferences(
     commit: () -> Unit,
-    language: Preference<Language?>? = null,
     voice: EnumPreference<AndroidTtsEngine.Voice.Id?>? = null,
+    voiceLabel: (AndroidTtsEngine.Voice.Id) -> String = { it.value },
     speed: RangePreference<Double>? = null,
     pitch: RangePreference<Double>? = null,
 ) {
@@ -245,19 +237,12 @@ private fun MediaUserPreferences(
         )
     }
 
-    if (language != null) {
-        LanguageItem(
-            preference = language,
-            commit = commit
-        )
-    }
-
     if (voice != null) {
-        MenuItem(
+        ButtonGroupItem(
             title = stringResource(R.string.tts_voice),
             preference = voice,
-            formatValue = { it?.value ?: "Default" },
-            commit = commit
+            commit = commit,
+            formatValue = { it?.let(voiceLabel) ?: "Default" }
         )
     }
 }
@@ -526,43 +511,14 @@ private fun RowScope.ThemeSwatch(
 }
 
 /**
- * Typeface choice shown as a scrollable row of tiles that preview the actual glyphs of each
- * font, rather than a text-only dropdown menu.
+ * Typeface choice shown as a row of text-only pills naming each font, wrapping onto multiple
+ * lines instead of scrolling or clipping long names off the edge.
  */
 @Composable
 private fun TypefaceItem(
     preference: Preference<ReadiumFontFamily?>,
     commit: () -> Unit,
 ) {
-    val context = LocalContext.current
-    val previewFamilies = remember(context) {
-        mapOf(
-            ReadiumFontFamily.ARIMA_MADURAI to ComposeFontFamily(
-                Font(
-                    "fonts/arima_madurai.ttf",
-                    context.assets
-                )
-            ),
-            ReadiumFontFamily.HIND_MADURAI to ComposeFontFamily(
-                Font(
-                    "fonts/hind_madurai.ttf",
-                    context.assets
-                )
-            ),
-            ReadiumFontFamily.LOHIT_TAMIL to ComposeFontFamily(
-                Font(
-                    "fonts/lohit_tamil.ttf",
-                    context.assets
-                )
-            ),
-            ReadiumFontFamily.MUKTA_MALAR to ComposeFontFamily(
-                Font(
-                    "fonts/mukta_malar.ttf",
-                    context.assets
-                )
-            )
-        )
-    }
     val options = remember {
         listOf(
             null,
@@ -576,16 +532,13 @@ private fun TypefaceItem(
     val selected = preference.value ?: preference.effectiveValue
 
     SettingsSection(label = stringResource(R.string.settings_typeface)) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState()),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             for (option in options) {
                 TypefaceTile(
                     label = option?.name ?: originalLabel,
-                    previewFontFamily = previewFamilies[option] ?: ComposeFontFamily.Default,
                     isSelected = selected == option,
                     onClick = {
                         if (option == preference.value) {
@@ -604,7 +557,6 @@ private fun TypefaceItem(
 @Composable
 private fun TypefaceTile(
     label: String,
-    previewFontFamily: ComposeFontFamily,
     isSelected: Boolean,
     onClick: () -> Unit,
 ) {
@@ -613,32 +565,14 @@ private fun TypefaceTile(
         shape = RoundedCornerShape(13.dp),
         color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface,
         contentColor = if (isSelected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
-        modifier = Modifier
-            .width(84.dp)
-            .border(
-                width = 1.dp,
-                color = if (isSelected) Color.Transparent else MaterialTheme.colorScheme.outline,
-                shape = RoundedCornerShape(13.dp)
-            )
+        border = if (isSelected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
     ) {
-        Column(
-            modifier = Modifier.padding(vertical = 12.dp, horizontal = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = "அஆஇ",
-                fontFamily = previewFontFamily,
-                fontSize = 19.sp
-            )
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall,
-                textAlign = TextAlign.Center,
-                maxLines = 2
-            )
-        }
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp)
+        )
     }
 }

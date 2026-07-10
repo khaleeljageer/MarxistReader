@@ -10,6 +10,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.compose.runtime.Composable
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.jskaleel.epub.reader.ReaderViewModel
 import com.jskaleel.epub.utils.compose.ComposeBottomSheetDialogFragment
@@ -27,8 +28,13 @@ abstract class UserPreferencesBottomSheetDialogFragment(
             window?.setDimAmount(0.1f)
 
             behavior.apply {
-                peekHeight = 1000
-                maxHeight = 1000
+                // Peek at a partial height, but let the user drag it up to fully expand
+                // (wrapping content, capped at screen height) instead of pinning the sheet
+                // to a fixed size that only scrolls internally.
+                isFitToContents = true
+                skipCollapsed = false
+                peekHeight = (resources.displayMetrics.heightPixels * 0.6f).toInt()
+                state = BottomSheetBehavior.STATE_COLLAPSED
             }
         }
 

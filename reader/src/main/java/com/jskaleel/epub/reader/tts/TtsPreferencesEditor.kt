@@ -64,6 +64,22 @@ class TtsPreferencesEditor(
         )
     }
 
+    /**
+     * A readable label for a voice, since [AndroidTtsEngine.Voice.Id] is an opaque engine
+     * identifier (e.g. "ta-in-x-tac-network") not meant for display.
+     */
+    fun voiceLabel(id: AndroidTtsEngine.Voice.Id): String {
+        val voice = availableVoices.firstOrNull { it.id == id } ?: return id.value
+        val quality = when (voice.quality) {
+            AndroidTtsEngine.Voice.Quality.Highest -> "Highest quality"
+            AndroidTtsEngine.Voice.Quality.High -> "High quality"
+            AndroidTtsEngine.Voice.Quality.Normal -> "Normal quality"
+            AndroidTtsEngine.Voice.Quality.Low -> "Low quality"
+            AndroidTtsEngine.Voice.Quality.Lowest -> "Lowest quality"
+        }
+        return if (voice.requiresNetwork) "$quality (Online)" else "$quality (Offline)"
+    }
+
     private fun <K, V> Map<K, V>.update(key: K, value: V?): Map<K, V> =
         buildMap {
             putAll(this@update)
