@@ -72,7 +72,6 @@ import org.readium.navigator.media.tts.android.AndroidTtsEngine
 import org.readium.r2.navigator.epub.EpubPreferencesEditor
 import org.readium.r2.navigator.preferences.Axis
 import org.readium.r2.navigator.preferences.Configurable
-import org.readium.r2.navigator.preferences.clear
 import org.readium.r2.navigator.preferences.EnumPreference
 import org.readium.r2.navigator.preferences.Fit
 import org.readium.r2.navigator.preferences.Preference
@@ -80,13 +79,14 @@ import org.readium.r2.navigator.preferences.PreferencesEditor
 import org.readium.r2.navigator.preferences.RangePreference
 import org.readium.r2.navigator.preferences.Spread
 import org.readium.r2.navigator.preferences.Theme
+import org.readium.r2.navigator.preferences.clear
 import org.readium.r2.shared.ExperimentalReadiumApi
-import org.readium.r2.shared.publication.epub.EpubLayout
+import org.readium.r2.shared.publication.Layout
 import org.readium.r2.shared.util.Language
+import androidx.compose.ui.text.font.FontFamily as ComposeFontFamily
 import org.readium.r2.navigator.preferences.Color as ReadiumColor
 import org.readium.r2.navigator.preferences.FontFamily as ReadiumFontFamily
 import org.readium.r2.navigator.preferences.TextAlign as ReadiumTextAlign
-import androidx.compose.ui.text.font.FontFamily as ComposeFontFamily
 
 /**
  * Stateful user settings component paired with a [ReaderViewModel].
@@ -129,7 +129,7 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
             when (editor) {
                 is EpubPreferencesEditor ->
                     when (editor.layout) {
-                        EpubLayout.REFLOWABLE ->
+                        Layout.REFLOWABLE ->
                             ReflowableUserPreferences(
                                 commit = commit,
                                 fontFamily = editor.fontFamily,
@@ -141,12 +141,14 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
                                 theme = editor.theme
                             )
 
-                        EpubLayout.FIXED ->
+                        Layout.FIXED ->
                             FixedLayoutUserPreferences(
                                 commit = commit,
                                 backgroundColor = editor.backgroundColor,
                                 spread = editor.spread
                             )
+
+                        Layout.SCROLLED -> {}
                     }
 
                 is TtsPreferencesEditor ->
@@ -409,9 +411,9 @@ private fun ReflowableUserPreferences(
             commit = commit,
             icon = { value ->
                 when (value) {
-                    ReadiumTextAlign.CENTER -> Icons.Default.FormatAlignCenter
                     ReadiumTextAlign.JUSTIFY -> Icons.Default.FormatAlignJustify
                     ReadiumTextAlign.END, ReadiumTextAlign.RIGHT -> Icons.AutoMirrored.Filled.FormatAlignRight
+                    ReadiumTextAlign.CENTER -> Icons.Default.FormatAlignCenter
                     ReadiumTextAlign.START, ReadiumTextAlign.LEFT, null -> Icons.AutoMirrored.Filled.FormatAlignLeft
                 }
             }
@@ -535,10 +537,30 @@ private fun TypefaceItem(
     val context = LocalContext.current
     val previewFamilies = remember(context) {
         mapOf(
-            ReadiumFontFamily.ARIMA_MADURAI to ComposeFontFamily(Font("fonts/arima_madurai.ttf", context.assets)),
-            ReadiumFontFamily.HIND_MADURAI to ComposeFontFamily(Font("fonts/hind_madurai.ttf", context.assets)),
-            ReadiumFontFamily.LOHIT_TAMIL to ComposeFontFamily(Font("fonts/lohit_tamil.ttf", context.assets)),
-            ReadiumFontFamily.MUKTA_MALAR to ComposeFontFamily(Font("fonts/mukta_malar.ttf", context.assets))
+            ReadiumFontFamily.ARIMA_MADURAI to ComposeFontFamily(
+                Font(
+                    "fonts/arima_madurai.ttf",
+                    context.assets
+                )
+            ),
+            ReadiumFontFamily.HIND_MADURAI to ComposeFontFamily(
+                Font(
+                    "fonts/hind_madurai.ttf",
+                    context.assets
+                )
+            ),
+            ReadiumFontFamily.LOHIT_TAMIL to ComposeFontFamily(
+                Font(
+                    "fonts/lohit_tamil.ttf",
+                    context.assets
+                )
+            ),
+            ReadiumFontFamily.MUKTA_MALAR to ComposeFontFamily(
+                Font(
+                    "fonts/mukta_malar.ttf",
+                    context.assets
+                )
+            )
         )
     }
     val options = remember {

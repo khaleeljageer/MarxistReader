@@ -18,6 +18,7 @@ import com.jskaleel.epub.utils.CoroutineQueue
 import com.jskaleel.epub.utils.IResult
 import org.json.JSONObject
 import org.readium.navigator.media.tts.TtsNavigatorFactory
+import org.readium.r2.navigator.epub.EpubDefaults
 import org.readium.r2.navigator.epub.EpubNavigatorFactory
 import org.readium.r2.shared.ExperimentalReadiumApi
 import org.readium.r2.shared.publication.Locator
@@ -115,7 +116,7 @@ class EBookReaderRepository(
         }
 
         val id = bookRepository.insertBook(
-            file.absoluteFile.toUrl(),
+            file.absoluteFile.toUrl(isDirectory = false),
             asset.format.mediaType,
             publication,
             coverFile
@@ -198,7 +199,12 @@ class EBookReaderRepository(
     ): Try<EpubReaderInitData, OpeningError> {
         val preferencesManager = EpubPreferencesManagerFactory(preferencesDataStore)
             .createPreferenceManager(bookId)
-        val navigatorFactory = EpubNavigatorFactory(publication)
+        val navigatorFactory = EpubNavigatorFactory(
+            publication = publication,
+            configuration = EpubNavigatorFactory.Configuration(
+                defaults = EpubDefaults(publisherStyles = false)
+            )
+        )
         val ttsInitData = getTtsInitData(bookId, publication)
 
         val initData = EpubReaderInitData(
