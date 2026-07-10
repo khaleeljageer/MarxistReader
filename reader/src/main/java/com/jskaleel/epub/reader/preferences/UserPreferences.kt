@@ -37,12 +37,10 @@ import org.readium.navigator.media.tts.android.AndroidTtsEngine
 import org.readium.r2.navigator.epub.EpubPreferencesEditor
 import org.readium.r2.navigator.preferences.Axis
 import org.readium.r2.navigator.preferences.Color
-import org.readium.r2.navigator.preferences.ColumnCount
 import org.readium.r2.navigator.preferences.Configurable
 import org.readium.r2.navigator.preferences.EnumPreference
 import org.readium.r2.navigator.preferences.Fit
 import org.readium.r2.navigator.preferences.FontFamily
-import org.readium.r2.navigator.preferences.ImageFilter
 import org.readium.r2.navigator.preferences.Preference
 import org.readium.r2.navigator.preferences.PreferencesEditor
 import org.readium.r2.navigator.preferences.RangePreference
@@ -97,27 +95,13 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
                     EpubLayout.REFLOWABLE ->
                         ReflowableUserPreferences(
                             commit = commit,
-                            backgroundColor = editor.backgroundColor,
-                            columnCount = editor.columnCount,
                             fontFamily = editor.fontFamily,
                             fontSize = editor.fontSize,
-                            fontWeight = editor.fontWeight,
-                            hyphens = editor.hyphens,
-                            imageFilter = editor.imageFilter,
                             letterSpacing = editor.letterSpacing,
-                            ligatures = editor.ligatures,
                             lineHeight = editor.lineHeight,
                             pageMargins = editor.pageMargins,
-                            paragraphIndent = editor.paragraphIndent,
-                            paragraphSpacing = editor.paragraphSpacing,
-                            publisherStyles = editor.publisherStyles,
-                            scroll = editor.scroll,
                             textAlign = editor.textAlign,
-                            textColor = editor.textColor,
-                            textNormalization = editor.textNormalization,
-                            theme = editor.theme,
-                            typeScale = editor.typeScale,
-                            wordSpacing = editor.wordSpacing
+                            theme = editor.theme
                         )
 
                     EpubLayout.FIXED ->
@@ -280,111 +264,41 @@ private fun FixedLayoutUserPreferences(
 @Composable
 private fun ReflowableUserPreferences(
     commit: () -> Unit,
-    backgroundColor: Preference<Color>? = null,
-    columnCount: EnumPreference<ColumnCount>? = null,
     fontFamily: Preference<FontFamily?>? = null,
     fontSize: RangePreference<Double>? = null,
-    fontWeight: RangePreference<Double>? = null,
-    hyphens: Preference<Boolean>? = null,
-    imageFilter: EnumPreference<ImageFilter?>? = null,
     letterSpacing: RangePreference<Double>? = null,
-    ligatures: Preference<Boolean>? = null,
     lineHeight: RangePreference<Double>? = null,
     pageMargins: RangePreference<Double>? = null,
-    paragraphIndent: RangePreference<Double>? = null,
-    paragraphSpacing: RangePreference<Double>? = null,
-    publisherStyles: Preference<Boolean>? = null,
-    scroll: Preference<Boolean>? = null,
     textAlign: EnumPreference<ReadiumTextAlign?>? = null,
-    textColor: Preference<Color>? = null,
-    textNormalization: Preference<Boolean>? = null,
     theme: EnumPreference<Theme>? = null,
-    typeScale: RangePreference<Double>? = null,
-    wordSpacing: RangePreference<Double>? = null,
 ) {
-    if (scroll != null || columnCount != null || pageMargins != null) {
-        if (scroll != null) {
-            SwitchItem(
-                title = "Scroll",
-                preference = scroll,
-                commit = commit
-            )
-        }
+    if (pageMargins != null) {
+        StepperItem(
+            title = "Page margins",
+            preference = pageMargins,
+            commit = commit
+        )
 
-        if (columnCount != null) {
-            ButtonGroupItem(
-                title = "Columns",
-                preference = columnCount,
-                commit = commit
-            ) { value ->
-                when (value) {
-                    ColumnCount.AUTO -> "Auto"
-                    ColumnCount.ONE -> "1"
-                    ColumnCount.TWO -> "2"
-                }
+        Divider()
+    }
+
+    if (theme != null) {
+        ButtonGroupItem(
+            title = "Theme",
+            preference = theme,
+            commit = commit
+        ) { value ->
+            when (value) {
+                Theme.LIGHT -> "Light"
+                Theme.DARK -> "Dark"
+                Theme.SEPIA -> "Sepia"
             }
-        }
-
-        if (pageMargins != null) {
-            StepperItem(
-                title = "Page margins",
-                preference = pageMargins,
-                commit = commit
-            )
         }
 
         Divider()
     }
 
-    if (theme != null || textColor != null || imageFilter != null) {
-        if (theme != null) {
-            ButtonGroupItem(
-                title = "Theme",
-                preference = theme,
-                commit = commit
-            ) { value ->
-                when (value) {
-                    Theme.LIGHT -> "Light"
-                    Theme.DARK -> "Dark"
-                    Theme.SEPIA -> "Sepia"
-                }
-            }
-        }
-
-        if (imageFilter != null) {
-            ButtonGroupItem(
-                title = "Image filter",
-                preference = imageFilter,
-                commit = commit
-            ) { value ->
-                when (value) {
-                    ImageFilter.DARKEN -> "Darken"
-                    ImageFilter.INVERT -> "Invert"
-                    null -> "None"
-                }
-            }
-        }
-
-        if (textColor != null) {
-            ColorItem(
-                title = "Text color",
-                preference = textColor,
-                commit = commit
-            )
-        }
-
-        if (backgroundColor != null) {
-            ColorItem(
-                title = "Background color",
-                preference = backgroundColor,
-                commit = commit
-            )
-        }
-
-        Divider()
-    }
-
-    if (fontFamily != null || fontSize != null || textNormalization != null) {
+    if (fontFamily != null || fontSize != null) {
         if (fontFamily != null) {
             MenuItem(
                 title = "Typeface",
@@ -413,114 +327,42 @@ private fun ReflowableUserPreferences(
             )
         }
 
-        if (fontWeight != null) {
-            StepperItem(
-                title = "Font weight",
-                preference = fontWeight,
-                commit = commit
-            )
-        }
-
-        if (textNormalization != null) {
-            SwitchItem(
-                title = "Text normalization",
-                preference = textNormalization,
-                commit = commit
-            )
-        }
-
         Divider()
     }
 
-    if (publisherStyles != null) {
-        SwitchItem(
-            title = "Publisher styles",
-            preference = publisherStyles,
-            commit = commit
-        )
-
-        if (!(publisherStyles.value ?: publisherStyles.effectiveValue)) {
-            if (textAlign != null) {
-                ButtonGroupItem(
-                    title = "Alignment",
-                    preference = textAlign,
-                    commit = commit
-                ) { value ->
-                    when (value) {
-                        ReadiumTextAlign.CENTER -> "Center"
-                        ReadiumTextAlign.JUSTIFY -> "Justify"
-                        ReadiumTextAlign.START -> "Start"
-                        ReadiumTextAlign.END -> "End"
-                        ReadiumTextAlign.LEFT -> "Left"
-                        ReadiumTextAlign.RIGHT -> "Right"
-                        null -> "Default"
-                    }
+    if (textAlign != null || lineHeight != null || letterSpacing != null) {
+        if (textAlign != null) {
+            ButtonGroupItem(
+                title = "Alignment",
+                preference = textAlign,
+                commit = commit
+            ) { value ->
+                when (value) {
+                    ReadiumTextAlign.CENTER -> "Center"
+                    ReadiumTextAlign.JUSTIFY -> "Justify"
+                    ReadiumTextAlign.START -> "Start"
+                    ReadiumTextAlign.END -> "End"
+                    ReadiumTextAlign.LEFT -> "Left"
+                    ReadiumTextAlign.RIGHT -> "Right"
+                    null -> "Default"
                 }
             }
+        }
 
-            if (typeScale != null) {
-                StepperItem(
-                    title = "Type scale",
-                    preference = typeScale,
-                    commit = commit
-                )
-            }
+        if (lineHeight != null) {
+            StepperItem(
+                title = "Line height",
+                preference = lineHeight,
+                commit = commit
+            )
+        }
 
-            if (lineHeight != null) {
-                StepperItem(
-                    title = "Line height",
-                    preference = lineHeight,
-                    commit = commit
-                )
-            }
-
-            if (paragraphIndent != null) {
-                StepperItem(
-                    title = "Paragraph indent",
-                    preference = paragraphIndent,
-                    commit = commit
-                )
-            }
-
-            if (paragraphSpacing != null) {
-                StepperItem(
-                    title = "Paragraph spacing",
-                    preference = paragraphSpacing,
-                    commit = commit
-                )
-            }
-
-            if (wordSpacing != null) {
-                StepperItem(
-                    title = "Word spacing",
-                    preference = wordSpacing,
-                    commit = commit
-                )
-            }
-
-            if (letterSpacing != null) {
-                StepperItem(
-                    title = "Letter spacing",
-                    preference = letterSpacing,
-                    commit = commit
-                )
-            }
-
-            if (hyphens != null) {
-                SwitchItem(
-                    title = "Hyphens",
-                    preference = hyphens,
-                    commit = commit
-                )
-            }
-
-            if (ligatures != null) {
-                SwitchItem(
-                    title = "Ligatures",
-                    preference = ligatures,
-                    commit = commit
-                )
-            }
+        if (letterSpacing != null) {
+            StepperItem(
+                title = "Letter spacing",
+                preference = letterSpacing,
+                commit = commit
+            )
         }
     }
 }
