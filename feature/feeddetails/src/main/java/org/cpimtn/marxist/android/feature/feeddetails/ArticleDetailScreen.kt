@@ -13,6 +13,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -33,10 +35,13 @@ import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.TextFields
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -56,6 +61,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.core.text.HtmlCompat
 import org.cpimtn.marxist.android.domain.model.FeedItem
+import org.cpimtn.marxist.android.domain.model.FontSize
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 @Composable
@@ -63,6 +69,7 @@ fun ArticleDetailTopBarActions(
     isSaved: Boolean,
     onSaveClick: () -> Unit,
     onShareClick: (() -> Unit)?,
+    onFontSizeClick: () -> Unit,
 ) {
     val ext = MarxistReaderTheme.colors
     val bookmarkTint by animateColorAsState(
@@ -70,6 +77,13 @@ fun ArticleDetailTopBarActions(
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
         label = "bookmark_tint",
     )
+    IconButton(onClick = onFontSizeClick) {
+        Icon(
+            imageVector = Icons.Outlined.TextFields,
+            contentDescription = stringResource(R.string.feeddetails_font_size_content_desc),
+            tint = ext.navInactiveIcon,
+        )
+    }
     IconButton(onClick = onSaveClick) {
         Icon(
             imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
@@ -89,6 +103,53 @@ fun ArticleDetailTopBarActions(
             )
         }
     }
+}
+
+@Composable
+fun FontSizeDialog(
+    current: FontSize,
+    onSelect: (FontSize) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.feeddetails_font_size_title)) },
+        text = {
+            Column(
+                modifier = Modifier.wrapContentSize()
+            ) {
+                FontSize.entries.forEach { size ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelect(size) }) {
+                        RadioButton(selected = current == size, onClick = { onSelect(size) })
+                        Spacer(Modifier.width(8.dp))
+                        Text(fontSizeLabel(size))
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+    )
+}
+
+@Composable
+private fun fontSizeLabel(fontSize: FontSize): String = when (fontSize) {
+    FontSize.SMALL -> stringResource(R.string.font_size_small)
+    FontSize.MEDIUM -> stringResource(R.string.font_size_medium)
+    FontSize.NORMAL -> stringResource(R.string.font_size_normal)
+    FontSize.LARGE -> stringResource(R.string.font_size_large)
+    FontSize.EXTRA_LARGE -> stringResource(R.string.font_size_extra_large)
+}
+
+private fun FontSize.scale(): Float = when (this) {
+    FontSize.SMALL -> 0.85f
+    FontSize.MEDIUM -> 0.925f
+    FontSize.NORMAL -> 1f
+    FontSize.LARGE -> 1.15f
+    FontSize.EXTRA_LARGE -> 1.3f
 }
 
 @Composable
@@ -139,6 +200,7 @@ fun ArticleDetailError(
 @Composable
 fun ArticleDetailContent(
     feedItem: FeedItem,
+    fontSize: FontSize,
     modifier: Modifier = Modifier,
 ) {
     val ext = MarxistReaderTheme.colors
@@ -209,7 +271,8 @@ fun ArticleDetailContent(
         // Article body (content) — paragraph style
         HtmlText(
             content = post.content,
-            color = ext.detailBody
+            color = ext.detailBody,
+            fontSizeScale = fontSize.scale(),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -250,15 +313,19 @@ fun ArticleDetailContent(
 }
 
 @Composable
-private fun HtmlText(content: String, color: Color) {
+private fun HtmlText(content: String, color: Color, fontSizeScale: Float) {
     val annotatedText = remember(content) {
         val spanned = HtmlCompat.fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY)
         spanned.toAnnotatedString()
     }
+    val baseStyle = MaterialTheme.typography.bodyMedium
 
     Text(
         text = annotatedText,
-        style = MaterialTheme.typography.bodyMedium,
+        style = baseStyle.copy(
+            fontSize = baseStyle.fontSize * fontSizeScale,
+            lineHeight = baseStyle.lineHeight * fontSizeScale,
+        ),
         color = color,
     )
 }

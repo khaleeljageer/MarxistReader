@@ -7,4 +7,11 @@
     <string name="feeddetails_save_content_desc">TODO_TA: Save article</string>
     <string name="feeddetails_unsave_content_desc">TODO_TA: Unsave article</string>
     <string name="feeddetails_share_content_desc">TODO_TA: Share article</string>
+    <string name="feeddetails_font_size_content_desc">TODO_TA: Text size</string>
+    <string name="feeddetails_font_size_title">TODO_TA: Text Size</string>
+    <string name="font_size_small">TODO_TA: Small</string>
+    <string name="font_size_medium">TODO_TA: Medium</string>
+    <string name="font_size_normal">TODO_TA: Normal</string>
+    <string name="font_size_large">TODO_TA: Large</string>
+    <string name="font_size_extra_large">TODO_TA: Extra Large</string>
 </resources>

@@ -15,6 +15,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -32,6 +35,18 @@ fun ArticleDetailRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    var fontSizeDialogVisible by rememberSaveable { mutableStateOf(false) }
+
+    if (fontSizeDialogVisible) {
+        val current = uiState
+        if (current is ArticleDetailUiState.Success) {
+            FontSizeDialog(
+                current = current.fontSize,
+                onSelect = { viewModel.setFontSize(it) },
+                onDismiss = { fontSizeDialogVisible = false },
+            )
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -65,6 +80,7 @@ fun ArticleDetailRoute(
                                         )
                                     )
                                 },
+                                onFontSizeClick = { fontSizeDialogVisible = true },
                             )
                         }
 
@@ -87,6 +103,7 @@ fun ArticleDetailRoute(
 
             is ArticleDetailUiState.Success -> ArticleDetailContent(
                 feedItem = state.feedItem,
+                fontSize = state.fontSize,
                 modifier = Modifier.padding(paddingValues),
             )
 

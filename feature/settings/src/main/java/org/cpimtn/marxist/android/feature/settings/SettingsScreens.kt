@@ -23,7 +23,6 @@ import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Notifications
-import androidx.compose.material.icons.outlined.TextFields
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -46,7 +45,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.cpimtn.marxist.android.domain.model.AppLanguage
-import org.cpimtn.marxist.android.domain.model.FontSize
 import org.cpimtn.marxist.android.domain.model.Theme
 import org.cpimtn.marxist.core.clickableIf
 import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
@@ -55,7 +53,6 @@ import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 @Stable
 data class SettingsUiState(
     val theme: Theme,
-    val fontSize: FontSize,
     val language: AppLanguage,
     val pushNotificationsEnabled: Boolean,
     val appVersion: String,
@@ -68,7 +65,6 @@ fun SettingsScreenContent(
     scrollState: ScrollState = rememberScrollState(),
     uiState: SettingsUiState,
     themeDialogUpdate: (Boolean) -> Unit,
-    fontSizeDialogUpdate: (Boolean) -> Unit,
     languageDialogUpdate: (Boolean) -> Unit,
     onPushNotificationStatusChange: (Boolean) -> Unit,
 ) {
@@ -89,16 +85,6 @@ fun SettingsScreenContent(
             subtitle = themeLabel(uiState.theme),
             showTrailingArrow = true,
             onClick = { themeDialogUpdate(true) },
-        )
-        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
-
-        SettingsItemRow(
-            icon = Icons.Outlined.TextFields,
-            iconBgColor = colors.settingsIconBg,
-            title = stringResource(R.string.settings_font_size),
-            subtitle = fontSizeLabel(uiState.fontSize),
-            showTrailingArrow = true,
-            onClick = { fontSizeDialogUpdate(true) },
         )
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 
@@ -256,15 +242,6 @@ private fun themeLabel(theme: Theme): String = when (theme) {
 }
 
 @Composable
-private fun fontSizeLabel(fontSize: FontSize): String = when (fontSize) {
-    FontSize.SMALL -> stringResource(R.string.font_size_small)
-    FontSize.MEDIUM -> stringResource(R.string.font_size_medium)
-    FontSize.NORMAL -> stringResource(R.string.font_size_normal)
-    FontSize.LARGE -> stringResource(R.string.font_size_large)
-    FontSize.EXTRA_LARGE -> stringResource(R.string.font_size_extra_large)
-}
-
-@Composable
 private fun languageLabel(lang: AppLanguage): String = when (lang) {
     AppLanguage.TAMIL -> stringResource(R.string.language_tamil)
     AppLanguage.ENGLISH -> stringResource(R.string.language_english)
@@ -292,36 +269,6 @@ fun ThemeDialog(
                         RadioButton(selected = current == theme, onClick = { onSelect(theme) })
                         Spacer(Modifier.width(8.dp))
                         Text(text = themeLabel(theme))
-                    }
-                }
-            }
-        },
-        confirmButton = {},
-    )
-}
-
-@Composable
-fun FontSizeDialog(
-    current: FontSize,
-    onSelect: (FontSize) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.settings_font_size)) },
-        text = {
-            Column(
-                modifier = Modifier.wrapContentSize()
-            ) {
-                FontSize.entries.forEach { size ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable { onSelect(size) }) {
-                        RadioButton(selected = current == size, onClick = { onSelect(size) })
-                        Spacer(Modifier.width(8.dp))
-                        Text(fontSizeLabel(size))
                     }
                 }
             }

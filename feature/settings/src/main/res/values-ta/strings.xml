@@ -7,8 +7,6 @@
     <!-- Display -->
     <string name="settings_dark_mode">TODO_TA: Dark Mode</string>
     <string name="settings_dark_mode_subtitle">TODO_TA: Comfortable look for eyes</string>
-    <string name="settings_font_size">TODO_TA: Font Size</string>
-    <string name="settings_font_size_subtitle">TODO_TA: Normal</string>
     <string name="settings_language">TODO_TA: Language</string>
     <string name="settings_language_subtitle">TODO_TA: Tamil</string>
     <string name="settings_theme_subtitle">TODO_TA: Theme</string>
@@ -28,13 +26,6 @@
     <string name="theme_light">TODO_TA: Light</string>
     <string name="theme_dark">TODO_TA: Dark</string>
     <string name="theme_default">TODO_TA: Default</string>
-
-    <!-- Font size dialog -->
-    <string name="font_size_small">TODO_TA: Small</string>
-    <string name="font_size_medium">TODO_TA: Medium</string>
-    <string name="font_size_normal">TODO_TA: Normal</string>
-    <string name="font_size_large">TODO_TA: Large</string>
-    <string name="font_size_extra_large">TODO_TA: Extra Large</string>
 
     <!-- Language dialog -->
     <string name="language_tamil">TODO_TA: Tamil</string>
