@@ -129,7 +129,9 @@ private fun <P : Configurable.Preferences<P>, E : PreferencesEditor<P>> UserPref
                                 lineHeight = editor.lineHeight,
                                 pageMargins = editor.pageMargins,
                                 textAlign = editor.textAlign,
-                                theme = editor.theme
+                                theme = editor.theme,
+                                themeBackgroundColor = editor.backgroundColor,
+                                themeTextColor = editor.textColor,
                             )
 
                         Layout.FIXED ->
@@ -349,9 +351,16 @@ private fun ReflowableUserPreferences(
     pageMargins: RangePreference<Double>? = null,
     textAlign: EnumPreference<ReadiumTextAlign?>? = null,
     theme: EnumPreference<Theme>? = null,
+    themeBackgroundColor: Preference<ReadiumColor>? = null,
+    themeTextColor: Preference<ReadiumColor>? = null,
 ) {
     if (theme != null) {
-        ThemeItem(preference = theme, commit = commit)
+        ThemeItem(
+            preference = theme,
+            backgroundColor = themeBackgroundColor,
+            textColor = themeTextColor,
+            commit = commit,
+        )
     }
 
     if (fontSize != null) {
@@ -427,9 +436,20 @@ private fun ReflowableUserPreferences(
  * Theme choice shown as color swatches (rather than text pills) so the effect of each option
  * is visible at a glance.
  */
+/**
+ * Readium's built-in dark theme is pure black background (#000000) on near-pure-white text
+ * (#FEFEFE), which is harsh to read for long stretches (halation on OLED, high eye strain).
+ * We override it with a softer dark-gray/off-white pair; the other built-in themes (light,
+ * sepia) are already comfortable, so we clear any override when switching to them.
+ */
+private val DARK_THEME_BACKGROUND = ReadiumColor(0xFF0E0C09.toInt())
+private val DARK_THEME_TEXT = ReadiumColor(0xFFFEF3EC.toInt())
+
 @Composable
 private fun ThemeItem(
     preference: EnumPreference<Theme>,
+    backgroundColor: Preference<ReadiumColor>?,
+    textColor: Preference<ReadiumColor>?,
     commit: () -> Unit,
 ) {
     val selected = preference.value ?: preference.effectiveValue
@@ -440,20 +460,29 @@ private fun ThemeItem(
             horizontalArrangement = Arrangement.spacedBy(18.dp)
         ) {
             for (option in preference.supportedValues) {
-                ThemeSwatch(
-                    label = themeLabel(option),
-                    swatchColor = themeSwatchColor(option),
-                    isSelected = selected == option,
-                    enabled = preference.isEffective,
-                    onClick = {
-                        if (option == preference.value) {
-                            preference.clear()
-                        } else {
-                            preference.set(option)
+                    ThemeSwatch(
+                        label = themeLabel(option),
+                        swatchColor = themeSwatchColor(option),
+                        isSelected = selected == option,
+                        enabled = preference.isEffective,
+                        onClick = {
+                            if (option == preference.value) {
+                                preference.clear()
+                                backgroundColor?.clear()
+                                textColor?.clear()
+                            } else {
+                                preference.set(option)
+                                if (option == Theme.DARK) {
+                                    backgroundColor?.set(DARK_THEME_BACKGROUND)
+                                    textColor?.set(DARK_THEME_TEXT)
+                                } else {
+                                    backgroundColor?.clear()
+                                    textColor?.clear()
+                                }
+                            }
+                            commit()
                         }
-                        commit()
-                    }
-                )
+                    )
             }
         }
     }
