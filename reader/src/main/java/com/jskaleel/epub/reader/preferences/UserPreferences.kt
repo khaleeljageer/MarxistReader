@@ -96,8 +96,7 @@ fun UserPreferences(
         commit = model::commit,
         title = title,
         onReset = {
-            editor.clear()
-            model.commit()
+            model.reset()
         },
         onDismiss = onDismiss
     )

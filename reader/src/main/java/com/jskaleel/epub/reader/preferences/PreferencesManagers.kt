@@ -45,10 +45,21 @@ class PreferencesManager<P : Configurable.Preferences<P>> internal constructor(
     @Suppress("Unused") // Keep the scope alive until the PreferencesManager is garbage collected
     private val coroutineScope: CoroutineScope,
     private val editPreferences: suspend (P) -> Unit,
+    private val clearPreferences: suspend () -> Unit,
 ) {
 
     suspend fun setPreferences(preferences: P) {
         editPreferences(preferences)
+    }
+
+    /**
+     * Removes the persisted preferences entirely (rather than overwriting them with a
+     * blank-but-real value) so the next read falls back to [PreferencesManagerFactory.emptyPreferences] —
+     * writing an actual cleared value here would permanently defeat that fallback, see
+     * [PreferencesManagerFactory.clearPreferences].
+     */
+    suspend fun resetPreferences() {
+        clearPreferences()
     }
 }
 
@@ -67,7 +78,8 @@ sealed class PreferencesManagerFactory<P : Configurable.Preferences<P>>(
         return PreferencesManager(
             preferences = preferences,
             coroutineScope = coroutineScope,
-            editPreferences = { setPreferences(bookId, it) }
+            editPreferences = { setPreferences(bookId, it) },
+            clearPreferences = { clearPreferences(bookId) }
         )
     }
 
@@ -82,6 +94,18 @@ sealed class PreferencesManagerFactory<P : Configurable.Preferences<P>>(
             data[key(bookId)] = publicationPreferencesFilter
                 .filter(preferences)
                 .let { preferencesSerializer.serialize(it) }
+        }
+    }
+
+    /**
+     * Deletes the stored entries rather than overwriting them with a cleared-but-real
+     * value: a stored (even all-null) value would deserialize successfully and permanently
+     * bypass the [emptyPreferences] fallback in [getPreferences] below.
+     */
+    private suspend fun clearPreferences(bookId: Long) {
+        dataStore.edit { data ->
+            data.remove(key(klass))
+            data.remove(key(bookId))
         }
     }
 

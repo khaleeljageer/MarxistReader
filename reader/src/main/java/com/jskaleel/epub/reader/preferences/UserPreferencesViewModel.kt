@@ -55,6 +55,12 @@ class UserPreferencesViewModel<S : Configurable.Settings, P : Configurable.Prefe
         }
     }
 
+    fun reset() {
+        viewModelScope.launch {
+            preferencesManager.resetPreferences()
+        }
+    }
+
     companion object {
         operator fun invoke(
             viewModelScope: CoroutineScope,
