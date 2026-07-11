@@ -134,21 +134,6 @@ fun BookCard(
         }
 
         Column(modifier = Modifier.padding(12.dp)) {
-            Text(
-                text = book.title,
-                style = MaterialTheme.typography.titleSmall,
-                color = MaterialTheme.colorScheme.onSurface,
-                maxLines = 2,
-                minLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = book.date,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Spacer(modifier = Modifier.height(10.dp))
             BookDownloadButton(
                 state = downloadState,
                 onClick = onDownloadClick,
