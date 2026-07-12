@@ -1,6 +1,9 @@
 package org.cpimtn.marxist.android.feature.search
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -26,6 +29,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.filled.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.SearchOff
@@ -55,150 +60,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import org.cpimtn.marxist.android.domain.model.CategoryWithCount
-import org.cpimtn.marxist.android.domain.model.TimelineMonth
+import org.cpimtn.marxist.android.ui.common.ArticleSkeleton
 import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-
-
-//@Composable
-//fun SearchScreen(
-//    modifier: Modifier = Modifier,
-//    onArticleClick: (postId: Int) -> Unit = {},
-//    onCategoryClick: (categoryId: Int) -> Unit = {},
-//    viewModel: SearchViewModel = hiltViewModel(),
-//) {
-//    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-//    val ext = MarxistReaderTheme.colors
-//    val keyboardController = LocalSoftwareKeyboardController.current
-//    val focusManager = LocalFocusManager.current
-//
-//    // Query lives in the composable — ViewModel only gets notified on submit
-//    var query by rememberSaveable { mutableStateOf("") }
-//    // Focus is transient UI state — don't survive process death
-//    var isFocused by remember { mutableStateOf(false) }
-//
-//    LazyColumn(
-//        modifier = modifier
-//            .fillMaxSize()
-//            .padding(horizontal = 16.dp),
-//    ) {
-//        // ── Search Bar ──
-//        item(key = "search_bar") {
-//            Spacer(modifier = Modifier.height(12.dp))
-//            SearchBar(
-//                query = query,
-//                onQueryChange = {
-//                    query = it
-//                    viewModel.onQueryChanged(it)
-//                },
-//                isFocused = isFocused,
-//                onFocusChange = { isFocused = it },
-//                onSubmit = {
-//                    viewModel.onSearchSubmit(query)
-//                    keyboardController?.hide()
-//                    focusManager.clearFocus()
-//                },
-//                onClear = {
-//                    query = ""
-//                    viewModel.onQueryChanged("")
-//                },
-//                onBack = {
-//                    query = ""
-//                    viewModel.onQueryChanged("")
-//                    keyboardController?.hide()
-//                    focusManager.clearFocus()
-//                },
-//                colors = ext,
-//            )
-//        }
-//
-//        // ── Recent Searches ──
-//        if (uiState.recentSearches.isNotEmpty() && query.isBlank()) {
-//            item(key = "recent_header") {
-//                Spacer(modifier = Modifier.height(24.dp))
-//                SectionHeader(
-//                    title = stringResource(R.string.search_recent_title),
-//                    action = stringResource(R.string.search_recent_clear),
-//                    onActionClick = viewModel::clearRecentSearches,
-//                )
-//                Spacer(modifier = Modifier.height(4.dp))
-//            }
-//
-//            items(
-//                items = uiState.recentSearches,
-//                key = { "recent_$it" },
-//            ) { term ->
-//                RecentSearchItem(
-//                    term = term,
-//                    onClick = {
-//                        query = term
-//                        viewModel.onSearchSubmit(term)
-//                        keyboardController?.hide()
-//                        focusManager.clearFocus()
-//                    },
-//                    onFillClick = {
-//                        // Fill search bar without submitting
-//                        query = term
-//                        viewModel.onQueryChanged(term)
-//                    },
-//                    colors = ext,
-//                )
-//            }
-//        }
-//
-//        // ── Categories ──
-//        if (uiState.categoriesWithCount.isNotEmpty() && query.isBlank()) {
-//            item(key = "cat_header") {
-//                Spacer(modifier = Modifier.height(24.dp))
-//                SectionHeader(
-//                    title = stringResource(R.string.search_categories_title),
-//                )
-//                Spacer(modifier = Modifier.height(12.dp))
-//            }
-//
-//            item(key = "cat_grid") {
-//                CategoryGrid(
-//                    categories = uiState.categoriesWithCount,
-//                    onCategoryClick = onCategoryClick,
-//                    colors = ext,
-//                )
-//                Spacer(modifier = Modifier.height(8.dp))
-//            }
-//        }
-//
-//        // ── Timeline ──
-//        if (uiState.timelineMonths.isNotEmpty() && query.isBlank()) {
-//            item(key = "timeline_header") {
-//                Spacer(modifier = Modifier.height(24.dp))
-//                SectionHeader(
-//                    title = stringResource(R.string.search_timeline_title),
-//                )
-//                Spacer(modifier = Modifier.height(12.dp))
-//            }
-//
-//            item(key = "timeline_chips") {
-//                TimelineRow(
-//                    months = uiState.timelineMonths,
-//                    selectedMonth = uiState.selectedMonth,
-//                    onMonthClick = viewModel::onTimelineMonthClick,
-//                    colors = ext,
-//                )
-//                Spacer(modifier = Modifier.height(32.dp))
-//            }
-//        }
-//
-//        // ── Search Results (when query is active) ──
-//        // TODO: Add search results section when SearchViewModel
-//        //       supports FTS query results
-//    }
-//}
-
-
 
 @Composable
 fun SearchDiscovery(
@@ -209,11 +77,11 @@ fun SearchDiscovery(
     onClearSearch: () -> Unit,
     onRecentSearchClick: (String) -> Unit,
     onClearRecentSearches: () -> Unit,
-    onTimelineMonthClick: (String) -> Unit,
-    onCategoryClick: (Int) -> Unit,
+    onTimelineMonthClick: (TimelineMonthUi) -> Unit,
+    onCategoryClick: (CategoryUi) -> Unit,
     onArticleClick: (postId: Int) -> Unit,
 ) {
-    var isFocused by androidx.compose.runtime.mutableStateOf(false)
+    var isFocused by remember { androidx.compose.runtime.mutableStateOf(false) }
     val ext = MarxistReaderTheme.colors
 
     LazyColumn(
@@ -522,6 +390,7 @@ fun SearchResultRow(
     isSaved: Boolean,
     onArticleClick: () -> Unit,
     modifier: Modifier = Modifier,
+    onBookmarkClick: (() -> Unit)? = null,
 ) {
     val ext = MarxistReaderTheme.colors
     Column(
@@ -610,19 +479,48 @@ fun SearchResultRow(
             } else {
                 Spacer(modifier = Modifier.weight(1f))
             }
-            Text(
-                text = item.readTime,
-                style = MaterialTheme.typography.labelSmall,
-                color = ext.articleTimestamp,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = item.readTime,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = ext.articleTimestamp,
+                )
+                if (onBookmarkClick != null) {
+                    Spacer(modifier = Modifier.width(4.dp))
+                    SearchResultBookmarkButton(isSaved = isSaved, onClick = onBookmarkClick)
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun SearchResultBookmarkButton(
+    isSaved: Boolean,
+    onClick: () -> Unit,
+) {
+    val ext = MarxistReaderTheme.colors
+    val tint by animateColorAsState(
+        targetValue = if (isSaved) ext.bookmarkActive else ext.bookmarkInactive,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "search_bookmark_tint",
+    )
+    IconButton(onClick = onClick, modifier = Modifier.size(28.dp)) {
+        Icon(
+            imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
+            contentDescription = stringResource(
+                if (isSaved) R.string.search_unsave_content_desc else R.string.search_save_content_desc,
+            ),
+            tint = tint,
+            modifier = Modifier.size(16.dp),
+        )
     }
 }
 
 @Composable
 private fun CategoryGridUi(
     categories: List<CategoryUi>,
-    onCategoryClick: (Int) -> Unit,
+    onCategoryClick: (CategoryUi) -> Unit,
     colors: MarxistExtendedColors,
 ) {
     val columns = remember(categories) { categories.chunked(3) }
@@ -640,7 +538,7 @@ private fun CategoryGridUi(
                 for (cat in columnItems) {
                     CategoryUiCard(
                         category = cat,
-                        onClick = { onCategoryClick(cat.id) },
+                        onClick = { onCategoryClick(cat) },
                         colors = colors,
                         modifier = Modifier.fillMaxWidth(),
                     )
@@ -694,7 +592,7 @@ private fun CategoryUiCard(
 private fun TimelineRowUi(
     months: List<TimelineMonthUi>,
     selectedMonth: String?,
-    onMonthClick: (String) -> Unit,
+    onMonthClick: (TimelineMonthUi) -> Unit,
     colors: MarxistExtendedColors,
 ) {
     val columns = remember(months) { months.chunked(3) }
@@ -711,8 +609,8 @@ private fun TimelineRowUi(
                 for (month in columnItems) {
                     TimelineChip(
                         label = month.label,
-                        selected = month.label == selectedMonth,
-                        onClick = { onMonthClick(month.label) },
+                        selected = month.key == selectedMonth,
+                        onClick = { onMonthClick(month) },
                         colors = colors,
                     )
                 }
@@ -787,114 +685,6 @@ private fun RecentSearchItem(
                 tint = colors.searchSuggestionIcon,
                 modifier = Modifier.size(16.dp),
             )
-        }
-    }
-}
-
-@Composable
-private fun CategoryGrid(
-    categories: List<CategoryWithCount>,
-    onCategoryClick: (categoryId: Int) -> Unit,
-    colors: MarxistExtendedColors,
-) {
-    val columns = remember(categories) { categories.chunked(3) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-    ) {
-        for (columnItems in columns) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-                modifier = Modifier.width(152.dp),
-            ) {
-                for (item in columnItems) {
-                    CategoryCard(
-                        categoryWithCount = item,
-                        onClick = { onCategoryClick(item.category.id) },
-                        colors = colors,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun CategoryCard(
-    categoryWithCount: CategoryWithCount,
-    onClick: () -> Unit,
-    colors: MarxistExtendedColors,
-    modifier: Modifier = Modifier,
-) {
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(
-                color = colors.searchFieldBg,
-                shape = RoundedCornerShape(12.dp),
-            )
-            .border(
-                width = 1.dp,
-                color = colors.searchFieldBorder,
-                shape = RoundedCornerShape(12.dp),
-            )
-            .clip(shape = RoundedCornerShape(12.dp))
-            .clickable(onClick = onClick)
-            .padding(12.dp),
-    ) {
-        Text(
-            modifier = Modifier.basicMarquee(),
-            text = categoryWithCount.category.name,
-            style = MaterialTheme.typography.titleSmall,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            color = MaterialTheme.colorScheme.onSurface,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = stringResource(
-                R.string.search_articles_count,
-                categoryWithCount.postCount,
-            ),
-            style = MaterialTheme.typography.bodySmall,
-            color = colors.searchSuggestionText,
-        )
-    }
-}
-
-@Composable
-private fun TimelineRow(
-    months: List<TimelineMonth>,
-    selectedMonth: String?,
-    onMonthClick: (String) -> Unit,
-    colors: MarxistExtendedColors,
-) {
-    val columns = remember(months) { months.chunked(3) }
-
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .horizontalScroll(rememberScrollState()),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        for (columnItems in columns) {
-            Column(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                modifier = Modifier,
-            ) {
-                for (month in columnItems) {
-                    TimelineChip(
-                        label = month.label,
-                        selected = month.label == selectedMonth,
-                        onClick = { onMonthClick(month.label) },
-                        colors = colors,
-                    )
-                }
-            }
         }
     }
 }
@@ -1073,6 +863,29 @@ fun SearchLoadingSkeleton(
                         .clip(RoundedCornerShape(20.dp))
                         .background(shimmer),
                 )
+            }
+        }
+    }
+}
+
+/**
+ * List-area skeleton shown below a persistent [SearchBarWithBack] while a submitted
+ * search/category/month browse is loading (unlike [SearchLoadingSkeleton], which fakes its
+ * own search bar and is only for the cold-start [SearchUiState.Loading] state).
+ */
+@Composable
+fun SearchResultsSkeleton(
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+    ) {
+        repeat(4) {
+            ArticleSkeleton()
+            if (it < 3) {
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }

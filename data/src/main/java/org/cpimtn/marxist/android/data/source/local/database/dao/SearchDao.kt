@@ -11,8 +11,9 @@ interface SearchDao {
     /**
      * Full-text search across title, excerpt, and content.
      *
-     * MATCH query uses prefix matching (query*) so "முதலா" matches
-     * "முதலாளித்துவம்", "முதலாளி", etc.
+     * `query` is a fully-formed FTS4 MATCH expression (built and escaped by
+     * [org.cpimtn.marxist.android.data.repository.SearchRepositoryImpl]) using
+     * prefix matching (query*) so "முதலா" matches "முதலாளித்துவம்", "முதலாளி", etc.
      *
      * JOIN on rowid is how Room connects FTS to content table.
      * Results ordered by post id (FTS4 does not expose a built-in rank column).
@@ -30,13 +31,13 @@ interface SearchDao {
 
     /**
      * Search only titles — used for instant suggestions while typing.
-     * Lighter query, fewer results.
+     * `query` already carries the `title:(...)` column filter. Lighter query, fewer results.
      */
     @Query(
         """
         SELECT p.* FROM posts p
         INNER JOIN posts_fts f ON p.rowid = f.rowid
-        WHERE posts_fts MATCH 'title:' || :query
+        WHERE posts_fts MATCH :query
         ORDER BY p.id
         LIMIT :limit
         """

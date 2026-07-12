@@ -8,9 +8,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.cpimtn.marxist.android.ui.common.ArticleListItem
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 @Composable
@@ -36,6 +38,18 @@ fun SearchScreenRoute(
             )
             NoResultsMessage(query = state.query, modifier = Modifier.fillMaxSize())
         }
+        is SearchUiState.Searching -> Column(modifier = Modifier.fillMaxSize()) {
+            SearchBarWithBack(
+                query = state.query,
+                onBack = viewModel::onClearSearch,
+                onQueryChange = viewModel::onQueryChanged,
+                onSubmit = { viewModel.onSearchSubmit(query) },
+                onClear = { viewModel.onQueryChanged("") },
+                colors = colors,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            SearchResultsSkeleton()
+        }
         is SearchUiState.Discovery -> SearchDiscovery(
             state = state,
             query = query,
@@ -45,7 +59,7 @@ fun SearchScreenRoute(
             onRecentSearchClick = { term -> viewModel.onSearchSubmit(term) },
             onClearRecentSearches = viewModel::clearRecentSearches,
             onTimelineMonthClick = viewModel::onTimelineMonthClick,
-            onCategoryClick = { /* TODO: navigate to category */ },
+            onCategoryClick = viewModel::onCategoryClick,
             onArticleClick = onArticleClick,
         )
         is SearchUiState.Results -> Column(modifier = Modifier.fillMaxSize()) {
@@ -61,20 +75,22 @@ fun SearchScreenRoute(
             if (state.items.isEmpty()) {
                 NoResultsMessage(query = state.query, modifier = Modifier.fillMaxSize())
             } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 16.dp),
-                ) {
+                LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(
                         items = state.items,
-                        key = { it.postId },
-                    ) { item ->
-                        SearchResultRow(
-                            item = item,
-                            isSaved = item.postId in state.savedPostIds,
-                            onArticleClick = { onArticleClick(item.postId) },
-                            modifier = Modifier.padding(vertical = 6.dp),
+                        key = { it.post.id },
+                    ) { feedItem ->
+                        val isSaved = feedItem.post.id in state.savedPostIds
+                        ArticleListItem(
+                            feedItem = feedItem,
+                            isSaved = isSaved,
+                            onArticleClick = { onArticleClick(feedItem.post.id) },
+                            onBookmarkClick = { viewModel.toggleSave(feedItem.post.id, isSaved) },
+                            bookmarkContentDescription = stringResource(
+                                if (isSaved) R.string.search_unsave_content_desc
+                                else R.string.search_save_content_desc,
+                            ),
+                            readTime = feedItem.readTime,
                         )
                     }
                 }

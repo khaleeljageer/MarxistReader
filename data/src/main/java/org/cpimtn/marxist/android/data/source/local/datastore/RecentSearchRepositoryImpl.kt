@@ -16,7 +16,10 @@ import javax.inject.Singleton
 private val Context.recentSearchDataStore: DataStore<Preferences> by preferencesDataStore(name = "recent_search")
 
 private val KEY_RECENT_QUERIES = stringPreferencesKey("recent_queries")
-private const val DELIMITER = "|"
+
+// Unit Separator control character — cannot be entered via a soft keyboard,
+// so it's safe as a delimiter without needing to escape it in stored terms.
+private const val DELIMITER = "\u001F"
 
 @Singleton
 class RecentSearchRepositoryImpl @Inject constructor(
@@ -34,7 +37,7 @@ class RecentSearchRepositoryImpl @Inject constructor(
         }
 
     override suspend fun addRecentSearch(query: String, maxSize: Int) {
-        val trimmed = query.trim()
+        val trimmed = query.trim().replace(DELIMITER, "")
         if (trimmed.isBlank()) return
         context.recentSearchDataStore.edit { prefs ->
             val current = prefs[KEY_RECENT_QUERIES]

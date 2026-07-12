@@ -25,6 +25,8 @@ import org.cpimtn.marxist.android.domain.usecase.GetDownloadedBookIdsUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemByIdFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostByIdFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetPostsByCategoryFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetPostsByMonthFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetRecentSearchesFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
@@ -186,14 +188,29 @@ object UseCaseModule {
     @Singleton
     fun provideGetCategoriesWithCountFlowUseCase(
         getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
-        getPostsFlowUseCase: GetPostsFlowUseCase,
     ): GetCategoriesWithCountFlowUseCase =
-        GetCategoriesWithCountFlowUseCase(getCategoriesFlowUseCase, getPostsFlowUseCase)
+        GetCategoriesWithCountFlowUseCase(getCategoriesFlowUseCase)
 
     @Provides
     @Singleton
-    fun provideGetTimelineMonthsFlowUseCase(getPostsFlowUseCase: GetPostsFlowUseCase): GetTimelineMonthsFlowUseCase =
-        GetTimelineMonthsFlowUseCase(getPostsFlowUseCase)
+    fun provideGetTimelineMonthsFlowUseCase(): GetTimelineMonthsFlowUseCase =
+        GetTimelineMonthsFlowUseCase()
+
+    @Provides
+    @Singleton
+    fun provideGetPostsByCategoryFlowUseCase(
+        getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
+        getTagsFlowUseCase: GetTagsFlowUseCase,
+    ): GetPostsByCategoryFlowUseCase =
+        GetPostsByCategoryFlowUseCase(getCategoriesFlowUseCase, getTagsFlowUseCase)
+
+    @Provides
+    @Singleton
+    fun provideGetPostsByMonthFlowUseCase(
+        getCategoriesFlowUseCase: GetCategoriesFlowUseCase,
+        getTagsFlowUseCase: GetTagsFlowUseCase,
+    ): GetPostsByMonthFlowUseCase =
+        GetPostsByMonthFlowUseCase(getCategoriesFlowUseCase, getTagsFlowUseCase)
 
     @Provides
     @Singleton

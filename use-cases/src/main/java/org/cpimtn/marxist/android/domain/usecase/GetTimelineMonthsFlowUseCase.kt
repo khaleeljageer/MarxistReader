@@ -2,16 +2,19 @@ package org.cpimtn.marxist.android.domain.usecase
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import org.cpimtn.marxist.android.domain.model.Post
 import org.cpimtn.marxist.android.domain.model.TimelineMonth
 
 /**
  * Distinct months from post dates for timeline filter (newest first). Uses Tamil month abbreviations for labels.
+ *
+ * Takes [postsFlow] rather than depending on [GetPostsFlowUseCase] directly so a caller with
+ * multiple post-derived use cases (e.g. search's timeline/category browsing) can share one
+ * upstream posts subscription instead of each use case re-querying the full posts table.
  */
-class GetTimelineMonthsFlowUseCase(
-    private val getPostsFlowUseCase: GetPostsFlowUseCase,
-) {
-    operator fun invoke(maxEntries: Int = 12): Flow<List<TimelineMonth>> =
-        getPostsFlowUseCase().map { posts ->
+class GetTimelineMonthsFlowUseCase {
+    operator fun invoke(postsFlow: Flow<List<Post>>, maxEntries: Int = 12): Flow<List<TimelineMonth>> =
+        postsFlow.map { posts ->
             posts
                 .asSequence()
                 .mapNotNull { post -> parseYearMonth(post.date) }

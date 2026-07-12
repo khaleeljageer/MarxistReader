@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(project(":ui:theme"))
+    implementation(project(":ui:common"))
     implementation(project(":core"))
     implementation(project(":domain"))
     implementation(project(":use-cases"))
@@ -64,6 +65,8 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

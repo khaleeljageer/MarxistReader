@@ -49,6 +49,7 @@ fun ArticleListItem(
     onBookmarkClick: () -> Unit,
     bookmarkContentDescription: String,
     modifier: Modifier = Modifier,
+    readTime: String? = null,
 ) {
     val ext = MarxistReaderTheme.colors
     val post = feedItem.post
@@ -152,11 +153,21 @@ fun ArticleListItem(
                 Spacer(modifier = Modifier.weight(1f))
             }
 
-            ArticleListItemBookmarkButton(
-                isSaved = isSaved,
-                onClick = onBookmarkClick,
-                contentDescription = bookmarkContentDescription,
-            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (readTime != null) {
+                    Text(
+                        text = readTime,
+                        style = MaterialTheme.typography.labelSmall,
+                        color = ext.articleTimestamp,
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
+                ArticleListItemBookmarkButton(
+                    isSaved = isSaved,
+                    onClick = onBookmarkClick,
+                    contentDescription = bookmarkContentDescription,
+                )
+            }
         }
     }
 }
