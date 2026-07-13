@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">மார்க்சிஸ்ட்</string>
+
+    <string name="notification_channel_new_book_name">புதிய நூல்கள்</string>
+    <string name="notification_channel_new_book_desc">புதிய மின்னூல் வெளியிடப்படும்போது உங்களுக்கு அறிவிக்கும்.</string>
+    <string name="notification_new_book_default_title">புதிய நூல் கிடைக்கிறது</string>
+    <string name="notification_new_book_default_body">புதிய மின்னூல் வெளியிடப்பட்டுள்ளது. படிக்க செயலியைத் திறக்கவும்.</string>
 </resources>

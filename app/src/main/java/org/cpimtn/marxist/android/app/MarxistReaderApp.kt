@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.cpimtn.marxist.android.data.worker.Sync
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
+import org.cpimtn.marxist.android.notification.NotificationChannels
+import org.cpimtn.marxist.android.notification.subscribeToNewBookTopic
 import javax.inject.Inject
 
 @HiltAndroidApp
@@ -31,5 +33,9 @@ class MarxistReaderApp : EpubApplication(), Configuration.Provider {
         val language = runBlocking { getSettingsFlowUseCase().first().language }
         LocaleController.apply(language)
         Sync.initialize(applicationContext)
+
+        // Create channels before any push arrives and register for the "new book published" broadcast.
+        NotificationChannels.registerAll(applicationContext)
+        subscribeToNewBookTopic()
     }
 }

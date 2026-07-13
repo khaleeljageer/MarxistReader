@@ -1,3 +1,5 @@
+app/google-services.json
+REPORT.md
 *.iml
 .gradle
 /local.properties
