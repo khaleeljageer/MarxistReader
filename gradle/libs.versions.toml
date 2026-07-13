@@ -1,4 +1,5 @@
 [versions]
+firebaseBom = "34.16.0"
 kotlinxCoroutinesCore = "1.11.0"
 appVersion = "6.0.0"
 minSdk = "26"
@@ -17,6 +18,8 @@ hiltNavigationCompose = "1.4.0"
 roomRuntime = "2.8.4"
 ksp = "2.3.9"
 navigationCompose = "2.9.8"
+gmsVersion = "4.5.0"
+crashVersion="3.0.7"
 composeLifecycle = "2.11.0"
 coil = "3.5.0"
 retrofit = "3.0.0"
@@ -46,6 +49,10 @@ desugar_jdk_libs = "2.1.5"
 [libraries]
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 converter-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version = "1.0.0" }
@@ -120,6 +127,8 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationCompose" }
+gms-google-service = { id = "com.google.gms.google-services", version.ref = "gmsVersion" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashVersion" }
 
 [bundles]
 hilt-core = [
