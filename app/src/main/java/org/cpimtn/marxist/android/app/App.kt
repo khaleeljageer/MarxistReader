@@ -20,6 +20,8 @@ import org.cpimtn.marxist.android.feature.feeddetails.ArticleDetailRoute
 import org.cpimtn.marxist.android.feature.welcome.WelcomeScreen
 import org.cpimtn.marxist.navigation.MainScreen
 import org.cpimtn.marxist.navigation.Route
+import org.cpimtn.marxist.navigation.Screen
+import org.cpimtn.marxist.navigation.TopLevelDestination
 
 /**
  * Root composable: root decides welcome vs main from DataStore. Welcome shown only once.
@@ -27,7 +29,9 @@ import org.cpimtn.marxist.navigation.Route
 @Composable
 fun App(
     windowSizeClass: WindowSizeClass,
-    darkTheme: Boolean
+    darkTheme: Boolean,
+    startTab: String? = null,
+    onStartTabHandled: () -> Unit = {},
 ) {
     val navController = rememberNavController()
     val context = LocalContext.current
@@ -73,6 +77,16 @@ fun App(
                 windowSizeClass = windowSizeClass,
                 darkTheme = darkTheme
             ) { appState, modifier ->
+                // A notification tap can request a tab (e.g. "new book" → Books). appState.navController
+                // is only available inside this slot, so select the tab here, then clear the request.
+                LaunchedEffect(startTab) {
+                    when (startTab) {
+                        Screen.Books.route -> {
+                            appState.navigateToTopLevelDestination(TopLevelDestination.BOOKS)
+                        }
+                    }
+                    if (startTab != null) onStartTabHandled()
+                }
                 MainScreensNavHost(
                     appState = appState,
                     modifier = modifier,

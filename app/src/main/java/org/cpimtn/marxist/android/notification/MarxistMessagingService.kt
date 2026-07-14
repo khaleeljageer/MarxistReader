@@ -54,6 +54,8 @@ class MarxistMessagingService : FirebaseMessagingService() {
 
         val launchIntent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            // Tell MainActivity to select the Books tab instead of just resuming wherever it was.
+            putExtra(MainActivity.EXTRA_START_TAB, MainActivity.TAB_BOOKS)
         }
         val pendingIntent = PendingIntent.getActivity(
             this,
