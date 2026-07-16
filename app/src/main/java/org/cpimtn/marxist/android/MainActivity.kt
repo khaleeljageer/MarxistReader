@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        startTab = intent?.getStringExtra(EXTRA_START_TAB)
+        startTab = resolveStartTab(intent)
         requestNotificationPermissionIfNeeded()
         setContent {
             val settings by appViewModel.settings.collectAsStateWithLifecycle()
@@ -77,7 +77,23 @@ class MainActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        startTab = intent.getStringExtra(EXTRA_START_TAB)
+        startTab = resolveStartTab(intent)
+    }
+
+    /**
+     * Works out which tab a launch intent is asking for. Two notification paths deliver this:
+     *  - Foreground: [org.cpimtn.marxist.android.notification.MarxistMessagingService] builds the
+     *    notification itself and sets [EXTRA_START_TAB] explicitly.
+     *  - Background/killed: FCM auto-displays the `notification` payload (our service is never called)
+     *    and, on tap, attaches the message's `data` entries as intent extras — which do NOT include
+     *    [EXTRA_START_TAB]. A "new book" push always carries [FCM_DATA_BOOK_ID], so we treat its
+     *    presence as a request to land on the Books tab.
+     */
+    private fun resolveStartTab(intent: Intent?): String? {
+        intent ?: return null
+        intent.getStringExtra(EXTRA_START_TAB)?.let { return it }
+        if (intent.hasExtra(FCM_DATA_BOOK_ID)) return TAB_BOOKS
+        return null
     }
 
     /**
@@ -99,6 +115,13 @@ class MainActivity : AppCompatActivity() {
     companion object {
         /** Intent extra naming the top-level tab to select on launch; value is a [Screen] route. */
         const val EXTRA_START_TAB = "start_tab"
+
+        /**
+         * Key in the FCM `data` payload for a "new book" push. When FCM auto-displays a
+         * `notification`-payload message (app backgrounded/killed), these data entries arrive as
+         * intent extras on tap, letting us detect the notification's intent without [EXTRA_START_TAB].
+         */
+        const val FCM_DATA_BOOK_ID = "bookid"
         val TAB_BOOKS: String = Screen.Books.route
     }
 }
