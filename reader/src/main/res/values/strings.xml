@@ -226,4 +226,19 @@
     <string name="error_unexpected">An unexpected error occurred.</string>
 
     <string name="info">Information</string>
+
+    <!-- Reader "how to use" help -->
+    <string name="reader_help_title">How to use the reader</string>
+    <string name="reader_help_pages_title">Turn pages</string>
+    <string name="reader_help_pages_desc">Tap the right side to go forward, the left side to go back. Tap the center to show or hide the menu.</string>
+    <string name="reader_help_toc_title">Chapters</string>
+    <string name="reader_help_toc_desc">Tap the list icon to jump to a chapter.</string>
+    <string name="reader_help_bookmark_title">Bookmark</string>
+    <string name="reader_help_bookmark_desc">Tap the bookmark icon to save your place.</string>
+    <string name="reader_help_tts_title">Read aloud</string>
+    <string name="reader_help_tts_desc">Tap the headphones icon to have the book read to you.</string>
+    <string name="reader_help_settings_title">Appearance</string>
+    <string name="reader_help_settings_desc">Tap the text-size icon to change the font, spacing, and theme.</string>
+    <string name="reader_help_search_title">Search</string>
+    <string name="reader_help_search_desc">Tap the search icon to find words in the book.</string>
 </resources>

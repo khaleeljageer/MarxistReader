@@ -28,6 +28,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
@@ -74,6 +75,7 @@ fun SearchDiscovery(
     query: String,
     onQueryChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    onHelpClick: () -> Unit,
     onClearSearch: () -> Unit,
     onRecentSearchClick: (String) -> Unit,
     onClearRecentSearches: () -> Unit,
@@ -99,6 +101,7 @@ fun SearchDiscovery(
                 onSubmit = onSubmit,
                 onClear = { onQueryChange("") },
                 onBack = onClearSearch,
+                onHelpClick = onHelpClick,
                 colors = ext,
             )
         }
@@ -193,6 +196,7 @@ private fun SearchBar(
     onSubmit: () -> Unit,
     onClear: () -> Unit,
     onBack: () -> Unit,
+    onHelpClick: () -> Unit,
     colors: MarxistExtendedColors,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -293,6 +297,24 @@ private fun SearchBar(
                         modifier = Modifier.size(18.dp),
                     )
                 }
+            }
+        }
+
+        // Help / how-to-use — hidden while focused to keep the field prominent
+        AnimatedVisibility(
+            visible = !isFocused,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
+            IconButton(
+                onClick = onHelpClick,
+                modifier = Modifier.size(40.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
+                    contentDescription = stringResource(R.string.help_content_desc),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }

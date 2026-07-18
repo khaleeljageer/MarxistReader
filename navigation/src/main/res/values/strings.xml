@@ -11,6 +11,7 @@
     <string name="app_bar_subtitle">CPIM TAMIL NADU</string>
     <string name="search_content_desc">Search</string>
     <string name="feed_refresh_content_desc">Refresh feed</string>
+    <string name="help_content_desc">How to use this screen</string>
 
     <!-- Placeholder screens -->
     <string name="placeholder_feed">Articles will appear here</string>

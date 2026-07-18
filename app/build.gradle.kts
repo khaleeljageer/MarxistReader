@@ -79,6 +79,7 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(project(":ui:theme"))
+    implementation(project(":ui:common"))
     implementation(project(":domain"))
     implementation(project(":use-cases"))
     implementation(project(":navigation"))

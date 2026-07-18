@@ -18,6 +18,7 @@ import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 @Composable
 fun SearchScreenRoute(
     onArticleClick: (postId: Int) -> Unit = {},
+    onHelpClick: () -> Unit = {},
     viewModel: SearchViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -55,6 +56,7 @@ fun SearchScreenRoute(
             query = query,
             onQueryChange = viewModel::onQueryChanged,
             onSubmit = { viewModel.onSearchSubmit(query) },
+            onHelpClick = onHelpClick,
             onClearSearch = viewModel::onClearSearch,
             onRecentSearchClick = { term -> viewModel.onSearchSubmit(term) },
             onClearRecentSearches = viewModel::clearRecentSearches,

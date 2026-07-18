@@ -9,9 +9,12 @@ import org.cpimtn.marxist.android.domain.model.UserSettings
 interface SettingsRepository {
     fun getSettings(): Flow<UserSettings>
     fun getWelcomeCompleted(): Flow<Boolean>
+    /** Names of [org.cpimtn.marxist.android.domain.model.HelpTopic] whose help has been shown. */
+    fun getSeenHelpTopics(): Flow<Set<String>>
     suspend fun setTheme(theme: Theme)
     suspend fun setFontSize(fontSize: FontSize)
     suspend fun setLanguage(language: AppLanguage)
     suspend fun setPushNotificationsEnabled(enabled: Boolean)
     suspend fun setWelcomeCompleted(completed: Boolean)
+    suspend fun markHelpSeen(topic: String)
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Contextual "how to use" help -->
+    <string name="help_got_it">Got it</string>
+    <string name="help_content_desc">How to use this screen</string>
+
+    <!-- Feed -->
+    <string name="help_feed_title">How to use the Home feed</string>
+    <string name="help_feed_read_title">Read an article</string>
+    <string name="help_feed_read_desc">Tap any article to open and read it.</string>
+    <string name="help_feed_save_title">Save for later</string>
+    <string name="help_feed_save_desc">Tap the bookmark icon on an article to save it for offline reading.</string>
+    <string name="help_feed_search_title">Search</string>
+    <string name="help_feed_search_desc">Tap the search icon at the top to find articles.</string>
+    <string name="help_feed_refresh_title">Get the latest</string>
+    <string name="help_feed_refresh_desc">Tap the refresh icon at the top to load new articles.</string>
+
+    <!-- Books -->
+    <string name="help_books_title">How to use Books</string>
+    <string name="help_books_open_title">Open a book</string>
+    <string name="help_books_open_desc">Tap a book to open it in the reader.</string>
+    <string name="help_books_download_title">Download for offline</string>
+    <string name="help_books_download_desc">Tap the download icon to keep a book on your device.</string>
+    <string name="help_books_offline_title">Read anytime</string>
+    <string name="help_books_offline_desc">Downloaded books open even without an internet connection.</string>
+
+    <!-- Search -->
+    <string name="help_search_title">How to search</string>
+    <string name="help_search_type_title">Type to search</string>
+    <string name="help_search_type_desc">Enter a word to find matching articles.</string>
+    <string name="help_search_recent_title">Recent searches</string>
+    <string name="help_search_recent_desc">Your recent searches appear below; tap one to search again.</string>
+    <string name="help_search_open_title">Open a result</string>
+    <string name="help_search_open_desc">Tap a result to read the full article.</string>
+
+    <!-- Saved -->
+    <string name="help_saved_title">How to use Saved</string>
+    <string name="help_saved_what_title">Your saved articles</string>
+    <string name="help_saved_what_desc">Articles you bookmarked appear here.</string>
+    <string name="help_saved_offline_title">Read offline</string>
+    <string name="help_saved_offline_desc">Saved articles are available even without internet.</string>
+    <string name="help_saved_remove_title">Remove an article</string>
+    <string name="help_saved_remove_desc">Open an article and tap the bookmark icon again to remove it.</string>
+
+    <!-- Settings -->
+    <string name="help_settings_title">How to use Settings</string>
+    <string name="help_settings_theme_title">Appearance</string>
+    <string name="help_settings_theme_desc">Switch between light and dark theme.</string>
+    <string name="help_settings_text_title">Text size</string>
+    <string name="help_settings_text_desc">Make the reading text bigger or smaller.</string>
+    <string name="help_settings_language_title">Language</string>
+    <string name="help_settings_language_desc">Switch between Tamil and English.</string>
+    <string name="help_settings_notify_title">Notifications</string>
+    <string name="help_settings_notify_desc">Turn new-article alerts on or off.</string>
+
+    <!-- Article detail -->
+    <string name="help_article_title">How to read an article</string>
+    <string name="help_article_text_title">Text size</string>
+    <string name="help_article_text_desc">Tap the text icon to make the article bigger or smaller.</string>
+    <string name="help_article_save_title">Save this article</string>
+    <string name="help_article_save_desc">Tap the bookmark icon to save it for offline reading.</string>
+    <string name="help_article_share_title">Share</string>
+    <string name="help_article_share_desc">Tap the share icon to send this article to others.</string>
+    <string name="help_article_links_title">Open links</string>
+    <string name="help_article_links_desc">Tap underlined links in the article to open them.</string>
+</resources>

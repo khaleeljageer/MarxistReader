@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
@@ -26,6 +27,7 @@ private val KEY_FONT_SIZE = stringPreferencesKey("font_size")
 private val KEY_LANGUAGE = stringPreferencesKey("language")
 private val KEY_PUSH_NOTIFICATIONS = booleanPreferencesKey("push_notifications_enabled")
 private val KEY_WELCOME_COMPLETED = booleanPreferencesKey("welcome_completed")
+private val KEY_SEEN_HELP_TOPICS = stringSetPreferencesKey("seen_help_topics")
 
 @Singleton
 class UserSettingsRepositoryImpl @Inject constructor(
@@ -36,6 +38,11 @@ class UserSettingsRepositoryImpl @Inject constructor(
     override fun getWelcomeCompleted(): Flow<Boolean> =
         context.userSettingsDataStore.data.map { prefs ->
             prefs[KEY_WELCOME_COMPLETED] ?: false
+        }
+
+    override fun getSeenHelpTopics(): Flow<Set<String>> =
+        context.userSettingsDataStore.data.map { prefs ->
+            prefs[KEY_SEEN_HELP_TOPICS] ?: emptySet()
         }
 
     override fun getSettings(): Flow<UserSettings> =
@@ -70,5 +77,11 @@ class UserSettingsRepositoryImpl @Inject constructor(
 
     override suspend fun setWelcomeCompleted(completed: Boolean) {
         context.userSettingsDataStore.edit { it[KEY_WELCOME_COMPLETED] = completed }
+    }
+
+    override suspend fun markHelpSeen(topic: String) {
+        context.userSettingsDataStore.edit { prefs ->
+            prefs[KEY_SEEN_HELP_TOPICS] = (prefs[KEY_SEEN_HELP_TOPICS] ?: emptySet()) + topic
+        }
     }
 }

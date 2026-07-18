@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,6 +24,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.cpimtn.marxist.android.domain.model.HelpTopic
+import org.cpimtn.marxist.android.ui.common.help.HelpBottomSheet
 import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
@@ -34,8 +37,16 @@ fun ArticleDetailRoute(
     viewModel: ArticleDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showHelp by viewModel.showHelp.collectAsStateWithLifecycle()
     val context = LocalContext.current
     var fontSizeDialogVisible by rememberSaveable { mutableStateOf(false) }
+
+    if (showHelp) {
+        HelpBottomSheet(
+            topic = HelpTopic.ARTICLE,
+            onDismiss = viewModel::dismissHelp,
+        )
+    }
 
     if (fontSizeDialogVisible) {
         val current = uiState
@@ -66,6 +77,13 @@ fun ArticleDetailRoute(
                     }
                 },
                 actions = {
+                    IconButton(onClick = viewModel::onHelpClicked) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.HelpOutline,
+                            contentDescription = stringResource(R.string.help_content_desc),
+                            tint = ext.navInactiveIcon,
+                        )
+                    }
                     when (val state = uiState) {
                         is ArticleDetailUiState.Success -> {
                             ArticleDetailTopBarActions(

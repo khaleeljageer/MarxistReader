@@ -11,6 +11,7 @@
     <string name="app_bar_subtitle">சிபிஐ(எம்)-தமிழ்நாடு</string>
     <string name="search_content_desc">தேடு</string>
     <string name="feed_refresh_content_desc">புதுப்பி</string>
+    <string name="help_content_desc">இந்தத் திரையை எவ்வாறு பயன்படுத்துவது</string>
 
     <!-- Placeholder screens -->
     <string name="placeholder_feed">கட்டுரைகள்</string>

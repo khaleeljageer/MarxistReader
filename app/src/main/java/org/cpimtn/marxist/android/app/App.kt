@@ -8,6 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
@@ -16,8 +17,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.jskaleel.epub.reader.ReaderActivityContract
+import org.cpimtn.marxist.android.domain.model.HelpTopic
 import org.cpimtn.marxist.android.feature.feeddetails.ArticleDetailRoute
 import org.cpimtn.marxist.android.feature.welcome.WelcomeScreen
+import org.cpimtn.marxist.android.ui.common.help.HelpBottomSheet
+import org.cpimtn.marxist.navigation.MainAppState
 import org.cpimtn.marxist.navigation.MainScreen
 import org.cpimtn.marxist.navigation.Route
 import org.cpimtn.marxist.navigation.Screen
@@ -99,6 +103,8 @@ fun App(
                         openBookViewModel.openBook(bookId)
                     }
                 )
+
+                HelpHost(appState = appState)
             }
         }
 
@@ -111,6 +117,39 @@ fun App(
             )
         }
     }
+}
+
+/**
+ * Hosts contextual help for the main tab screens. Auto-shows the current tab's help on first visit
+ * and registers [MainAppState.helpCallback] so the top bar / search bar help icon can reopen it.
+ */
+@Composable
+private fun HelpHost(appState: MainAppState) {
+    val helpViewModel: HelpViewModel = hiltViewModel()
+    val topic = appState.currentTopLevelDestination?.toHelpTopic()
+
+    LaunchedEffect(topic) {
+        topic?.let(helpViewModel::onScreenShown)
+    }
+    SideEffect {
+        appState.helpCallback = topic?.let { t -> { helpViewModel.onHelpClicked(t) } }
+    }
+
+    val visibleTopic by helpViewModel.visibleTopic.collectAsState()
+    visibleTopic?.let { activeTopic ->
+        HelpBottomSheet(
+            topic = activeTopic,
+            onDismiss = helpViewModel::dismiss,
+        )
+    }
+}
+
+private fun TopLevelDestination.toHelpTopic(): HelpTopic = when (this) {
+    TopLevelDestination.FEED -> HelpTopic.FEED
+    TopLevelDestination.BOOKS -> HelpTopic.BOOKS
+    TopLevelDestination.SEARCH -> HelpTopic.SEARCH
+    TopLevelDestination.SAVED -> HelpTopic.SAVED
+    TopLevelDestination.SETTINGS -> HelpTopic.SETTINGS
 }
 
 fun Context.launchReaderActivity(readerId: Long) {

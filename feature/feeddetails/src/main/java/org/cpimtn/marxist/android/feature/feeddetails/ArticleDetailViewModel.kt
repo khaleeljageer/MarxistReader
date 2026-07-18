@@ -7,14 +7,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.android.domain.model.FontSize
+import org.cpimtn.marxist.android.domain.model.HelpTopic
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemByIdFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSeenHelpTopicsUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.MarkHelpSeenUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
 import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
@@ -26,13 +31,37 @@ class ArticleDetailViewModel @Inject constructor(
     getFeedItemByIdFlowUseCase: GetFeedItemByIdFlowUseCase,
     getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
     getSettingsFlowUseCase: GetSettingsFlowUseCase,
+    getSeenHelpTopicsUseCase: GetSeenHelpTopicsUseCase,
     private val savePostUseCase: SavePostUseCase,
     private val unsavePostUseCase: UnsavePostUseCase,
     private val setFontSizeUseCase: SetFontSizeUseCase,
+    private val markHelpSeenUseCase: MarkHelpSeenUseCase,
 ) : ViewModel() {
 
     private val postId: Int = checkNotNull(savedStateHandle["postId"]) {
         "postId is required"
+    }
+
+    /** Whether the "how to read an article" help sheet is showing. */
+    private val _showHelp = MutableStateFlow(false)
+    val showHelp: StateFlow<Boolean> = _showHelp.asStateFlow()
+
+    init {
+        // Auto-show help the first time an article is opened, then persist so it won't reappear.
+        viewModelScope.launch {
+            if (HelpTopic.ARTICLE.name !in getSeenHelpTopicsUseCase().first()) {
+                _showHelp.value = true
+                markHelpSeenUseCase(HelpTopic.ARTICLE)
+            }
+        }
+    }
+
+    fun onHelpClicked() {
+        _showHelp.value = true
+    }
+
+    fun dismissHelp() {
+        _showHelp.value = false
     }
 
     /**

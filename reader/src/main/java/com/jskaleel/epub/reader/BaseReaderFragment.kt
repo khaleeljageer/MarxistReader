@@ -25,6 +25,7 @@ import org.readium.r2.navigator.preferences.Configurable
 import org.readium.r2.shared.ExperimentalReadiumApi
 import org.readium.r2.shared.publication.Locator
 import org.readium.r2.shared.publication.Publication
+import androidx.core.content.edit
 
 /*
  * Base reader fragment class
@@ -106,6 +107,23 @@ abstract class BaseReaderFragment : Fragment() {
             },
             viewLifecycleOwner
         )
+
+        maybeAutoShowHelp()
+    }
+
+    private fun showReaderHelp() {
+        ReaderHelpBottomSheetDialogFragment()
+            .show(childFragmentManager, "ReaderHelp")
+    }
+
+    /** Show the reader help automatically the first time a book is opened, then persist the flag. */
+    private fun maybeAutoShowHelp() {
+        val prefs = requireContext()
+            .getSharedPreferences(READER_HELP_PREFS, android.content.Context.MODE_PRIVATE)
+        if (!prefs.getBoolean(KEY_READER_HELP_SEEN, false)) {
+            prefs.edit { putBoolean(KEY_READER_HELP_SEEN, true) }
+            showReaderHelp()
+        }
     }
 
     override fun onHiddenChanged(hidden: Boolean) {
@@ -121,5 +139,10 @@ abstract class BaseReaderFragment : Fragment() {
     protected fun showError(error: UserError) {
         val activity = activity ?: return
         error.show(activity)
+    }
+
+    private companion object {
+        const val READER_HELP_PREFS = "reader_help"
+        const val KEY_READER_HELP_SEEN = "reader_help_seen"
     }
 }

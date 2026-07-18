@@ -33,11 +33,13 @@ import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSearchResultsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSearchSuggestionsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSeenHelpTopicsUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSyncStatusUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTimelineMonthsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetWelcomeCompletedUseCase
+import org.cpimtn.marxist.android.domain.usecase.MarkHelpSeenUseCase
 import org.cpimtn.marxist.android.domain.usecase.SaveBookReaderIdUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
@@ -165,6 +167,16 @@ object UseCaseModule {
     @Singleton
     fun provideSetWelcomeCompletedUseCase(settingsRepository: SettingsRepository): SetWelcomeCompletedUseCase =
         SetWelcomeCompletedUseCase(settingsRepository)
+
+    @Provides
+    @Singleton
+    fun provideGetSeenHelpTopicsUseCase(settingsRepository: SettingsRepository): GetSeenHelpTopicsUseCase =
+        GetSeenHelpTopicsUseCase(settingsRepository)
+
+    @Provides
+    @Singleton
+    fun provideMarkHelpSeenUseCase(settingsRepository: SettingsRepository): MarkHelpSeenUseCase =
+        MarkHelpSeenUseCase(settingsRepository)
 
     @Provides
     @Singleton

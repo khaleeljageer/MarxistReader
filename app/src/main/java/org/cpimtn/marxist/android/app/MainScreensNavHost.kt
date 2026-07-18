@@ -50,7 +50,10 @@ fun MainScreensNavHost(
             )
         }
         composable(route = Screen.Search.route) {
-            SearchScreenRoute(onArticleClick = goToArticleDetails)
+            SearchScreenRoute(
+                onArticleClick = goToArticleDetails,
+                onHelpClick = { appState.helpCallback?.invoke() },
+            )
         }
         composable(route = Screen.Saved.route) {
             SavedScreen(
