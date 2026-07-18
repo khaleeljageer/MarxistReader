@@ -1,5 +1,16 @@
 package org.cpimtn.marxist.android.feature.welcome
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +47,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -48,7 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
-private val FeatureCount = 3
+private const val FeatureCount = 3
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -104,12 +116,6 @@ fun WelcomeScreen(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(R.string.welcome_subtitle),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
             }
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -162,8 +168,27 @@ fun WelcomeScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Bottom card: show spinner until posts table has >= 50 records
-            if (!canContinue) {
+            // Bottom card: show spinner until posts table has >= 50 records.
+            // Animate the whole card in/out so it fades + expands on appear and
+            // gracefully collapses once fetching completes.
+            AnimatedVisibility(
+                visible = !canContinue,
+                enter = fadeIn(animationSpec = tween(400)) +
+                    expandVertically(animationSpec = tween(400)),
+                exit = fadeOut(animationSpec = tween(300)) +
+                    shrinkVertically(animationSpec = tween(300)),
+            ) {
+                // Gentle pulsing alpha to signal the fetch is still in progress.
+                val infiniteTransition = rememberInfiniteTransition(label = "fetchingPulse")
+                val hintAlpha by infiniteTransition.animateFloat(
+                    initialValue = 0.4f,
+                    targetValue = 1f,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(durationMillis = 900, easing = FastOutSlowInEasing),
+                        repeatMode = RepeatMode.Reverse,
+                    ),
+                    label = "hintAlpha",
+                )
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
@@ -196,6 +221,14 @@ fun WelcomeScreen(
                                     text = stringResource(R.string.welcome_fetching_source),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = stringResource(R.string.welcome_fetching_hint),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Medium,
+                                    color = accent,
+                                    modifier = Modifier.alpha(hintAlpha),
                                 )
                             }
                         }

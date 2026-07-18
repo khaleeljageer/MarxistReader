@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Greeting -->
-    <string name="welcome_greeting_hello">TODO_EN: வணக்கம்!</string>
-    <string name="welcome_greeting_to">TODO_EN: வரவேற்கிறோம்</string>
-    <string name="welcome_greeting_marxist">TODO_EN: மார்க்சிஸ்ட் செயலி</string>
-    <string name="welcome_subtitle">TODO_EN: CPI(M) Tamil Nadu இதழ் — உங்கள் கையில்</string>
+    <string name="welcome_greeting_hello">Hello!</string>
+    <string name="welcome_greeting_to">Welcome to</string>
+    <string name="welcome_greeting_marxist">Marxist Reader</string>
 
     <!-- Feature 1: Daily Articles -->
-    <string name="welcome_feature1_title">Daily Articles</string>
+    <string name="welcome_feature1_title">Monthly Articles</string>
     <string name="welcome_feature1_desc">Politics, Economy, History, Society — deep analysis in Tamil</string>
 
     <!-- Feature 2: Library &amp; Books -->
-    <string name="welcome_feature2_title">Library &amp; Books</string>
+    <string name="welcome_feature2_title">Books</string>
     <string name="welcome_feature2_desc">Marxist classics — download as epub for offline reading</string>
 
     <!-- Feature 3: Save &amp; Read Offline -->
-    <string name="welcome_feature3_title">Save &amp; Read Offline</string>
+    <string name="welcome_feature3_title">Save &amp; Read</string>
     <string name="welcome_feature3_desc">Bookmark articles and read them anytime without internet</string>
 
     <!-- Bottom: Fetching -->
-    <string name="welcome_fetching">TODO_EN: கட்டுரைகளைப் பெறுகிறது…</string>
-    <string name="welcome_fetching_source">TODO_EN: marxist.cpimtn.org இலிருந்து பதிவிறக்கம்</string>
+    <string name="welcome_fetching">Fetching Articles…</string>
+    <string name="welcome_fetching_source">Fetching articles from marxist.cpimtn.org</string>
+    <string name="welcome_fetching_hint">This will take some time to complete</string>
 
     <!-- Bottom: No internet -->
-    <string name="welcome_internet_needed">TODO_EN: இணைய இணைப்பு தேவை</string>
-    <string name="welcome_internet_instruction">TODO_EN: கட்டுரைகளைப் பதிவிறக்க இணையம் இணைக்கவும்</string>
-    <string name="welcome_retry">TODO_EN: மீண்டும் முயற்சி</string>
+    <string name="welcome_internet_needed">Connect to internet</string>
+    <string name="welcome_internet_instruction">Internet needed to fetch articles</string>
+    <string name="welcome_retry">Retry</string>
 
     <!-- Continue -->
-    <string name="welcome_continue">TODO_EN: தொடர்</string>
+    <string name="welcome_continue">Continue</string>
 
     <string name="welcome_feature1_title_en" translatable="false">Daily Articles</string>
     <string name="welcome_feature1_desc_en" translatable="false">Politics, Economy, History, Society — deep analysis in Tamil</string>

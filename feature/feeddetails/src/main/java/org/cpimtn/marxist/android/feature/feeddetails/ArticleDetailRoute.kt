@@ -60,7 +60,7 @@ fun ArticleDetailRoute(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.feeddetails_back),
+                            contentDescription = stringResource(R.string.feed_details_back),
                             tint = ext.navInactiveIcon,
                         )
                     }

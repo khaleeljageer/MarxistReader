@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Header -->
-    <string name="saved_title">TODO_EN: சேமித்தவை</string>
+    <string name="saved_title">Saved</string>
     <!-- Content descriptions -->
     <string name="saved_unsave_content_desc">Remove from saved</string>
-
-    <string name="saved_feed_empty_message">No saved articles yet.</string>
+    <string name="saved_feed_empty_message">No saved articles</string>
     <string name="saved_take_me">Take Me</string>
     <string name="saved_feed_empty_subtitle">You can save articles from Feed</string>
-    <string name="saved_feed_error_title">Something went wrong</string>
+    <string name="saved_feed_error_title">Something went wrong…</string>
 </resources>

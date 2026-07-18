@@ -530,7 +530,7 @@ abstract class VisualReaderFragment : BaseReaderFragment() {
                 (activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager)
                     .hideSoftInputFromWindow(
                         note.applicationWindowToken,
-                        InputMethodManager.HIDE_NOT_ALWAYS
+                        0, // always hide; HIDE_NOT_ALWAYS is deprecated
                     )
             }
 

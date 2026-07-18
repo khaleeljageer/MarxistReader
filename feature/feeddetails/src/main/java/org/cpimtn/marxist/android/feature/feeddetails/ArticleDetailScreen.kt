@@ -80,7 +80,7 @@ fun ArticleDetailTopBarActions(
     IconButton(onClick = onFontSizeClick) {
         Icon(
             imageVector = Icons.Outlined.TextFields,
-            contentDescription = stringResource(R.string.feeddetails_font_size_content_desc),
+            contentDescription = stringResource(R.string.feed_details_font_size_content_desc),
             tint = ext.navInactiveIcon,
         )
     }
@@ -88,8 +88,8 @@ fun ArticleDetailTopBarActions(
         Icon(
             imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
             contentDescription = stringResource(
-                if (isSaved) R.string.feeddetails_unsave_content_desc
-                else R.string.feeddetails_save_content_desc,
+                if (isSaved) R.string.feed_details_unsave_content_desc
+                else R.string.feed_details_save_content_desc,
             ),
             tint = bookmarkTint,
         )
@@ -98,7 +98,7 @@ fun ArticleDetailTopBarActions(
         IconButton(onClick = onShareClick) {
             Icon(
                 imageVector = Icons.Outlined.Share,
-                contentDescription = stringResource(R.string.feeddetails_share_content_desc),
+                contentDescription = stringResource(R.string.feed_details_share_content_desc),
                 tint = ext.navInactiveIcon,
             )
         }
@@ -113,7 +113,7 @@ fun FontSizeDialog(
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.feeddetails_font_size_title)) },
+        title = { Text(stringResource(R.string.feed_details_font_size_title)) },
         text = {
             Column(
                 modifier = Modifier.wrapContentSize()
@@ -159,7 +159,7 @@ fun ArticleDetailLoading(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(R.string.feeddetails_loading),
+            text = stringResource(R.string.feed_details_loading),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -173,7 +173,7 @@ fun ArticleDetailNotFound(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(R.string.feeddetails_not_found),
+            text = stringResource(R.string.feed_details_not_found),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )

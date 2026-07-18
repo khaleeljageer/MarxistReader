@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="search_placeholder">கட்டுரைகளைத் தேடுங்கள்…</string>
-    <string name="search_hint">TODO_TA: Search results will appear here.</string>
+    <string name="search_hint">தேடல் முடிவுகள் இங்கே தோன்றும்</string>
     <string name="search_recent_title">சமீபத்திய தேடல்கள்</string>
     <string name="search_recent_clear">அழி</string>
     <string name="search_categories_title">வகைகள் வாரியாக உலாவுக</string>
     <string name="search_articles_count">%d கட்டுரைகள்</string>
     <string name="search_timeline_title">காலவரிசை</string>
-    <string name="search_recent_content_desc">TODO_TA: Recent search</string>
-    <string name="search_clear_content_desc">TODO_TA: Clear recent searches</string>
+    <string name="search_recent_content_desc">சமீபத்திய தேடல்கள்</string>
+    <string name="search_clear_content_desc">சமீபத்திய தேடல்களை அழி</string>
     <string name="search_save_content_desc">கட்டுரையை சேமி</string>
     <string name="search_unsave_content_desc">சேமிப்பை நீக்கு</string>
     <string name="search_no_results">முடிவுகள் இல்லை</string>

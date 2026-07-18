@@ -37,6 +37,7 @@ import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
 @HiltViewModel
@@ -88,7 +89,7 @@ class SearchViewModel @Inject constructor(
     }
 
     private val suggestionsFlow = _query
-        .debounce(300)
+        .debounce(300.milliseconds)
         .flatMapLatest { q ->
             if (q.isNotBlank()) getSearchSuggestionsFlowUseCase(q, 10) else flowOf(emptyList())
         }
@@ -109,24 +110,48 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    val uiState: StateFlow<SearchUiState> = combine(
+    /**
+     * The `uiState` combine below has 8 source flows. Kotlin's typed `combine` overloads only
+     * go up to 5 arity — beyond that the vararg overload hands the transform an untyped
+     * `Array<Any>`, forcing unchecked casts. Grouping the sources into two typed holder flows of
+     * ≤5 each lets us combine those two with full type safety and no casts.
+     */
+    private data class DiscoveryInputs(
+        val recent: List<String>,
+        val categories: List<CategoryWithCount>,
+        val timeline: List<TimelineMonth>,
+        val suggestions: List<FeedItem>,
+    )
+
+    private data class ResultInputs(
+        val query: String,
+        val submittedPhase: Phase<String>,
+        val savedIds: Set<Int>,
+        val filteredPhase: Phase<ActiveFilter>,
+    )
+
+    private val discoveryInputsFlow: Flow<DiscoveryInputs> = combine(
         getRecentSearchesFlowUseCase(maxSize = 10),
         getCategoriesWithCountFlowUseCase(postsFlow),
         getTimelineMonthsFlowUseCase(postsFlow, maxEntries = 12),
+        suggestionsFlow,
+    ) { recent, categories, timeline, suggestions ->
+        DiscoveryInputs(recent, categories, timeline, suggestions)
+    }
+
+    private val resultInputsFlow: Flow<ResultInputs> = combine(
         _query,
         submittedResultsFlow,
-        suggestionsFlow,
         getSavedPostIdsFlowUseCase(),
         filteredBrowseFlow,
-    ) { values ->
-        val recent = values[0] as List<String>
-        val categories = values[1] as List<CategoryWithCount>
-        val timeline = values[2] as List<TimelineMonth>
-        val query = values[3] as String
-        val submittedPhase = values[4] as Phase<String>
-        val suggestions = values[5] as List<FeedItem>
-        val savedIds = values[6] as Set<Int>
-        val filteredPhase = values[7] as Phase<ActiveFilter>
+    ) { query, submittedPhase, savedIds, filteredPhase ->
+        ResultInputs(query, submittedPhase, savedIds, filteredPhase)
+    }
+
+    val uiState: StateFlow<SearchUiState> = combine(
+        discoveryInputsFlow,
+        resultInputsFlow,
+    ) { (recent, categories, timeline, suggestions), (query, submittedPhase, savedIds, filteredPhase) ->
         val discovery = SearchUiState.Discovery(
             recentSearches = recent,
             categories = categories.map { item ->

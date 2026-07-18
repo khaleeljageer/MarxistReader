@@ -3,10 +3,9 @@
     <!-- Header (Tamil): Saved Articles -->
     <string name="saved_title">சேமித்தவை</string>
     <!-- Content descriptions -->
-    <string name="saved_unsave_content_desc">TODO_TA: Remove from saved</string>
-
-    <string name="saved_feed_empty_message">TODO_TA: No saved articles yet.</string>
-    <string name="saved_take_me">TODO_TA: Take Me</string>
-    <string name="saved_feed_empty_subtitle">TODO_TA: You can save articles from Feed</string>
-    <string name="saved_feed_error_title">TODO_TA: Something went wrong</string>
+    <string name="saved_unsave_content_desc">சேமிப்பிலிருந்து நீக்கு</string>
+    <string name="saved_feed_empty_message">கட்டுரைகள் இல்லை</string>
+    <string name="saved_take_me">கட்டுரைக்கு செல்</string>
+    <string name="saved_feed_empty_subtitle">முகப்பு பக்கத்திலிருந்து கட்டுரைகளை சேமிக்கலாம்</string>
+    <string name="saved_feed_error_title">ஏதோ பிழை ஏற்பட்டுள்ளது…</string>
 </resources>

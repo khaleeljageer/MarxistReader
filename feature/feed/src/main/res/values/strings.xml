@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Section headers -->
-    <string name="feed_special_article">TODO_EN: சிறப்புக் கட்டுரை</string>
-    <string name="feed_recent_articles">TODO_EN: சமீபத்திய கட்டுரைகள்</string>
+    <string name="feed_special_article">Featured Article</string>
+    <string name="feed_recent_articles">Recent Articles</string>
     <!-- Save button -->
     <string name="feed_save_content_desc">Save article</string>
     <string name="feed_unsave_content_desc">Unsave article</string>

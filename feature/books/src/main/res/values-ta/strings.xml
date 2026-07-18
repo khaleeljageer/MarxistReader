@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Download button states -->
-    <string name="books_download">TODO_TA: Download</string>
-    <string name="books_downloading">TODO_TA: Downloading…</string>
-    <string name="books_downloaded">TODO_TA: Downloaded</string>
-    <string name="books_retry">TODO_TA: Retry</string>
+    <string name="books_download">பதிவிறக்கு</string>
+    <string name="books_downloading">பதிவிறக்குகிறது…</string>
+    <string name="books_downloaded">பதிவிறக்கப்பட்டது</string>
+    <string name="books_retry">மீள்துவக்கு</string>
     <!-- States -->
-    <string name="books_empty_message">TODO_TA: No books yet. Sync when online.</string>
-    <string name="books_empty_subtitle">TODO_TA: Connect to the internet to fetch the book catalog</string>
-    <string name="books_error_title">TODO_TA: Something went wrong</string>
+    <string name="books_empty_message">புத்தகங்கள் இல்லை. இணையத்துடன் இணைத்து முயற்சிக்கவும்.</string>
+    <string name="books_empty_subtitle">புத்தகங்களை காண இணைய இணைப்பு தேவை</string>
+    <string name="books_error_title">ஏதோ பிழை ஏற்பட்டுள்ளது…</string>
 </resources>
