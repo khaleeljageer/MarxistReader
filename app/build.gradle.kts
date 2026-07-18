@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId = "org.cpimtn.marxist.android"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = libs.versions.appVersion.get()
 
@@ -95,7 +95,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
