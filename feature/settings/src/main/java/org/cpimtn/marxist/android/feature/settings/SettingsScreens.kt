@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.DarkMode
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
@@ -40,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -49,6 +51,8 @@ import org.cpimtn.marxist.android.domain.model.Theme
 import org.cpimtn.marxist.core.clickableIf
 import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
+
+private const val SOURCE_CODE_URL = "https://github.com/khaleeljageer/MarxistReader/"
 
 @Stable
 data class SettingsUiState(
@@ -137,6 +141,17 @@ fun SettingsScreenContent(
             iconBgColor = colors.settingsIconBg,
             title = stringResource(R.string.settings_version),
             subtitle = "v${uiState.appVersion}",
+        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+        val uriHandler = LocalUriHandler.current
+        SettingsItemRow(
+            icon = Icons.Outlined.Code,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_source_code),
+            subtitle = stringResource(R.string.settings_source_code_subtitle),
+            showTrailingArrow = true,
+            onClick = { uriHandler.openUri(SOURCE_CODE_URL) },
         )
 
         Spacer(modifier = Modifier.height(32.dp))

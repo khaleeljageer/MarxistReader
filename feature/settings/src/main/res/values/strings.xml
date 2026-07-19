@@ -18,9 +18,11 @@
     <!-- About -->
     <string name="settings_version">Version</string>
     <string name="settings_version_subtitle">6.0.0</string>
+    <string name="settings_source_code">Source Code</string>
+    <string name="settings_source_code_subtitle">github.com/khaleeljageer/MarxistReader</string>
 
     <!-- Footer -->
-    <string name="settings_footer_license">CC BY-SA 4.0 — marxist.cpimtn.org</string>
+    <string name="settings_footer_license">Licensed under GNU GPL v3.0 — Free &amp; open source software</string>
 
     <!-- Theme dialog -->
     <string name="theme_light">Light</string>

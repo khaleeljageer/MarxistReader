@@ -18,7 +18,7 @@ android {
         applicationId = "org.cpimtn.marxist.android"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = 37
-        versionCode = 1
+        versionCode = 2
         versionName = libs.versions.appVersion.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
