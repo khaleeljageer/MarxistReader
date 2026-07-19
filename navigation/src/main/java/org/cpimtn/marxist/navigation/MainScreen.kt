@@ -29,6 +29,7 @@ import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 fun MainScreen(
     windowSizeClass: WindowSizeClass,
     darkTheme: Boolean,
+    helpIconEnabled: Boolean = true,
     content: @Composable (MainAppState, Modifier) -> Unit,
 ) {
     val appState = rememberMainAppState(widthSizeClass = windowSizeClass.widthSizeClass)
@@ -105,7 +106,7 @@ fun MainScreen(
                         showSearchIcon = true,
                         showRefreshIcon = currentDestination?.route == Screen.Feed.route,
                         onRefreshClick = { appState.feedRefreshCallback?.invoke() },
-                        showHelpIcon = topLevelDestination != null,
+                        showHelpIcon = helpIconEnabled && topLevelDestination != null,
                         onHelpClick = { appState.helpCallback?.invoke() },
                         onSearchClick = { appState.navigateToTopLevelDestination(TopLevelDestination.SEARCH) },
                         darkTheme = darkTheme

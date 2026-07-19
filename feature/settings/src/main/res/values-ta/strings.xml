@@ -11,6 +11,14 @@
     <string name="settings_language_subtitle">தமிழ்</string>
     <string name="settings_theme_subtitle">தோற்றம்</string>
 
+    <!-- Help icon -->
+    <string name="settings_help_icon">உதவி சின்னம்</string>
+    <string name="settings_help_icon_shown">அனைத்து திரைகளிலும் காட்டப்படும்</string>
+    <string name="settings_help_icon_hidden">மறைக்கப்பட்டது</string>
+    <string name="settings_help_icon_toggle_label">உதவி சின்னத்தைக் காட்டு</string>
+    <string name="settings_help_icon_dialog_message">இதை இயக்கினால், ஒவ்வொரு திரையின் மேல் பட்டியிலும் ஒரு உதவி சின்னம் தோன்றும். அதைத் தொட்டால், அந்தத் திரையை எவ்வாறு பயன்படுத்துவது என்பது குறித்த விரைவான வழிகாட்டி காட்டப்படும்.</string>
+    <string name="settings_help_icon_dialog_confirm">சரி</string>
+
     <!-- Notifications -->
     <string name="settings_push_notifications">துள்ளு அறிவிப்புகள்</string>
     <string name="settings_push_notifications_subtitle">புதிய கட்டுரைகளுக்கான அறிவிப்புகள்</string>

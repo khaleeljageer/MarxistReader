@@ -15,6 +15,7 @@ fun SettingsScreenRoute(
 
     val themeDialog = rememberSaveable { mutableStateOf(false) }
     val languageDialog = rememberSaveable { mutableStateOf(false) }
+    val helpIconDialog = rememberSaveable { mutableStateOf(false) }
 
     if (themeDialog.value) {
         ThemeDialog(
@@ -30,16 +31,25 @@ fun SettingsScreenRoute(
             onDismiss = { languageDialog.value = false },
         )
     }
+    if (helpIconDialog.value) {
+        HelpIconDialog(
+            visible = settings.helpIconVisible,
+            onToggle = { viewModel.setHelpIconVisible(it) },
+            onDismiss = { helpIconDialog.value = false },
+        )
+    }
 
     SettingsScreenContent(
         uiState = SettingsUiState(
             theme = settings.theme,
             language = settings.language,
             pushNotificationsEnabled = settings.pushNotificationsEnabled,
+            helpIconVisible = settings.helpIconVisible,
             appVersion = settings.appVersion,
         ),
         themeDialogUpdate = { themeDialog.value = it },
         languageDialogUpdate = { languageDialog.value = it },
+        helpIconDialogUpdate = { helpIconDialog.value = it },
         onPushNotificationStatusChange = { viewModel.setPushNotificationsEnabled(it) },
     )
 }

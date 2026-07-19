@@ -34,6 +34,7 @@ import org.cpimtn.marxist.navigation.TopLevelDestination
 fun App(
     windowSizeClass: WindowSizeClass,
     darkTheme: Boolean,
+    helpIconEnabled: Boolean = true,
     startTab: String? = null,
     onStartTabHandled: () -> Unit = {},
 ) {
@@ -79,7 +80,8 @@ fun App(
 
             MainScreen(
                 windowSizeClass = windowSizeClass,
-                darkTheme = darkTheme
+                darkTheme = darkTheme,
+                helpIconEnabled = helpIconEnabled
             ) { appState, modifier ->
                 // A notification tap can request a tab (e.g. "new book" → Books). appState.navController
                 // is only available inside this slot, so select the tab here, then clear the request.
@@ -94,6 +96,7 @@ fun App(
                 MainScreensNavHost(
                     appState = appState,
                     modifier = modifier,
+                    helpIconEnabled = helpIconEnabled,
                     goToArticleDetails = {
                         navController.navigate(Route.ArticleDetail.createRoute(it)) {
                             launchSingleTop = true
@@ -104,7 +107,7 @@ fun App(
                     }
                 )
 
-                HelpHost(appState = appState)
+                HelpHost(appState = appState, helpEnabled = helpIconEnabled)
             }
         }
 
@@ -124,15 +127,18 @@ fun App(
  * and registers [MainAppState.helpCallback] so the top bar / search bar help icon can reopen it.
  */
 @Composable
-private fun HelpHost(appState: MainAppState) {
+private fun HelpHost(appState: MainAppState, helpEnabled: Boolean) {
     val helpViewModel: HelpViewModel = hiltViewModel()
     val topic = appState.currentTopLevelDestination?.toHelpTopic()
 
-    LaunchedEffect(topic) {
-        topic?.let(helpViewModel::onScreenShown)
+    // When help is turned off the icon is hidden, so also suppress the first-visit auto-show and
+    // don't register a reopen callback — the feature is fully dormant until re-enabled.
+    LaunchedEffect(topic, helpEnabled) {
+        if (helpEnabled) topic?.let(helpViewModel::onScreenShown)
     }
     SideEffect {
-        appState.helpCallback = topic?.let { t -> { helpViewModel.onHelpClicked(t) } }
+        appState.helpCallback =
+            if (helpEnabled) topic?.let { t -> { helpViewModel.onHelpClicked(t) } } else null
     }
 
     val visibleTopic by helpViewModel.visibleTopic.collectAsState()

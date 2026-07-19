@@ -11,6 +11,14 @@
     <string name="settings_language_subtitle">Tamil</string>
     <string name="settings_theme_subtitle">Theme</string>
 
+    <!-- Help icon -->
+    <string name="settings_help_icon">Help Icon</string>
+    <string name="settings_help_icon_shown">Shown on all screens</string>
+    <string name="settings_help_icon_hidden">Hidden</string>
+    <string name="settings_help_icon_toggle_label">Show help icon</string>
+    <string name="settings_help_icon_dialog_message">When turned on, a help icon appears in the top bar of every screen. Tapping it shows a quick guide on how to use that screen and get the most out of the app.</string>
+    <string name="settings_help_icon_dialog_confirm">Got it</string>
+
     <!-- Notifications -->
     <string name="settings_push_notifications">Push Notifications</string>
     <string name="settings_push_notifications_subtitle">New article notifications</string>

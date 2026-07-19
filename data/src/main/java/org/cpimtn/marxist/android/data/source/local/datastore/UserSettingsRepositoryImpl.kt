@@ -26,6 +26,7 @@ private val KEY_THEME = stringPreferencesKey("theme")
 private val KEY_FONT_SIZE = stringPreferencesKey("font_size")
 private val KEY_LANGUAGE = stringPreferencesKey("language")
 private val KEY_PUSH_NOTIFICATIONS = booleanPreferencesKey("push_notifications_enabled")
+private val KEY_HELP_ICON_VISIBLE = booleanPreferencesKey("help_icon_visible")
 private val KEY_WELCOME_COMPLETED = booleanPreferencesKey("welcome_completed")
 private val KEY_SEEN_HELP_TOPICS = stringSetPreferencesKey("seen_help_topics")
 
@@ -55,6 +56,7 @@ class UserSettingsRepositoryImpl @Inject constructor(
                 language = prefs[KEY_LANGUAGE]?.let { AppLanguage.valueOf(it) }
                     ?: AppLanguage.TAMIL,
                 pushNotificationsEnabled = prefs[KEY_PUSH_NOTIFICATIONS] ?: true,
+                helpIconVisible = prefs[KEY_HELP_ICON_VISIBLE] ?: true,
                 appVersion = appVersionProvider.getVersion(),
             )
         }
@@ -73,6 +75,10 @@ class UserSettingsRepositoryImpl @Inject constructor(
 
     override suspend fun setPushNotificationsEnabled(enabled: Boolean) {
         context.userSettingsDataStore.edit { it[KEY_PUSH_NOTIFICATIONS] = enabled }
+    }
+
+    override suspend fun setHelpIconVisible(visible: Boolean) {
+        context.userSettingsDataStore.edit { it[KEY_HELP_ICON_VISIBLE] = visible }
     }
 
     override suspend fun setWelcomeCompleted(completed: Boolean) {

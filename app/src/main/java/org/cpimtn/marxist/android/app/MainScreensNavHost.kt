@@ -23,6 +23,7 @@ import org.cpimtn.marxist.navigation.Screen
 fun MainScreensNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
+    helpIconEnabled: Boolean = true,
     goToArticleDetails: (postId: Int) -> Unit,
     openBook: (bookId: String) -> Unit,
 ) {
@@ -52,6 +53,7 @@ fun MainScreensNavHost(
         composable(route = Screen.Search.route) {
             SearchScreenRoute(
                 onArticleClick = goToArticleDetails,
+                showHelpIcon = helpIconEnabled,
                 onHelpClick = { appState.helpCallback?.invoke() },
             )
         }

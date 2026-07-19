@@ -62,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                 App(
                     windowSizeClass = windowSizeClass,
                     darkTheme = darkTheme,
+                    helpIconEnabled = settings.helpIconVisible,
                     startTab = startTab,
                     onStartTabHandled = { startTab = null },
                 )

@@ -18,6 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.DarkMode
@@ -34,6 +35,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
@@ -59,6 +61,7 @@ data class SettingsUiState(
     val theme: Theme,
     val language: AppLanguage,
     val pushNotificationsEnabled: Boolean,
+    val helpIconVisible: Boolean,
     val appVersion: String,
 )
 
@@ -70,6 +73,7 @@ fun SettingsScreenContent(
     uiState: SettingsUiState,
     themeDialogUpdate: (Boolean) -> Unit,
     languageDialogUpdate: (Boolean) -> Unit,
+    helpIconDialogUpdate: (Boolean) -> Unit,
     onPushNotificationStatusChange: (Boolean) -> Unit,
 ) {
     Column(
@@ -99,6 +103,20 @@ fun SettingsScreenContent(
             subtitle = languageLabel(uiState.language),
             showTrailingArrow = true,
             onClick = { languageDialogUpdate(true) },
+        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+        SettingsItemRow(
+            icon = Icons.AutoMirrored.Outlined.HelpOutline,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_help_icon),
+            subtitle = if (uiState.helpIconVisible) {
+                stringResource(R.string.settings_help_icon_shown)
+            } else {
+                stringResource(R.string.settings_help_icon_hidden)
+            },
+            showTrailingArrow = true,
+            onClick = { helpIconDialogUpdate(true) },
         )
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 
@@ -319,5 +337,62 @@ fun LanguageDialog(
             }
         },
         confirmButton = {},
+    )
+}
+
+/**
+ * Educates the user about the contextual help icon and lets them show/hide it. Opened when the user
+ * taps the "Help icon" settings row so the explanation appears exactly when they're deciding.
+ */
+@Composable
+fun HelpIconDialog(
+    visible: Boolean,
+    onToggle: (Boolean) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Outlined.HelpOutline,
+                contentDescription = null,
+            )
+        },
+        title = { Text(stringResource(R.string.settings_help_icon)) },
+        text = {
+            Column(modifier = Modifier.wrapContentSize()) {
+                Text(
+                    text = stringResource(R.string.settings_help_icon_dialog_message),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+                Spacer(Modifier.height(16.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = stringResource(R.string.settings_help_icon_toggle_label),
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier.weight(1f),
+                    )
+                    Switch(
+                        checked = visible,
+                        onCheckedChange = onToggle,
+                        colors = SwitchDefaults.colors(
+                            checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                            checkedTrackColor = MarxistReaderTheme.colors.settingsGroupTitle,
+                            uncheckedThumbColor = MaterialTheme.colorScheme.outline,
+                            uncheckedTrackColor = MaterialTheme.colorScheme.surface,
+                            uncheckedBorderColor = MaterialTheme.colorScheme.outline,
+                        ),
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.settings_help_icon_dialog_confirm))
+            }
+        },
     )
 }

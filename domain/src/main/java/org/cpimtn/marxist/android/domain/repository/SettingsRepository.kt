@@ -15,6 +15,7 @@ interface SettingsRepository {
     suspend fun setFontSize(fontSize: FontSize)
     suspend fun setLanguage(language: AppLanguage)
     suspend fun setPushNotificationsEnabled(enabled: Boolean)
+    suspend fun setHelpIconVisible(visible: Boolean)
     suspend fun setWelcomeCompleted(completed: Boolean)
     suspend fun markHelpSeen(topic: String)
 }

@@ -43,6 +43,7 @@ import org.cpimtn.marxist.android.domain.usecase.MarkHelpSeenUseCase
 import org.cpimtn.marxist.android.domain.usecase.SaveBookReaderIdUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
+import org.cpimtn.marxist.android.domain.usecase.SetHelpIconVisibleUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetLanguageUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetPushNotificationsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetThemeUseCase
@@ -157,6 +158,11 @@ object UseCaseModule {
     @Singleton
     fun provideSetPushNotificationsUseCase(settingsRepository: SettingsRepository): SetPushNotificationsUseCase =
         SetPushNotificationsUseCase(settingsRepository)
+
+    @Provides
+    @Singleton
+    fun provideSetHelpIconVisibleUseCase(settingsRepository: SettingsRepository): SetHelpIconVisibleUseCase =
+        SetHelpIconVisibleUseCase(settingsRepository)
 
     @Provides
     @Singleton

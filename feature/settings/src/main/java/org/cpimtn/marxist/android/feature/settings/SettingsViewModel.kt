@@ -11,6 +11,7 @@ import org.cpimtn.marxist.android.domain.model.AppLanguage
 import org.cpimtn.marxist.android.domain.model.Theme
 import org.cpimtn.marxist.android.domain.model.UserSettings
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.SetHelpIconVisibleUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetLanguageUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetPushNotificationsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetThemeUseCase
@@ -22,6 +23,7 @@ class SettingsViewModel @Inject constructor(
     private val setThemeUseCase: SetThemeUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
     private val setPushNotificationsUseCase: SetPushNotificationsUseCase,
+    private val setHelpIconVisibleUseCase: SetHelpIconVisibleUseCase,
 ) : ViewModel() {
     val settingsState: StateFlow<UserSettings> = getSettingsFlowUseCase()
         .stateIn(
@@ -40,5 +42,9 @@ class SettingsViewModel @Inject constructor(
 
     fun setPushNotificationsEnabled(enabled: Boolean) {
         viewModelScope.launch { setPushNotificationsUseCase(enabled) }
+    }
+
+    fun setHelpIconVisible(visible: Boolean) {
+        viewModelScope.launch { setHelpIconVisibleUseCase(visible) }
     }
 }

@@ -75,6 +75,7 @@ fun SearchDiscovery(
     query: String,
     onQueryChange: (String) -> Unit,
     onSubmit: () -> Unit,
+    showHelpIcon: Boolean = true,
     onHelpClick: () -> Unit,
     onClearSearch: () -> Unit,
     onRecentSearchClick: (String) -> Unit,
@@ -101,6 +102,7 @@ fun SearchDiscovery(
                 onSubmit = onSubmit,
                 onClear = { onQueryChange("") },
                 onBack = onClearSearch,
+                showHelpIcon = showHelpIcon,
                 onHelpClick = onHelpClick,
                 colors = ext,
             )
@@ -196,6 +198,7 @@ private fun SearchBar(
     onSubmit: () -> Unit,
     onClear: () -> Unit,
     onBack: () -> Unit,
+    showHelpIcon: Boolean = true,
     onHelpClick: () -> Unit,
     colors: MarxistExtendedColors,
 ) {
@@ -300,9 +303,10 @@ private fun SearchBar(
             }
         }
 
-        // Help / how-to-use — hidden while focused to keep the field prominent
+        // Help / how-to-use — hidden while focused to keep the field prominent,
+        // and fully suppressed when the user has disabled the help icon in settings.
         AnimatedVisibility(
-            visible = !isFocused,
+            visible = showHelpIcon && !isFocused,
             enter = fadeIn(),
             exit = fadeOut(),
         ) {
