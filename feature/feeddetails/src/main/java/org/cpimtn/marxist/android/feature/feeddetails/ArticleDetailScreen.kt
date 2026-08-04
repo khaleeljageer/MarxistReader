@@ -33,6 +33,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.TextFields
@@ -50,6 +51,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -63,6 +65,7 @@ import androidx.core.text.HtmlCompat
 import org.cpimtn.marxist.android.domain.model.FeedItem
 import org.cpimtn.marxist.android.domain.model.FontSize
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.core.config.AppConfig
 
 @Composable
 fun ArticleDetailTopBarActions(
@@ -283,6 +286,10 @@ fun ArticleDetailContent(
         )
         Spacer(modifier = Modifier.height(16.dp))
 
+        ArticleSourceAttribution(slug = post.slug)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         FlowRow(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -309,6 +316,49 @@ fun ArticleDetailContent(
         }
 
         Spacer(modifier = Modifier.height(40.dp))
+    }
+}
+
+/**
+ * Credits the original publisher and links to the article's canonical page on the website.
+ * Required by Play's News & Magazines / Misleading Claims policies: every article has to name its
+ * original source and offer a working link to it.
+ */
+@Composable
+private fun ArticleSourceAttribution(
+    slug: String,
+    modifier: Modifier = Modifier,
+) {
+    val ext = MarxistReaderTheme.colors
+    val uriHandler = LocalUriHandler.current
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(R.string.feed_details_source_publisher),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Row(
+            modifier = Modifier
+                .clickable { uriHandler.openUri(AppConfig.Site.articleUrl(slug)) }
+                .padding(vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.OpenInNew,
+                contentDescription = null,
+                modifier = Modifier.size(14.dp),
+                tint = ext.categoryBadgeBg,
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = stringResource(R.string.feed_details_source_link),
+                style = MaterialTheme.typography.labelMedium,
+                color = ext.categoryBadgeBg,
+                textDecoration = TextDecoration.Underline,
+            )
+        }
     }
 }
 

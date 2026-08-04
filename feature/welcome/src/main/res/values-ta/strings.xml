@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Greeting (no app logo per design) -->
-    <string name="welcome_greeting_hello">வணக்கம்!</string>
-    <string name="welcome_greeting_to">வரவேற்கிறோம்</string>
-    <string name="welcome_greeting_marxist">மார்க்சிஸ்ட் செயலி</string>
-
     <!-- Feature 1: Daily Articles -->
     <string name="welcome_feature1_title">கட்டுரைகள்</string>
     <string name="welcome_feature1_desc">அரசியல், பொருளாதாரம், வரலாறு, சமூகம் — தமிழில் ஆழமான பகுப்பாய்வுகள்</string>
 
     <!-- Feature 2: Library &amp; Books -->
     <string name="welcome_feature2_title">புத்தகங்கள்</string>
-    <string name="welcome_feature2_desc">மார்க்சிய கிளாசிக்குகள் — epub வடிவில் பதிவிறக்கம் செய்யுங்கள்</string>
+    <string name="welcome_feature2_desc">மாத இதழ்கள் — epub வடிவில் பதிவிறக்கம் செய்யுங்கள்</string>
 
     <!-- Feature 3: Save \u0026amp; Read Offline -->
     <string name="welcome_feature3_title">சேமித்து படிக்கலாம்</string>

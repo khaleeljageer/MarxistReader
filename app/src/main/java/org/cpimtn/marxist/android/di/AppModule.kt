@@ -15,6 +15,6 @@ object AppModule {
     @Provides
     @Singleton
     fun appVersionProvider(): AppVersionProvider = object : AppVersionProvider {
-        override fun getVersion(): String = BuildConfig.VERSION_NAME
+        override fun getVersion(): String = BuildConfig.VERSION_NAME + "_" + BuildConfig.VERSION_CODE
     }
 }

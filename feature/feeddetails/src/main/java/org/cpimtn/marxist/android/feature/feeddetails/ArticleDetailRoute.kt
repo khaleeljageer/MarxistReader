@@ -28,6 +28,7 @@ import org.cpimtn.marxist.android.domain.model.HelpTopic
 import org.cpimtn.marxist.android.ui.common.help.HelpBottomSheet
 import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.core.config.AppConfig
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,7 +95,7 @@ fun ArticleDetailRoute(
                                         sharePost(
                                             title = state.feedItem.post.title,
                                             excerpt = state.feedItem.post.excerpt,
-                                            url = state.feedItem.post.slug,
+                                            url = AppConfig.Site.articleUrl(state.feedItem.post.slug),
                                         )
                                     )
                                 },

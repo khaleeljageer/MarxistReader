@@ -29,10 +29,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.RssFeed
-import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -90,14 +88,6 @@ fun WelcomeScreen(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                // Greeting: வணக்கம்!
-                Text(
-                    text = stringResource(R.string.welcome_greeting_hello),
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                // மார்க்சிஸ்ட் (accent) + க்கு வரவேற்கிறோம்
                 Text(
                     text = buildAnnotatedString {
                         withStyle(SpanStyle(color = accent, fontWeight = FontWeight.Bold)) {
@@ -109,7 +99,12 @@ fun WelcomeScreen(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-
+                Text(
+                    text = stringResource(R.string.welcome_greeting_hello),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
                 Text(
                     text = stringResource(R.string.welcome_greeting_to),
                     style = MaterialTheme.typography.headlineLarge,
@@ -174,9 +169,9 @@ fun WelcomeScreen(
             AnimatedVisibility(
                 visible = !canContinue,
                 enter = fadeIn(animationSpec = tween(400)) +
-                    expandVertically(animationSpec = tween(400)),
+                        expandVertically(animationSpec = tween(400)),
                 exit = fadeOut(animationSpec = tween(300)) +
-                    shrinkVertically(animationSpec = tween(300)),
+                        shrinkVertically(animationSpec = tween(300)),
             ) {
                 // Gentle pulsing alpha to signal the fetch is still in progress.
                 val infiniteTransition = rememberInfiniteTransition(label = "fetchingPulse")

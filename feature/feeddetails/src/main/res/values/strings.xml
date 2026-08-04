@@ -9,6 +9,8 @@
     <string name="feed_details_share_content_desc">Share article</string>
     <string name="feed_details_font_size_content_desc">Text size</string>
     <string name="feed_details_font_size_title">Text Size</string>
+    <string name="feed_details_source_publisher">Source: Marxist Theoretical Magazine — marxist.cpimtn.org</string>
+    <string name="feed_details_source_link">Read the original article on the website</string>
     <string name="font_size_small">Small</string>
     <string name="font_size_medium">Medium</string>
     <string name="font_size_normal">Normal</string>

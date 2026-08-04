@@ -27,6 +27,16 @@
     <string name="settings_version">Version</string>
     <string name="settings_source_code">Source Code</string>
     <string name="settings_source_code_subtitle">Github</string>
+    <string name="settings_contact">Contact us</string>
+    <string name="settings_contact_subtitle">Reach the magazine\'s editorial office</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_privacy_policy_subtitle">How your data is handled</string>
+    <string name="settings_terms_conditions">Terms &amp; Conditions</string>
+    <string name="settings_terms_conditions_subtitle">Terms of using the app</string>
+
+    <!-- Disclaimer -->
+    <string name="settings_disclaimer_title">Disclaimer</string>
+    <string name="settings_disclaimer_body">Marxist Reader is an independent reader app for the Marxist Theoretical Magazine (https://marxist.cpimtn.org). It is not a government app and is not affiliated with, endorsed by, or representing any government entity or agency. All articles are published by the magazine and link back to their original source on the website.</string>
 
     <!-- Footer -->
     <string name="settings_footer_license">Licensed under GNU GPL v3.0 — Free &amp; open source software</string>

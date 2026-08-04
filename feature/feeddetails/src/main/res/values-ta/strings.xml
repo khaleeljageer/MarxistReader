@@ -9,6 +9,8 @@
     <string name="feed_details_share_content_desc">கட்டுரையை பகிர்</string>
     <string name="feed_details_font_size_content_desc">எழுத்து அளவு</string>
     <string name="feed_details_font_size_title">எழுத்து அளவு</string>
+    <string name="feed_details_source_publisher">மூலம்: மார்க்சிஸ்ட் கோட்பாட்டு இதழ் — marxist.cpimtn.org</string>
+    <string name="feed_details_source_link">மூலக் கட்டுரையை இணையதளத்தில் படிக்க</string>
     <string name="font_size_small">மிகச் சிறிய</string>
     <string name="font_size_medium">சிறிய</string>
     <string name="font_size_normal">சாதாரண</string>

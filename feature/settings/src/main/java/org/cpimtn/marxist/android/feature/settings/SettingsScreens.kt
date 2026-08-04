@@ -22,9 +22,12 @@ import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
+import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.PrivacyTip
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -51,10 +54,13 @@ import androidx.compose.ui.unit.dp
 import org.cpimtn.marxist.android.domain.model.AppLanguage
 import org.cpimtn.marxist.android.domain.model.Theme
 import org.cpimtn.marxist.core.clickableIf
+import org.cpimtn.marxist.core.config.AppConfig
 import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
 private const val SOURCE_CODE_URL = "https://github.com/khaleeljageer/MarxistReader/"
+private const val PRIVACY_POLICY_URL = AppConfig.Site.PRIVACY_POLICY_URL
+private const val TERMS_CONDITIONS_URL = AppConfig.Site.TERMS_CONDITIONS_URL
 
 @Stable
 data class SettingsUiState(
@@ -171,8 +177,43 @@ fun SettingsScreenContent(
             showTrailingArrow = true,
             onClick = { uriHandler.openUri(SOURCE_CODE_URL) },
         )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 
-        Spacer(modifier = Modifier.height(32.dp))
+        SettingsItemRow(
+            icon = Icons.Outlined.MailOutline,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_contact),
+            subtitle = stringResource(R.string.settings_contact_subtitle),
+            showTrailingArrow = true,
+            onClick = { uriHandler.openUri(AppConfig.Site.CONTACT_URL) },
+        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+        SettingsItemRow(
+            icon = Icons.Outlined.PrivacyTip,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_privacy_policy),
+            subtitle = stringResource(R.string.settings_privacy_policy_subtitle),
+            showTrailingArrow = true,
+            onClick = { uriHandler.openUri(PRIVACY_POLICY_URL) },
+        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+        SettingsItemRow(
+            icon = Icons.Outlined.Gavel,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_terms_conditions),
+            subtitle = stringResource(R.string.settings_terms_conditions_subtitle),
+            showTrailingArrow = true,
+            onClick = { uriHandler.openUri(TERMS_CONDITIONS_URL) },
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+        // Play's Misleading Claims policy requires an easy-to-see statement that this app is not
+        // a government entity, since it publishes political/policy content.
+        DisclaimerCard(colors = colors)
+
+        Spacer(modifier = Modifier.height(24.dp))
         Text(
             text = stringResource(R.string.settings_footer_license),
             style = MaterialTheme.typography.bodySmall,
@@ -181,6 +222,33 @@ fun SettingsScreenContent(
                 .padding(bottom = 24.dp),
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
             textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+private fun DisclaimerCard(
+    colors: MarxistExtendedColors,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .clip(RoundedCornerShape(12.dp))
+            .background(colors.settingsIconBg)
+            .padding(16.dp),
+    ) {
+        Text(
+            text = stringResource(R.string.settings_disclaimer_title),
+            style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold),
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Text(
+            text = stringResource(R.string.settings_disclaimer_body),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }
