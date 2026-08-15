@@ -222,7 +222,9 @@ private fun BookDownloadButton(
     val ext = MarxistReaderTheme.colors
 
     Surface(
-        onClick = onClick,
+        // In the Downloaded state, clicking anywhere on the surface should open the book —
+        // hanging it off the label alone leaves the icon and the padding around it dead.
+        onClick = if (state == BookDownloadUiState.Downloaded) onOpen else onClick,
         enabled = state != BookDownloadUiState.Downloading,
         shape = RoundedCornerShape(10.dp),
         color = ext.bookDownloadBg,
@@ -259,7 +261,6 @@ private fun BookDownloadButton(
                     )
                     Spacer(modifier = Modifier.width(6.dp))
                     Text(
-                        modifier = Modifier.clickable(onClick = onOpen),
                         text = stringResource(R.string.books_downloaded),
                         style = MaterialTheme.typography.labelMedium,
                         color = ext.bookDownloadText,

@@ -51,3 +51,10 @@
 # ---------------------------------------------------------------------------
 -dontwarn org.joda.convert.FromString
 -dontwarn org.joda.convert.ToString
+
+# ---------------------------------------------------------------------------
+# Play in-app review (com.google.android.play:review-ktx) — its coroutine
+# adapters carry a Play Services nullness annotation that is compile-only and
+# never packaged, so R8 reports it missing. Annotations are dropped anyway.
+# ---------------------------------------------------------------------------
+-dontwarn com.google.android.gms.common.annotation.NoNullnessRewrite
