@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Marxist Reader</string>
+
+    <string name="notification_channel_new_book_name">New books</string>
+    <string name="notification_channel_new_book_desc">Alerts you when a new e-book is published.</string>
+    <string name="notification_new_book_default_title">New book available</string>
+    <string name="notification_new_book_default_body">A new e-book has been published. Open the app to read it.</string>
 </resources>

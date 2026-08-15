@@ -1,21 +1,53 @@
 # Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep line numbers for readable crash stack traces (and hide the original file name).
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# ---------------------------------------------------------------------------
+# kotlinx.serialization  (WordPress REST DTOs in :network)
+# ---------------------------------------------------------------------------
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.**
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Keep every @Serializable DTO and its generated $$serializer intact. The model
+# package is tiny, so keeping it fully is the safest way to avoid serialization
+# breakage under R8 full mode.
+-keep class org.cpimtn.marxist.network.model.** { *; }
+
+# Standard kotlinx.serialization keep rules (R8 full-mode safe).
+-if @kotlinx.serialization.Serializable class **
+-keepclassmembers class <1> {
+    static <1>$Companion Companion;
+}
+-if @kotlinx.serialization.Serializable class ** {
+    static **$* *;
+}
+-keepclassmembers class <2>$$serializer {
+    *;
+}
+
+# ---------------------------------------------------------------------------
+# Enums persisted by name via DataStore + Enum.valueOf() — constant names must
+# survive obfuscation or valueOf() throws at runtime (settings would crash).
+# ---------------------------------------------------------------------------
+-keepclassmembers enum org.cpimtn.marxist.android.domain.model.Theme { *; }
+-keepclassmembers enum org.cpimtn.marxist.android.domain.model.FontSize { *; }
+-keepclassmembers enum org.cpimtn.marxist.android.domain.model.AppLanguage { *; }
+-keepclassmembers enum org.cpimtn.marxist.android.domain.model.HelpTopic { *; }
+
+# ---------------------------------------------------------------------------
+# Retrofit — keep generic signatures used to build service interfaces.
+# (Modern Retrofit/OkHttp ship their own consumer rules; these are belt-and-braces.)
+# ---------------------------------------------------------------------------
+-keepattributes Signature, Exceptions, EnclosingMethod
+
+# ---------------------------------------------------------------------------
+# joda-time (pulled in transitively via the Readium reader) references the
+# optional compile-only joda-convert annotations, which aren't on the runtime
+# classpath. Suppress the R8 missing-class warnings for them.
+# ---------------------------------------------------------------------------
+-dontwarn org.joda.convert.FromString
+-dontwarn org.joda.convert.ToString

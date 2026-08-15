@@ -13,7 +13,7 @@ pluginManagement {
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version ("0.9.0")
+    id("org.gradle.toolchains.foojay-resolver-convention") version ("1.0.0")
 }
 
 dependencyResolutionManagement {
@@ -33,7 +33,7 @@ include(":navigation")
 include(":core")
 include(":feature:feed")
 include(":feature:books")
-include(":feature:more")
+include(":feature:search")
 include(":feature:saved")
 include(":feature:feeddetails")
 include(":feature:settings")
@@ -41,3 +41,4 @@ include(":feature:welcome")
 include(":data")
 include(":domain")
 include(":use-cases")
+include(":reader")

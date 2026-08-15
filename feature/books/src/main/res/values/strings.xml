@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Download button states -->
+    <string name="books_download">Download</string>
+    <string name="books_downloading">Downloading…</string>
+    <string name="books_downloaded">Downloaded</string>
+    <string name="books_retry">Retry</string>
+    <!-- Delete a downloaded book -->
+    <string name="books_delete">Delete download</string>
+    <string name="books_delete_title">Delete this download?</string>
+    <string name="books_delete_message">“%1$s” will be removed from this device, along with your reading progress. You can download it again later.</string>
+    <string name="books_delete_confirm">Delete</string>
+    <string name="books_delete_cancel">Cancel</string>
+    <!-- States -->
+    <string name="books_empty_message">No books yet. Sync when online.</string>
+    <string name="books_empty_subtitle">Connect to the internet to fetch the book catalog</string>
+    <string name="books_error_title">Something went wrong</string>
+</resources>

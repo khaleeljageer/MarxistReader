@@ -1,5 +1,16 @@
 package org.cpimtn.marxist.android.feature.welcome
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,10 +29,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.MenuBook
-import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material.icons.outlined.RssFeed
-import androidx.compose.material.icons.outlined.WifiOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CardDefaults
@@ -31,11 +40,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -48,7 +59,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
 
-private val FeatureCount = 3
+private const val FeatureCount = 3
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -58,6 +69,7 @@ fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
 ) {
     val canContinue by viewModel.canContinue.collectAsState()
+    val showSkip by viewModel.showSkip.collectAsState()
     val colors = MarxistReaderTheme.colors
     val pagerState = rememberPagerState(pageCount = { FeatureCount })
     val cardBg = MaterialTheme.colorScheme.surfaceContainerLow
@@ -78,14 +90,6 @@ fun WelcomeScreen(
                     .padding(horizontal = 16.dp),
                 verticalArrangement = Arrangement.Top
             ) {
-                // Greeting: வணக்கம்!
-                Text(
-                    text = stringResource(R.string.welcome_greeting_hello),
-                    style = MaterialTheme.typography.headlineLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface,
-                )
-                // மார்க்சிஸ்ட் (accent) + க்கு வரவேற்கிறோம்
                 Text(
                     text = buildAnnotatedString {
                         withStyle(SpanStyle(color = accent, fontWeight = FontWeight.Bold)) {
@@ -97,18 +101,17 @@ fun WelcomeScreen(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
                 )
-
+                Text(
+                    text = stringResource(R.string.welcome_greeting_hello),
+                    style = MaterialTheme.typography.headlineLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
                 Text(
                     text = stringResource(R.string.welcome_greeting_to),
                     style = MaterialTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = stringResource(R.string.welcome_subtitle),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -162,8 +165,27 @@ fun WelcomeScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            // Bottom card: show spinner until posts table has >= 50 records
-            if (!canContinue) {
+            // Bottom card: show spinner until posts table has >= 50 records.
+            // Animate the whole card in/out so it fades + expands on appear and
+            // gracefully collapses once fetching completes.
+            AnimatedVisibility(
+                visible = !canContinue,
+                enter = fadeIn(animationSpec = tween(400)) +
+                        expandVertically(animationSpec = tween(400)),
+                exit = fadeOut(animationSpec = tween(300)) +
+                        shrinkVertically(animationSpec = tween(300)),
+            ) {
+                // Gentle pulsing alpha to signal the fetch is still in progress.
+                val infiniteTransition = rememberInfiniteTransition(label = "fetchingPulse")
+                val hintAlpha by infiniteTransition.animateFloat(
+                    initialValue = 0.4f,
+                    targetValue = 1f,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(durationMillis = 900, easing = FastOutSlowInEasing),
+                        repeatMode = RepeatMode.Reverse,
+                    ),
+                    label = "hintAlpha",
+                )
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
@@ -197,6 +219,14 @@ fun WelcomeScreen(
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    text = stringResource(R.string.welcome_fetching_hint),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    fontWeight = FontWeight.Medium,
+                                    color = accent,
+                                    modifier = Modifier.alpha(hintAlpha),
+                                )
                             }
                         }
                     }
@@ -216,6 +246,22 @@ fun WelcomeScreen(
                     enabled = canContinue,
                 ) {
                     Text(stringResource(R.string.welcome_continue))
+                }
+            }
+
+            // Escape hatch for a connection too slow to ever reach the post threshold. Only offered
+            // once the sync has had a fair chance, and never while Continue is already available.
+            if (showSkip && !canContinue) {
+                Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    TextButton(
+                        onClick = { viewModel.onContinueClicked(onContinueClicked) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.welcome_skip),
+                            color = accent,
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))

@@ -31,6 +31,12 @@ class MainAppState(
 ) {
     /** Set by FeedScreen when composed; cleared on dispose. Used for top bar refresh (feed only). */
     var feedRefreshCallback: (() -> Unit)? = null
+
+    /**
+     * Set by the app-level help host for the current top-level destination. Invoked when the user
+     * taps the help icon (shared top bar, or the search screen's own bar) to reopen contextual help.
+     */
+    var helpCallback: (() -> Unit)? = null
     val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 

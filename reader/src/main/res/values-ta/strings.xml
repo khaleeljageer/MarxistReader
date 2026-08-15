@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Reader "how to use" help (Tamil). Other reader strings fall back to values/ (English). -->
+    <string name="reader_help_title">படிப்பானை எவ்வாறு பயன்படுத்துவது</string>
+    <string name="reader_help_pages_title">பக்கங்களை மாற்ற</string>
+    <string name="reader_help_pages_desc">அடுத்த பக்கத்திற்கு வலப்பக்கத்தையும், முந்தைய பக்கத்திற்கு இடப்பக்கத்தையும் தட்டவும். பட்டியைக் காட்ட அல்லது மறைக்க நடுவில் தட்டவும்.</string>
+    <string name="reader_help_toc_title">அத்தியாயங்கள்</string>
+    <string name="reader_help_toc_desc">ஒரு அத்தியாயத்திற்குச் செல்ல பட்டியல் ஐகானைத் தட்டவும்.</string>
+    <string name="reader_help_bookmark_title">புத்தகக்குறி</string>
+    <string name="reader_help_bookmark_desc">நீங்கள் படித்த இடத்தைக் குறிக்க புத்தகக்குறி ஐகானைத் தட்டவும்.</string>
+    <string name="reader_help_tts_title">வாசித்துக் காட்டு</string>
+    <string name="reader_help_tts_desc">புத்தகத்தை வாசித்துக் காட்ட ஹெட்ஃபோன் ஐகானைத் தட்டவும்.</string>
+    <string name="reader_help_settings_title">தோற்றம்</string>
+    <string name="reader_help_settings_desc">எழுத்துரு, இடைவெளி மற்றும் தோற்றத்தை மாற்ற எழுத்து அளவு ஐகானைத் தட்டவும்.</string>
+    <string name="reader_help_search_title">தேடல்</string>
+    <string name="reader_help_search_desc">புத்தகத்தில் சொற்களைத் தேட தேடல் ஐகானைத் தட்டவும்.</string>
+</resources>

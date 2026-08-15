@@ -8,6 +8,7 @@ import org.cpimtn.marxist.android.domain.model.Post
 
 /**
  * Stream of posts that are currently saved (bookmarked), in feed order (date desc).
+ * Resolves at most one category and up to three tags per post (same as feed list).
  */
 class GetSavedPostsFlowUseCase(
     private val getPostsFlowUseCase: GetPostsFlowUseCase,

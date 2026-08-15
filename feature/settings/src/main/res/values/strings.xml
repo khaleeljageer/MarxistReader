@@ -7,11 +7,17 @@
     <!-- Display -->
     <string name="settings_dark_mode">Dark Mode</string>
     <string name="settings_dark_mode_subtitle">Comfortable look for eyes</string>
-    <string name="settings_font_size">Font Size</string>
-    <string name="settings_font_size_subtitle">Normal</string>
-    <string name="settings_language">Language</string>
+    <string name="settings_language">App Language</string>
     <string name="settings_language_subtitle">Tamil</string>
     <string name="settings_theme_subtitle">Theme</string>
+
+    <!-- Help icon -->
+    <string name="settings_help_icon">Help Icon</string>
+    <string name="settings_help_icon_shown">Shown on all screens</string>
+    <string name="settings_help_icon_hidden">Hidden</string>
+    <string name="settings_help_icon_toggle_label">Show help icon</string>
+    <string name="settings_help_icon_dialog_message">When turned on, a help icon appears in the top bar of every screen. Tapping it shows a quick guide on how to use that screen and get the most out of the app.</string>
+    <string name="settings_help_icon_dialog_confirm">Got it</string>
 
     <!-- Notifications -->
     <string name="settings_push_notifications">Push Notifications</string>
@@ -19,8 +25,30 @@
 
     <!-- About -->
     <string name="settings_version">Version</string>
-    <string name="settings_version_subtitle">6.0.0</string>
+    <string name="settings_source_code">Source Code</string>
+    <string name="settings_source_code_subtitle">Github</string>
+    <string name="settings_rate_app">Rate this app</string>
+    <string name="settings_rate_app_subtitle">Share your feedback on Google Play</string>
+    <string name="settings_contact">Contact us</string>
+    <string name="settings_contact_subtitle">Reach the magazine\'s editorial office</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_privacy_policy_subtitle">How your data is handled</string>
+    <string name="settings_terms_conditions">Terms &amp; Conditions</string>
+    <string name="settings_terms_conditions_subtitle">Terms of using the app</string>
+
+    <!-- Disclaimer -->
+    <string name="settings_disclaimer_title">Disclaimer</string>
+    <string name="settings_disclaimer_body">Marxist Reader is an independent reader app for the Marxist Theoretical Magazine (https://marxist.cpimtn.org). It is not a government app and is not affiliated with, endorsed by, or representing any government entity or agency. All articles are published by the magazine and link back to their original source on the website.</string>
 
     <!-- Footer -->
-    <string name="settings_footer_license">CC BY-SA 4.0 — marxist.cpimtn.org</string>
+    <string name="settings_footer_license">Licensed under GNU GPL v3.0 — Free &amp; open source software</string>
+
+    <!-- Theme dialog -->
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="theme_default">Default</string>
+
+    <!-- Language dialog -->
+    <string name="language_tamil">Tamil</string>
+    <string name="language_english">English</string>
 </resources>

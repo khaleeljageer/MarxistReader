@@ -7,13 +7,22 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.cpimtn.marxist.android.domain.model.FeedItem
+import org.cpimtn.marxist.android.domain.model.FontSize
+import org.cpimtn.marxist.android.domain.model.HelpTopic
 import org.cpimtn.marxist.android.domain.usecase.GetFeedItemByIdFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSeenHelpTopicsUseCase
+import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
+import org.cpimtn.marxist.android.domain.usecase.MarkHelpSeenUseCase
+import org.cpimtn.marxist.android.domain.usecase.RecordArticleReadUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
+import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
 import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
 import javax.inject.Inject
 
@@ -22,12 +31,42 @@ class ArticleDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getFeedItemByIdFlowUseCase: GetFeedItemByIdFlowUseCase,
     getSavedPostIdsFlowUseCase: GetSavedPostIdsFlowUseCase,
+    getSettingsFlowUseCase: GetSettingsFlowUseCase,
+    getSeenHelpTopicsUseCase: GetSeenHelpTopicsUseCase,
     private val savePostUseCase: SavePostUseCase,
     private val unsavePostUseCase: UnsavePostUseCase,
+    private val setFontSizeUseCase: SetFontSizeUseCase,
+    private val markHelpSeenUseCase: MarkHelpSeenUseCase,
+    private val recordArticleReadUseCase: RecordArticleReadUseCase,
 ) : ViewModel() {
 
     private val postId: Int = checkNotNull(savedStateHandle["postId"]) {
         "postId is required"
+    }
+
+    /** Whether the "how to read an article" help sheet is showing. */
+    private val _showHelp = MutableStateFlow(false)
+    val showHelp: StateFlow<Boolean> = _showHelp.asStateFlow()
+
+    init {
+        // Auto-show help the first time an article is opened, then persist so it won't reappear.
+        viewModelScope.launch {
+            if (HelpTopic.ARTICLE.name !in getSeenHelpTopicsUseCase().first()) {
+                _showHelp.value = true
+                markHelpSeenUseCase(HelpTopic.ARTICLE)
+            }
+        }
+        // Counts toward the one-time review prompt. The ViewModel is scoped to the article route,
+        // so this runs once per article opened rather than on every recomposition.
+        viewModelScope.launch { recordArticleReadUseCase() }
+    }
+
+    fun onHelpClicked() {
+        _showHelp.value = true
+    }
+
+    fun dismissHelp() {
+        _showHelp.value = false
     }
 
     /**
@@ -45,7 +84,8 @@ class ArticleDetailViewModel @Inject constructor(
         getFeedItemByIdFlowUseCase(postId),
         getSavedPostIdsFlowUseCase(),
         _optimisticSaved,
-    ) { feedItem, savedIds, optimistic ->
+        getSettingsFlowUseCase(),
+    ) { feedItem, savedIds, optimistic, settings ->
         when {
             feedItem == null -> ArticleDetailUiState.NotFound
             else -> {
@@ -61,6 +101,7 @@ class ArticleDetailViewModel @Inject constructor(
                 ArticleDetailUiState.Success(
                     feedItem = feedItem,
                     isSaved = isSaved,
+                    fontSize = settings.fontSize,
                 )
             }
         }
@@ -90,6 +131,10 @@ class ArticleDetailViewModel @Inject constructor(
             }
         }
     }
+
+    fun setFontSize(fontSize: FontSize) {
+        viewModelScope.launch { setFontSizeUseCase(fontSize) }
+    }
 }
 
 sealed interface ArticleDetailUiState {
@@ -97,6 +142,7 @@ sealed interface ArticleDetailUiState {
     data class Success(
         val feedItem: FeedItem,
         val isSaved: Boolean,
+        val fontSize: FontSize,
     ) : ArticleDetailUiState
 
     data object NotFound : ArticleDetailUiState

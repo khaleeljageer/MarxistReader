@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Greeting (no app logo per design) -->
-    <string name="welcome_greeting_hello">வணக்கம்!</string>
-    <string name="welcome_greeting_to">வரவேற்கிறோம்</string>
-    <string name="welcome_greeting_marxist">மார்க்சிஸ்ட் செயலி</string>
-    <string name="welcome_subtitle">CPI(M) Tamil Nadu இதழ் — உங்கள் கையில்</string>
+    <!-- Greeting -->
+    <string name="welcome_greeting_hello" translatable="false">உங்களை</string>
+    <string name="welcome_greeting_to" translatable="false">வரவேற்கிறோம்…</string>
+    <string name="welcome_greeting_marxist" translatable="false">Marxist Reader</string>
 
     <!-- Feature 1: Daily Articles -->
-    <string name="welcome_feature1_title">தினசரி கட்டுரைகள்</string>
-    <string name="welcome_feature1_title_en">Daily Articles</string>
-    <string name="welcome_feature1_desc">அரசியல், பொருளாதாரம், வரலாறு, சமூகம் — தமிழில் ஆழமான பகுப்பாய்வுகள்</string>
-    <string name="welcome_feature1_desc_en">Politics, Economy, History, Society — deep analysis in Tamil</string>
+    <string name="welcome_feature1_title">Monthly Articles</string>
+    <string name="welcome_feature1_desc">Politics, Economy, History, Society — deep analysis in Tamil</string>
 
     <!-- Feature 2: Library &amp; Books -->
-    <string name="welcome_feature2_title">நூலகம் &amp; புத்தகங்கள்</string>
-    <string name="welcome_feature2_title_en">Library &amp; Books</string>
-    <string name="welcome_feature2_desc">மார்க்சிய கிளாசிக்குகள் — epub வடிவில் பதிவிறக்கம் செய்யுங்கள்</string>
-    <string name="welcome_feature2_desc_en">Marxist classics — download as epub for offline reading</string>
+    <string name="welcome_feature2_title">Books</string>
+    <string name="welcome_feature2_desc">Marxist classics — download as epub for offline reading</string>
 
-    <!-- Feature 3: Save \u0026amp; Read Offline -->
-    <string name="welcome_feature3_title">சேமி &amp; ஆஃப்லைன் படிப்பு</string>
-    <string name="welcome_feature3_title_en">Save &amp; Read Offline</string>
-    <string name="welcome_feature3_desc">பிடித்த கட்டுரைகளை சேமித்து, இணையம் இல்லாமலும் படியுங்கள்</string>
-    <string name="welcome_feature3_desc_en">Bookmark articles and read them anytime without internet</string>
+    <!-- Feature 3: Save &amp; Read Offline -->
+    <string name="welcome_feature3_title">Save &amp; Read</string>
+    <string name="welcome_feature3_desc">Bookmark articles and read them anytime without internet</string>
 
     <!-- Bottom: Fetching -->
-    <string name="welcome_fetching">கட்டுரைகளைப் பெறுகிறது…</string>
-    <string name="welcome_fetching_source">marxist.cpimtn.org இலிருந்து பதிவிறக்கம்</string>
+    <string name="welcome_fetching">Fetching Articles…</string>
+    <string name="welcome_fetching_source">Fetching articles from marxist.cpimtn.org</string>
+    <string name="welcome_fetching_hint">This will take some time to complete</string>
 
     <!-- Bottom: No internet -->
-    <string name="welcome_internet_needed">இணைய இணைப்பு தேவை</string>
-    <string name="welcome_internet_instruction">கட்டுரைகளைப் பதிவிறக்க இணையம் இணைக்கவும்</string>
-    <string name="welcome_retry">மீண்டும் முயற்சி</string>
+    <string name="welcome_internet_needed">Connect to internet</string>
+    <string name="welcome_internet_instruction">Internet needed to fetch articles</string>
+    <string name="welcome_retry">Retry</string>
 
     <!-- Continue -->
-    <string name="welcome_continue">தொடர்</string>
+    <string name="welcome_continue">Continue</string>
+    <string name="welcome_skip">Skip for now</string>
+
+    <string name="welcome_feature1_title_en" translatable="false">Daily Articles</string>
+    <string name="welcome_feature1_desc_en" translatable="false">Politics, Economy, History, Society — deep analysis in Tamil</string>
+    <string name="welcome_feature2_title_en" translatable="false">Library &amp; Books</string>
+    <string name="welcome_feature2_desc_en" translatable="false">Marxist classics — download as epub for offline reading</string>
+    <string name="welcome_feature3_title_en" translatable="false">Save &amp; Read Offline</string>
+    <string name="welcome_feature3_desc_en" translatable="false">Bookmark articles and read them anytime without internet</string>
 </resources>

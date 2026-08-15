@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="help_content_desc">இந்தத் திரையை எவ்வாறு பயன்படுத்துவது</string>
+    <string name="search_placeholder">கட்டுரைகளைத் தேடுங்கள்…</string>
+    <string name="search_hint">தேடல் முடிவுகள் இங்கே தோன்றும்</string>
+    <string name="search_recent_title">சமீபத்திய தேடல்கள்</string>
+    <string name="search_recent_clear">அழி</string>
+    <string name="search_categories_title">வகைகள் வாரியாக உலாவுக</string>
+    <string name="search_articles_count">%d கட்டுரைகள்</string>
+    <string name="search_timeline_title">காலவரிசை</string>
+    <string name="search_recent_content_desc">சமீபத்திய தேடல்கள்</string>
+    <string name="search_clear_content_desc">சமீபத்திய தேடல்களை அழி</string>
+    <string name="search_save_content_desc">கட்டுரையை சேமி</string>
+    <string name="search_unsave_content_desc">சேமிப்பை நீக்கு</string>
+    <string name="search_no_results">முடிவுகள் இல்லை</string>
+    <string name="search_no_results_for">"%s" க்கான முடிவுகள் கிடைக்கவில்லை</string>
+    <string name="search_no_results_hint">வேறு சொற்களில் தேடவும்</string>
+    <string name="search_error_title">தேடலில் பிழை</string>
+    <string name="search_retry">மீண்டும் முயற்சி</string>
+</resources>

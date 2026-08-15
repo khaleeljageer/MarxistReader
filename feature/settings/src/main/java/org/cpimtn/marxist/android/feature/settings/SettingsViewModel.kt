@@ -8,11 +8,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.cpimtn.marxist.android.domain.model.AppLanguage
-import org.cpimtn.marxist.android.domain.model.FontSize
 import org.cpimtn.marxist.android.domain.model.Theme
 import org.cpimtn.marxist.android.domain.model.UserSettings
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
-import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
+import org.cpimtn.marxist.android.domain.usecase.SetHelpIconVisibleUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetLanguageUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetPushNotificationsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetThemeUseCase
@@ -22,9 +21,9 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     getSettingsFlowUseCase: GetSettingsFlowUseCase,
     private val setThemeUseCase: SetThemeUseCase,
-    private val setFontSizeUseCase: SetFontSizeUseCase,
     private val setLanguageUseCase: SetLanguageUseCase,
     private val setPushNotificationsUseCase: SetPushNotificationsUseCase,
+    private val setHelpIconVisibleUseCase: SetHelpIconVisibleUseCase,
 ) : ViewModel() {
     val settingsState: StateFlow<UserSettings> = getSettingsFlowUseCase()
         .stateIn(
@@ -37,15 +36,15 @@ class SettingsViewModel @Inject constructor(
         viewModelScope.launch { setThemeUseCase(theme) }
     }
 
-    fun setFontSize(fontSize: FontSize) {
-        viewModelScope.launch { setFontSizeUseCase(fontSize) }
-    }
-
     fun setLanguage(language: AppLanguage) {
         viewModelScope.launch { setLanguageUseCase(language) }
     }
 
     fun setPushNotificationsEnabled(enabled: Boolean) {
         viewModelScope.launch { setPushNotificationsUseCase(enabled) }
+    }
+
+    fun setHelpIconVisible(visible: Boolean) {
+        viewModelScope.launch { setHelpIconVisibleUseCase(visible) }
     }
 }

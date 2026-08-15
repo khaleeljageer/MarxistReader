@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
+import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,13 +16,19 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.cpimtn.marxist.android.domain.model.HelpTopic
+import org.cpimtn.marxist.android.ui.common.help.HelpBottomSheet
 import org.cpimtn.marxist.android.ui.theme.MarxistExtendedColors
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.core.config.AppConfig
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +38,27 @@ fun ArticleDetailRoute(
     viewModel: ArticleDetailViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val showHelp by viewModel.showHelp.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    var fontSizeDialogVisible by rememberSaveable { mutableStateOf(false) }
+
+    if (showHelp) {
+        HelpBottomSheet(
+            topic = HelpTopic.ARTICLE,
+            onDismiss = viewModel::dismissHelp,
+        )
+    }
+
+    if (fontSizeDialogVisible) {
+        val current = uiState
+        if (current is ArticleDetailUiState.Success) {
+            FontSizeDialog(
+                current = current.fontSize,
+                onSelect = { viewModel.setFontSize(it) },
+                onDismiss = { fontSizeDialogVisible = false },
+            )
+        }
+    }
 
     Scaffold(
         modifier = Modifier
@@ -45,12 +72,19 @@ fun ArticleDetailRoute(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
-                            contentDescription = stringResource(R.string.feeddetails_back),
+                            contentDescription = stringResource(R.string.feed_details_back),
                             tint = ext.navInactiveIcon,
                         )
                     }
                 },
                 actions = {
+                    IconButton(onClick = viewModel::onHelpClicked) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.HelpOutline,
+                            contentDescription = stringResource(R.string.help_content_desc),
+                            tint = ext.navInactiveIcon,
+                        )
+                    }
                     when (val state = uiState) {
                         is ArticleDetailUiState.Success -> {
                             ArticleDetailTopBarActions(
@@ -61,10 +95,11 @@ fun ArticleDetailRoute(
                                         sharePost(
                                             title = state.feedItem.post.title,
                                             excerpt = state.feedItem.post.excerpt,
-                                            url = state.feedItem.post.slug,
+                                            url = AppConfig.Site.articleUrl(state.feedItem.post.slug),
                                         )
                                     )
                                 },
+                                onFontSizeClick = { fontSizeDialogVisible = true },
                             )
                         }
 
@@ -87,6 +122,7 @@ fun ArticleDetailRoute(
 
             is ArticleDetailUiState.Success -> ArticleDetailContent(
                 feedItem = state.feedItem,
+                fontSize = state.fontSize,
                 modifier = Modifier.padding(paddingValues),
             )
 

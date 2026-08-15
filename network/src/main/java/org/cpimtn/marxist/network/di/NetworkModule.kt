@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import org.cpimtn.marxist.core.config.AppConfig
+import org.cpimtn.marxist.network.api.BooksApiService
 import org.cpimtn.marxist.network.api.WPApiService
 import org.cpimtn.marxist.network.downloader.FileDownloader
 import org.cpimtn.marxist.network.downloader.FileDownloaderImpl
@@ -71,6 +72,12 @@ abstract class NetworkModule {
         @Singleton
         fun provideApiService(retrofit: Retrofit): WPApiService {
             return retrofit.create(WPApiService::class.java)
+        }
+
+        @Provides
+        @Singleton
+        fun provideBooksApiService(retrofit: Retrofit): BooksApiService {
+            return retrofit.create(BooksApiService::class.java)
         }
     }
 }

@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import org.cpimtn.marxist.android.feature.books.BooksScreen
+import org.cpimtn.marxist.android.feature.books.BooksScreenRoute
 import org.cpimtn.marxist.android.feature.feed.FeedScreenRoute
-import org.cpimtn.marxist.android.feature.more.MoreScreen
 import org.cpimtn.marxist.android.feature.saved.SavedScreen
+import org.cpimtn.marxist.android.feature.search.SearchScreenRoute
 import org.cpimtn.marxist.android.feature.settings.SettingsScreenRoute
 import org.cpimtn.marxist.navigation.MainAppState
 import org.cpimtn.marxist.navigation.Screen
@@ -23,7 +23,10 @@ import org.cpimtn.marxist.navigation.Screen
 fun MainScreensNavHost(
     appState: MainAppState,
     modifier: Modifier = Modifier,
+    helpIconEnabled: Boolean = true,
     goToArticleDetails: (postId: Int) -> Unit,
+    openBook: (bookId: String) -> Unit,
+    onRateAppClick: () -> Unit,
 ) {
     val navController = appState.navController
     NavHost(
@@ -42,10 +45,18 @@ fun MainScreensNavHost(
             )
         }
         composable(route = Screen.Books.route) {
-            BooksScreen()
+            BooksScreenRoute(
+                onBookClick = {
+                    openBook(it)
+                },
+            )
         }
         composable(route = Screen.Search.route) {
-            MoreScreen()
+            SearchScreenRoute(
+                onArticleClick = goToArticleDetails,
+                showHelpIcon = helpIconEnabled,
+                onHelpClick = { appState.helpCallback?.invoke() },
+            )
         }
         composable(route = Screen.Saved.route) {
             SavedScreen(
@@ -61,7 +72,7 @@ fun MainScreensNavHost(
             )
         }
         composable(route = Screen.Settings.route) {
-            SettingsScreenRoute()
+            SettingsScreenRoute(onRateAppClick = onRateAppClick)
         }
     }
 }

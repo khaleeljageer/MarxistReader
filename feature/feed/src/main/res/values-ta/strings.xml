@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Section headers (Tamil per design) -->
+    <string name="feed_special_article">சிறப்புக் கட்டுரை</string>
+    <string name="feed_recent_articles">சமீபத்திய கட்டுரைகள்</string>
+    <!-- Save button -->
+    <string name="feed_save_content_desc">சேமி</string>
+    <string name="feed_unsave_content_desc">நீக்கு</string>
+    <!-- States -->
+    <string name="feed_empty_message">கட்டுரைகள் இல்லை. இணையத்துடன் இணைத்து முயற்சிக்கவும்.</string>
+    <string name="feed_retry">மீண்டும் முயற்சி</string>
+    <string name="feed_empty_subtitle">கட்டுரைகளுக்கு காண இணைய இணைப்பு தேவை</string>
+    <string name="feed_error_title">ஏதோ பிழை ஏற்பட்டுள்ளது…</string>
+</resources>

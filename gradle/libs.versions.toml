@@ -1,39 +1,61 @@
 [versions]
-kotlinxCoroutinesCore = "1.10.2"
-appVersion = "6.0.0"
+firebaseBom = "34.17.0"
+playReview = "2.0.2"
+kotlinxCoroutinesCore = "1.11.0"
+appVersion = "6.0.2"
 minSdk = "26"
-compileSdk = "36"
-agp = "9.0.0"
-kotlin = "2.3.10"
-coreKtx = "1.17.0"
+versionCode = "5"
+compileSdk = "37"
+agp = "9.3.0"
+kotlin = "2.4.0"
+coreKtx = "1.19.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
 espressoCore = "3.7.0"
-lifecycleRuntimeKtx = "2.10.0"
-activityCompose = "1.12.4"
-composeBom = "2026.02.00"
-hilt = "2.59.1"
-hiltNavigationCompose = "1.3.0"
+lifecycleRuntimeKtx = "2.11.0"
+activityCompose = "1.13.0"
+composeBom = "2026.08.00"
+hilt = "2.60.1"
+hiltNavigationCompose = "1.4.0"
 roomRuntime = "2.8.4"
-ksp = "2.3.5"
-navigationCompose = "2.9.7"
-composeLifecycle = "2.10.0"
-coil = "3.3.0"
+ksp = "2.3.9"
+navigationCompose = "2.9.8"
+gmsVersion = "4.5.0"
+crashVersion="3.0.7"
+composeLifecycle = "2.11.0"
+coil = "3.5.0"
 retrofit = "3.0.0"
-okhttp = "5.3.2"
-kotlinx-serialization-json = "1.10.0"
-appcompat = "1.7.1"
-material = "1.13.0"
-work = "2.11.1"
-hiltWork = "1.3.0"
-hiltWorkCompiler = "1.3.0"
-datastore = "1.2.0"
-mockk = "1.14.9"
-coroutinesTest = "1.10.2"
-runtimeSaveable = "1.10.3"
+okhttp = "5.4.0"
+kotlinx-serialization-json = "1.11.0"
+appcompat = "1.8.0"
+material = "1.14.0"
+work = "2.11.2"
+hiltWork = "1.4.0"
+hiltWorkCompiler = "1.4.0"
+datastore = "1.2.1"
+mockk = "1.14.11"
+coroutinesTest = "1.11.0"
+runtimeSaveable = "1.12.0"
+materialIconsExtended = "1.7.8"
+androidx-fragment-ktx = "1.9.0"
+androidx-paging = "3.5.1"
+androidx-activity = "1.13.0"
+kotlinx-coroutines = "1.11.0"
+androidx-browser = "1.10.0"
+readium = "3.3.0"
+androidx-media3 = "1.11.0"
+joda-time = "2.14.3"
+timber = "5.0.1"
+desugar_jdk_libs = "2.1.5"
 
 [libraries]
+desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+firebase-messaging = { module = "com.google.firebase:firebase-messaging" }
+play-review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "playReview" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutinesCore" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
 converter-kotlinx-serialization = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version = "1.0.0" }
@@ -55,18 +77,14 @@ androidx-material3-window-size = { group = "androidx.compose.material3", name = 
 androidx-material3-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "composeLifecycle" }
-
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
-
 hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 androidx-hilt-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltWork" }
 androidx-hilt-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltWorkCompiler" }
-
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
-
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
@@ -82,6 +100,28 @@ mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutinesTest" }
 androidx-compose-runtime-saveable = { group = "androidx.compose.runtime", name = "runtime-saveable", version.ref = "runtimeSaveable" }
 
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidx-fragment-ktx" }
+androidx-paging = { group = "androidx.paging", name = "paging-runtime-ktx", version.ref = "androidx-paging" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidx-browser" }
+androidx-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-media3-common = { group = "androidx.media3", name = "media3-common-ktx", version.ref = "androidx-media3" }
+androidx-media3-session = { group = "androidx.media3", name = "media3-session", version.ref = "androidx-media3" }
+joda-time = { group = "joda-time", name = "joda-time", version.ref = "joda-time" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+
+# Readium Kotlin Toolkit
+readium-shared = { group = "org.readium.kotlin-toolkit", name = "readium-shared", version.ref = "readium" }
+readium-streamer = { group = "org.readium.kotlin-toolkit", name = "readium-streamer", version.ref = "readium" }
+readium-navigator = { group = "org.readium.kotlin-toolkit", name = "readium-navigator", version.ref = "readium" }
+readium-navigator-media-tts = { group = "org.readium.kotlin-toolkit", name = "readium-navigator-media-tts", version.ref = "readium" }
+readium-lcp = { group = "org.readium.kotlin-toolkit", name = "readium-lcp", version.ref = "readium" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -90,14 +130,24 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 hiltAndroid = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 androidx-navigation-safeargs = { id = "androidx.navigation.safeargs.kotlin", version.ref = "navigationCompose" }
+gms-google-service = { id = "com.google.gms.google-services", version.ref = "gmsVersion" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashVersion" }
 
 [bundles]
 hilt-core = [
     "hilt-android",
     "androidx-hilt-navigation-compose"
 ]
-
 room-core = [
     "androidx-room-ktx",
     "androidx-room-runtime",
+]
+readium-core = [
+    "readium-shared",
+    "readium-streamer",
+    "readium-navigator",
+    "readium-navigator-media-tts",
+    "readium-lcp",
+    "androidx-media3-session",
+    "androidx-media3-common"
 ]

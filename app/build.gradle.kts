@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.hiltAndroid)
     alias(libs.plugins.androidx.navigation.safeargs)
+    alias(libs.plugins.gms.google.service)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -15,8 +17,8 @@ android {
     defaultConfig {
         applicationId = "org.cpimtn.marxist.android"
         minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = 36
-        versionCode = 1
+        targetSdk = 37
+        versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.appVersion.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -24,7 +26,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -35,6 +38,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
 
     kotlin {
@@ -53,8 +57,10 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
@@ -74,23 +80,31 @@ dependencies {
     ksp(libs.hilt.compiler)
 
     implementation(project(":ui:theme"))
+    implementation(project(":ui:common"))
     implementation(project(":domain"))
     implementation(project(":use-cases"))
     implementation(project(":navigation"))
     implementation(project(":data"))
     implementation(project(":feature:feed"))
     implementation(project(":feature:books"))
-    implementation(project(":feature:more"))
+    implementation(project(":feature:search"))
     implementation(project(":feature:saved"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:welcome"))
     implementation(project(":feature:feeddetails"))
+    implementation(project(":reader"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.messaging)
+
+    implementation(libs.play.review.ktx)
 }

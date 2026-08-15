@@ -13,6 +13,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,18 +26,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.outlined.BookmarkBorder
+import androidx.compose.material.icons.outlined.OpenInNew
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material.icons.outlined.Share
+import androidx.compose.material.icons.outlined.TextFields
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,6 +51,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -56,13 +63,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.core.text.HtmlCompat
 import org.cpimtn.marxist.android.domain.model.FeedItem
+import org.cpimtn.marxist.android.domain.model.FontSize
 import org.cpimtn.marxist.android.ui.theme.MarxistReaderTheme
+import org.cpimtn.marxist.core.config.AppConfig
 
 @Composable
 fun ArticleDetailTopBarActions(
     isSaved: Boolean,
     onSaveClick: () -> Unit,
     onShareClick: (() -> Unit)?,
+    onFontSizeClick: () -> Unit,
 ) {
     val ext = MarxistReaderTheme.colors
     val bookmarkTint by animateColorAsState(
@@ -70,12 +80,19 @@ fun ArticleDetailTopBarActions(
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
         label = "bookmark_tint",
     )
+    IconButton(onClick = onFontSizeClick) {
+        Icon(
+            imageVector = Icons.Outlined.TextFields,
+            contentDescription = stringResource(R.string.feed_details_font_size_content_desc),
+            tint = ext.navInactiveIcon,
+        )
+    }
     IconButton(onClick = onSaveClick) {
         Icon(
             imageVector = if (isSaved) Icons.Filled.Bookmark else Icons.Outlined.BookmarkBorder,
             contentDescription = stringResource(
-                if (isSaved) R.string.feeddetails_unsave_content_desc
-                else R.string.feeddetails_save_content_desc,
+                if (isSaved) R.string.feed_details_unsave_content_desc
+                else R.string.feed_details_save_content_desc,
             ),
             tint = bookmarkTint,
         )
@@ -84,11 +101,58 @@ fun ArticleDetailTopBarActions(
         IconButton(onClick = onShareClick) {
             Icon(
                 imageVector = Icons.Outlined.Share,
-                contentDescription = stringResource(R.string.feeddetails_share_content_desc),
+                contentDescription = stringResource(R.string.feed_details_share_content_desc),
                 tint = ext.navInactiveIcon,
             )
         }
     }
+}
+
+@Composable
+fun FontSizeDialog(
+    current: FontSize,
+    onSelect: (FontSize) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.feed_details_font_size_title)) },
+        text = {
+            Column(
+                modifier = Modifier.wrapContentSize()
+            ) {
+                FontSize.entries.forEach { size ->
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { onSelect(size) }) {
+                        RadioButton(selected = current == size, onClick = { onSelect(size) })
+                        Spacer(Modifier.width(8.dp))
+                        Text(fontSizeLabel(size))
+                    }
+                }
+            }
+        },
+        confirmButton = {},
+    )
+}
+
+@Composable
+private fun fontSizeLabel(fontSize: FontSize): String = when (fontSize) {
+    FontSize.SMALL -> stringResource(R.string.font_size_small)
+    FontSize.MEDIUM -> stringResource(R.string.font_size_medium)
+    FontSize.NORMAL -> stringResource(R.string.font_size_normal)
+    FontSize.LARGE -> stringResource(R.string.font_size_large)
+    FontSize.EXTRA_LARGE -> stringResource(R.string.font_size_extra_large)
+}
+
+private fun FontSize.scale(): Float = when (this) {
+    FontSize.SMALL -> 0.85f
+    FontSize.MEDIUM -> 0.925f
+    FontSize.NORMAL -> 1f
+    FontSize.LARGE -> 1.15f
+    FontSize.EXTRA_LARGE -> 1.3f
 }
 
 @Composable
@@ -98,7 +162,7 @@ fun ArticleDetailLoading(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(R.string.feeddetails_loading),
+            text = stringResource(R.string.feed_details_loading),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -112,7 +176,7 @@ fun ArticleDetailNotFound(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(R.string.feeddetails_not_found),
+            text = stringResource(R.string.feed_details_not_found),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -139,6 +203,7 @@ fun ArticleDetailError(
 @Composable
 fun ArticleDetailContent(
     feedItem: FeedItem,
+    fontSize: FontSize,
     modifier: Modifier = Modifier,
 ) {
     val ext = MarxistReaderTheme.colors
@@ -209,7 +274,8 @@ fun ArticleDetailContent(
         // Article body (content) — paragraph style
         HtmlText(
             content = post.content,
-            color = ext.detailBody
+            color = ext.detailBody,
+            fontSizeScale = fontSize.scale(),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -218,6 +284,10 @@ fun ArticleDetailContent(
             thickness = 0.5.dp,
             modifier = Modifier.fillMaxWidth(),
         )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        ArticleSourceAttribution(slug = post.slug)
+
         Spacer(modifier = Modifier.height(16.dp))
 
         FlowRow(
@@ -249,16 +319,63 @@ fun ArticleDetailContent(
     }
 }
 
+/**
+ * Credits the original publisher and links to the article's canonical page on the website.
+ * Required by Play's News & Magazines / Misleading Claims policies: every article has to name its
+ * original source and offer a working link to it.
+ */
 @Composable
-private fun HtmlText(content: String, color: Color) {
+private fun ArticleSourceAttribution(
+    slug: String,
+    modifier: Modifier = Modifier,
+) {
+    val ext = MarxistReaderTheme.colors
+    val uriHandler = LocalUriHandler.current
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        Text(
+            text = stringResource(R.string.feed_details_source_publisher),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        Spacer(modifier = Modifier.height(6.dp))
+        Row(
+            modifier = Modifier
+                .clickable { uriHandler.openUri(AppConfig.Site.articleUrl(slug)) }
+                .padding(vertical = 4.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Outlined.OpenInNew,
+                contentDescription = null,
+                modifier = Modifier.size(14.dp),
+                tint = ext.categoryBadgeBg,
+            )
+            Spacer(modifier = Modifier.width(6.dp))
+            Text(
+                text = stringResource(R.string.feed_details_source_link),
+                style = MaterialTheme.typography.labelMedium,
+                color = ext.categoryBadgeBg,
+                textDecoration = TextDecoration.Underline,
+            )
+        }
+    }
+}
+
+@Composable
+private fun HtmlText(content: String, color: Color, fontSizeScale: Float) {
     val annotatedText = remember(content) {
         val spanned = HtmlCompat.fromHtml(content, HtmlCompat.FROM_HTML_MODE_LEGACY)
         spanned.toAnnotatedString()
     }
+    val baseStyle = MaterialTheme.typography.bodyMedium
 
     Text(
         text = annotatedText,
-        style = MaterialTheme.typography.bodyMedium,
+        style = baseStyle.copy(
+            fontSize = baseStyle.fontSize * fontSizeScale,
+            lineHeight = baseStyle.lineHeight * fontSizeScale,
+        ),
         color = color,
     )
 }

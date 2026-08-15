@@ -23,6 +23,11 @@ object Sync {
                 ExistingWorkPolicy.KEEP,
                 TaxonomySyncWorker.taxonomySyncWork(),
             )
+            enqueueUniqueWork(
+                "sync_books",
+                ExistingWorkPolicy.KEEP,
+                BookSyncWorker.syncWork(),
+            )
         }
     }
 }

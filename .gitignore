@@ -1,3 +1,5 @@
+app/google-services.json
+REPORT.md
 *.iml
 .gradle
 /local.properties
@@ -28,5 +30,7 @@ local.properties
 /feature/welcome/build
 /feature/saved/build
 /feature/feeddetails/build
+/feature/search/build
 /ui-common/build
 GEMINI.md
+CLAUDE.md

@@ -91,26 +91,10 @@ fun SavedFeedContent(
     onArticleClick: (Int) -> Unit,
     onUnSaveClick: (Int) -> Unit
 ) {
-    val ext = MarxistReaderTheme.colors
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(0.dp)
     ) {
-        item(key = "saved_header") {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    text = stringResource(R.string.saved_title),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
-                )
-                HorizontalDivider(
-                    modifier = Modifier.fillMaxWidth(),
-                    color = ext.accentLineStart,
-                    thickness = 1.dp,
-                )
-            }
-        }
         itemsIndexed(
             items = feedItems,
             key = { _, item -> item.post.id }
@@ -136,10 +120,16 @@ fun SavedFeedContent(
 
 @Composable
 private fun FeedLoadingSkeleton() {
-    repeat(5) {
-        ArticleSkeleton()
-        if (it < 3) {
-            Spacer(modifier = Modifier.height(20.dp))
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+    ) {
+        repeat(5) {
+            ArticleSkeleton()
+            if (it < 4) {
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
     }
 }

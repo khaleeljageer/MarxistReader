@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
@@ -45,6 +46,8 @@ fun MarxistTopAppBar(
     showSearchIcon: Boolean = true,
     showRefreshIcon: Boolean = false,
     onRefreshClick: () -> Unit = {},
+    showHelpIcon: Boolean = false,
+    onHelpClick: () -> Unit = {},
     darkTheme: Boolean
 ) {
     val ext = MarxistReaderTheme.colors
@@ -80,6 +83,17 @@ fun MarxistTopAppBar(
                     Icon(
                         imageVector = Icons.Rounded.Refresh,
                         contentDescription = stringResource(R.string.feed_refresh_content_desc),
+                        tint = ext.navInactiveIcon,
+                    )
+                }
+            }
+
+            // ── Help / how-to-use ──
+            if (showHelpIcon) {
+                IconButton(onClick = onHelpClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Rounded.HelpOutline,
+                        contentDescription = stringResource(R.string.help_content_desc),
                         tint = ext.navInactiveIcon,
                     )
                 }
