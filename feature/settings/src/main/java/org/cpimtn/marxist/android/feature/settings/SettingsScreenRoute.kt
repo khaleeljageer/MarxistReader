@@ -9,6 +9,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
 fun SettingsScreenRoute(
+    onRateAppClick: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val settings by viewModel.settingsState.collectAsStateWithLifecycle()
@@ -51,5 +52,6 @@ fun SettingsScreenRoute(
         languageDialogUpdate = { languageDialog.value = it },
         helpIconDialogUpdate = { helpIconDialog.value = it },
         onPushNotificationStatusChange = { viewModel.setPushNotificationsEnabled(it) },
+        onRateAppClick = onRateAppClick,
     )
 }

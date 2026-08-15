@@ -40,6 +40,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -68,6 +69,7 @@ fun WelcomeScreen(
     viewModel: WelcomeViewModel = hiltViewModel(),
 ) {
     val canContinue by viewModel.canContinue.collectAsState()
+    val showSkip by viewModel.showSkip.collectAsState()
     val colors = MarxistReaderTheme.colors
     val pagerState = rememberPagerState(pageCount = { FeatureCount })
     val cardBg = MaterialTheme.colorScheme.surfaceContainerLow
@@ -244,6 +246,22 @@ fun WelcomeScreen(
                     enabled = canContinue,
                 ) {
                     Text(stringResource(R.string.welcome_continue))
+                }
+            }
+
+            // Escape hatch for a connection too slow to ever reach the post threshold. Only offered
+            // once the sync has had a fair chance, and never while Continue is already available.
+            if (showSkip && !canContinue) {
+                Box(modifier = Modifier.padding(horizontal = 16.dp)) {
+                    TextButton(
+                        onClick = { viewModel.onContinueClicked(onContinueClicked) },
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            text = stringResource(R.string.welcome_skip),
+                            color = accent,
+                        )
+                    }
                 }
             }
             Spacer(modifier = Modifier.height(8.dp))

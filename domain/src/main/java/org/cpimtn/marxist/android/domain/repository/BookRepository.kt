@@ -27,6 +27,9 @@ interface BookRepository {
     /** Absolute path of [bookId]'s downloaded epub file, or null if it hasn't been downloaded. */
     suspend fun getDownloadedFilePath(bookId: String): String?
 
+    /** Deletes [bookId]'s downloaded epub file and the cached reader-id mapping that went with it. */
+    suspend fun deleteDownload(bookId: String)
+
     /** Reader-assigned id for [bookId], cached from a previous import into the reader, or null. */
     suspend fun getReaderId(bookId: String): Long?
 

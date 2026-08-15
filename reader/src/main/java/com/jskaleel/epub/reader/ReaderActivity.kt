@@ -49,12 +49,6 @@ open class ReaderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Block screenshots and screen recording while reading a book.
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_SECURE,
-            WindowManager.LayoutParams.FLAG_SECURE
-        )
-
         val binding = ActivityReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

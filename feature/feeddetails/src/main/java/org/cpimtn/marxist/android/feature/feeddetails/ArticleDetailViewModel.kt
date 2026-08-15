@@ -20,6 +20,7 @@ import org.cpimtn.marxist.android.domain.usecase.GetSavedPostIdsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSeenHelpTopicsUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetSettingsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.MarkHelpSeenUseCase
+import org.cpimtn.marxist.android.domain.usecase.RecordArticleReadUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
 import org.cpimtn.marxist.android.domain.usecase.UnsavePostUseCase
@@ -36,6 +37,7 @@ class ArticleDetailViewModel @Inject constructor(
     private val unsavePostUseCase: UnsavePostUseCase,
     private val setFontSizeUseCase: SetFontSizeUseCase,
     private val markHelpSeenUseCase: MarkHelpSeenUseCase,
+    private val recordArticleReadUseCase: RecordArticleReadUseCase,
 ) : ViewModel() {
 
     private val postId: Int = checkNotNull(savedStateHandle["postId"]) {
@@ -54,6 +56,9 @@ class ArticleDetailViewModel @Inject constructor(
                 markHelpSeenUseCase(HelpTopic.ARTICLE)
             }
         }
+        // Counts toward the one-time review prompt. The ViewModel is scoped to the article route,
+        // so this runs once per article opened rather than on every recomposition.
+        viewModelScope.launch { recordArticleReadUseCase() }
     }
 
     fun onHelpClicked() {

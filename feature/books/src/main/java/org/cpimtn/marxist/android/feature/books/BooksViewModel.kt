@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import org.cpimtn.marxist.android.domain.model.Book
 import org.cpimtn.marxist.android.domain.model.BookDownloadState
 import org.cpimtn.marxist.android.domain.model.SyncResult
+import org.cpimtn.marxist.android.domain.usecase.DeleteBookDownloadUseCase
 import org.cpimtn.marxist.android.domain.usecase.DownloadBookUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetBooksFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetDownloadedBookIdsUseCase
@@ -24,6 +25,7 @@ class BooksViewModel @Inject constructor(
     private val getBooksFlowUseCase: GetBooksFlowUseCase,
     private val getDownloadedBookIdsUseCase: GetDownloadedBookIdsUseCase,
     private val downloadBookUseCase: DownloadBookUseCase,
+    private val deleteBookDownloadUseCase: DeleteBookDownloadUseCase,
     private val syncBooksUseCase: SyncBooksUseCase,
 ) : ViewModel() {
 
@@ -70,6 +72,16 @@ class BooksViewModel @Inject constructor(
             downloadBookUseCase(book).collect { state ->
                 _downloadStates.update { it + (book.id to state.toUiState()) }
             }
+        }
+    }
+
+    /** Removes [book]'s downloaded epub, returning the card to its "not downloaded" state. */
+    fun deleteBook(book: Book) {
+        if (_downloadStates.value[book.id] != BookDownloadUiState.Downloaded) return
+
+        viewModelScope.launch {
+            deleteBookDownloadUseCase(book.id)
+            _downloadStates.update { it + (book.id to BookDownloadUiState.NotDownloaded) }
         }
     }
 

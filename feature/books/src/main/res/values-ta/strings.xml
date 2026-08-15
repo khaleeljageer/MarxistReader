@@ -3,8 +3,14 @@
     <!-- Download button states -->
     <string name="books_download">பதிவிறக்கு</string>
     <string name="books_downloading">பதிவிறக்குகிறது…</string>
-    <string name="books_downloaded">பதிவிறக்கப்பட்டது</string>
+    <string name="books_downloaded">திற</string>
     <string name="books_retry">மீள்துவக்கு</string>
+    <!-- Delete a downloaded book -->
+    <string name="books_delete">பதிவிறக்கத்தை நீக்கு</string>
+    <string name="books_delete_title">இந்தப் பதிவிறக்கத்தை நீக்கவா?</string>
+    <string name="books_delete_message">“%1$s” இந்தச் சாதனத்திலிருந்து நீக்கப்படும், நீங்கள் படித்த முன்னேற்றமும் நீங்கும். பின்னர் மீண்டும் பதிவிறக்கம் செய்யலாம்.</string>
+    <string name="books_delete_confirm">நீக்கு</string>
+    <string name="books_delete_cancel">ரத்து</string>
     <!-- States -->
     <string name="books_empty_message">புத்தகங்கள் இல்லை. இணையத்துடன் இணைத்து முயற்சிக்கவும்.</string>
     <string name="books_empty_subtitle">புத்தகங்களை காண இணைய இணைப்பு தேவை</string>

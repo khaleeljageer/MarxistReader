@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -29,6 +30,8 @@ private val KEY_PUSH_NOTIFICATIONS = booleanPreferencesKey("push_notifications_e
 private val KEY_HELP_ICON_VISIBLE = booleanPreferencesKey("help_icon_visible")
 private val KEY_WELCOME_COMPLETED = booleanPreferencesKey("welcome_completed")
 private val KEY_SEEN_HELP_TOPICS = stringSetPreferencesKey("seen_help_topics")
+private val KEY_ARTICLE_READ_COUNT = intPreferencesKey("article_read_count")
+private val KEY_REVIEW_PROMPT_SHOWN = booleanPreferencesKey("review_prompt_shown")
 
 @Singleton
 class UserSettingsRepositoryImpl @Inject constructor(
@@ -44,6 +47,16 @@ class UserSettingsRepositoryImpl @Inject constructor(
     override fun getSeenHelpTopics(): Flow<Set<String>> =
         context.userSettingsDataStore.data.map { prefs ->
             prefs[KEY_SEEN_HELP_TOPICS] ?: emptySet()
+        }
+
+    override fun getArticleReadCount(): Flow<Int> =
+        context.userSettingsDataStore.data.map { prefs ->
+            prefs[KEY_ARTICLE_READ_COUNT] ?: 0
+        }
+
+    override fun getReviewPromptShown(): Flow<Boolean> =
+        context.userSettingsDataStore.data.map { prefs ->
+            prefs[KEY_REVIEW_PROMPT_SHOWN] ?: false
         }
 
     override fun getSettings(): Flow<UserSettings> =
@@ -89,5 +102,15 @@ class UserSettingsRepositoryImpl @Inject constructor(
         context.userSettingsDataStore.edit { prefs ->
             prefs[KEY_SEEN_HELP_TOPICS] = (prefs[KEY_SEEN_HELP_TOPICS] ?: emptySet()) + topic
         }
+    }
+
+    override suspend fun incrementArticleReadCount() {
+        context.userSettingsDataStore.edit { prefs ->
+            prefs[KEY_ARTICLE_READ_COUNT] = (prefs[KEY_ARTICLE_READ_COUNT] ?: 0) + 1
+        }
+    }
+
+    override suspend fun setReviewPromptShown() {
+        context.userSettingsDataStore.edit { it[KEY_REVIEW_PROMPT_SHOWN] = true }
     }
 }

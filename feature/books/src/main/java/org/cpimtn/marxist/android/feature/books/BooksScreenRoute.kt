@@ -30,24 +30,30 @@ fun BooksScreenRoute(
         onRefresh = { viewModel.refresh() },
         modifier = Modifier.fillMaxSize(),
     ) {
+        // Animates on a change of state *kind* only — contentKey keeps a data-only change (a book
+        // finishing its download, or being deleted) from re-running the fade. The content reads
+        // the state handed to it rather than closing over `uiState`: with the outer value captured
+        // instead, an update that leaves stateKey untouched left the grid showing the old
+        // download states until something else forced a recomposition.
         AnimatedContent(
-            targetState = uiState.stateKey,
+            targetState = uiState,
+            contentKey = { it.stateKey },
             transitionSpec = { fadeIn() togetherWith fadeOut() },
             label = "books_state",
-        ) { key ->
-            when (key) {
-                StateKey.Loading -> BooksLoadingSkeleton()
-                StateKey.Content -> {
-                    val state = uiState as? BooksUiState.Success ?: return@AnimatedContent
+        ) { state ->
+            when (state) {
+                is BooksUiState.Loading -> BooksLoadingSkeleton()
+                is BooksUiState.Success -> {
                     BooksContent(
                         books = state.books,
                         downloadStates = state.downloadStates,
                         onDownloadClick = { viewModel.downloadBook(it) },
+                        onDeleteClick = { viewModel.deleteBook(it) },
                         onOpenClick = { onBookClick(it.id) },
                     )
                 }
 
-                StateKey.Empty -> {
+                is BooksUiState.Empty -> {
                     StatusMessage(
                         icon = Icons.AutoMirrored.Outlined.MenuBook,
                         title = stringResource(R.string.books_empty_message),
@@ -57,12 +63,11 @@ fun BooksScreenRoute(
                     )
                 }
 
-                StateKey.Error -> {
-                    val message = (uiState as? BooksUiState.Error)?.message ?: ""
+                is BooksUiState.Error -> {
                     StatusMessage(
                         icon = Icons.Outlined.CloudOff,
                         title = stringResource(R.string.books_error_title),
-                        subtitle = message,
+                        subtitle = state.message,
                         actionLabel = stringResource(R.string.books_retry),
                         onAction = { viewModel.refresh() },
                     )

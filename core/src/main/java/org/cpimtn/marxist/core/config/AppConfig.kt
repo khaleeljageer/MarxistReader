@@ -14,6 +14,12 @@ object AppConfig {
 
     object Sync {
         const val DEFAULT_PER_PAGE = 50
+
+        /**
+         * How long the welcome screen waits for the first posts to land before offering a way to
+         * skip ahead. Without this a user with no usable connection is stuck on onboarding forever.
+         */
+        const val WELCOME_SKIP_DELAY_MS = 15_000L
     }
 
     /**
@@ -30,6 +36,12 @@ object AppConfig {
         const val CONTACT_URL = "${BASE_URL}contact/"
 
         fun articleUrl(slug: String): String = "$BASE_URL${slug.trim('/')}/"
+    }
+
+    /** Gating for the one-time Play in-app review prompt. */
+    object Review {
+        /** Articles a user must open before being asked to rate the app. */
+        const val MIN_ARTICLES_READ = 10
     }
 
     object Books {

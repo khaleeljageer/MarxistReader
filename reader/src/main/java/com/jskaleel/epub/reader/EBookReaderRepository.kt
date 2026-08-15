@@ -231,6 +231,16 @@ class EBookReaderRepository(
         return TtsInitData(mediaServiceFacade, navigatorFactory, preferencesManager)
     }
 
+    /**
+     * Removes a book from the reader's library, along with any reading progress, bookmarks and
+     * highlights. Releases the publication first so deleting a book that was opened earlier in the
+     * session doesn't leave its handle open.
+     */
+    suspend fun deleteBook(readerId: Long) {
+        close(readerId)
+        bookRepository.deleteBook(readerId)
+    }
+
     fun close(bookId: Long) {
         coroutineQueue.launch {
             Timber.v("Closing Publication $bookId.")

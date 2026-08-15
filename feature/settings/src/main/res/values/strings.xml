@@ -27,6 +27,8 @@
     <string name="settings_version">Version</string>
     <string name="settings_source_code">Source Code</string>
     <string name="settings_source_code_subtitle">Github</string>
+    <string name="settings_rate_app">Rate this app</string>
+    <string name="settings_rate_app_subtitle">Share your feedback on Google Play</string>
     <string name="settings_contact">Contact us</string>
     <string name="settings_contact_subtitle">Reach the magazine\'s editorial office</string>
     <string name="settings_privacy_policy">Privacy Policy</string>

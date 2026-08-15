@@ -22,6 +22,9 @@ interface PostDao {
     @Query("SELECT * FROM posts WHERE id = :postId")
     fun getPostById(postId: Int): Flow<PostEntity?>
 
+    @Query("SELECT COUNT(*) FROM posts")
+    suspend fun count(): Int
+
     @Query("DELETE FROM posts")
     suspend fun clearAll()
 

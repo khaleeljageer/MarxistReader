@@ -25,4 +25,5 @@
 
     <!-- Continue -->
     <string name="welcome_continue">தொடர்</string>
+    <string name="welcome_skip">தற்போதைக்கு தவிர்</string>
 </resources>

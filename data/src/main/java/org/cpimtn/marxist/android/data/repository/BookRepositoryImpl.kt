@@ -99,6 +99,13 @@ class BookRepositoryImpl @Inject constructor(
         File(context.getDownloadDir(), fileNameFor(bookId)).takeIf { it.exists() }?.absolutePath
     }
 
+    override suspend fun deleteDownload(bookId: String) {
+        withContext(Dispatchers.IO) {
+            File(context.getDownloadDir(), fileNameFor(bookId)).delete()
+        }
+        bookReaderLinkDao.delete(bookId)
+    }
+
     override suspend fun getReaderId(bookId: String): Long? = bookReaderLinkDao.getReaderId(bookId)
 
     override suspend fun saveReaderId(bookId: String, readerId: Long) {

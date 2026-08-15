@@ -26,6 +26,7 @@ fun MainScreensNavHost(
     helpIconEnabled: Boolean = true,
     goToArticleDetails: (postId: Int) -> Unit,
     openBook: (bookId: String) -> Unit,
+    onRateAppClick: () -> Unit,
 ) {
     val navController = appState.navController
     NavHost(
@@ -71,7 +72,7 @@ fun MainScreensNavHost(
             )
         }
         composable(route = Screen.Settings.route) {
-            SettingsScreenRoute()
+            SettingsScreenRoute(onRateAppClick = onRateAppClick)
         }
     }
 }

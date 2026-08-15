@@ -7,6 +7,7 @@ import dagger.hilt.components.SingletonComponent
 import org.cpimtn.marxist.android.domain.repository.BookRepository
 import org.cpimtn.marxist.android.domain.repository.CategoryRepository
 import org.cpimtn.marxist.android.domain.repository.PostRepository
+import org.cpimtn.marxist.android.domain.repository.ReaderLibrary
 import org.cpimtn.marxist.android.domain.repository.RecentSearchRepository
 import org.cpimtn.marxist.android.domain.repository.SavedPostRepository
 import org.cpimtn.marxist.android.domain.repository.SearchRepository
@@ -15,6 +16,7 @@ import org.cpimtn.marxist.android.domain.repository.SyncStatusRepository
 import org.cpimtn.marxist.android.domain.repository.TagRepository
 import org.cpimtn.marxist.android.domain.usecase.AddRecentSearchUseCase
 import org.cpimtn.marxist.android.domain.usecase.ClearRecentSearchesUseCase
+import org.cpimtn.marxist.android.domain.usecase.DeleteBookDownloadUseCase
 import org.cpimtn.marxist.android.domain.usecase.DownloadBookUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetBookFilePathUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetBookReaderIdUseCase
@@ -40,6 +42,8 @@ import org.cpimtn.marxist.android.domain.usecase.GetTagsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetTimelineMonthsFlowUseCase
 import org.cpimtn.marxist.android.domain.usecase.GetWelcomeCompletedUseCase
 import org.cpimtn.marxist.android.domain.usecase.MarkHelpSeenUseCase
+import org.cpimtn.marxist.android.domain.usecase.MarkReviewPromptShownUseCase
+import org.cpimtn.marxist.android.domain.usecase.RecordArticleReadUseCase
 import org.cpimtn.marxist.android.domain.usecase.SaveBookReaderIdUseCase
 import org.cpimtn.marxist.android.domain.usecase.SavePostUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetFontSizeUseCase
@@ -48,6 +52,7 @@ import org.cpimtn.marxist.android.domain.usecase.SetLanguageUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetPushNotificationsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetThemeUseCase
 import org.cpimtn.marxist.android.domain.usecase.SetWelcomeCompletedUseCase
+import org.cpimtn.marxist.android.domain.usecase.ShouldShowReviewPromptUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncBooksUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncPostsUseCase
 import org.cpimtn.marxist.android.domain.usecase.SyncTaxonomyUseCase
@@ -297,4 +302,31 @@ object UseCaseModule {
     @Singleton
     fun provideSaveBookReaderIdUseCase(bookRepository: BookRepository): SaveBookReaderIdUseCase =
         SaveBookReaderIdUseCase(bookRepository)
+
+    @Provides
+    @Singleton
+    fun provideRecordArticleReadUseCase(settingsRepository: SettingsRepository): RecordArticleReadUseCase =
+        RecordArticleReadUseCase(settingsRepository)
+
+    @Provides
+    @Singleton
+    fun provideShouldShowReviewPromptUseCase(
+        settingsRepository: SettingsRepository,
+    ): ShouldShowReviewPromptUseCase = ShouldShowReviewPromptUseCase(
+        settingsRepository,
+        AppConfig.Review.MIN_ARTICLES_READ,
+    )
+
+    @Provides
+    @Singleton
+    fun provideMarkReviewPromptShownUseCase(
+        settingsRepository: SettingsRepository,
+    ): MarkReviewPromptShownUseCase = MarkReviewPromptShownUseCase(settingsRepository)
+
+    @Provides
+    @Singleton
+    fun provideDeleteBookDownloadUseCase(
+        bookRepository: BookRepository,
+        readerLibrary: ReaderLibrary,
+    ): DeleteBookDownloadUseCase = DeleteBookDownloadUseCase(bookRepository, readerLibrary)
 }

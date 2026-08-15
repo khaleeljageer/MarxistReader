@@ -14,4 +14,7 @@ interface BookReaderLinkDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(entity: BookReaderLinkEntity)
+
+    @Query("DELETE FROM book_reader_links WHERE bookId = :bookId")
+    suspend fun delete(bookId: String)
 }

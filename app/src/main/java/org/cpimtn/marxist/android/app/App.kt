@@ -104,10 +104,12 @@ fun App(
                     },
                     openBook = { bookId ->
                         openBookViewModel.openBook(bookId)
-                    }
+                    },
+                    onRateAppClick = { context.openPlayStoreListing() },
                 )
 
                 HelpHost(appState = appState, helpEnabled = helpIconEnabled)
+                ReviewHost()
             }
         }
 

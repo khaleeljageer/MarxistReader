@@ -27,6 +27,8 @@
     <string name="settings_version">பதிப்பு</string>
     <string name="settings_source_code">மூல நிரல்</string>
     <string name="settings_source_code_subtitle">Github</string>
+    <string name="settings_rate_app">செயலியை மதிப்பிடுங்கள்</string>
+    <string name="settings_rate_app_subtitle">Google Play-இல் உங்கள் கருத்தைப் பகிரவும்</string>
     <string name="settings_contact">தொடர்புக்கு</string>
     <string name="settings_contact_subtitle">இதழின் ஆசிரியர் குழுவைத் தொடர்பு கொள்ள</string>
     <string name="settings_privacy_policy">தனியுரிமைக் கொள்கை</string>

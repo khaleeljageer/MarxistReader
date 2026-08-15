@@ -28,6 +28,7 @@ import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.MailOutline
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.PrivacyTip
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -81,6 +82,7 @@ fun SettingsScreenContent(
     languageDialogUpdate: (Boolean) -> Unit,
     helpIconDialogUpdate: (Boolean) -> Unit,
     onPushNotificationStatusChange: (Boolean) -> Unit,
+    onRateAppClick: () -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -176,6 +178,16 @@ fun SettingsScreenContent(
             subtitle = stringResource(R.string.settings_source_code_subtitle),
             showTrailingArrow = true,
             onClick = { uriHandler.openUri(SOURCE_CODE_URL) },
+        )
+        HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+
+        SettingsItemRow(
+            icon = Icons.Outlined.StarOutline,
+            iconBgColor = colors.settingsIconBg,
+            title = stringResource(R.string.settings_rate_app),
+            subtitle = stringResource(R.string.settings_rate_app_subtitle),
+            showTrailingArrow = true,
+            onClick = onRateAppClick,
         )
         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
 

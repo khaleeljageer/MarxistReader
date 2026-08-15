@@ -29,6 +29,7 @@
 
     <!-- Continue -->
     <string name="welcome_continue">Continue</string>
+    <string name="welcome_skip">Skip for now</string>
 
     <string name="welcome_feature1_title_en" translatable="false">Daily Articles</string>
     <string name="welcome_feature1_desc_en" translatable="false">Politics, Economy, History, Society — deep analysis in Tamil</string>
